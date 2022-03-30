@@ -1,4 +1,3 @@
-
  #Requirements Document 
 
 Date: 22 march 2022
@@ -127,9 +126,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  	 FR2.2.1   | Add item  |
 |	 FR2.2.2   | Remove item	|
 |	 FR2.2.3   | Set position of item |
-
 | FR3  | Manage availability of items |
-
 | FR4 |	Issue order |
 | 	FR3.1 | show suppliers per item |
 | FR4 | Manage suppliers |
@@ -160,11 +157,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | 	  FR6.4.1 | Add new Place |
 | 	  FR6.4.2 | Delete Place |
 | 	  FR6.4.2 | Modify dimension ?????? |
-
 | FR7 | Locate items |
-
 | FR8 | Track free space |
-
 | FR9 | Accept internal order |
 | 	FR9.1 | Collect items |
 | 	FR9.2 | Ship items |
@@ -176,10 +170,10 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | ID        | Type (efficiency, reliability, ..)           | Description  | Refers to |
 | ------------- |:-------------:| :-----:| -----:|
 |  NFR1     | Efficiency  | Memory large enough to store all items | FR2, FR4, FR6 |
-|  NFR2     | Efficiency | Response time <1s | For all FR |
+|  NFR2     | Efficiency | Response time less than 1s | For all FR |
 |  NFR3     | Usability | Low effort for GUI usability | For all FR |
 |  NFR4 | Reliability | Should be available during working hours | For all FR |
-|  NFR5 | Maintainability | <1hr to recover from an error | For all FR |
+|  NFR5 | Maintainability | less than 1hr to recover from an error | For all FR |
 |  NFR6 | Security | Authentication and authorization before all operations | For all FR |
 |  NFR7 | Safety | report hazardous material | FR2 FR5 FR8 |
 
