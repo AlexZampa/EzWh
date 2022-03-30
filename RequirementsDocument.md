@@ -67,14 +67,17 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |	Organizational Unit	|	May request items from the warehouse	|
 |	Warehouse worker	|	Tracks the items, the free space and collects the items for delivery	|
 |	Warehouse delivery employee	|	Ships internal orders	|
+|	Warehouse Administrative | Track incoming and outgoing flow of items |
 |	System administrator	|	Manages the functioning of the app	|
+| 	Competitors | Other Warehouse Management System |
+| 	Warehouse | Physical space available to store items |
 
 # Context Diagram and interfaces
 
 ## Context Diagram
 <!--\<Define here Context diagram using UML use case diagram>-->
 
-![image](./img/ContextDiag.jpg)
+![ContectDiagram](./img/ContextDiagram.png)
 <!--\<actors are a subset of stakeholders>-->
 
 ## Interfaces
@@ -84,11 +87,14 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 | Actor | Logical Interface | Physical Interface  |
 | ------------- |:-------------:| -----:|
-|  Quality Office    | GUI | Screen, keyboard |
+|   Quality Office    | GUI | Screen, keyboard |
 |	Manager	|	GUI		|	Screen, keyboard	|
 |	Warehouse worker	|	GUI	|	Tablet	|
 |	Warehouse delivery employee	|	GUI	|	Tablet	|
-|	Organizational Unit	|	|	|
+|	Warehouse Administrative | GUI | Screen, keyboard |
+|	Organizational Unit	| GUI | Screen, keyboard |
+|	System administrator | GUI | Screen, keyboard |
+| 	Warehouse | ???? |
 
 # Stories and personas
 \<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
@@ -108,23 +114,60 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 | ID        | Description  |
 | ------------- |:-------------:| 
-|  FR1     | Manage users |
-|  FR1.1     | Create users  |
+| FR1     | Manage users |
+|  	FR1.1     | Create users  |
 |	FR1.2	|	Delete users	|
 |	FR1.3	|	Modify users	|
-| FR2  | Manage availability of items |
-| FR3 |	Issue order |
-| FR3.1 | Choose supplier |
+| FR2     | Manage item |
+|  	FR2.1   | Manage itemDescriptor  |
+|  	 FR2.1.1   | Create itemDescriptor  |
+|	 FR2.1.2   | Delete itemDescriptor	|
+|	 FR2.1.3	| Modify itemDescriptor	|
+| 	FR2.2  | Manage physical items |
+|  	 FR2.2.1   | Add item  |
+|	 FR2.2.2   | Remove item	|
+|	 FR2.2.3   | Set position of item |
+
+| FR3  | Manage availability of items |
+
+| FR4 |	Issue order |
+| 	FR3.1 | show suppliers per item |
 | FR4 | Manage suppliers |
+| 	FR4.1 | Insert new Supplier |
+| 	FR4.2 | Delete Supplier |
+| 	FR4.3 | Associate itemDescriptor with Supplier |
 | FR5 | Manage quality check |
-| FR5.1 | Add test result |
-| FR5.2 | Reject items |
-| FR5.3 | Accept items |
-| FR6 | Track items |
-| FR7 | Track free space |
-| FR8 | Accept internal order |
-| FR8.1 | Collect items |
-| FR8.2 | Ship items |
+|   FR5.1 | Manage test |
+|     FR5.1.1 | Describe new test |
+|     FR5.1.2 | Modify test |
+|     FR5.1.3 | Delete test |
+|     FR5.1.4 | Associate test with itemDescriptor |
+|   FR5.2 | Apply test |
+| 	  FR5.2.1 | Add test result |
+| 	  FR5.2.2 | Reject items |
+| 	  FR5.2.3 | Accept items |
+| FR6 | Manage Warehouse physical space |
+| 	FR6.1 | Manage Section |
+| 	  FR6.1.1 | Add new Section |
+| 	  FR6.1.2 | Delete Section |
+| 	FR6.2 | Manage Lane |
+| 	  FR6.2.1 | Add new Lane |
+| 	  FR6.2.2 | Delete Lane |
+| 	FR6.3 | Manage Shelf |
+| 	  FR6.2.1 | Add new Shelf |
+| 	  FR6.2.2 | Delete Shelf |
+| 	FR6.4 | Manage Place |
+| 	  FR6.4.1 | Add new Place |
+| 	  FR6.4.2 | Delete Place |
+| 	  FR6.4.2 | Modify dimension ?????? |
+
+| FR7 | Locate items |
+
+| FR8 | Track free space |
+
+| FR9 | Accept internal order |
+| 	FR9.1 | Collect items |
+| 	FR9.2 | Ship items |
 
 ## Non Functional Requirements
 
@@ -135,16 +178,16 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  NFR1     | Efficiency  | Memory large enough to store all items | FR2, FR4, FR6 |
 |  NFR2     | Efficiency | Response time <1s | For all FR |
 |  NFR3     | Usability | Low effort for GUI usability | For all FR |
-| NFR4 | Reliability | Should be available during working hours | For all FR |
-| NFR5 | Maintainability | <1hr to recover from an error | For all FR |
-| NFR6 | Security | Authentication and authorization before all operations | For all FR |
-
+|  NFR4 | Reliability | Should be available during working hours | For all FR |
+|  NFR5 | Maintainability | <1hr to recover from an error | For all FR |
+|  NFR6 | Security | Authentication and authorization before all operations | For all FR |
+|  NFR7 | Safety | report hazardous material | FR2 FR5 FR8 |
 
 # Use case diagram and use cases
 
-
 ## Use case diagram
 \<define here UML Use case diagram UCD summarizing all use cases, and their relationships>
+![UseCaseDiagram](./img/UseCaseDiagram.png)
 
 
 \<next describe here each use case in the UCD>
