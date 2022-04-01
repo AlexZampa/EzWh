@@ -112,8 +112,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 | ID        | Description  |
 | ------------- |:-------------:| 
-| FR1     | Manage users |
-|  	FR1.1     | Create users  |
+| FR1     | Manage users (Administrator) |
+|  	FR1.1   | Create users  |
 |	FR1.2	|	Delete users	|
 |	FR1.3	|	Modify users	|
 | FR2     | Manage item |
@@ -124,47 +124,57 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | 	FR2.2  | Manage physical items |
 |  	 FR2.2.1   | Add item  |
 |	 FR2.2.2   | Remove item	|
-|	 FR2.2.3   | Set position of item |
-| FR3  | Manage availability of items |
-| FR4 |	Issue order |
-| 	FR3.1 | show suppliers per item |
-| FR4 | Manage suppliers |
-| 	FR4.1 | Insert new Supplier |
-| 	FR4.2 | Delete Supplier |
-| 	FR4.3 | Add offer on itemDescriptor (Supplier) |
-| FR5 | Manage quality check |
-|   FR5.1 | Manage test |
-|     FR5.1.1 | Describe new test |
-|     FR5.1.2 | Modify test |
-|     FR5.1.3 | Delete test |
-|     FR5.1.4 | Associate test with itemDescriptor |
-|   FR5.2 | Apply test |
-| 	  FR5.2.1 | Add test result |
-| 	  FR5.2.2 | Reject items |
-| 	  FR5.2.3 | Accept items |
-| FR6 | Manage Warehouse physical space |
-| 	FR6.1 | Manage Section |
-| 	  FR6.1.1 | Add new Section |
-| 	  FR6.1.2 | Delete Section |
-| 	FR6.2 | Manage Lane |
-| 	  FR6.2.1 | Add new Lane |
-| 	  FR6.2.2 | Delete Lane |
-| 	FR6.3 | Manage Shelf |
-| 	  FR6.2.1 | Add new Shelf |
-| 	  FR6.2.2 | Delete Shelf |
-| 	FR6.4 | Manage Place |
-| 	  FR6.4.1 | Add new Place |
-| 	  FR6.4.2 | Delete Place |
-| 	  FR6.4.2 | Modify dimension ?????? |
-| FR7 | Locate items |
-| FR8 | Track free space |
-| FR9 | Accept internal order |
-| 	FR9.1 | Collect items |
-| 	FR9.2 | Ship items |
-| FR10 | Supplier offer |
-| FR10.1 | Add offer |
-| FR10.2 | Update offer |
-| FR10.3 | Delete offer |
+|	FR2.3 | Manage Batch |
+|	 FR2.3.1 | Add Batch |
+|	 FR2.3.2 | Remove Batch |
+|	 FR2.3.3 | Modify Batch |
+|	 FR2.3.4   | Set position of batch |
+| FR3  | Manage availability of items (Manager) |
+| 	FR3.1 | Show quantity per item |
+| 	FR3.2 | Notify when items are under a given quantity threshold |
+| 	FR3.3 | Set the quantity threshold |
+| FR4 |	Manage order (Manager) |
+| 	FR4.1 | show suppliers per item |
+|	FR4.2 | Issue order |
+|	FR4.3 | Complete order |
+|	FR4.4 | Show order status |
+| FR5 | Manage suppliers |
+| 	FR5.1 | Add offer on item descriptor (Supplier) |
+| 	FR5.2 | Update offer (Supplier) |
+| 	FR5.3 | Delete offer (Supplier) |
+| FR6 | Manage quality check |
+|   FR6.1 | Manage test |
+|     FR6.1.1 | Describe new test |
+|     FR6.1.2 | Modify test |
+|     FR6.1.3 | Delete test |
+|     FR6.1.4 | Associate test with item descriptor |
+|   FR6.2 | Apply test (Quality office) |
+| 	  FR6.2.1 | Add test result |
+| 	  FR6.2.2 | Reject items |
+| 	  FR6.2.3 | Accept items |
+| FR7 | Manage Warehouse physical space (Warehouse administrative) |
+| 	FR7.1 | Manage Section |
+| 	  FR7.1.1 | Add new Section |
+| 	  FR7.1.2 | Delete Section |
+| 	FR7.2 | Manage Lane |
+| 	  FR7.2.1 | Add new Lane |
+| 	  FR7.2.2 | Delete Lane |
+| 	FR7.3 | Manage Shelf |
+| 	  FR7.2.1 | Add new Shelf |
+| 	  FR7.2.2 | Delete Shelf |
+| 	FR7.4 | Manage Slot |
+| 	  FR7.4.1 | Add new Slot |
+| 	  FR7.4.2 | Delete Slot |
+| 	  FR7.4.2 | Set slot dimension |
+| FR8 | Locate items |
+| FR9 | Track free space |
+| FR10 | Manage internal order |
+| 	FR10.1 | Issue internal order (Organizational Unit) |
+|	FR10.2 | Accept internal order|
+| 	 FR10.2.1 | Collect items |
+| 	 FR10.2.2 | Ship items |
+|	FR10.3 | Show internal order status |
+
 
 
 ## Non Functional Requirements
