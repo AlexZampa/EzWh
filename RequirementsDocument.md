@@ -65,7 +65,6 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |	Quality office	|	Performs quality on items and choose whether to return them	|
 |	Organizational Unit	|	May request items from the warehouse	|
 |	Warehouse worker	|	Tracks the items, the free space and collects the items for delivery	|
-|	Warehouse delivery employee	|	Ships internal orders	|
 |	Warehouse Administrative | Track incoming and outgoing flow of items |
 |	System administrator	|	Manages the functioning of the app	|
 | 	Competitors | Other Warehouse Management System |
@@ -89,10 +88,10 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |   Quality Office    | GUI | Screen, keyboard |
 |	Manager	|	GUI		|	Screen, keyboard	|
 |	Warehouse worker	|	GUI	|	Tablet	|
-|	Warehouse delivery employee	|	GUI	|	Tablet	|
 |	Warehouse Administrative | GUI | Screen, keyboard |
 |	Organizational Unit	| GUI | Screen, keyboard |
 |	System administrator | GUI | Screen, keyboard |
+|	Supplier | GUI | Screen, keyboard |
 | 	Warehouse | ???? |
 
 # Stories and personas
@@ -132,7 +131,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | FR4 | Manage suppliers |
 | 	FR4.1 | Insert new Supplier |
 | 	FR4.2 | Delete Supplier |
-| 	FR4.3 | Associate itemDescriptor with Supplier |
+| 	FR4.3 | Add offer on itemDescriptor (Supplier) |
 | FR5 | Manage quality check |
 |   FR5.1 | Manage test |
 |     FR5.1.1 | Describe new test |
@@ -162,6 +161,11 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | FR9 | Accept internal order |
 | 	FR9.1 | Collect items |
 | 	FR9.2 | Ship items |
+| FR10 | Supplier offer |
+| FR10.1 | Add offer |
+| FR10.2 | Update offer |
+| FR10.3 | Delete offer |
+
 
 ## Non Functional Requirements
 
