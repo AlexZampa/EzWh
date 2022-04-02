@@ -244,7 +244,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Precondition     | Warehouse W exists, section S exists, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Lane L is created |
 |  Nominal Scenario     | U selects the section S; U starts the procedure to add a new lane; the app generates automatically a new id for the lane; U changes the id into "L"; U submits the procedure. |
-|  Variants     | With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences for section and slot. When an entity exists, U can also modify its id, adjacences and slot dimension where present, or delete it. |
+|  Variants     | With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences explained in the scenarios below. When an entity exists, U can also modify its id, adjacences and slot dimension where present, or delete it. |
 |  Exceptions     | The id chosen by U already exists into the upper-level entity: U has to enter another id. |
 
 ##### Scenario xyz.1
