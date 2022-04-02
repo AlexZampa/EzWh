@@ -309,6 +309,15 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     | D needs no tests: points 4, 5, 6 are skipped. D needs more than one test: U waits that all tests have been passed |
 |  Exceptions     | B not compliant with O: Items are not even registered, U calls a manager to handle the situation. B does not pass a test: B is marked as refused and is not stored, the return to the supplier is not handled by EzWh app. |
 
+### Use case xzz (Administrative 3 - manage internal order), UCxzz
+| Actors Involved        |  Warehouse administrative |
+| ------------- |:-------------:| 
+|  Precondition     | Organizational Unit OU has issued an internal order IO, user U exists and is logged in as "Warehouse administrative" |
+|  Post condition     | Requested items are ready at the pick up point |
+|  Nominal Scenario     | U selects IO; U checks that all the item requested are present in the warehouse; U sets the action "collect" associated to IO and a warehouse worker; U waits until the action is completed; U sets the action "ship" for IO and another warehouse worker; U is notified that the action has been completed.  |
+|  Variants     | If IO is huge, U can set more than one action "collect" or "ship", involving different warehouse workers |
+|  Exceptions     | Some of requested items not present: U can decide if send immediately the present ones and complete IO later with the missing ones, or freeze the whole order until all items are available. Action collect returns "not found": possible fatal error detected (outgoing flow not tracked or phantom incoming flow), special situation handled by a higher-level manager, IO handled as "item not present" |
+
 
 
 
