@@ -318,6 +318,15 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     | If IO is huge, U can set more than one action "collect" or "ship", involving different warehouse workers |
 |  Exceptions     | Some of requested items not present: U can decide if send immediately the present ones and complete IO later with the missing ones, or freeze the whole order until all items are available. Action collect returns "not found": possible fatal error detected (outgoing flow not tracked or phantom incoming flow), special situation handled by a higher-level manager, IO handled as "item not present" |
 
+### Use case xyt (Quality office - apply test), UCxyt
+| Actors Involved        |  Quality office |
+| ------------- |:-------------:| 
+|  Precondition     | Batch B arrived in quality office, B is registered, test T exists, user U exists and is logged in as "Quality office" |
+|  Post condition     | B is accepted |
+|  Nominal Scenario     | U selects the batch B; among the tests needed by B, U selects the test T; after the test has been executed, U selects "passed"; U submits the test result. |
+|  Variants     | U can read the description of the test to apply. Test not passed: at point 3 U selects "not passed". U can define a new test for the descriptor of items included in B, modify the description of a test or delete it |
+|  Exceptions     | B is not registered: T cannot be applied (U returns B to administrative office, where it should have been before it arrived at quality office). T is not descripted: U can add a description or delete it. |
+
 
 
 
