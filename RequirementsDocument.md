@@ -238,6 +238,74 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 ..
 
 
+### Use case xyz (Administrative 1 - physical space), UCxyz
+| Actors Involved        |  Warehouse administrative |
+| ------------- |:-------------:| 
+|  Precondition     | Warehouse W exists, section S exists, user U exists and is logged in as "Warehouse administrative" |
+|  Post condition     | Lane L is created |
+|  Nominal Scenario     | U selects the section S; U starts the procedure to add a new lane; the app generates automatically a new id for the lane; U changes the id into "L"; U submits the procedure. |
+|  Variants     | \<other normal executions>With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences for section and slot. When an entity exists, U can also modify its id, adjacences and slot dimension where present, or delete it. |
+|  Exceptions     | The id chosen by U already exists into the upper-level entity: U has to enter another id. |
+
+##### Scenario xyz.1
+
+| Scenario xyz.1 | Add new warehouse |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists and is logged in as "Warehouse administrative" |
+|  Post condition     | Warehouse W is created |
+| Step#        | Description  |
+|  1     | U starts the procedure to add a new warehouse |
+|  2     | The app generates automatically a new id for the warehouse |
+|  4     | U changes the id into "W" |
+|  5     | U sets the dimension of warehouse's slots |
+|  6     | U submits the procedure |
+
+##### Scenario xyz.2 
+
+| Scenario xyz.2 | Add new section |
+| ------------- |:-------------:| 
+|  Precondition     | Warehouse W exists, user U exists and is logged in as "Warehouse administrative" |
+|  Post condition     | Section S is created |
+| Step#        | Description  |
+|  1     | U selects warehouse W |  
+|  2     | U starts the procedure to add a new section |
+|  3     | The app generates automatically a new id for the section |
+|  4     | U changes the id into "S" |
+|  5     | U selects a list of adjacent sections |
+|  6     | U submits the procedure |
+
+##### Scenario xyz.3
+
+| Scenario xyz.3 | Add new slots |
+| ------------- |:-------------:| 
+|  Precondition     | Warehouse W, Section S, Lane L and Shelf A exist, user U exists and is logged in as "Warehouse administrative" |
+|  Post condition     | A has 100 new slots |
+| Step#        | Description  |
+|  1     | U selects Shelf A |  
+|  2     | U starts the procedure to add new slots |
+|  3     | U selects the number of new slots: 100 |
+|  4     | The app generates automatically new id for the slots |
+|  5     | U accepts all the proposed ids |
+|  6     | U submits the procedure |
+
+##### Scenario xyz.4
+
+| Scenario xyz.1 | Delete a Shelf |
+| ------------- |:-------------:| 
+|  Precondition     | Shelf A exists, A contains no slots or empty slots, user U exists and is logged in as "Warehouse administrative" |
+|  Post condition     | A is deleted |
+| Step#        | Description  |
+|  1     | U selects shelf A |
+|  2     | U selects the option "delete" |
+|  4     | The app asks for confirmation |
+|  5     | U confirms |
+
+
+
+
+
+
+
 
 # Glossary
 
