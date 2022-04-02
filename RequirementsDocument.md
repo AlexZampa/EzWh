@@ -35,7 +35,16 @@ Version: 0.0
 				- [Scenario 1.2](#scenario-12)
 				- [Scenario 1.x](#scenario-1x)
 		- [Use case 2, UC2](#use-case-2-uc2)
-		- [Use case x, UCx](#use-case-x-ucx)
+		- [Use case x (User - LogIn), UCx](#use-case-x-user---login-ucx)
+		- [Use case x (User - LogOut), UCx](#use-case-x-user---logout-ucx)
+		- [Use case xyz (Administrative 1 - physical space), UCxyz](#use-case-xyz-administrative-1---physical-space-ucxyz)
+				- [Scenario xyz.1](#scenario-xyz1)
+				- [Scenario xyz.2](#scenario-xyz2)
+				- [Scenario xyz.3](#scenario-xyz3)
+				- [Scenario xyz.4](#scenario-xyz4)
+		- [Use case zyx (Administrative 2 - receive items), UCzyx](#use-case-zyx-administrative-2---receive-items-uczyx)
+		- [Use case xzz (Administrative 3 - manage internal order), UCxzz](#use-case-xzz-administrative-3---manage-internal-order-ucxzz)
+		- [Use case xyt (Quality office - apply test), UCxyt](#use-case-xyt-quality-office---apply-test-ucxyt)
 - [Glossary](#glossary)
 - [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
@@ -234,9 +243,23 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 ### Use case 2, UC2
 ..
 
-### Use case x, UCx
-..
+### Use case x (User - LogIn), UCx
+| Actors Involved        | User |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists |
+|  Post condition     | The user has logged in |
+|  Nominal Scenario     | U knows Username UN and Password P; he types them in the dedicated fields; U logs in |
+|  Variants     | None |
+|  Exceptions     | U types wrong UN or P; U doesn't exist; U has been removed |
 
+### Use case x (User - LogOut), UCx
+| Actors Involved        | User |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists and has logged in |
+|  Post condition     | The user has logged out |
+|  Nominal Scenario     | U clicks on the appropriate button to log out |
+|  Variants     | None |
+|  Exceptions     | None |
 
 ### Use case xyz (Administrative 1 - physical space), UCxyz
 | Actors Involved        |  Warehouse administrative |
@@ -340,6 +363,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<concepts are used consistently all over the document, ex in use cases, requirements etc>
 
+![UseCaseDiagram](./img/Glossary.jpg)
+
 # System Design
 \<describe here system design>
 
@@ -349,6 +374,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<describe here deployment diagram >
 
+![UseCaseDiagram](./img/DeploymentDiagram.png)
 
 
 
