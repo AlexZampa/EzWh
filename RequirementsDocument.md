@@ -244,7 +244,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Precondition     | Warehouse W exists, section S exists, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Lane L is created |
 |  Nominal Scenario     | U selects the section S; U starts the procedure to add a new lane; the app generates automatically a new id for the lane; U changes the id into "L"; U submits the procedure. |
-|  Variants     | \<other normal executions>With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences for section and slot. When an entity exists, U can also modify its id, adjacences and slot dimension where present, or delete it. |
+|  Variants     | With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences for section and slot. When an entity exists, U can also modify its id, adjacences and slot dimension where present, or delete it. |
 |  Exceptions     | The id chosen by U already exists into the upper-level entity: U has to enter another id. |
 
 ##### Scenario xyz.1
@@ -285,7 +285,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2     | U starts the procedure to add new slots |
 |  3     | U selects the number of new slots: 100 |
 |  4     | The app generates automatically new id for the slots |
-|  5     | U accepts all the proposed ids |
+|  5     | U accepts all the proposed id |
 |  6     | U submits the procedure |
 
 ##### Scenario xyz.4
@@ -299,6 +299,15 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2     | U selects the option "delete" |
 |  4     | The app asks for confirmation |
 |  5     | U confirms |
+
+### Use case zyx (Administrative 2 - receive items), UCzyx
+| Actors Involved        |  Warehouse administrative |
+| ------------- |:-------------:| 
+|  Precondition     | Order O has been sent to supplier S, batch B of items descripted by item descriptor D arrived to warehouse, user U exists and is logged in as "Warehouse administrative" |
+|  Post condition     | B is ready to be stored |
+|  Nominal Scenario     | U checks that kind and quantity of items are compliant with O; U registers B and the items in it; U sees that D needs the test T; U sends B to the Quality Office; U waits for test result; U is notified that T has been passed; U sets the action "store" for the items included in B and a warehouse worker. |
+|  Variants     | D needs no tests: points 4, 5, 6 are skipped. D needs more than one test: U waits that all tests have been passed |
+|  Exceptions     | B not compliant with O: Items are not even registered, U calls a manager to handle the situation. B does not pass a test: B is marked as refused and is not stored, the return to the supplier is not handled by EzWh app. |
 
 
 
