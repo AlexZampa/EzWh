@@ -45,6 +45,27 @@ Version: 0.0
 		- [Use case zyx (Administrative 2 - receive items), UCzyx](#use-case-zyx-administrative-2---receive-items-uczyx)
 		- [Use case xzz (Administrative 3 - manage internal order), UCxzz](#use-case-xzz-administrative-3---manage-internal-order-ucxzz)
 		- [Use case xyt (Quality office - apply test), UCxyt](#use-case-xyt-quality-office---apply-test-ucxyt)
+		- [Use case abc (Supplier - manage-requested-items), UCabc](#use-case-abc-supplier---manage-requested-items-ucabc)
+				- [Scenario abc.1](#scenario-abc1)
+				- [Scenario abc.2](#scenario-abc2)
+		- [Use case abd (Supplier - show order list), UCabd](#use-case-abd-supplier---show-order-list-ucabd)
+				- [Scenario abd.1](#scenario-abd1)
+				- [Scenario abd.2](#scenario-abd2)
+		- [Use case abe (Supplier - process order), UCabe](#use-case-abe-supplier---process-order-ucabe)
+				- [Scenario abe.1](#scenario-abe1)
+				- [Scenario abe.2](#scenario-abe2)
+		- [Use case abf (Organizational Unit - issue internal order), UCabf](#use-case-abf-organizational-unit---issue-internal-order-ucabf)
+				- [Scenario abf.1](#scenario-abf1)
+				- [Scenario abf.2](#scenario-abf2)
+				- [Scenario abf.3](#scenario-abf3)
+				- [Scenario abf.4](#scenario-abf4)
+				- [Scenario abf.5](#scenario-abf5)
+		- [Use case abg (Organizational Unit - show order list), UCabg](#use-case-abg-organizational-unit---show-order-list-ucabg)
+				- [Scenario abg.1](#scenario-abg1)
+				- [Scenario abg.2](#scenario-abg2)
+		- [Use case abh (Organizational Unit - process order), UCabh](#use-case-abh-organizational-unit---process-order-ucabh)
+				- [Scenario abh.1](#scenario-abh1)
+				- [Scenario abh.2](#scenario-abh2)
 - [Glossary](#glossary)
 - [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
@@ -349,11 +370,272 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario     | U selects the batch B; among the tests needed by B, U selects the test T; after the test has been executed, U selects "passed"; U submits the test result. |
 |  Variants     | U can read the description of the test to apply. Test not passed: at point 3 U selects "not passed". U can define a new test for the descriptor of items included in B, modify the description of a test or delete it |
 |  Exceptions     | B is not registered: T cannot be applied (U returns B to administrative office, where it should have been before it arrived at quality office). T is not descripted: U can add a description or delete it. |
+------------------------------------------------------------------------------------------------------------------------------------
 
+### Use case abc (Supplier - manage requested items), UCabc
+| Actors Involved        | Supplier |
+| ------------- |:-------------:| 
+|  Precondition     | User U authenticated and authorized as "Supplier" |
+|  Post condition   | associated or not item descriptor D to user U |
+|  Nominal Scenario | show list of item needed by company, user U selects items that produces |
+|  Variants     	| User U searches the item descriptor D by its name |
+|  Exceptions     	| user U aborts the operation |
 
+##### Scenario abc.1
 
+| Scenario abc.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U authenticated and authorized as "Supplier" |
+| Post condition   | Associated one or more item descriptor D to user U |
+| Step#        	   | Description  |
+|  1     | User U selects item descriptor D from list | 
+|  2     | User U sets the item decriptor D as available |
+|  3     | User U confirms operation |
 
+#### Scenario abc.2
 
+| Scenario abc.2 |  |
+| ------------- |:-------------:| 
+| Variant Scenario | User U searches item descriptor D by item name | 
+| Precondition     | User U authenticated and authorized  as "Supplier" |
+| Post condition   | associated one or more item descriptor D to user U |
+| Step#        	   | Description  |
+|  1     | User U searches item descriptor D by its name |  
+|  2     | User U sets the item decriptor D as available |
+|  3     | User U confirms operation |
+
+##### Scenario abc.3
+
+| Scenario abc.3 | |
+| ------------- |:-------------:| 
+| Exceptional Scenario | User U aborts operation | 
+| Precondition     | User U authenticated and authorized  as "Supplier" |
+| Post condition   | nothing changed |
+| Step#        	   | Description  |
+|  1     | User U selects item descriptor D from list or by searching it | 
+|  2     | User U sets the item decriptor D as available |
+|  3     | User U aborts the operation |
+|  4	 | User U confirms abort operation |
+-----------------------------------------------------------------------------------------------------
+
+### Use case abd (Supplier - show order list), UCabd
+| Actors Involved        | Supplier |
+| ------------- |:-------------:| 
+|  Precondition     | User U authenticated and authorized as "Supplier" |
+|  Post condition   | show list of user orders |
+|  Nominal Scenario | show list of all orders of the user |
+|  Variants     	| show list of orders filtered by status |
+
+##### Scenario abd.1
+
+| Scenario abd.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U authenticated and authorized as "Supplier" |
+| Post condition   | show list of all user U orders |
+| Step#        	   | Description  |
+|  1	 | A list of all user U orders is shown with orderID, date, status and Quality Check problems |
+|  2     | User U can scroll list to see all orders | 
+
+#### Scenario abd.2
+
+| Scenario abd.2 | |
+| ------------- |:-------------:| 
+| Variant Scenario | User U filters list by order status | 
+| Precondition     | User U authenticated and authorized as "Supplier" |
+| Post condition   | show list of user U orders filtered by status |
+| Step#        	   | Description  |
+|  1	 | A list of all user U orders is shown with orderID, date, status and Quality Check problems |
+|  2     | User U selects a filter (status completed, pending, or all) |
+|  3     | list change showing only orders of the status selected |
+--------------------------------------------------------------------------------------------------------------
+
+### Use case abe (Supplier - process order), UCabe
+| Actors Involved        | Supplier |
+| ------------- |:-------------:| 
+|  Precondition     | User U authenticated and authorized as "Supplier"|
+|  Post condition   | items of an orders set as delivered |
+|  Nominal Scenario | user U selects order from order list and process order |
+|  Exceptions     	| user U aborts the operation |
+
+##### Scenario abe.1
+
+| Scenario abe.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U authenticated and authorized as "Supplier" |
+| Post condition   | items I of an orders set as delivered |
+| Step#        	   | Description |
+|  1	 | User U selects an order O |
+|  2     | user U wants to see order details of the order O selected | 
+|  3	 | A list of all items I of the order O is shown with quantity and a delivered field (already delivered item rows are disabled) |
+|  4	 | User U checks one or more item(s) I as delivered |
+|  5	 | User U confirms operation |
+
+#### Scenario abe.2
+
+| Scenario abe.2 | |
+| ------------- |:-------------:| 
+| Exception Scenario | User U abort operation | 
+| Precondition     | User U authenticated and authorized as "Supplier" |
+| Post condition   | nothing changed |
+| Step#        	   | Description  |
+|  1	 | User U selects an order O |
+|  2     | user U wants to see order details of the order O selected | 
+|  3	 | A list of all items I of the order O is shown with quantity and a delivered field (already delivered item rows are disabled) |
+|  4	 | User U checks one or more item(s) as delivered |
+|  5     | User U aborts the operation |
+|  6	 | User U confirms abort operation |
+---------------------------------------------------------------------------------------------------------
+<!-- USE CASES ORGANIZATIONAL UNIT -->
+
+### Use case abf (Organizational Unit - issue internal order), UCabf
+| Actors Involved        | Organizational Unit |
+| ------------- |:-------------:| 
+|  Precondition     | User U authenticated and authorized as "Organizational Unit" |
+|  Post condition   | New internal order IO issued |
+|  Nominal Scenario | User U selects items from inventory, add quantity and issue order IO |
+|  Variant Scenario | User U searches item I by its name, filter by category | 
+|  Exceptions     	| user U aborts the operation, quantity invalid |
+
+##### Scenario abf.1
+
+| Scenario abf.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Post condition   | New internal order IO issued |
+| Step#        	   | Description  |
+|  1	 | A list of all items in the inventory of the Warehouse is shown with itemID, item name and category |
+|  2	 | User U sets quantity to one or more item(s) |
+|  3     | User U confirms operation |
+|  4	 | Quantity input fields checks are passed |
+
+#### Scenario abf.2
+
+| Scenario abf.2 | |
+| ------------- |:-------------:| 
+| Variant Scenario | User U searches item I by item name | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Post condition   | New internal order IO issued |
+| Step#        	   | Description  |
+|  1	 | A list of all items in the inventory of the Warehouse is shown with ItemID, itemName and Category |
+|  2	 | User U searches item I by item name |
+|  3	 | User U sets quantity to the item I |
+|  4     | User U confirms operation |
+|  5	 | Quantity input fields checks are passed |
+
+#### Scenario abf.3
+
+| Scenario abf.3 | |
+| ------------- |:-------------:| 
+| Variant Scenario | User U filters item by category | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Post condition   | New internal order IO issued |
+| Step#        	   | Description  |
+|  1	 | A list of all items in the inventory of the Warehouse is shown with ItemID, itemName and Category |
+|  2	 | User U filters inventory by item category |
+|  3	 | User U sets quantity to one or more item(s) |
+|  4     | User U confirms operation |
+|  5	 | Quantity input fields checks are passed |
+
+##### Scenario abf.4
+
+| Scenario abf.4 | |
+| ------------- |:-------------:| 
+| Exception Scenario | User U aborts operation | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Post condition   | New internal order IO issued |
+| Step#        	   | Description  |
+|  1	 | A list of all items in the inventory of the Warehouse is shown with itemID, item name and Category |
+|  2	 | User U sets quantity to one or more item(s) |
+|  3     | User U aborts the operation |
+|  4	 | User U confirms abort operation |
+
+##### Scenario abf.5
+
+| Scenario n.5 | |
+| ------------- |:-------------:| 
+| Exception Scenario | Quantity value checks failed | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Post condition   | Wrong input field are highlighted |
+| Step#        	   | Description |
+|  1	 | A list of all items in the inventory of the Warehouse is shown with itemID, item name and Category |
+|  2	 | User U sets quantity to one or more item(s) |
+|  3     | User U confirms operation |
+|  4	 | One or more quantity input fields checks are failed |
+|  5     | Input fields with error are highlighted |
+------------------------------------------------------------------------------------------------------------
+
+### Use case abg (Organizational Unit - show order list), UCabg
+| Actors Involved        | Organizational Unit |
+| ------------- |:-------------:| 
+|  Precondition     | User U authenticated and authorized as "Organizational Unit" |
+|  Post condition   | Show list of user U orders |
+|  Nominal Scenario | Show list of all orders of the user U |
+|  Variants     	| Show list of orders filtered by status |
+
+##### Scenario abg.1
+
+| Scenario abg.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Post condition   | Show list of all user U orders |
+| Step#        	   | Description  |
+|  1	 | A list of all user orders is shown with orderID, date and order status |
+|  2     | User can scroll list to see all orders |
+
+#### Scenario abg.2
+
+| Scenario abg.2 | |
+| ------------- |:-------------:| 
+| Variant Scenario | User U filters list by order status | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Post condition   | Show list of user U orders filtered by status |
+| Step#        	   | Description  |
+|  2	 | A list of all user U orders is shown with orderID, date and order status |
+|  3     | User U selects a filter (status completed, pending, or all) |
+|  4     | list change showing only orders of the status selected |
+------------------------------------------------------------------------------------------------------------------
+
+### Use case abh (Organizational Unit - process order), UCabh
+| Actors Involved        | Organizational Unit |
+| ------------- |:-------------:| 
+|  Precondition     | User U authenticated and authorized as "Organizational Unit" |
+|  Post condition   | Items of an orders set as delivered |
+|  Nominal Scenario | User U selects order O from order list and process order O |
+|  Exceptions     	| User U aborts the operation |
+
+##### Scenario abh.1
+
+| Scenario abh.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Post condition   | Items of order O set as delivered |
+| Step#        	   | Description  |
+|  1	 | User U selects an order O |
+|  2     | user U wants to see the order details of the order O selected | 
+|  3	 | A list of all items of the order O is shown with quantity and a delivered field (already delivered item rows are disabled) |
+|  4	 | User U checks one or more item(s) as delivered |
+|  5	 | User U confirms operation |
+
+#### Scenario abh.2
+
+| Scenario abh.2 | |
+| ------------- |:-------------:| 
+| Exception Scenario | User U aborts operation | 
+| Precondition     | User U authenticated and authorized as "Organizational Unit"|
+| Post condition   | nothing changed |
+| Step#        	   | Description  |
+|  1	 | User U selects an order O |
+|  2     | User U wants to see order details of the order O selected | 
+|  3	 | A list of all items of the order O is shown with quantity and a delivered field (already delivered item rows are disabled) |
+|  4	 | User U checks one or more item(s) as delivered |
+|  5     | User U aborts the operation |
+|  6	 | User U confirms abort operation |
 
 
 
