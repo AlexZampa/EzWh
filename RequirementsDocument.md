@@ -35,37 +35,53 @@ Version: 0.0
 				- [Scenario 1.2](#scenario-12)
 				- [Scenario 1.x](#scenario-1x)
 		- [Use case 2, UC2](#use-case-2-uc2)
-		- [Use case x (User - LogIn), UCx](#use-case-x-user---login-ucx)
-		- [Use case x (User - LogOut), UCx](#use-case-x-user---logout-ucx)
-		- [Use case xyz (Administrative 1 - physical space), UCxyz](#use-case-xyz-administrative-1---physical-space-ucxyz)
-				- [Scenario xyz.1](#scenario-xyz1)
-				- [Scenario xyz.2](#scenario-xyz2)
-				- [Scenario xyz.3](#scenario-xyz3)
-				- [Scenario xyz.4](#scenario-xyz4)
-		- [Use case zyx (Administrative 2 - receive items), UCzyx](#use-case-zyx-administrative-2---receive-items-uczyx)
-		- [Use case xzz (Administrative 3 - manage internal order), UCxzz](#use-case-xzz-administrative-3---manage-internal-order-ucxzz)
-		- [Use case xyt (Quality office - apply test), UCxyt](#use-case-xyt-quality-office---apply-test-ucxyt)
-		- [Use case abc (Supplier - manage-requested-items), UCabc](#use-case-abc-supplier---manage-requested-items-ucabc)
-				- [Scenario abc.1](#scenario-abc1)
-				- [Scenario abc.2](#scenario-abc2)
-		- [Use case abd (Supplier - show order list), UCabd](#use-case-abd-supplier---show-order-list-ucabd)
-				- [Scenario abd.1](#scenario-abd1)
-				- [Scenario abd.2](#scenario-abd2)
-		- [Use case abe (Supplier - process order), UCabe](#use-case-abe-supplier---process-order-ucabe)
-				- [Scenario abe.1](#scenario-abe1)
-				- [Scenario abe.2](#scenario-abe2)
-		- [Use case abf (Organizational Unit - issue internal order), UCabf](#use-case-abf-organizational-unit---issue-internal-order-ucabf)
-				- [Scenario abf.1](#scenario-abf1)
-				- [Scenario abf.2](#scenario-abf2)
-				- [Scenario abf.3](#scenario-abf3)
-				- [Scenario abf.4](#scenario-abf4)
-				- [Scenario abf.5](#scenario-abf5)
-		- [Use case abg (Organizational Unit - show order list), UCabg](#use-case-abg-organizational-unit---show-order-list-ucabg)
-				- [Scenario abg.1](#scenario-abg1)
-				- [Scenario abg.2](#scenario-abg2)
-		- [Use case abh (Organizational Unit - process order), UCabh](#use-case-abh-organizational-unit---process-order-ucabh)
-				- [Scenario abh.1](#scenario-abh1)
-				- [Scenario abh.2](#scenario-abh2)
+		- [Use case 1 (User - LogIn), UC1](#use-case-1-user---login-uc1)
+		- [Use case 2 (User - LogOut), UC2](#use-case-2-user---logout-uc2)
+		- [Use case 3 (Manager - Manage availability of items), UC3](#use-case-3-manager---manage-availability-of-items-uc3)
+				- [Scenario 3.1](#scenario-31)
+				- [Scenario 3.2](#scenario-32)
+				- [Scenario 3.3](#scenario-33)
+		- [Use case 4 (Manager - Manage order), UC4](#use-case-4-manager---manage-order-uc4)
+				- [Scenario 4.1](#scenario-41)
+				- [Scenario 4.2](#scenario-42)
+				- [Scenario 4.3](#scenario-43)
+				- [Scenario 4.4](#scenario-44)
+		- [Use case 5 (Administrative 1 - physical space), UC5](#use-case-5-administrative-1---physical-space-uc5)
+				- [Scenario 5.1](#scenario-51)
+				- [Scenario 5.2](#scenario-52)
+				- [Scenario 5.3](#scenario-53)
+				- [Scenario 5.4](#scenario-54)
+		- [Use case 6 (Administrative 2 - receive items), UC6](#use-case-6-administrative-2---receive-items-uc6)
+		- [Use case 7 (Administrative 3 - manage internal order), UC7](#use-case-7-administrative-3---manage-internal-order-uc7)
+		- [Use case 8 (Quality office - apply test), UC8](#use-case-8-quality-office---apply-test-uc8)
+	- [|  Exceptions     | B is not registered: T cannot be applied (U returns B to administrative office, where it should have been before it arrived at quality office). T is not descripted: U can add a description or delete it. |](#--exceptions------b-is-not-registered-t-cannot-be-applied-u-returns-b-to-administrative-office-where-it-should-have-been-before-it-arrived-at-quality-office-t-is-not-descripted-u-can-add-a-description-or-delete-it-)
+		- [Use case 9 (Supplier - manage requested items), UC9](#use-case-9-supplier---manage-requested-items-uc9)
+				- [Scenario 9.1](#scenario-91)
+			- [Scenario 9.2](#scenario-92)
+				- [Scenario 9.3](#scenario-93)
+	- [|  4	 | User U confirms abort operation |](#--4--user-u-confirms-abort-operation-)
+		- [Use case 10 (Supplier - show order list), UC10](#use-case-10-supplier---show-order-list-uc10)
+				- [Scenario 10.1](#scenario-101)
+			- [Scenario 10.2](#scenario-102)
+	- [|  3     | list change showing only orders of the status selected |](#--3------list-change-showing-only-orders-of-the-status-selected-)
+		- [Use case 11 (Supplier - process order), UC11](#use-case-11-supplier---process-order-uc11)
+				- [Scenario 11.1](#scenario-111)
+			- [Scenario 11.2](#scenario-112)
+	- [|  6	 | User U confirms abort operation |](#--6--user-u-confirms-abort-operation-)
+		- [Use case 12 (Organizational Unit - issue internal order), UC12](#use-case-12-organizational-unit---issue-internal-order-uc12)
+				- [Scenario 12.1](#scenario-121)
+			- [Scenario 12.2](#scenario-122)
+			- [Scenario 12.3](#scenario-123)
+				- [Scenario 12.4](#scenario-124)
+				- [Scenario 12.5](#scenario-125)
+	- [|  5     | Input fields with error are highlighted |](#--5------input-fields-with-error-are-highlighted-)
+		- [Use case 13 (Organizational Unit - show order list), UC13](#use-case-13-organizational-unit---show-order-list-uc13)
+				- [Scenario 13.1](#scenario-131)
+			- [Scenario 13.2](#scenario-132)
+	- [|  4     | list change showing only orders of the status selected |](#--4------list-change-showing-only-orders-of-the-status-selected-)
+		- [Use case 14 (Organizational Unit - process order), UC14](#use-case-14-organizational-unit---process-order-uc14)
+				- [Scenario 14.1](#scenario-141)
+			- [Scenario 14.2](#scenario-142)
 - [Glossary](#glossary)
 - [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
@@ -264,7 +280,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 ### Use case 2, UC2
 ..
 
-### Use case x (User - LogIn), UCx
+### Use case 1 (User - LogIn), UC1
 | Actors Involved        | User |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists |
@@ -273,7 +289,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     | None |
 |  Exceptions     | U types wrong UN or P; U doesn't exist; U has been removed |
 
-### Use case x (User - LogOut), UCx
+### Use case 2 (User - LogOut), UC2
 | Actors Involved        | User |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and has logged in |
@@ -282,7 +298,106 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     | None |
 |  Exceptions     | None |
 
-### Use case xyz (Administrative 1 - physical space), UCxyz
+### Use case 3 (Manager - Manage availability of items), UC3
+| Actors Involved        | Manager |
+| ------------- |:-------------:| 
+|  Precondition     | Manager M has logged in as User U; Item I exists |
+|  Post condition     | All Is have been checked |
+|  Nominal Scenario     | M selects an I; M checks the availability of that item; |
+|  Variants     | M is notified when I are few; M sets the quantity threshold T of I before notification; M checks the quantity of I |
+|  Exceptions     | I doesn't exist; T is not valid |
+
+##### Scenario 3.1
+
+| Scenario 3.1 | Show quantity per item |
+| ------------- |:-------------:| 
+|  Precondition     | Item I exists |
+|  Post condition     | M is shown the quantity Q of I |
+| Step#        | Description  |
+|  1     | M selects the procedure to check Q |  
+|  2     | The app prompts for the ID of I |
+|  3	 | M types the ID	|
+|  3     | Q of I is shown |
+
+##### Scenario 3.2
+
+| Scenario 3.2 | Notify when items are under a given quantity threshold |
+| ------------- |:-------------:| 
+|  Precondition     | Item I exists; a threshold T has been set |
+|  Post condition     | M is notified of a low Q of I |
+| Step#        | Description  |
+|  1     | The app detects that the Q of I is lower than T |  
+|  2	 | The app notifies M |
+|  3 	 | M reads the notification |
+
+##### Scenario 3.3
+
+| Scenario 3.3 | Set the quantity threshold |
+| ------------- |:-------------:| 
+|  Precondition     | Item I exists |
+|  Post condition     | Q is accepted as a valid threshold |
+| Step#        | Description  |
+|  1     | M selects the procedure to set a T |  
+|  2	 | M selects I |
+|  3 	 | M types the minimum Q |
+
+### Use case 4 (Manager - Manage order), UC4	
+| Actors Involved        | Manager |
+| ------------- |:-------------:| 
+|  Precondition     | Manager M has logged in as User U; Item I exists; Supplier S exists; I is in low stock |
+|  Post condition     | The order has been managed successfully |
+|  Nominal Scenario     | M is notified that I is in low stock; M issues the order O from S and manages it until it is completed |
+|  Variants     | M checks how many S are available for each I; M issues the order; M selects the order as completed; M checks the order status |
+|  Exceptions     | I doesn't exist; S is not valid; O doesn't exist; O has already been completed |
+
+##### Scenario 4.1
+
+| Scenario 4.1 | Show suppliers per item |
+| ------------- |:-------------:| 
+|  Precondition     | Item I exists |
+|  Post condition     | M is shown all the S for I |
+| Step#        | Description  |
+|  1     | M selects the procedure to check S for I |  
+|  2     | The app prompts for the ID of I |
+|  3	 | M is shown the list of S and can select one for later orders |
+
+##### Scenario 4.2
+
+| Scenario 4.2 | Issue order |
+| ------------- |:-------------:| 
+|  Precondition     | I exists; M has been notified that I is in short supply; S exists |
+|  Post condition     | Order O has been issued |
+| Step#        | Description  |
+|  1     | M selects the option to issue a new O |  
+|  2	 | M selects the I typing its ID  |
+|  3 	 | M selects the Q of I |
+|  4	 | M selects the S typing its ID |
+|  5	 | M issues the order |
+|  6	 | The app automatically generates a new ID for O |
+
+##### Scenario 4.3
+
+| Scenario 4.3	 | Complete order |
+| ------------- |:-------------:| 
+|  Precondition     | I exists; S exists; O exists and has been delivered  |
+|  Post condition     | O is set as completed |
+| Step#        | Description  |
+|  1     | M selects the procedure to set the O as completed |  
+|  2	 | M types the ID of O |
+|  3 	 | M sets O as completed |
+
+##### Scenario 4.4
+
+| Scenario 4.4	 | Show order status |
+| ------------- |:-------------:| 
+|  Precondition     | I exists; S exists |
+|  Post condition     | O is set as completed |
+| Step#        | Description  |
+|  1     | M selects the procedure to check the status of O |  
+|  2	 | M types the ID of O |
+|  3 	 | The app prompts the actual status of O (issued, shipped, delivered, completed) |
+
+### Use case 5 (Administrative 1 - physical space), UC5
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition     | Warehouse W exists, section S exists, user U exists and is logged in as "Warehouse administrative" |
@@ -291,9 +406,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     | With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences explained in the scenarios below. When an entity exists, U can also modify its id, adjacences and slot dimension where present, or delete it. |
 |  Exceptions     | The id chosen by U already exists into the upper-level entity: U has to enter another id. |
 
-##### Scenario xyz.1
+##### Scenario 5.1
 
-| Scenario xyz.1 | Add new warehouse |
+| Scenario 5.1 | Add new warehouse |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Warehouse W is created |
@@ -304,9 +419,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | U sets the dimension of warehouse's slots |
 |  6     | U submits the procedure |
 
-##### Scenario xyz.2 
+##### Scenario 5.2 
 
-| Scenario xyz.2 | Add new section |
+| Scenario 5.2 | Add new section |
 | ------------- |:-------------:| 
 |  Precondition     | Warehouse W exists, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Section S is created |
@@ -318,9 +433,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | U selects a list of adjacent sections |
 |  6     | U submits the procedure |
 
-##### Scenario xyz.3
+##### Scenario 5.3
 
-| Scenario xyz.3 | Add new slots |
+| Scenario 5.3 | Add new slots |
 | ------------- |:-------------:| 
 |  Precondition     | Warehouse W, Section S, Lane L and Shelf A exist, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | A has 100 new slots |
@@ -332,9 +447,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | U accepts all the proposed id |
 |  6     | U submits the procedure |
 
-##### Scenario xyz.4
+##### Scenario 5.4
 
-| Scenario xyz.1 | Delete a Shelf |
+| Scenario 5.1 | Delete a Shelf |
 | ------------- |:-------------:| 
 |  Precondition     | Shelf A exists, A contains no slots or empty slots, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | A is deleted |
@@ -344,7 +459,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4     | The app asks for confirmation |
 |  5     | U confirms |
 
-### Use case zyx (Administrative 2 - receive items), UCzyx
+### Use case 6 (Administrative 2 - receive items), UC6
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition     | Order O has been sent to supplier S, batch B of items descripted by item descriptor D arrived to warehouse, user U exists and is logged in as "Warehouse administrative" |
@@ -353,7 +468,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     | D needs no tests: points 4, 5, 6 are skipped. D needs more than one test: U waits that all tests have been passed |
 |  Exceptions     | B not compliant with O: Items are not even registered, U calls a manager to handle the situation. B does not pass a test: B is marked as refused and is not stored, the return to the supplier is not handled by EzWh app. |
 
-### Use case xzz (Administrative 3 - manage internal order), UCxzz
+### Use case 7 (Administrative 3 - manage internal order), UC7
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition     | Organizational Unit OU has issued an internal order IO, user U exists and is logged in as "Warehouse administrative" |
@@ -362,7 +477,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     | If IO is huge, U can set more than one action "collect" or "ship", involving different warehouse workers |
 |  Exceptions     | Some of requested items not present: U can decide if send immediately the present ones and complete IO later with the missing ones, or freeze the whole order until all items are available. Action collect returns "not found": possible fatal error detected (outgoing flow not tracked or phantom incoming flow), special situation handled by a higher-level manager, IO handled as "item not present" |
 
-### Use case xyt (Quality office - apply test), UCxyt
+### Use case 8 (Quality office - apply test), UC8
 | Actors Involved        |  Quality office |
 | ------------- |:-------------:| 
 |  Precondition     | Batch B arrived in quality office, B is registered, test T exists, user U exists and is logged in as "Quality office" |
@@ -372,7 +487,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Exceptions     | B is not registered: T cannot be applied (U returns B to administrative office, where it should have been before it arrived at quality office). T is not descripted: U can add a description or delete it. |
 ------------------------------------------------------------------------------------------------------------------------------------
 
-### Use case abc (Supplier - manage requested items), UCabc
+### Use case 9 (Supplier - manage requested items), UC9
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
 |  Precondition     | User U authenticated and authorized as "Supplier" |
@@ -381,9 +496,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     	| User U searches the item descriptor D by its name |
 |  Exceptions     	| user U aborts the operation |
 
-##### Scenario abc.1
+##### Scenario 9.1
 
-| Scenario abc.1 | |
+| Scenario 9.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U authenticated and authorized as "Supplier" |
@@ -393,9 +508,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2     | User U sets the item decriptor D as available |
 |  3     | User U confirms operation |
 
-#### Scenario abc.2
+#### Scenario 9.2
 
-| Scenario abc.2 |  |
+| Scenario 9.2 |  |
 | ------------- |:-------------:| 
 | Variant Scenario | User U searches item descriptor D by item name | 
 | Precondition     | User U authenticated and authorized  as "Supplier" |
@@ -405,9 +520,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2     | User U sets the item decriptor D as available |
 |  3     | User U confirms operation |
 
-##### Scenario abc.3
+##### Scenario 9.3
 
-| Scenario abc.3 | |
+| Scenario 9.3 | |
 | ------------- |:-------------:| 
 | Exceptional Scenario | User U aborts operation | 
 | Precondition     | User U authenticated and authorized  as "Supplier" |
@@ -419,7 +534,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4	 | User U confirms abort operation |
 -----------------------------------------------------------------------------------------------------
 
-### Use case abd (Supplier - show order list), UCabd
+### Use case 10 (Supplier - show order list), UC10
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
 |  Precondition     | User U authenticated and authorized as "Supplier" |
@@ -427,9 +542,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario | show list of all orders of the user |
 |  Variants     	| show list of orders filtered by status |
 
-##### Scenario abd.1
+##### Scenario 10.1
 
-| Scenario abd.1 | |
+| Scenario 10.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U authenticated and authorized as "Supplier" |
@@ -438,9 +553,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  1	 | A list of all user U orders is shown with orderID, date, status and Quality Check problems |
 |  2     | User U can scroll list to see all orders | 
 
-#### Scenario abd.2
+#### Scenario 10.2
 
-| Scenario abd.2 | |
+| Scenario 10.2 | |
 | ------------- |:-------------:| 
 | Variant Scenario | User U filters list by order status | 
 | Precondition     | User U authenticated and authorized as "Supplier" |
@@ -451,7 +566,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  3     | list change showing only orders of the status selected |
 --------------------------------------------------------------------------------------------------------------
 
-### Use case abe (Supplier - process order), UCabe
+### Use case 11 (Supplier - process order), UC11
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
 |  Precondition     | User U authenticated and authorized as "Supplier"|
@@ -459,9 +574,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario | user U selects order from order list and process order |
 |  Exceptions     	| user U aborts the operation |
 
-##### Scenario abe.1
+##### Scenario 11.1
 
-| Scenario abe.1 | |
+| Scenario 11.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U authenticated and authorized as "Supplier" |
@@ -473,7 +588,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4	 | User U checks one or more item(s) I as delivered |
 |  5	 | User U confirms operation |
 
-#### Scenario abe.2
+#### Scenario 11.2
 
 | Scenario abe.2 | |
 | ------------- |:-------------:| 
@@ -490,7 +605,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 ---------------------------------------------------------------------------------------------------------
 <!-- USE CASES ORGANIZATIONAL UNIT -->
 
-### Use case abf (Organizational Unit - issue internal order), UCabf
+### Use case 12 (Organizational Unit - issue internal order), UC12
 | Actors Involved        | Organizational Unit |
 | ------------- |:-------------:| 
 |  Precondition     | User U authenticated and authorized as "Organizational Unit" |
@@ -499,9 +614,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variant Scenario | User U searches item I by its name, filter by category | 
 |  Exceptions     	| user U aborts the operation, quantity invalid |
 
-##### Scenario abf.1
+##### Scenario 12.1
 
-| Scenario abf.1 | |
+| Scenario 12.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U authenticated and authorized as "Organizational Unit" |
@@ -512,9 +627,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  3     | User U confirms operation |
 |  4	 | Quantity input fields checks are passed |
 
-#### Scenario abf.2
+#### Scenario 12.2
 
-| Scenario abf.2 | |
+| Scenario 12.2 | |
 | ------------- |:-------------:| 
 | Variant Scenario | User U searches item I by item name | 
 | Precondition     | User U authenticated and authorized as "Organizational Unit" |
@@ -526,9 +641,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4     | User U confirms operation |
 |  5	 | Quantity input fields checks are passed |
 
-#### Scenario abf.3
+#### Scenario 12.3
 
-| Scenario abf.3 | |
+| Scenario 12.3 | |
 | ------------- |:-------------:| 
 | Variant Scenario | User U filters item by category | 
 | Precondition     | User U authenticated and authorized as "Organizational Unit" |
@@ -540,9 +655,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4     | User U confirms operation |
 |  5	 | Quantity input fields checks are passed |
 
-##### Scenario abf.4
+##### Scenario 12.4
 
-| Scenario abf.4 | |
+| Scenario 12.4 | |
 | ------------- |:-------------:| 
 | Exception Scenario | User U aborts operation | 
 | Precondition     | User U authenticated and authorized as "Organizational Unit" |
@@ -553,7 +668,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  3     | User U aborts the operation |
 |  4	 | User U confirms abort operation |
 
-##### Scenario abf.5
+##### Scenario 12.5
 
 | Scenario n.5 | |
 | ------------- |:-------------:| 
@@ -568,7 +683,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | Input fields with error are highlighted |
 ------------------------------------------------------------------------------------------------------------
 
-### Use case abg (Organizational Unit - show order list), UCabg
+### Use case 13 (Organizational Unit - show order list), UC13
 | Actors Involved        | Organizational Unit |
 | ------------- |:-------------:| 
 |  Precondition     | User U authenticated and authorized as "Organizational Unit" |
@@ -576,7 +691,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario | Show list of all orders of the user U |
 |  Variants     	| Show list of orders filtered by status |
 
-##### Scenario abg.1
+##### Scenario 13.1
 
 | Scenario abg.1 | |
 | ------------- |:-------------:| 
@@ -587,7 +702,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  1	 | A list of all user orders is shown with orderID, date and order status |
 |  2     | User can scroll list to see all orders |
 
-#### Scenario abg.2
+#### Scenario 13.2
 
 | Scenario abg.2 | |
 | ------------- |:-------------:| 
@@ -600,7 +715,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4     | list change showing only orders of the status selected |
 ------------------------------------------------------------------------------------------------------------------
 
-### Use case abh (Organizational Unit - process order), UCabh
+### Use case 14 (Organizational Unit - process order), UC14
 | Actors Involved        | Organizational Unit |
 | ------------- |:-------------:| 
 |  Precondition     | User U authenticated and authorized as "Organizational Unit" |
@@ -608,9 +723,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario | User U selects order O from order list and process order O |
 |  Exceptions     	| User U aborts the operation |
 
-##### Scenario abh.1
+##### Scenario 14.1
 
-| Scenario abh.1 | |
+| Scenario 14.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U authenticated and authorized as "Organizational Unit" |
@@ -622,9 +737,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4	 | User U checks one or more item(s) as delivered |
 |  5	 | User U confirms operation |
 
-#### Scenario abh.2
+#### Scenario 14.2
 
-| Scenario abh.2 | |
+| Scenario 14.2 | |
 | ------------- |:-------------:| 
 | Exception Scenario | User U aborts operation | 
 | Precondition     | User U authenticated and authorized as "Organizational Unit"|
