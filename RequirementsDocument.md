@@ -285,37 +285,38 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | ------------- |:-------------:| 
 |  Precondition     | User U exists |
 |  Post condition     | The user has logged in |
-|  Nominal Scenario     | U knows Username UN and Password P; he types them in the dedicated fields; U logs in |
-|  Variants     | None |
-|  Exceptions     | U types wrong UN or P; U doesn't exist; U has been removed |
+|  Nominal Scenario     | U knows Username UN and Password P; U types them in the dedicated fields; the app recognizes the role of U; U logs in the correct page |
+|  Variants     | Password forgotten: restore password procedure;  |
+|  Exceptions     | U types wrong UN or P, U doesn't exist: access denied |
 
 ### Use case 2 (User - LogOut), UC2
 | Actors Involved        | User |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and has logged in |
 |  Post condition     | The user has logged out |
-|  Nominal Scenario     | U clicks on the appropriate button to log out |
+|  Nominal Scenario     | U selects the aprropriate field to log out |
 |  Variants     | None |
 |  Exceptions     | None |
 
 ### Use case 3 (Manager - Manage availability of items), UC3
 | Actors Involved        | Manager |
 | ------------- |:-------------:| 
-|  Precondition     | Manager M has logged in as User U; Item I exists |
-|  Post condition     | All Is have been checked |
-|  Nominal Scenario     | M selects an I; M checks the availability of that item; |
-|  Variants     | M is notified when I are few; M sets the quantity threshold T of I before notification; M checks the quantity of I |
-|  Exceptions     | I doesn't exist; T is not valid |
+|  Precondition     | Manager M has logged in as User U; Inventory I exists, item descriptors A exists |
+|  Post condition     | A, B, C have been checked |
+|  Nominal Scenario     | the app shows the list of all item descriptors in I, with name, id, associated total quantity and current quantity threshold; M searches for A by scrolling the list; M can verify the availability of A |
+|  Variants     | M can search by item descriptor's name; M can filter by items with quantity under threshold; rows with items with quantity under quantity threshold are highlighted; M can modify the quantity threshold; M is notified when quantity of A is equal or less than quantity threshold;  |
+|  Exceptions     | quantity threshold is not valid |
 
 ##### Scenario 3.1
 
+<!-- nominal scenario: valutere se tenere e nel caso modificare -->
 | Scenario 3.1 | Show quantity per item |
 | ------------- |:-------------:| 
 |  Precondition     | Item I exists |
 |  Post condition     | M is shown the quantity Q of I |
 | Step#        | Description  |
 |  1     | M selects the procedure to check Q |  
-|  2     | The app prompts for the ID of I |
+|  2     | The app prompts for the ID of I | (non è più comodo scegliere dalla GUI senza doversi ricordare tutti gli id?)
 |  3	 | M types the ID	|
 |  3     | Q of I is shown |
 
@@ -323,10 +324,10 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 | Scenario 3.2 | Notify when items are under a given quantity threshold |
 | ------------- |:-------------:| 
-|  Precondition     | Item I exists; a threshold T has been set |
-|  Post condition     | M is notified of a low Q of I |
+|  Precondition     | Item descriptor I exists; a threshold T has been set |
+|  Post condition     | M is notified of a low quantity of I |
 | Step#        | Description  |
-|  1     | The app detects that the Q of I is lower than T |  
+|  1     | The app detects that the quantity of I is lower than T |  
 |  2	 | The app notifies M |
 |  3 	 | M reads the notification |
 
@@ -334,22 +335,57 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 | Scenario 3.3 | Set the quantity threshold |
 | ------------- |:-------------:| 
-|  Precondition     | Item I exists |
-|  Post condition     | Q is accepted as a valid threshold |
-| Step#        | Description  |
-|  1     | M selects the procedure to set a T |  
-|  2	 | M selects I |
-|  3 	 | M types the minimum Q |
+|  Precondition     | Item descriptor I exists |
+|  Post condition     | Q is set as quantity threshold for I |
+| Step#        | Description  | 
+|  1	 | M selects I |
+|  2	 | M selects the procedure to set a new T |
+|  3 	 | M types the new quantity threshold Q |
+|  4	 | M subits the modification |
+|  5     | the app checks that Q is valid |
 
-### Use case 4 (Manager - Manage order), UC4	
+<!-- ### Use case 4 (Manager - Manage item request), UC4	-->
+
+<!-- da cancellare -->
 | Actors Involved        | Manager |
 | ------------- |:-------------:| 
-|  Precondition     | Manager M has logged in as User U; Item I exists; Supplier S exists; I is in low stock |
+|  Precondition     | Manager M has logged in as User U; Item I exists; Supplier S exists; I is in low stock ------------->  è necessario che I scarseggi? |
 |  Post condition     | The order has been managed successfully |
-|  Nominal Scenario     | M is notified that I is in low stock; M issues the order O from S and manages it until it is completed |
+|  Nominal Scenario     | ((M is notified that I is in low stock;)) M issues the order O from S and manages it until it is completed |
 |  Variants     | M checks how many S are available for each I; M issues the order; M selects the order as completed; M checks the order status |
 |  Exceptions     | I doesn't exist; S is not valid; O doesn't exist; O has already been completed |
 
+### Use case 4 (Manager - Manage item request), UC4	
+| Actors Involved        | Manager |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists and is logged in as "manager", item descriptor A, B, C exists, A and B are not requested, C is requested, list of item descriptors L exists |
+|  Post condition     | A, B set as requested (they can be seen by suppliers), C set as not requested (a supplier cannot see it anymore) |
+|  Nominal Scenario     | U starts procedure to manage item requests; the app shows L with name, id, quantity, and an editable field to say if I is requested or not; U sets A and B as requested and C as not requested; U subits the procedure; the app asks for confirmation |
+|  Variants     | U can filter L by name  |
+|  Exceptions     | abort procedure: app asks for confirmation |
+
+### Use case 9 (Supplier - manage offer), UC9
+| Actors Involved        | Supplier |
+| ------------- |:-------------:| 
+|  Precondition     | User U authenticated and authorized as "Supplier", item descriptor I exists and set as requested, company C exists |
+|  Post condition   | offer O is created for I |
+|  Nominal Scenario | U selects C; U starts procedure to manage offers; app shows the list of I requested by C and a field to manage offers; U selects I; no offer already existing for I; U starts procedure to add a new offer O; U sets the amount; app checks that amount is valid; U confirms; app asks for confirmation; |
+|  Variants     	| U can filter items by name; an offer for I already exists: U can update or delete it |
+|  Exceptions     	| user U aborts the operation |
+
+### Use case y (Manager - manage orders), UCy
+| Actors Involved        | Manager |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists and is logged in as "manager"; Item descriptor I, J exists and set as requested; Supplier S exists; offer O for I by S exists |
+|  Post condition     | The order has been managed successfully |
+|  Nominal Scenario     | U starts procedure to manage orders; U starts procedure to create a new order; U selects starts procedure to add items; app shows the list of requested items; U selects I; app shows the list of all suppliers that made an offer for I, and the offer; U selects O; U sets quantity; U confirms; user sees the current list of items to be ordered, with S, quantity and total amount; U repeats procedure to add items for J; U submits the new order; app asks for confirmation; app automatically groups order by N different suppliers, and creates N orders |
+|  Variants     | U can choose more than one supplier for the same I; U can remove an element from the list before submitting the order; U can modify quantity of an element already in the list, before submitting the order; in the procedure to manage orders, U can check and update the status of existing orders | 
+|  Exceptions     | U aborts the procedure to create a new order |
+
+<!-- Scenarios per check status e set as completed -->
+<!-- Use case (Supplier - manage order) (view, set delivered.)(pensare ai rejected) -->
+
+<!--
 ##### Scenario 4.1
 
 | Scenario 4.1 | Show suppliers per item |
@@ -397,14 +433,16 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2	 | M types the ID of O |
 |  3 	 | The app prompts the actual status of O (issued, shipped, delivered, completed) |
 
+-->
+
 ### Use case 5 (Administrative 1 - physical space), UC5
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition     | Warehouse W exists, section S exists, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Lane L is created |
-|  Nominal Scenario     | U selects the section S; U starts the procedure to add a new lane; the app generates automatically a new id for the lane; U changes the id into "L"; U submits the procedure. |
-|  Variants     | With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences explained in the scenarios below. When an entity exists, U can also modify its id, adjacences and slot dimension where present, or delete it. |
-|  Exceptions     | The id chosen by U already exists into the upper-level entity: U has to enter another id. |
+|  Nominal Scenario     | U starts procedure to add physical space; from a hyerarchical list U selects the section S; U starts the procedure to add a new lane; the app generates automatically a new id for the lane; U submits the procedure; app asks for confirmation |
+|  Variants     | With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences explained in the scenarios below. When an entity exists, U can also modify its attributes (name, adjacences or slot dimension where present), or delete it. |
+|  Exceptions     | U aborts procedure |
 
 ##### Scenario 5.1
 
@@ -415,9 +453,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Step#        | Description  |
 |  1     | U starts the procedure to add a new warehouse |
 |  2     | The app generates automatically a new id for the warehouse |
-|  4     | U changes the id into "W" |
-|  5     | U sets the dimension of warehouse's slots |
-|  6     | U submits the procedure |
+|  4     | U sets the dimension of warehouse's slots |
+|  5     | U submits the procedure |
+|  6	 | app asks for confirmation |
 
 ##### Scenario 5.2 
 
@@ -429,9 +467,10 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  1     | U selects warehouse W |  
 |  2     | U starts the procedure to add a new section |
 |  3     | The app generates automatically a new id for the section |
-|  4     | U changes the id into "S" |
+|  4     | U set the name of S |
 |  5     | U selects a list of adjacent sections |
 |  6     | U submits the procedure |
+|  7	 | app asks for confirmation |
 
 ##### Scenario 5.3
 
@@ -444,8 +483,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2     | U starts the procedure to add new slots |
 |  3     | U selects the number of new slots: 100 |
 |  4     | The app generates automatically new id for the slots |
-|  5     | U accepts all the proposed id |
-|  6     | U submits the procedure |
+|  5     | U submits the procedure |
+|  6	 | app asks for confirmation |
 
 ##### Scenario 5.4
 
@@ -462,7 +501,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 ### Use case 6 (Administrative 2 - receive items), UC6
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
-|  Precondition     | Order O has been sent to supplier S, batch B of items descripted by item descriptor D arrived to warehouse, user U exists and is logged in as "Warehouse administrative" |
+|  Precondition     | Order O to supplier S exists and is PENDING, batch B of items descripted by item descriptor D arrived to warehouse, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | B is ready to be stored |
 |  Nominal Scenario     | U checks that kind and quantity of items are compliant with O; U registers B and the items in it; U sees that D needs the test T; U sends B to the Quality Office; U waits for test result; U is notified that T has been passed; U sets the action "store" for the items included in B and a warehouse worker. |
 |  Variants     | D needs no tests: points 4, 5, 6 are skipped. D needs more than one test: U waits that all tests have been passed |
@@ -490,10 +529,10 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 ### Use case 9 (Supplier - manage requested items), UC9
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
-|  Precondition     | User U authenticated and authorized as "Supplier" |
+|  Precondition     | User U authenticated and authorized as "Supplier", item descriptor I exists |
 |  Post condition   | associated or not item descriptor D to user U |
-|  Nominal Scenario | show list of item needed by company, user U selects items that produces |
-|  Variants     	| User U searches the item descriptor D by its name |
+|  Nominal Scenario | show list of item needed by company, user U selects I that produces |
+|  Variants     	| User U searches the item descriptor D by its name; U does not provides I anymore: U deletes I from the list  |
 |  Exceptions     	| user U aborts the operation |
 
 ##### Scenario 9.1
