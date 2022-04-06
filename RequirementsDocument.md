@@ -792,6 +792,170 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  6	 | User U confirms abort operation |
 
 
+<!-- use case system administrator -->
+### Use Case 15 (System Administrator - create user), UC15
+
+| Actors Involved        | System Administrator |
+| ------------- |:-------------:| 
+|  Precondition     | User U not defined in the system |
+|  Post condition   | User U created |
+|  Nominal Scenario | System Administrator SA create a User given its username, email and password |
+|  Variants         | SA specifies which role user have with eventually additional parameters|
+
+##### Scenario 15.1
+
+| Scenario 15.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U not defined in the system |
+| Post condition   | User U created |
+| Step#        	   | Description  |
+|  1	 | SA retrieves username, email and password about a user |
+|  2     | SA create a user with linked data | 
+|  3	 | SA add the new user to the system |
+
+#### Scenario 15.2
+
+| Scenario 15.2 | |
+| ------------- |:-------------:| 
+| Variant Scenario | SA wants to specify the role of the user in the system | 
+| Precondition     | User U not defined in the system |
+| Post condition   | User U created |
+| Step#        	   | Description  |
+|  1	 | SA retrieves username, email, password and role about a user |
+|  2     | SA create a user with linked data | 
+|  3	 | SA add the new user to the system |
+
+### Use Case 16 (System Administrator - modify user), UC16
+
+| Actors Involved        | System Administrator |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists |
+|  Post condition   | User U modified |
+|  Nominal Scenario | System Administrator SA wants to modify a User given its username |
+|  exception        | user's username is not present |
+
+##### Scenario 16.1
+
+| Scenario 16.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U exists |
+| Post condition   | User U modified |
+| Step#        	   | Description  |
+|  1	 | SA retrieves user by its username |
+|  2     | SA check if the modification are consistent |
+|  3     | SA modify the user | 
+
+#### Scenario 16.2
+
+| Scenario 16.2 | |
+| ------------- |:-------------:| 
+| Exception Scenario | user's username is not present | 
+| Precondition     | User U exists |
+| Post condition   | nothing changed |
+| Step#        	   | Description  |
+|  1	 | SA retrieves user by its username |
+|  2     | SA doesn't find the user |
+|  3     | SA cancel the modification |
+
+### Use Case 17 (System Administrator - delete user), UC17
+
+| Actors Involved        | System Administrator |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists |
+|  Post condition   | User U deleted |
+|  Nominal Scenario | System Administrator SA wants to delete a User given its username |
+|  exception        | user's username is not present |
+
+##### Scenario 17.1
+
+| Scenario 17.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U exists |
+| Post condition   | User U deleted |
+| Step#        	   | Description  |
+|  1	 | SA retrieves user by its username |
+|  2     | SA delete the user | 
+
+#### Scenario 17.2
+
+| Scenario 17.2 | |
+| ------------- |:-------------:| 
+| Exception Scenario | user's username is not present | 
+| Precondition     | User U exists |
+| Post condition   | nothing changed |
+| Step#        	   | Description  |
+|  1	 | SA retrieves user by its username |
+|  2     | SA doesn't find the user |
+|  3     | SA cancel the deletion |
+
+<!-- use case warehouse worker -->
+
+### Use Case 18 (Warehouse Worker - collect item), UC18
+
+| Actors Involved        | Warehouse Worker |
+| ------------- |:-------------:| 
+|  Precondition     | item found |
+|  Post condition   | item collected |
+|  Nominal Scenario | WW collect the item found |
+|  exception        | item was not found |
+
+<!--##### Scenario 18.1
+
+| Scenario 18.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | item found |
+| Post condition   | item collected |
+| Step#        	   | Description  |
+|  1	 | WW check if the item was found |
+|  2     | WW collect the shipped item | 
+
+#### Scenario 18.2
+
+| Scenario 18.2 | |
+| ------------- |:-------------:| 
+| Exception Scenario | item was not found | 
+| Precondition     |  |
+| Post condition   | nothing changed |
+| Step#        	   | Description  |
+|  1	 | WW check if the item was found |
+|  2     |  |-->
+
+### Use Case 19 (Warehouse Worker - store item), UC19
+
+| Actors Involved        | Warehouse Worker |
+| ------------- |:-------------:| 
+|  Precondition     | item collected |
+|  Post condition   | item stored |
+|  Nominal Scenario | WW store the item collected |
+|  exception        | no freespace available |
+
+##### Scenario 19.1
+
+| Scenario 19.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | item collected |
+| Post condition   | item stored |
+| Step#        	   | Description  |
+|  1	 | WW search for the batch corresponding to the item |
+|  2     | WW check if there is free space available, if yes|
+|  3     | WW store the item | 
+
+#### Scenario 19.2
+
+| Scenario 19.2 | |
+| ------------- |:-------------:| 
+| Exception Scenario | no freespace available | 
+| Precondition     | item collected |
+| Post condition   | new batch created |
+| Step#        	   | Description  |
+|  1	 | WW search for the batch corresponding to the item |
+|  2     | WW check if there is free space available, if no|
+|  3     | WW add a new batch | 
 
 # Glossary
 
