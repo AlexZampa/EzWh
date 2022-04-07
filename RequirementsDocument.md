@@ -16,8 +16,7 @@ Version: 0.0
 - [Stakeholders](#stakeholders)
 - [Context Diagram and interfaces](#context-diagram-and-interfaces)
 	+ [Context Diagram](#context-diagram)
-	+ [Interfaces](#interfaces) 
-	
+	+ [Interfaces](#interfaces) 	
 - [Contents](#contents)
 - [Informal description](#informal-description)
 - [Stakeholders](#stakeholders)
@@ -30,58 +29,57 @@ Version: 0.0
 	- [Non Functional Requirements](#non-functional-requirements)
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
 	- [Use case diagram](#use-case-diagram)
-		- [Use case 1, UC1](#use-case-1-uc1)
-				- [Scenario 1.1](#scenario-11)
-				- [Scenario 1.2](#scenario-12)
-				- [Scenario 1.x](#scenario-1x)
-		- [Use case 2, UC2](#use-case-2-uc2)
 		- [Use case 1 (User - LogIn), UC1](#use-case-1-user---login-uc1)
 		- [Use case 2 (User - LogOut), UC2](#use-case-2-user---logout-uc2)
 		- [Use case 3 (Manager - Manage availability of items), UC3](#use-case-3-manager---manage-availability-of-items-uc3)
-				- [Scenario 3.1](#scenario-31)
-				- [Scenario 3.2](#scenario-32)
-				- [Scenario 3.3](#scenario-33)
-		- [Use case 4 (Manager - Manage order), UC4](#use-case-4-manager---manage-order-uc4)
-				- [Scenario 4.1](#scenario-41)
-				- [Scenario 4.2](#scenario-42)
-				- [Scenario 4.3](#scenario-43)
-				- [Scenario 4.4](#scenario-44)
-		- [Use case 5 (Administrative 1 - physical space), UC5](#use-case-5-administrative-1---physical-space-uc5)
-				- [Scenario 5.1](#scenario-51)
-				- [Scenario 5.2](#scenario-52)
-				- [Scenario 5.3](#scenario-53)
-				- [Scenario 5.4](#scenario-54)
-		- [Use case 6 (Administrative 2 - receive items), UC6](#use-case-6-administrative-2---receive-items-uc6)
-		- [Use case 7 (Administrative 3 - manage internal order), UC7](#use-case-7-administrative-3---manage-internal-order-uc7)
-		- [Use case 8 (Quality office - apply test), UC8](#use-case-8-quality-office---apply-test-uc8)
-	- [|  Exceptions     | B is not registered: T cannot be applied (U returns B to administrative office, where it should have been before it arrived at quality office). T is not descripted: U can add a description or delete it. |](#--exceptions------b-is-not-registered-t-cannot-be-applied-u-returns-b-to-administrative-office-where-it-should-have-been-before-it-arrived-at-quality-office-t-is-not-descripted-u-can-add-a-description-or-delete-it-)
-		- [Use case 9 (Supplier - manage requested items), UC9](#use-case-9-supplier---manage-requested-items-uc9)
-				- [Scenario 9.1](#scenario-91)
-			- [Scenario 9.2](#scenario-92)
-				- [Scenario 9.3](#scenario-93)
-	- [|  4	 | User U confirms abort operation |](#--4--user-u-confirms-abort-operation-)
-		- [Use case 10 (Supplier - show order list), UC10](#use-case-10-supplier---show-order-list-uc10)
-				- [Scenario 10.1](#scenario-101)
+			- [Scenario 3.1](#scenario-31)
+			- [Scenario 3.2](#scenario-32)
+			- [Scenario 3.3](#scenario-33)
+		- [Use case 4 (Manager - Manage item request), UC4](#use-case-4-manager---manage-item-request-uc4)
+			- [Scenario 4.1](#scenario-41)
+		- [ Use case 5 (Manager - manage orders), UC5](#use-case-5-manager---manage-orders-uc5)
+			- [Scenario 5.1](#scenario-51)
+			- [Scenario 5.2](#scenario-52)
+		- [Use case 6 (Administrative 1 - physical space), UC6](#use-case-6-administrative-1---physical-space-uc6)
+			- [Scenario 6.1](#scenario-61)
+			- [Scenario 6.2](#scenario-62)
+			- [Scenario 6.3](#scenario-63)
+			- [Scenario 6.4](#scenario-64)
+		- [Use case 7 (Administrative 2 - receive items), UC7](#use-case-7-administrative-2---receive-items-uc7)
+			- [Scenario 7.1](#scenario-71)
+			- [Scenario 7.2](#scenario-72)
+		- [Use case 8 (Administrative 3 - manage internal order), UC8](#use-case-8-administrative-3---manage-internal-order-uc8)
+			- [Scenario 8.1](#scenario-81)
+		- [Use case 9 (Quality office - apply test), UC9](#use-case-9-quality-office---apply-test-uc9)
+			- [Scenario 9.1](#scenario-91)
+		- [Use case 10 (Supplier - manage requested items), UC10](#use-case-9-supplier---manage-requested-items-uc9)
+			- [Scenario 10.1](#scenario-101)
 			- [Scenario 10.2](#scenario-102)
-	- [|  3     | list change showing only orders of the status selected |](#--3------list-change-showing-only-orders-of-the-status-selected-)
-		- [Use case 11 (Supplier - process order), UC11](#use-case-11-supplier---process-order-uc11)
-				- [Scenario 11.1](#scenario-111)
+		- [Use case 11 (Supplier - manage offer), UC11](#use-case-11-supplier---manage-offer-uc11)
+			- [Scenario 11.1](#scenario-111)
 			- [Scenario 11.2](#scenario-112)
-	- [|  6	 | User U confirms abort operation |](#--6--user-u-confirms-abort-operation-)
-		- [Use case 12 (Organizational Unit - issue internal order), UC12](#use-case-12-organizational-unit---issue-internal-order-uc12)
-				- [Scenario 12.1](#scenario-121)
-			- [Scenario 12.2](#scenario-122)
-			- [Scenario 12.3](#scenario-123)
-				- [Scenario 12.4](#scenario-124)
-				- [Scenario 12.5](#scenario-125)
-	- [|  5     | Input fields with error are highlighted |](#--5------input-fields-with-error-are-highlighted-)
-		- [Use case 13 (Organizational Unit - show order list), UC13](#use-case-13-organizational-unit---show-order-list-uc13)
-				- [Scenario 13.1](#scenario-131)
+		- [Use case 12 (Supplier - manage order list), UC12](#use-case-12-supplier---manage-order-list-uc12)
+			- [Scenario 12.1](#scenario-121)
+		- [Use case 13 (Organizational Unit - issue internal order), UC13](#use-case-13-organizational-unit---issue-internal-order-uc13)
+			- [Scenario 13.1](#scenario-131)
 			- [Scenario 13.2](#scenario-132)
-	- [|  4     | list change showing only orders of the status selected |](#--4------list-change-showing-only-orders-of-the-status-selected-)
-		- [Use case 14 (Organizational Unit - process order), UC14](#use-case-14-organizational-unit---process-order-uc14)
-				- [Scenario 14.1](#scenario-141)
-			- [Scenario 14.2](#scenario-142)
+		- [Use case 14 (Organizational Unit - show internal order list), UC14](#use-case-14-organizational-unit---show-internal-order-list-uc14)
+			- [Scenario 14.1](#scenario-141)
+		- [Use case 15 (Organizational Unit - process internal order), UC15](#use-case-15-organizational-unit---process-internal-order-uc15)
+			- [Scenario 15.1](#scenario-151)
+		- [Use Case 16 (System Administrator - create user), UC16](#use-case-16-system-administrator---create-user-uc16)
+			- [Scenario 16.1](#scenario-161)
+			- [Scenario 16.2](#scenario-162)
+		- [Use Case 17 (System Administrator - modify user), UC17](#use-case-17-system-administrator---modify-user-uc17)
+			- [Scenario 17.1](#scenario-171)
+			- [Scenario 17.2](#scenario-172)
+		- [Use Case 18 (System Administrator - delete user), UC18](#use-case-18-system-administrator---delete-user-uc18)
+			- [Scenario 18.1](#scenario-181)
+			- [Scenario 18.2](#scenario-182)
+		- [Use Case 19 (Warehouse Worker - collect item), UC19](#use-case-19-warehouse-worker---collect-item-uc19)
+		- [Use Case 20 (Warehouse Worker - store item), UC20](#use-case-20-warehouse-worker---store-item-uc20)
+			- [Scenario 20.1](#scenario-201)
+			- [Scenario 20.2](#scenario-202)
 - [Glossary](#glossary)
 - [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
@@ -97,8 +95,6 @@ Storage of items in the warehouse must take into account the availability of phy
 The warehouse is part of a company. Other organizational units (OU) of the company may ask for items in the warehouse. This is implemented via internal orders, received by the warehouse. Upon reception of an internal order the warehouse must collect the requested item(s), prepare them and deliver them to a pick up area. When the item is collected by the other OU the internal order is completed. 
 
 EZWH (EaSy WareHouse) is a software application to support the management of a warehouse.
-
-
 
 # Stakeholders
 
@@ -243,43 +239,6 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 \<define here UML Use case diagram UCD summarizing all use cases, and their relationships>
 ![UseCaseDiagram](./img/UseCaseDiagram.png)
 
-
-\<next describe here each use case in the UCD>
-### Use case 1, UC1
-| Actors Involved        |  |
-| ------------- |:-------------:| 
-|  Precondition     | \<Boolean expression, must evaluate to true before the UC can start> |
-|  Post condition     | \<Boolean expression, must evaluate to true after UC is finished> |
-|  Nominal Scenario     | \<Textual description of actions executed by the UC> |
-|  Variants     | \<other normal executions> |
-|  Exceptions     | \<exceptions, errors > |
-
-##### Scenario 1.1 
-
-\<describe here scenarios instances of UC1>
-
-\<a scenario is a sequence of steps that corresponds to a particular execution of one use case>
-
-\<a scenario is a more formal description of a story>
-
-\<only relevant scenarios should be described>
-
-| Scenario 1.1 | |
-| ------------- |:-------------:| 
-|  Precondition     | \<Boolean expression, must evaluate to true before the scenario can start> |
-|  Post condition     | \<Boolean expression, must evaluate to true after scenario is finished> |
-| Step#        | Description  |
-|  1     |  |  
-|  2     |  |
-|  ...     |  |
-
-##### Scenario 1.2
-
-##### Scenario 1.x
-
-### Use case 2, UC2
-..
-
 ### Use case 1 (User - LogIn), UC1
 | Actors Involved        | User |
 | ------------- |:-------------:| 
@@ -301,15 +260,52 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 ### Use case 3 (Manager - Manage availability of items), UC3
 | Actors Involved        | Manager |
 | ------------- |:-------------:| 
-|  Precondition     | Manager M has logged in as User U; Inventory I exists, item descriptors A exists |
-|  Post condition     | A, B, C have been checked |
-|  Nominal Scenario     | the app shows the list of all item descriptors in I, with name, id, associated total quantity and current quantity threshold; M searches for A by scrolling the list; M can verify the availability of A |
-|  Variants     | M can search by item descriptor's name; M can filter by items with quantity under threshold; rows with items with quantity under quantity threshold are highlighted; M can modify the quantity threshold; M is notified when quantity of A is equal or less than quantity threshold;  |
-|  Exceptions     | quantity threshold is not valid |
+|  Precondition      | User U exists and is logged in as "manager"; Inventory I exists |
+|  Post condition    | Items have been checked |
+|  Nominal Scenario  | U selects item descriptors from list and check availability of items |
+|  Variants     	 | U can search by item descriptor's name; U can filter by items with quantity under threshold; U can modify the quantity threshold; |
+|  Exceptions     	 | quantity threshold is not valid |
 
+#### Scenario 3.1
+| Scenario 3.1 | |
+| ------------- |:-------------:| 
+|  Nominal Scenario |  |
+|  Precondition     | User U exists and is logged in as "manager"; Inventory I exists, Item descriptor A exists |
+|  Post condition   | List of items with quantity is showned |
+| Step#        | Description  |
+|  1     | U selects the procedure to manage availability of items |  
+|  2     | App shows the list of all item descriptors in I, with name, id, associated total quantity and current quantity threshold; rows with items with quantity under quantity threshold are highlighted; |
+|  3	 | U searches for A by scrolling the list |
+
+#### Scenario 3.2
+| Scenario 3.2 |  |
+| ------------- |:-------------:| 
+|  Variant Scenario | Notify when items are under a given quantity threshold |
+|  Precondition     | Item descriptor I exists; a threshold T has been set |
+|  Post condition   | U is notified of a low quantity of I |
+| Step#        | Description  |
+|  1     | The app detects that the quantity of I is lower than T |  
+|  2	 | The app notifies U |
+|  3 	 | U reads the notification |
+
+#### Scenario 3.3
+| Scenario 3.3 |  |
+| ------------- |:-------------:| 
+|  Variant Scenario | Modify the quantity threshold |
+|  Precondition     | Item descriptor I exists |
+|  Post condition   | Q is set as quantity threshold for I |
+| Step#        | Description  | 
+|  1     | U selects the procedure to manage availability of items |  
+|  2     | App shows the list of all item descriptors in I, with name, id, associated total quantity and current quantity threshold |
+|  3	 | U selects I |
+|  4	 | U selects the procedure to set a new T |
+|  5 	 | U types the new quantity threshold Q |
+|  6	 | U subits the modification |
+|  7     | App checks that Q is valid |
+
+<!-- nominal scenario: valutere se tenere e nel caso modificare 
 ##### Scenario 3.1
 
-<!-- nominal scenario: valutere se tenere e nel caso modificare -->
 | Scenario 3.1 | Show quantity per item |
 | ------------- |:-------------:| 
 |  Precondition     | Item I exists |
@@ -344,46 +340,87 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4	 | M subits the modification |
 |  5     | the app checks that Q is valid |
 
-<!-- ### Use case 4 (Manager - Manage item request), UC4	-->
-
-<!-- da cancellare -->
+<!-- ### Use case 4 (Manager - Manage item request), UC4
+ da cancellare 
 | Actors Involved        | Manager |
 | ------------- |:-------------:| 
-|  Precondition     | Manager M has logged in as User U; Item I exists; Supplier S exists; I is in low stock ------------->  è necessario che I scarseggi? |
+|  Precondition     | Manager M has logged in as User U; Item I exists; Supplier S exists; I is in low stock -> è necessario che I scarseggi? |
 |  Post condition     | The order has been managed successfully |
 |  Nominal Scenario     | ((M is notified that I is in low stock;)) M issues the order O from S and manages it until it is completed |
 |  Variants     | M checks how many S are available for each I; M issues the order; M selects the order as completed; M checks the order status |
 |  Exceptions     | I doesn't exist; S is not valid; O doesn't exist; O has already been completed |
+-->
 
-### Use case 4 (Manager - Manage item request), UC4	
+### Use case 4 (Manager - Manage item request), UC4
 | Actors Involved        | Manager |
 | ------------- |:-------------:| 
-|  Precondition     | User U exists and is logged in as "manager", item descriptor A, B, C exists, A and B are not requested, C is requested, list of item descriptors L exists |
-|  Post condition     | A, B set as requested (they can be seen by suppliers), C set as not requested (a supplier cannot see it anymore) |
-|  Nominal Scenario     | U starts procedure to manage item requests; the app shows L with name, id, quantity, and an editable field to say if I is requested or not; U sets A and B as requested and C as not requested; U subits the procedure; the app asks for confirmation |
-|  Variants     | U can filter L by name  |
-|  Exceptions     | abort procedure: app asks for confirmation |
+|  Precondition     | User U exists and is logged in as "manager", list of item descriptors L exists |
+|  Post condition   | One or more item descriptors set as requested or not requested |
+|  Nominal Scenario | U change the state of one or more item descriptors to requested or not requested |
+|  Variants     	| U can search item descriptor inside L by name |
+|  Exceptions     	| abort procedure: app asks for confirmation |
 
-### Use case 9 (Supplier - manage offer), UC9
-| Actors Involved        | Supplier |
+##### Scenario 4.1
+| Scenario 4.1 |  |
 | ------------- |:-------------:| 
-|  Precondition     | User U authenticated and authorized as "Supplier", item descriptor I exists and set as requested, company C exists |
-|  Post condition   | offer O is created for I |
-|  Nominal Scenario | U selects C; U starts procedure to manage offers; app shows the list of I requested by C and a field to manage offers; U selects I; no offer already existing for I; U starts procedure to add a new offer O; U sets the amount; app checks that amount is valid; U confirms; app asks for confirmation; |
-|  Variants     	| U can filter items by name; an offer for I already exists: U can update or delete it |
-|  Exceptions     	| user U aborts the operation |
+| Nominal Scenario | |			
+|  Precondition    | User U exists and is logged in as "manager", list of item descriptors L exists, item descriptors A, B exist, A set as not requested and B set as requested |
+|  Post condition  | A set as requested (it can be seen by suppliers), B set as not requested (it cannot be seen by suppliers) |
+| Step#        | Description  | 
+|  1	 | U starts procedure to manage item requests |
+|  2	 | App shows L with name, id, quantity, and an editable field to say if item descriptor is requested or not |
+|  3	 | U change state of A to requested | 
+|  4	 | U change state of B to not requested | 
+|  5	 | U subits the procedure |
+|  6     | App asks for confirmation |
 
-### Use case y (Manager - manage orders), UCy
+### Use case 5 (Manager - manage orders), UC5
 | Actors Involved        | Manager |
 | ------------- |:-------------:| 
-|  Precondition     | User U exists and is logged in as "manager"; Item descriptor I, J exists and set as requested; Supplier S exists; offer O for I by S exists |
-|  Post condition     | The order has been managed successfully |
-|  Nominal Scenario     | U starts procedure to manage orders; U starts procedure to create a new order; U selects starts procedure to add items; app shows the list of requested items; U selects I; app shows the list of all suppliers that made an offer for I, and the offer; U selects O; U sets quantity; U confirms; user sees the current list of items to be ordered, with S, quantity and total amount; U repeats procedure to add items for J; U submits the new order; app asks for confirmation; app automatically groups order by N different suppliers, and creates N orders |
-|  Variants     | U can choose more than one supplier for the same I; U can remove an element from the list before submitting the order; U can modify quantity of an element already in the list, before submitting the order; in the procedure to manage orders, U can check and update the status of existing orders | 
+|  Precondition     | User U exists and is logged in as "manager" |
+|  Post condition   | N orders created and grouped by N different Supplier |
+|  Nominal Scenario | U select one or more offer by different supplier for different items and issue N orders |
+|  Variants     	| U can remove an element from the list before submitting the order; U can modify quantity of an element already in the list, before submitting the order; U can check and update the status of existing orders |
 |  Exceptions     | U aborts the procedure to create a new order |
 
-<!-- Scenarios per check status e set as completed -->
-<!-- Use case (Supplier - manage order) (view, set delivered.)(pensare ai rejected) -->
+##### Scenario 5.1
+
+| Scenario 5.1 |  |
+| ------------- |:-------------:| 
+|  Nominal Scenario | |
+|  Precondition     | User U exists and is logged in as "manager", Item descriptor I exists, Supplier S exists, offer O for I by S exists |
+|  Post condition   | N orders created and grouped by N different Supplier |
+| Step#        | Description  |
+|  1     | U starts procedure to manage orders |
+|  2     | U starts procedure to create a new order |
+|  3 	 | App shows the current list of items to be ordered with supplier, quantity and total amount (initially list is empty) |
+|  4	 | U starts procedure to add items |
+|  5     | App shows the list of requested items |
+|  6     | U selects I |
+|  7	 | App shows the list of all suppliers that made an offer for I, and the associated offer O |
+|  8     | U selects O |
+|  9     | U sets quantity |
+|  10	 | U confirms operation |
+|  11 	 | back to Step #3, U can continue to add more offer to the order or continue to step #12 |
+|  12	 | U submits the new order | 
+|  13	 | App asks for confirmation |
+|  14	 | App automatically groups order by N different suppliers, and creates N orders |
+
+##### Scenario 5.2
+
+| Scenario 5.2 |  |
+| ------------- |:-------------:| 
+|  Variant Scenario | U can check and update the status of existing orders |
+|  Precondition     | User U exists and is logged in as "manager", Order O exists |
+|  Post condition   | status of O changed to completed |
+| Step#        | Description  |
+|  1     | U starts procedure to manage orders |
+|  2     | U starts procedure to manage existing orders |
+|  3 	 | App shows the list of all orders issued by U with orderID, supplier, date and actual status |
+|  4	 | U selects order O from list |
+|  5     | U set status of O as completed |
+|  6     | App asks for confirmation |
+
 
 <!--
 ##### Scenario 4.1
@@ -435,7 +472,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 -->
 
-### Use case 5 (Administrative 1 - physical space), UC5
+### Use case 6 (Administrative 1 - physical space), UC6
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition     | Warehouse W exists, section S exists, user U exists and is logged in as "Warehouse administrative" |
@@ -444,9 +481,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Variants     | With an equivalent procedure it is possible to add new warehouses, sections, shelves and slots (Precondition: the hyerarchical upper level exists - nothing in case of warehouse -; post condition: the entity is created). Some little differences explained in the scenarios below. When an entity exists, U can also modify its attributes (name, adjacences or slot dimension where present), or delete it. |
 |  Exceptions     | U aborts procedure |
 
-##### Scenario 5.1
+##### Scenario 6.1
 
-| Scenario 5.1 | Add new warehouse |
+| Scenario 6.1 | Add new warehouse |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Warehouse W is created |
@@ -457,9 +494,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | U submits the procedure |
 |  6	 | app asks for confirmation |
 
-##### Scenario 5.2 
+##### Scenario 6.2 
 
-| Scenario 5.2 | Add new section |
+| Scenario 6.2 | Add new section |
 | ------------- |:-------------:| 
 |  Precondition     | Warehouse W exists, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Section S is created |
@@ -472,9 +509,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  6     | U submits the procedure |
 |  7	 | app asks for confirmation |
 
-##### Scenario 5.3
+##### Scenario 6.3
 
-| Scenario 5.3 | Add new slots |
+| Scenario 6.3 | Add new slots |
 | ------------- |:-------------:| 
 |  Precondition     | Warehouse W, Section S, Lane L and Shelf A exist, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | A has 100 new slots |
@@ -486,7 +523,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | U submits the procedure |
 |  6	 | app asks for confirmation |
 
-##### Scenario 5.4
+##### Scenario 6.4
 
 | Scenario 5.1 | Delete a Shelf |
 | ------------- |:-------------:| 
@@ -498,221 +535,239 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4     | The app asks for confirmation |
 |  5     | U confirms |
 
-### Use case 6 (Administrative 2 - receive items), UC6
+### Use case 7 (Administrative 2 - receive items), UC7
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition     | Order O to supplier S exists and is PENDING, batch B of items descripted by item descriptor D arrived to warehouse, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | B is ready to be stored |
 |  Nominal Scenario     | U checks that kind and quantity of items are compliant with O; U registers B and the items in it; U sees that D needs the test T; U sends B to the Quality Office; U waits for test result; U is notified that T has been passed; U sets the action "store" for the items included in B and a warehouse worker. |
-|  Variants     | D needs no tests: points 4, 5, 6 are skipped. D needs more than one test: U waits that all tests have been passed |
-|  Exceptions     | B not compliant with O: Items are not even registered, U calls a manager to handle the situation. B does not pass a test: B is marked as refused and is not stored, the return to the supplier is not handled by EzWh app. |
+|  Variants     | no need of test for B |
+|  Exceptions   | B not compliant with O: Items are not even registered, U calls a manager to handle the situation. B does not pass a test: B is marked as refused and is not stored, the return to the supplier is not handled by EzWh app. |
 
-### Use case 7 (Administrative 3 - manage internal order), UC7
+#### Scenario 7.1
+
+| Scenario 7.1 |  |
+| ------------- |:-------------:| 
+|  Nominal Scenario | |
+|  Precondition     | Order O to supplier S exists and is PENDING, batch B of items descripted by item descriptor D arrived to warehouse, user U exists and is logged in as "Warehouse administrative, a test T for D exists |
+|  Post condition   | B is ready to be stored |
+| Step#        | Description  |
+|  1     | U checks that kind and quantity of items are compliant with O |
+|  2     | U registers B and the items in it |
+|  3 	 | U sends B to the Quality Office |
+|  4	 | U waits for test result |
+|  5     | U is notified that T has been passed |
+|  6     | U sets the action "store" for the items included in B and a warehouse worker |
+
+#### Scenario 7.2
+
+| Scenario 7.2 |  |
+| ------------- |:-------------:| 
+|  Variant Scenario | no need to apply test to B |
+|  Precondition     | Order O to supplier S exists and is PENDING, batch B of items descripted by item descriptor D arrived to warehouse, user U exists and is logged in as "Warehouse administrative, a test T for D exists |
+|  Post condition   | B is ready to be stored |
+| Step#        | Description  |
+|  1     | U checks that kind and quantity of items are compliant with O |
+|  2     | U registers B and the items in it |
+|  6     | U sets the action "store" for the items included in B and a warehouse worker |
+
+
+### Use case 8 (Administrative 3 - manage internal order), UC8
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
-|  Precondition     | Organizational Unit OU has issued an internal order IO, user U exists and is logged in as "Warehouse administrative" |
-|  Post condition     | Requested items are ready at the pick up point |
-|  Nominal Scenario     | U selects IO; U checks that all the item requested are present in the warehouse; U sets the action "collect" associated to IO and a warehouse worker; U waits until the action is completed; U sets the action "ship" for IO and another warehouse worker; U is notified that the action has been completed.  |
-|  Variants     | If IO is huge, U can set more than one action "collect" or "ship", involving different warehouse workers |
-|  Exceptions     | Some of requested items not present: U can decide if send immediately the present ones and complete IO later with the missing ones, or freeze the whole order until all items are available. Action collect returns "not found": possible fatal error detected (outgoing flow not tracked or phantom incoming flow), special situation handled by a higher-level manager, IO handled as "item not present" |
+|  Precondition    | Organizational Unit OU has issued an internal order IO, user U exists and is logged in as "Warehouse administrative" |
+|  Post condition   | Requested items are ready at the pick up point |
+|  Nominal Scenario | U manages the actions collect and ship of IO |
+|  Variants    		| If IO is large, U can set more than one action "collect" or "ship", involving different warehouse workers |
+|  Exceptions     	| Some of requested items not present: U can decide if send immediately the present ones and complete IO later with the missing ones, or freeze the whole order until all items are available. Action collect returns "not found": possible fatal error detected (outgoing flow not tracked or phantom incoming flow), special situation handled by a higher-level manager, IO handled as "item not present" |
+<!-- Exception un po' troppo complicata forse?-->
 
-### Use case 8 (Quality office - apply test), UC8
+#### Scenario 8.1
+
+| Scenario 8.1 |  |
+| ------------- |:-------------:| 
+|  Nominal Scenario | |
+|  Precondition     | Organizational Unit OU has issued an internal order IO, user U exists and is logged in as "Warehouse administrative" |
+|  Post condition   | Requested items are ready at the pick up point |
+| Step#        | Description  |
+|  1     | U selects IO |
+|  2     | U checks that all the item requested are present in the warehouse |
+|  3 	 | U sets the action "collect" associated to IO and a warehouse worker |
+|  4	 | U waits until the action is completed |
+|  5     | U sets the action "ship" for IO and another warehouse worker |
+|  6     | U is notified that the action has been completed |
+
+### Use case 9 (Quality office - apply test), UC9
 | Actors Involved        |  Quality office |
 | ------------- |:-------------:| 
 |  Precondition     | Batch B arrived in quality office, B is registered, test T exists, user U exists and is logged in as "Quality office" |
 |  Post condition     | B is accepted |
-|  Nominal Scenario     | U selects the batch B; among the tests needed by B, U selects the test T; after the test has been executed, U selects "passed"; U submits the test result. |
-|  Variants     | U can read the description of the test to apply. Test not passed: at point 3 U selects "not passed". U can define a new test for the descriptor of items included in B, modify the description of a test or delete it |
-|  Exceptions     | B is not registered: T cannot be applied (U returns B to administrative office, where it should have been before it arrived at quality office). T is not descripted: U can add a description or delete it. |
-------------------------------------------------------------------------------------------------------------------------------------
+|  Nominal Scenario   | U manages test result for batch B |
+|  Variants     	  | Test not passed: same as Scenario 8.1 but at point 4 U selects "not passed". U can define a new test for the descriptor D of items included in B, modify the description of a test or delete it |
+|  Exceptions     | B is not registered: T cannot be applied (U returns B to administrative office, where it should have been before it arrived at quality office). |
+<!-- Exceptions | T is not descripted: U can add a description or delete it. 
+	 creare un test senza descrizione non sarebbe già da evitare (tipo campo obbligatorio) ?
+ -->
+#### Scenario 9.1
 
-### Use case 9 (Supplier - manage requested items), UC9
-| Actors Involved        | Supplier |
+| Scenario 9.1 |  |
 | ------------- |:-------------:| 
-|  Precondition     | User U authenticated and authorized as "Supplier", item descriptor I exists |
-|  Post condition   | associated or not item descriptor D to user U |
-|  Nominal Scenario | show list of item needed by company, user U selects I that produces |
-|  Variants     	| User U searches the item descriptor D by its name; U does not provides I anymore: U deletes I from the list  |
-|  Exceptions     	| user U aborts the operation |
-
-##### Scenario 9.1
-
-| Scenario 9.1 | |
-| ------------- |:-------------:| 
-| Nominal Scenario | | 
-| Precondition     | User U authenticated and authorized as "Supplier" |
-| Post condition   | Associated one or more item descriptor D to user U |
-| Step#        	   | Description  |
-|  1     | User U selects item descriptor D from list | 
-|  2     | User U sets the item decriptor D as available |
-|  3     | User U confirms operation |
+|  Nominal Scenario | |
+|  Precondition     | Batch B arrived in quality office, B is registered, test T exists, user U exists and is logged in as "Quality office"  |
+|  Post condition   | B is accepted |
+| Step#        | Description |
+|  1     | U selects the batch B |
+|  2     | App shows list of tests needed for B, with description |
+|  3	 | U selects the test T |
+|  4 	 | after the test has been executed, U selects "passed" |
+|  5	 | U submits the test result |
+|  6     | U sets the action "ship" for IO and another warehouse worker |
+|  7     | U is notified that the action has been completed |
 
 #### Scenario 9.2
 
 | Scenario 9.2 |  |
 | ------------- |:-------------:| 
-| Variant Scenario | User U searches item descriptor D by item name | 
-| Precondition     | User U authenticated and authorized  as "Supplier" |
-| Post condition   | associated one or more item descriptor D to user U |
-| Step#        	   | Description  |
-|  1     | User U searches item descriptor D by its name |  
-|  2     | User U sets the item decriptor D as available |
-|  3     | User U confirms operation |
+|  Variant Scenario | U can define a new test for the item descriptor D of items included in B|
+|  Precondition     | user U exists and is logged in as "Quality office"  |
+|  Post condition   | a new T is created for D |
+| Step#        | Description |
+|  1     | U starts procedure to create new test |
+|  2     | App shows list of all item descriptors |
+|  3 	 | U selects D from list |
+|  4	 | U starts procedure to add new test T |
+|  5     | U adds description for T |
+|  6     | U confirms the operation |
 
-##### Scenario 9.3
-
-| Scenario 9.3 | |
-| ------------- |:-------------:| 
-| Exceptional Scenario | User U aborts operation | 
-| Precondition     | User U authenticated and authorized  as "Supplier" |
-| Post condition   | nothing changed |
-| Step#        	   | Description  |
-|  1     | User U selects item descriptor D from list or by searching it | 
-|  2     | User U sets the item decriptor D as available |
-|  3     | User U aborts the operation |
-|  4	 | User U confirms abort operation |
------------------------------------------------------------------------------------------------------
-
-### Use case 10 (Supplier - show order list), UC10
+### Use case 10 (Supplier - manage requested items), UC10
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
-|  Precondition     | User U authenticated and authorized as "Supplier" |
-|  Post condition   | show list of user orders |
-|  Nominal Scenario | show list of all orders of the user |
-|  Variants     	| show list of orders filtered by status |
+|  Precondition     | User U exists and is logged in as "Supplier", List L of item descriptors set as requested exists |
+|  Post condition   | associated or not item descriptor D to user U |
+|  Nominal Scenario | App shows L of items descriptor needed by the company, user U selects I that can supply |
+|  Variants     	| User U searches the item descriptor D by its name; U does not provides I anymore: U deletes I from the list |
+|  Exceptions     	| user U aborts the operation |
 
 ##### Scenario 10.1
 
 | Scenario 10.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
-| Precondition     | User U authenticated and authorized as "Supplier" |
-| Post condition   | show list of all user U orders |
+| Precondition     | User U exists and is logged in as "Supplier", List L of item descriptors set as requested exists |
+| Post condition   | Associated one or more item descriptor D to user U |
 | Step#        	   | Description  |
-|  1	 | A list of all user U orders is shown with orderID, date, status and Quality Check problems |
-|  2     | User U can scroll list to see all orders | 
+|  1	 | User starts procedure to manage requested items |
+|  3     | App shows L with item descriptor name | 
+|  4     | User U sets the item descriptor D from L as available to supply | 
+|  5     | User U confirms operation |
 
-#### Scenario 10.2
+##### Scenario 10.2
 
 | Scenario 10.2 | |
 | ------------- |:-------------:| 
-| Variant Scenario | User U filters list by order status | 
-| Precondition     | User U authenticated and authorized as "Supplier" |
-| Post condition   | show list of user U orders filtered by status |
+| Variant Scenario | User U exists and is logged in as "Supplier", List L of item descriptors set as requested exists, item descriptor D already setted as available to supply |
+| Precondition     | User U authenticated and authorized  as "Supplier" |
+| Post condition   | Removed association of one or more item descriptor D to user U |
 | Step#        	   | Description  |
-|  1	 | A list of all user U orders is shown with orderID, date, status and Quality Check problems |
-|  2     | User U selects a filter (status completed, pending, or all) |
-|  3     | list change showing only orders of the status selected |
---------------------------------------------------------------------------------------------------------------
+|  1	 | User starts procedure to manage requested items |
+|  3     | App shows L with item descriptor name, D is already shown as available to supply | 
+|  4     | User U deselect the item descriptor D from L as available to supply | 
+|  5     | User U confirms operation |
 
-### Use case 11 (Supplier - process order), UC11
+### Use case 11 (Supplier - manage offer), UC11
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
-|  Precondition     | User U authenticated and authorized as "Supplier"|
-|  Post condition   | items of an orders set as delivered |
-|  Nominal Scenario | user U selects order from order list and process order |
-|  Exceptions     	| user U aborts the operation |
+|  Precondition     | User U exists and is logged in as "Supplier", item descriptor I exists and set as requested |
+|  Post condition   | Offer O is created, updated or deleted for I |
+|  Nominal Scenario | U selects I from a list and manages an Offer O for I |
+|  Variants     	| U can filter item descriptor by name; an offer O for I already exists: U can update or delete O |
+|  Exceptions     	| user U aborts the operation: app asks for confirmation |
 
-##### Scenario 11.1
-
-| Scenario 11.1 | |
+#### Scenario 11.1
+| Scenario 11.1 |  |
 | ------------- |:-------------:| 
-| Nominal Scenario | | 
-| Precondition     | User U authenticated and authorized as "Supplier" |
-| Post condition   | items I of an orders set as delivered |
-| Step#        	   | Description |
-|  1	 | User U selects an order O |
-|  2     | user U wants to see order details of the order O selected | 
-|  3	 | A list of all items I of the order O is shown with quantity and a delivered field (already delivered item rows are disabled) |
-|  4	 | User U checks one or more item(s) I as delivered |
-|  5	 | User U confirms operation |
+| Nominal Scenario | |			
+|  Precondition    | User U exists and is logged in as "Supplier", item descriptor I exists and set as requested, no offer already existing for I |
+|  Post condition  | Offer O is created for I |
+| Step#        | Description  | 
+|  1	 | U starts procedure to manage offers |
+|  2	 | app shows the list of I requested by the company and a field to manage offers |
+|  3	 | U selects I |
+|  4	 | U starts procedure to manage an offer O for I|
+|  5     | U sets the amount for O |
+|  6 	 | app checks that amount is valid |
+|  7	 | U confirms operation |
 
 #### Scenario 11.2
-
-| Scenario abe.2 | |
+| Scenario 11.2 |  |
 | ------------- |:-------------:| 
-| Exception Scenario | User U abort operation | 
-| Precondition     | User U authenticated and authorized as "Supplier" |
-| Post condition   | nothing changed |
-| Step#        	   | Description  |
-|  1	 | User U selects an order O |
-|  2     | user U wants to see order details of the order O selected | 
-|  3	 | A list of all items I of the order O is shown with quantity and a delivered field (already delivered item rows are disabled) |
-|  4	 | User U checks one or more item(s) as delivered |
-|  5     | User U aborts the operation |
-|  6	 | User U confirms abort operation |
----------------------------------------------------------------------------------------------------------
-<!-- USE CASES ORGANIZATIONAL UNIT -->
+| Variant Scenario | U update an offer already existing for I |
+|  Precondition    | User U exists and is logged in as "Supplier", item descriptor I exists and set as requested, an offer O already exists for I |
+|  Post condition  | Offer O is updated for I |
+| Step#        | Description  | 
+|  1	 | U starts procedure to manage offers |
+|  2	 | app shows the list of I requested by the company and a field to manage offers |
+|  3	 | U selects I |
+|  4	 | U starts procedure to manage an offer O for I|
+|  5	 | App shows the existing offer |
+|  5     | U sets the new amount for O |
+|  6 	 | app checks that amount is valid |
+|  7	 | U confirms operation |
 
-### Use case 12 (Organizational Unit - issue internal order), UC12
-| Actors Involved        | Organizational Unit |
+### Use case 12 (Supplier - manage order list), UC12
+| Actors Involved        | Supplier |
 | ------------- |:-------------:| 
-|  Precondition     | User U authenticated and authorized as "Organizational Unit" |
-|  Post condition   | New internal order IO issued |
-|  Nominal Scenario | User U selects items from inventory, add quantity and issue order IO |
-|  Variant Scenario | User U searches item I by its name, filter by category | 
-|  Exceptions     	| user U aborts the operation, quantity invalid |
+|  Precondition     | User U exists and is logged in as "Supplier", List L of orders exists |
+|  Post condition   | list of user orders showed, order O changed |
+|  Nominal Scenario | User U start procedure to show order list; App shows L of all orders of U with orderID, date, status and Quality 						  Check problems; |
+|  Variants     	| User U can filter L by status; U can process an order O |
+|  Exceptions	  	| None |
 
 ##### Scenario 12.1
 
 | Scenario 12.1 | |
 | ------------- |:-------------:| 
+| Variant Scenario | User U process order O | 
+| Precondition     | User U exists and is logged in as "Supplier", list of orders L exists |
+| Post condition   | One or more items of order O set as delivered |
+| Step#        	   | Description |
+|  1	 | User U start procedure to show order list L |
+|  2 	 | U selects an order O from L | 
+|  3     | U start procedure to process order O | 
+|  4	 | App shows a list of all items of the order O with quantity and a delivered field (already delivered item rows are disabled)|
+|  5	 | U checks one or more item(s) as delivered |
+|  6	 | U confirms operation |
+
+
+### Use case 13 (Organizational Unit - issue internal order), UC13
+| Actors Involved        | Organizational Unit |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists and is logged in as "Organizational Unit", Inventory I exists |
+|  Post condition   | New internal order IO issued |
+|  Nominal Scenario | User U selects item descriptors from inventory I, add quantity and issue order IO |
+|  Variant Scenario | User U searches item descriptor I by its name; U filters I by item category | 
+|  Exceptions     	| user U aborts the operation, quantity invalid |
+
+##### Scenario 13.1
+
+| Scenario 13.1 | |
+| ------------- |:-------------:| 
 | Nominal Scenario | | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Precondition     | User U exists and is logged in as "Organizational Unit", Inventory I exists |
 | Post condition   | New internal order IO issued |
 | Step#        	   | Description  |
-|  1	 | A list of all items in the inventory of the Warehouse is shown with itemID, item name and category |
-|  2	 | User U sets quantity to one or more item(s) |
-|  3     | User U confirms operation |
-|  4	 | Quantity input fields checks are passed |
-
-#### Scenario 12.2
-
-| Scenario 12.2 | |
-| ------------- |:-------------:| 
-| Variant Scenario | User U searches item I by item name | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit" |
-| Post condition   | New internal order IO issued |
-| Step#        	   | Description  |
-|  1	 | A list of all items in the inventory of the Warehouse is shown with ItemID, itemName and Category |
-|  2	 | User U searches item I by item name |
-|  3	 | User U sets quantity to the item I |
+|  1	 | U starts procedure to issue a new internal order IO |
+|  2	 | A list of all item descriptors in I of the Warehouse is shown with itemID, item name and category |
+|  3	 | User U sets the quantity to one or more item descriptor(s) in the list |
 |  4     | User U confirms operation |
-|  5	 | Quantity input fields checks are passed |
+|  5	 | App checks that the quantity input fields are valid|
 
-#### Scenario 12.3
+##### Scenario 13.2
 
-| Scenario 12.3 | |
-| ------------- |:-------------:| 
-| Variant Scenario | User U filters item by category | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit" |
-| Post condition   | New internal order IO issued |
-| Step#        	   | Description  |
-|  1	 | A list of all items in the inventory of the Warehouse is shown with ItemID, itemName and Category |
-|  2	 | User U filters inventory by item category |
-|  3	 | User U sets quantity to one or more item(s) |
-|  4     | User U confirms operation |
-|  5	 | Quantity input fields checks are passed |
-
-##### Scenario 12.4
-
-| Scenario 12.4 | |
-| ------------- |:-------------:| 
-| Exception Scenario | User U aborts operation | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit" |
-| Post condition   | New internal order IO issued |
-| Step#        	   | Description  |
-|  1	 | A list of all items in the inventory of the Warehouse is shown with itemID, item name and Category |
-|  2	 | User U sets quantity to one or more item(s) |
-|  3     | User U aborts the operation |
-|  4	 | User U confirms abort operation |
-
-##### Scenario 12.5
-
-| Scenario n.5 | |
+| Scenario 13.2 | |
 | ------------- |:-------------:| 
 | Exception Scenario | Quantity value checks failed | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Precondition     | User U exists and is logged in as "Organizational Unit", Inventory I exists |
 | Post condition   | Wrong input field are highlighted |
 | Step#        	   | Description |
 |  1	 | A list of all items in the inventory of the Warehouse is shown with itemID, item name and Category |
@@ -720,80 +775,55 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  3     | User U confirms operation |
 |  4	 | One or more quantity input fields checks are failed |
 |  5     | Input fields with error are highlighted |
-------------------------------------------------------------------------------------------------------------
 
-### Use case 13 (Organizational Unit - show order list), UC13
+### Use case 14 (Organizational Unit - show internal order list), UC14
 | Actors Involved        | Organizational Unit |
 | ------------- |:-------------:| 
-|  Precondition     | User U authenticated and authorized as "Organizational Unit" |
-|  Post condition   | Show list of user U orders |
+|  Precondition     | User U exists and is logged in as "Organizational Unit" |
+|  Post condition   | List of user U orders showed |
 |  Nominal Scenario | Show list of all orders of the user U |
-|  Variants     	| Show list of orders filtered by status |
-
-##### Scenario 13.1
-
-| Scenario abg.1 | |
-| ------------- |:-------------:| 
-| Nominal Scenario | | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit" |
-| Post condition   | Show list of all user U orders |
-| Step#        	   | Description  |
-|  1	 | A list of all user orders is shown with orderID, date and order status |
-|  2     | User can scroll list to see all orders |
-
-#### Scenario 13.2
-
-| Scenario abg.2 | |
-| ------------- |:-------------:| 
-| Variant Scenario | User U filters list by order status | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit" |
-| Post condition   | Show list of user U orders filtered by status |
-| Step#        	   | Description  |
-|  2	 | A list of all user U orders is shown with orderID, date and order status |
-|  3     | User U selects a filter (status completed, pending, or all) |
-|  4     | list change showing only orders of the status selected |
-------------------------------------------------------------------------------------------------------------------
-
-### Use case 14 (Organizational Unit - process order), UC14
-| Actors Involved        | Organizational Unit |
-| ------------- |:-------------:| 
-|  Precondition     | User U authenticated and authorized as "Organizational Unit" |
-|  Post condition   | Items of an orders set as delivered |
-|  Nominal Scenario | User U selects order O from order list and process order O |
-|  Exceptions     	| User U aborts the operation |
+|  Variants     	| Show list of orders filtered by status; U can see list of item descriptor |
+|  Exception 		| None |
 
 ##### Scenario 14.1
 
 | Scenario 14.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit" |
+| Precondition     | User U exists and is logged in as "Organizational Unit" |
+| Post condition   | List of all user U orders showed |
+| Step#        	   | Description  |
+|  1	 | U starts the procedure to show the list of all internal orders |
+|  2	 | App shows a list of all user U orders with orderID, date and order status |
+|  3     | User can scroll list to see all orders |
+
+### Use case 15 (Organizational Unit - process internal order), UC15
+| Actors Involved        | Organizational Unit |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists and is logged in as "Organizational Unit" |
+|  Post condition   | Items of an orders set as delivered |
+|  Nominal Scenario | User U selects order O from order list and process order O |
+|  Variant Scenario | None |
+|  Exceptions     	| User U aborts the operation |
+
+##### Scenario 15.1
+
+| Scenario 15.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U exists and is logged in as "Organizational Unit" |
 | Post condition   | Items of order O set as delivered |
 | Step#        	   | Description  |
-|  1	 | User U selects an order O |
-|  2     | user U wants to see the order details of the order O selected | 
-|  3	 | A list of all items of the order O is shown with quantity and a delivered field (already delivered item rows are disabled) |
-|  4	 | User U checks one or more item(s) as delivered |
-|  5	 | User U confirms operation |
-
-#### Scenario 14.2
-
-| Scenario 14.2 | |
-| ------------- |:-------------:| 
-| Exception Scenario | User U aborts operation | 
-| Precondition     | User U authenticated and authorized as "Organizational Unit"|
-| Post condition   | nothing changed |
-| Step#        	   | Description  |
-|  1	 | User U selects an order O |
-|  2     | User U wants to see order details of the order O selected | 
-|  3	 | A list of all items of the order O is shown with quantity and a delivered field (already delivered item rows are disabled) |
-|  4	 | User U checks one or more item(s) as delivered |
-|  5     | User U aborts the operation |
-|  6	 | User U confirms abort operation |
+|  1	 | U starts the procedure to show the list of all internal orders |
+|  2	 | App shows a list of all user U orders with orderID, date and order status |
+|  3	 | U selects an order O |
+|  4     | U starts procedure to see order details of O | 
+|  5	 | A list of all items of O is shown with quantity and a delivered field (already delivered item rows are disabled) |
+|  6	 | User U checks one or more item(s) as delivered |
+|  7	 | User U confirms operation |
 
 
-<!-- use case system administrator -->
-### Use Case 15 (System Administrator - create user), UC15
+### Use Case 16 (System Administrator - create user), UC16
 
 | Actors Involved        | System Administrator |
 | ------------- |:-------------:| 
@@ -802,9 +832,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario | System Administrator SA create a User given its username, email and password |
 |  Variants         | SA specifies which role user have with eventually additional parameters|
 
-##### Scenario 15.1
+##### Scenario 16.1
 
-| Scenario 15.1 | |
+| Scenario 16.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U not defined in the system |
@@ -814,9 +844,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2     | SA create a user with linked data | 
 |  3	 | SA add the new user to the system |
 
-#### Scenario 15.2
+#### Scenario 16.2
 
-| Scenario 15.2 | |
+| Scenario 16.2 | |
 | ------------- |:-------------:| 
 | Variant Scenario | SA wants to specify the role of the user in the system | 
 | Precondition     | User U not defined in the system |
@@ -826,7 +856,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2     | SA create a user with linked data | 
 |  3	 | SA add the new user to the system |
 
-### Use Case 16 (System Administrator - modify user), UC16
+### Use Case 17 (System Administrator - modify user), UC17
 
 | Actors Involved        | System Administrator |
 | ------------- |:-------------:| 
@@ -835,9 +865,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario | System Administrator SA wants to modify a User given its username |
 |  exception        | user's username is not present |
 
-##### Scenario 16.1
+##### Scenario 17.1
 
-| Scenario 16.1 | |
+| Scenario 17.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U exists |
@@ -846,38 +876,6 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  1	 | SA retrieves user by its username |
 |  2     | SA check if the modification are consistent |
 |  3     | SA modify the user | 
-
-#### Scenario 16.2
-
-| Scenario 16.2 | |
-| ------------- |:-------------:| 
-| Exception Scenario | user's username is not present | 
-| Precondition     | User U exists |
-| Post condition   | nothing changed |
-| Step#        	   | Description  |
-|  1	 | SA retrieves user by its username |
-|  2     | SA doesn't find the user |
-|  3     | SA cancel the modification |
-
-### Use Case 17 (System Administrator - delete user), UC17
-
-| Actors Involved        | System Administrator |
-| ------------- |:-------------:| 
-|  Precondition     | User U exists |
-|  Post condition   | User U deleted |
-|  Nominal Scenario | System Administrator SA wants to delete a User given its username |
-|  exception        | user's username is not present |
-
-##### Scenario 17.1
-
-| Scenario 17.1 | |
-| ------------- |:-------------:| 
-| Nominal Scenario | | 
-| Precondition     | User U exists |
-| Post condition   | User U deleted |
-| Step#        	   | Description  |
-|  1	 | SA retrieves user by its username |
-|  2     | SA delete the user | 
 
 #### Scenario 17.2
 
@@ -889,11 +887,43 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 | Step#        	   | Description  |
 |  1	 | SA retrieves user by its username |
 |  2     | SA doesn't find the user |
+|  3     | SA cancel the modification |
+
+### Use Case 18 (System Administrator - delete user), UC18
+
+| Actors Involved        | System Administrator |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists |
+|  Post condition   | User U deleted |
+|  Nominal Scenario | System Administrator SA wants to delete a User given its username |
+|  exception        | user's username is not present |
+
+##### Scenario 18.1
+
+| Scenario 18.1 | |
+| ------------- |:-------------:| 
+| Nominal Scenario | | 
+| Precondition     | User U exists |
+| Post condition   | User U deleted |
+| Step#        	   | Description  |
+|  1	 | SA retrieves user by its username |
+|  2     | SA delete the user | 
+
+#### Scenario 18.2
+
+| Scenario 18.2 | |
+| ------------- |:-------------:| 
+| Exception Scenario | user's username is not present | 
+| Precondition     | User U exists |
+| Post condition   | nothing changed |
+| Step#        	   | Description  |
+|  1	 | SA retrieves user by its username |
+|  2     | SA doesn't find the user |
 |  3     | SA cancel the deletion |
 
 <!-- use case warehouse worker -->
 
-### Use Case 18 (Warehouse Worker - collect item), UC18
+### Use Case 19 (Warehouse Worker - collect item), UC19
 
 | Actors Involved        | Warehouse Worker |
 | ------------- |:-------------:| 
@@ -924,7 +954,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  1	 | WW check if the item was found |
 |  2     |  |-->
 
-### Use Case 19 (Warehouse Worker - store item), UC19
+### Use Case 20 (Warehouse Worker - store item), UC20
 
 | Actors Involved        | Warehouse Worker |
 | ------------- |:-------------:| 
@@ -933,9 +963,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario | WW store the item collected |
 |  exception        | no freespace available |
 
-##### Scenario 19.1
+##### Scenario 20.1
 
-| Scenario 19.1 | |
+| Scenario 20.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | item collected |
@@ -945,9 +975,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  2     | WW check if there is free space available, if yes|
 |  3     | WW store the item | 
 
-#### Scenario 19.2
+#### Scenario 20.2
 
-| Scenario 19.2 | |
+| Scenario 20.2 | |
 | ------------- |:-------------:| 
 | Exception Scenario | no freespace available | 
 | Precondition     | item collected |
