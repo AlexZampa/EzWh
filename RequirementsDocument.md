@@ -153,70 +153,73 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 \<they match to high level use cases>
 
 | ID        | Description  |
-| ------------- |:-------------:| 
-| FR1     | Manage users (Administrator) |
-|  	FR1.1   | Create users  |
-|	FR1.2	|	Delete users	|
-|	FR1.3	|	Modify users	|
+| :------------- |:-------------:| 
+| FR1     | Manage users (System Administrator) |
+| &emsp;FR1.1   |   Create users  |
+| &emsp;FR1.2	|	Delete users  |
+| &emsp;FR1.3	|	Modify users  |
 | FR2     | Manage item |
-|  	FR2.1   | Manage itemDescriptor  |
-|  	 FR2.1.1   | Create itemDescriptor  |
-|	 FR2.1.2   | Delete itemDescriptor	|
-|	 FR2.1.3	| Modify itemDescriptor	|
-| 	FR2.2  | Manage physical items |
-|  	 FR2.2.1   | Add item  |
-|	 FR2.2.2   | Remove item	|
-|	FR2.3 | Manage Batch |
-|	 FR2.3.1 | Add Batch |
-|	 FR2.3.2 | Remove Batch |
-|	 FR2.3.3 | Modify Batch |
-|	 FR2.3.4   | Set position of batch |
+| &emsp;FR2.1   | Manage itemDescriptor  |
+| &emsp;&emsp;FR2.1.1   | Create itemDescriptor  |
+| &emsp;&emsp;FR2.1.2   | Delete itemDescriptor	|
+| &emsp;&emsp;FR2.1.3	| Modify itemDescriptor	|
+| &emsp;FR2.2  | Manage physical items |
+| &emsp;&emsp;FR2.2.1   | Add item  |
+| &emsp;&emsp;FR2.2.2   | Remove item	|
+| &emsp;FR2.3 | Manage Batch |
+| &emsp;&emsp;FR2.3.1 | Add Batch |
+| &emsp;&emsp;FR2.3.2 | Remove Batch |
+| &emsp;&emsp;FR2.3.3 | Modify Batch |
+| &emsp;FR2.3.4   | Set position of batch |
 | FR3  | Manage availability of items (Manager) |
-| 	FR3.1 | Show quantity per item |
-| 	FR3.2 | Notify when items are under a given quantity threshold |
-| 	FR3.3 | Set the quantity threshold |
+| &emsp;FR3.1 | Show quantity per item |
+| &emsp;FR3.2 | Notify when items are under a given quantity threshold |
+| &emsp;FR3.3 | Set the quantity threshold |
 | FR4 |	Manage order (Manager) |
-| 	FR4.1 | show suppliers per item |
-|	FR4.2 | Issue order |
-|	FR4.3 | Complete order |
-|	FR4.4 | Show order status |
-| FR5 | Manage suppliers |
-| 	FR5.1 | Add offer on item descriptor (Supplier) |
-| 	FR5.2 | Update offer (Supplier) |
-| 	FR5.3 | Delete offer (Supplier) |
+| &emsp;FR4.1 | Manage item request |
+| &emsp;FR4.2 | Show suppliers per item |
+| &emsp;FR4.3 | Issue order |
+| &emsp;FR4.4 | Complete order |
+| &emsp;FR4.5 | Show order status |
+| FR5 | Manage suppliers (Supplier) |
+| &emsp;FR5.1 |	Manage requested items |
+| &emsp;FR5.2 | Manage offer |
+| &emsp;&emsp;FR5.2.1 | Add offer |
+| &emsp;&emsp;FR5.2.2 | Update offer |
+| &emsp;&emsp;FR5.2.3 | Delete offer |
+| &emsp;FR5.3 | Show orders |
 | FR6 | Manage quality check |
-|   FR6.1 | Manage test |
-|     FR6.1.1 | Describe new test |
-|     FR6.1.2 | Modify test |
-|     FR6.1.3 | Delete test |
-|     FR6.1.4 | Associate test with item descriptor |
-|   FR6.2 | Apply test (Quality office) |
-| 	  FR6.2.1 | Add test result |
-| 	  FR6.2.2 | Reject items |
-| 	  FR6.2.3 | Accept items |
+| &emsp;FR6.1 | Manage test |
+| &emsp;&emsp;FR6.1.1 | Describe new test |
+| &emsp;&emsp;FR6.1.2 | Modify test |
+| &emsp;&emsp;FR6.1.3 | Delete test |
+| &emsp;&emsp;FR6.1.4 | Associate test with item descriptor |
+| &emsp;FR6.2 | Apply test (Quality office) |
+| &emsp;&emsp;FR6.2.1 | Add test result |
+| &emsp;&emsp;FR6.2.2 | Reject items |
+| &emsp;&emsp;FR6.2.3 | Accept items |
 | FR7 | Manage Warehouse physical space (Warehouse administrative) |
-| 	FR7.1 | Manage Section |
-| 	  FR7.1.1 | Add new Section |
-| 	  FR7.1.2 | Delete Section |
-| 	FR7.2 | Manage Lane |
-| 	  FR7.2.1 | Add new Lane |
-| 	  FR7.2.2 | Delete Lane |
-| 	FR7.3 | Manage Shelf |
-| 	  FR7.2.1 | Add new Shelf |
-| 	  FR7.2.2 | Delete Shelf |
-| 	FR7.4 | Manage Slot |
-| 	  FR7.4.1 | Add new Slot |
-| 	  FR7.4.2 | Delete Slot |
-| 	  FR7.4.2 | Set slot dimension |
+| &emsp;FR7.1 | Manage Section |
+| &emsp;&emsp;FR7.1.1 | Add new Section |
+| &emsp;&emsp;FR7.1.2 | Delete Section |
+| &emsp;FR7.2 | Manage Lane |
+| &emsp;&emsp;FR7.2.1 | Add new Lane |
+| &emsp;&emsp;FR7.2.2 | Delete Lane |
+| &emsp;FR7.3 | Manage Shelf |
+| &emsp;&emsp;FR7.3.1 | Add new Shelf |
+| &emsp;&emsp;FR7.3.2 | Delete Shelf |
+| &emsp;FR7.4 | Manage Slot |
+| &emsp;&emsp;FR7.4.1 | Add new Slot |
+| &emsp;&emsp;FR7.4.2 | Delete Slot |
+| &emsp;&emsp;FR7.4.2 | Set slot dimension |
 | FR8 | Locate items |
 | FR9 | Track free space |
 | FR10 | Manage internal order |
-| 	FR10.1 | Issue internal order (Organizational Unit) |
-|	FR10.2 | Accept internal order|
-| 	 FR10.2.1 | Collect items |
-| 	 FR10.2.2 | Ship items |
-|	FR10.3 | Show internal order status |
-
+| &emsp;FR10.1 | Issue internal order (Organizational Unit) |
+| &emsp;FR10.2 | Accept internal order (Warehouse Administrative) |
+| &emsp;&emsp;FR10.2.1 | Collect items |
+| &emsp;&emsp;FR10.2.2 | Ship items |
+| &emsp;FR10.3 | Show Internal order status |
 
 
 ## Non Functional Requirements
@@ -245,8 +248,20 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Precondition     | User U exists |
 |  Post condition     | The user has logged in |
 |  Nominal Scenario     | U knows Username UN and Password P; U types them in the dedicated fields; the app recognizes the role of U; U logs in the correct page |
-|  Variants     | Password forgotten: restore password procedure;  |
+|  Variants     | First login; Password forgotten: restore password procedure;  |
 |  Exceptions     | U types wrong UN or P, U doesn't exist: access denied |
+
+#### Scenario 3.1
+| Scenario 3.1 | |
+| ------------- |:-------------:| 
+|  Variant Scenario | First login: User must change password |
+|  Precondition     | User U exists and first login |
+|  Post condition   | The user has logged in and the password changed |
+| Step#        | Description  |
+|  1     | U enters username and temporary password |  
+|  2     | Apps asks to change the password |
+|  3	 | U enters twice the new password |
+|  4	 | U confirms operation |
 
 ### Use case 2 (User - LogOut), UC2
 | Actors Involved        | User |
@@ -256,6 +271,42 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario     | U selects the aprropriate field to log out |
 |  Variants     | None |
 |  Exceptions     | None |
+
+### Use Case 17 (User - modify user), UC17
+
+| Actors Involved        | System Administrator |
+| ------------- |:-------------:| 
+|  Precondition     | User U exists and loggend in |
+|  Post condition   | User U modified |
+|  Nominal Scenario | U wants to modify username or password |
+|  Variants         | U modifies email |
+|  Exception        | new username is not unique |
+
+##### Scenario 17.1
+
+| Scenario 17.1 | |
+| ------------- |:-------------:| 
+| Variant Scenario | U modifies email | 
+| Precondition     | User U exists and loggend in |
+| Post condition   | User U email address modified |
+| Step#        	   | Description  |
+|  1	 | U sets new email |
+|  2     | App sends an email to the new address to ask for confirmation |
+|  3     | U receives the email and follow the link |
+|  4	 | App confirms the new email address | 
+
+#### Scenario 17.2
+
+| Scenario 17.2 | |
+| ------------- |:-------------:| 
+| Exception Scenario | new username is not unique | 
+| Precondition     | User U exists |
+| Post condition   | nothing changed |
+| Step#        	   | Description  |
+|  1	 | U sets new username |
+|  2     | App verify that username is already used |
+|  3     | App notifies U that username is not unique |
+|  4	 | U must choose a different username | 
 
 ### Use case 3 (Manager - Manage availability of items), UC3
 | Actors Involved        | Manager |
@@ -302,54 +353,6 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5 	 | U types the new quantity threshold Q |
 |  6	 | U subits the modification |
 |  7     | App checks that Q is valid |
-
-<!-- nominal scenario: valutere se tenere e nel caso modificare 
-##### Scenario 3.1
-
-| Scenario 3.1 | Show quantity per item |
-| ------------- |:-------------:| 
-|  Precondition     | Item I exists |
-|  Post condition     | M is shown the quantity Q of I |
-| Step#        | Description  |
-|  1     | M selects the procedure to check Q |  
-|  2     | The app prompts for the ID of I | (non è più comodo scegliere dalla GUI senza doversi ricordare tutti gli id?)
-|  3	 | M types the ID	|
-|  3     | Q of I is shown |
-
-##### Scenario 3.2
-
-| Scenario 3.2 | Notify when items are under a given quantity threshold |
-| ------------- |:-------------:| 
-|  Precondition     | Item descriptor I exists; a threshold T has been set |
-|  Post condition     | M is notified of a low quantity of I |
-| Step#        | Description  |
-|  1     | The app detects that the quantity of I is lower than T |  
-|  2	 | The app notifies M |
-|  3 	 | M reads the notification |
-
-##### Scenario 3.3
-
-| Scenario 3.3 | Set the quantity threshold |
-| ------------- |:-------------:| 
-|  Precondition     | Item descriptor I exists |
-|  Post condition     | Q is set as quantity threshold for I |
-| Step#        | Description  | 
-|  1	 | M selects I |
-|  2	 | M selects the procedure to set a new T |
-|  3 	 | M types the new quantity threshold Q |
-|  4	 | M subits the modification |
-|  5     | the app checks that Q is valid |
-
-<!-- ### Use case 4 (Manager - Manage item request), UC4
- da cancellare 
-| Actors Involved        | Manager |
-| ------------- |:-------------:| 
-|  Precondition     | Manager M has logged in as User U; Item I exists; Supplier S exists; I is in low stock -> è necessario che I scarseggi? |
-|  Post condition     | The order has been managed successfully |
-|  Nominal Scenario     | ((M is notified that I is in low stock;)) M issues the order O from S and manages it until it is completed |
-|  Variants     | M checks how many S are available for each I; M issues the order; M selects the order as completed; M checks the order status |
-|  Exceptions     | I doesn't exist; S is not valid; O doesn't exist; O has already been completed |
--->
 
 ### Use case 4 (Manager - Manage item request), UC4
 | Actors Involved        | Manager |
@@ -421,56 +424,6 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | U set status of O as completed |
 |  6     | App asks for confirmation |
 
-
-<!--
-##### Scenario 4.1
-
-| Scenario 4.1 | Show suppliers per item |
-| ------------- |:-------------:| 
-|  Precondition     | Item I exists |
-|  Post condition     | M is shown all the S for I |
-| Step#        | Description  |
-|  1     | M selects the procedure to check S for I |  
-|  2     | The app prompts for the ID of I |
-|  3	 | M is shown the list of S and can select one for later orders |
-
-##### Scenario 4.2
-
-| Scenario 4.2 | Issue order |
-| ------------- |:-------------:| 
-|  Precondition     | I exists; M has been notified that I is in short supply; S exists |
-|  Post condition     | Order O has been issued |
-| Step#        | Description  |
-|  1     | M selects the option to issue a new O |  
-|  2	 | M selects the I typing its ID  |
-|  3 	 | M selects the Q of I |
-|  4	 | M selects the S typing its ID |
-|  5	 | M issues the order |
-|  6	 | The app automatically generates a new ID for O |
-
-##### Scenario 4.3
-
-| Scenario 4.3	 | Complete order |
-| ------------- |:-------------:| 
-|  Precondition     | I exists; S exists; O exists and has been delivered  |
-|  Post condition     | O is set as completed |
-| Step#        | Description  |
-|  1     | M selects the procedure to set the O as completed |  
-|  2	 | M types the ID of O |
-|  3 	 | M sets O as completed |
-
-##### Scenario 4.4
-
-| Scenario 4.4	 | Show order status |
-| ------------- |:-------------:| 
-|  Precondition     | I exists; S exists |
-|  Post condition     | O is set as completed |
-| Step#        | Description  |
-|  1     | M selects the procedure to check the status of O |  
-|  2	 | M types the ID of O |
-|  3 	 | The app prompts the actual status of O (issued, shipped, delivered, completed) |
-
--->
 
 ### Use case 6 (Warehouse Administrative - Manage physical space), UC6
 | Actors Involved        |  Warehouse administrative |
@@ -583,8 +536,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Post condition   | Requested items are ready at the pick up point |
 |  Nominal Scenario | U manages the actions collect and ship of IO |
 |  Variants    		| If IO is large, U can set more than one action "collect" or "ship", involving different warehouse workers |
-|  Exceptions     	| Some of requested items not present: U can decide if send immediately the present ones and complete IO later with the missing ones, or freeze the whole order until all items are available. Action collect returns "not found": possible fatal error detected (outgoing flow not tracked or phantom incoming flow), special situation handled by a higher-level manager, IO handled as "item not present" |
-<!-- Exception un po' troppo complicata forse?-->
+|  Exceptions     	| Some of requested items not present: U can decide if send immediately the present ones and complete IO later with the missing ones, or freeze the whole order until all items are available |
 
 #### Scenario 8.1
 
@@ -609,9 +561,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  Nominal Scenario   | U manages test result for batch B |
 |  Variants     	  | Test not passed: same as Scenario 8.1 but at point 4 U selects "not passed". U can define a new test for the descriptor D of items included in B, modify the description of a test or delete it |
 |  Exceptions     | B is not registered: T cannot be applied (U returns B to administrative office, where it should have been before it arrived at quality office). |
-<!-- Exceptions | T is not descripted: U can add a description or delete it. 
-	 creare un test senza descrizione non sarebbe già da evitare (tipo campo obbligatorio) ?
- -->
+
 #### Scenario 9.1
 
 | Scenario 9.1 |  |
@@ -831,132 +781,94 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 | Actors Involved        | System Administrator |
 | ------------- |:-------------:| 
-|  Precondition     | User U not defined in the system |
+|  Precondition     | User SA exists and is logged in as "System Administrator", User U not defined in the system |
 |  Post condition   | User U created |
-|  Nominal Scenario | System Administrator SA create a User given its username, email and password |
-|  Variants         | SA specifies which role user have with eventually additional parameters|
+|  Nominal Scenario | SA create User U given its username, email and password; SA specifies which role U has with eventually additional parameters |
+|  Variants         | None |
+|  Exception        | Username already exists |
 
 ##### Scenario 16.1
 
 | Scenario 16.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
-| Precondition     | User U not defined in the system |
+| Precondition     | User SA exists and is logged in as "System Administrator", User U not defined in the system |
 | Post condition   | User U created |
 | Step#        	   | Description  |
-|  1	 | SA retrieves username, email and password about a user |
-|  2     | SA create a user with linked data | 
-|  3	 | SA add the new user to the system |
+|  1	 | SA retrieves username, email and role about a user |
+|  2     | SA creates a user U with username and email |
+|  3	 | SA sets role for U |
+|  4     | SA sets a temporary password for U |
+|  5	 | SA confirms operation |
 
-#### Scenario 16.2
 
-| Scenario 16.2 | |
-| ------------- |:-------------:| 
-| Variant Scenario | SA wants to specify the role of the user in the system | 
-| Precondition     | User U not defined in the system |
-| Post condition   | User U created |
-| Step#        	   | Description  |
-|  1	 | SA retrieves username, email, password and role about a user |
-|  2     | SA create a user with linked data | 
-|  3	 | SA add the new user to the system |
-
-### Use Case 17 (System Administrator - modify user), UC17
-
-| Actors Involved        | System Administrator |
-| ------------- |:-------------:| 
-|  Precondition     | User U exists |
-|  Post condition   | User U modified |
-|  Nominal Scenario | System Administrator SA wants to modify a User given its username |
-|  exception        | user's username is not present |
-
-##### Scenario 17.1
-
-| Scenario 17.1 | |
-| ------------- |:-------------:| 
-| Nominal Scenario | | 
-| Precondition     | User U exists |
-| Post condition   | User U modified |
-| Step#        	   | Description  |
-|  1	 | SA retrieves user by its username |
-|  2     | SA check if the modification are consistent |
-|  3     | SA modify the user | 
-
-#### Scenario 17.2
-
-| Scenario 17.2 | |
-| ------------- |:-------------:| 
-| Exception Scenario | user's username is not present | 
-| Precondition     | User U exists |
-| Post condition   | nothing changed |
-| Step#        	   | Description  |
-|  1	 | SA retrieves user by its username |
-|  2     | SA doesn't find the user |
-|  3     | SA cancel the modification |
 
 ### Use Case 18 (System Administrator - delete user), UC18
 
 | Actors Involved        | System Administrator |
 | ------------- |:-------------:| 
-|  Precondition     | User U exists |
+|  Precondition     | User SA exists and is logged in as "System Administrator", User U exists |
 |  Post condition   | User U deleted |
 |  Nominal Scenario | System Administrator SA wants to delete a User given its username |
-|  exception        | user's username is not present |
+|  exception        | U username is not present |
 
 ##### Scenario 18.1
 
 | Scenario 18.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
-| Precondition     | User U exists |
+| Precondition     | User SA exists and is logged in as "System Administrator", User U exists |
 | Post condition   | User U deleted |
 | Step#        	   | Description  |
 |  1	 | SA retrieves user by its username |
-|  2     | SA delete the user | 
+|  2     | SA delete the user |
+|  3	 | App asks for confirmation |
 
 #### Scenario 18.2
 
 | Scenario 18.2 | |
 | ------------- |:-------------:| 
-| Exception Scenario | user's username is not present | 
-| Precondition     | User U exists |
+| Exception Scenario | U username is not present | 
+| Precondition     | User SA exists and is logged in as "System Administrator", User U exists |
 | Post condition   | nothing changed |
 | Step#        	   | Description  |
 |  1	 | SA retrieves user by its username |
 |  2     | SA doesn't find the user |
-|  3     | SA cancel the deletion |
 
-<!-- use case warehouse worker -->
 
 ### Use Case 19 (Warehouse Worker - collect item), UC19
 
 | Actors Involved        | Warehouse Worker |
 | ------------- |:-------------:| 
-|  Precondition     | item found |
-|  Post condition   | item collected |
-|  Nominal Scenario | WW collect the item found |
+|  Precondition     | User U exists and is logged in as "Warehouse Worker", Item I exists and located |
+|  Post condition   | item I collected |
+|  Nominal Scenario | U collects the item found |
 |  exception        | item was not found |
 
-<!--##### Scenario 18.1
+##### Scenario 18.1
 
 | Scenario 18.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
-| Precondition     | item found |
-| Post condition   | item collected |
+| Precondition     | User U exists and is logged in as "Warehouse Worker", Item I exists and located |
+| Post condition   | item I collected |
 | Step#        	   | Description  |
-|  1	 | WW check if the item was found |
-|  2     | WW collect the shipped item | 
+|  1	 | U is notified to collect I |
+|  2     | App shows the position of I in the Warehouse |
+|  3	 | U sets the action as completed |
 
 #### Scenario 18.2
 
 | Scenario 18.2 | |
 | ------------- |:-------------:| 
 | Exception Scenario | item was not found | 
-| Precondition     |  |
-| Post condition   | nothing changed |
+| Precondition     | User U exists and is logged in as "Warehouse Worker", Item I exists and located |
+| Post condition   | nothing change |
 | Step#        	   | Description  |
-|  1	 | WW check if the item was found |
-|  2     |  |-->
+|  1	 | U is notified to collect I |
+|  2     | App shows the position of I in the Warehouse |
+|  3	 | U set I as not found |
+|  4	 | U sets the action as completed and exception is handled externally of EzWH |
 
 ### Use Case 20 (Warehouse Worker - store item), UC20
 
