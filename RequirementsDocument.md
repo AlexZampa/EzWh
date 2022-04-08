@@ -1,13 +1,12 @@
  #Requirements Document 
 
-Date: 22 march 2022
+Date: 08 april 2022
 
-Version: 0.0
+Version: 3.2
 
- 
 | Version number | Change |
 | ----------------- |:-----------|
-| | | 
+|  | | 
 
 
 # Contents
@@ -30,56 +29,58 @@ Version: 0.0
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
 	- [Use case diagram](#use-case-diagram)
 		- [Use case 1 (User - LogIn), UC1](#use-case-1-user---login-uc1)
+			- [Scenario 1.1](#scenario-11)
 		- [Use case 2 (User - LogOut), UC2](#use-case-2-user---logout-uc2)
-		- [Use case 3 (Manager - Manage availability of items), UC3](#use-case-3-manager---manage-availability-of-items-uc3)
+		- [Use Case 3 (User - Modify user), UC3](#use-case-3-user---modify-user-uc3)
 			- [Scenario 3.1](#scenario-31)
 			- [Scenario 3.2](#scenario-32)
-			- [Scenario 3.3](#scenario-33)
-		- [Use case 4 (Manager - Manage item request), UC4](#use-case-4-manager---manage-item-request-uc4)
+		- [Use case 4 (Manager - Manage availability of items), UC4](#use-case-4-manager---manage-availability-of-items-uc4)
 			- [Scenario 4.1](#scenario-41)
-		- [ Use case 5 (Manager - manage orders), UC5](#use-case-5-manager---manage-orders-uc5)
+			- [Scenario 4.2](#scenario-42)
+			- [Scenario 4.3](#scenario-43)
+		- [Use case 5 (Manager - Manage item request), UC5](#use-case-5-manager---manage-item-request-uc5)
 			- [Scenario 5.1](#scenario-51)
-			- [Scenario 5.2](#scenario-52)
-		- [Use case 6 (Administrative 1 - physical space), UC6](#use-case-6-administrative-1---physical-space-uc6)
+		- [ Use case 6 (Manager - manage orders), UC6](#use-case-6-manager---manage-orders-uc6)
 			- [Scenario 6.1](#scenario-61)
 			- [Scenario 6.2](#scenario-62)
-			- [Scenario 6.3](#scenario-63)
-			- [Scenario 6.4](#scenario-64)
-		- [Use case 7 (Administrative 2 - receive items), UC7](#use-case-7-administrative-2---receive-items-uc7)
+		- [Use case 7 (Warehouse Administrative - Manage physical space), UC7](#use-case-7-warehouse-administrative---manage-physical-space-uc7)
 			- [Scenario 7.1](#scenario-71)
 			- [Scenario 7.2](#scenario-72)
-		- [Use case 8 (Administrative 3 - manage internal order), UC8](#use-case-8-administrative-3---manage-internal-order-uc8)
+			- [Scenario 7.3](#scenario-73)
+			- [Scenario 7.4](#scenario-74)
+		- [Use case 8 (Warehouse Administrative - Receive items), UC8](#use-case-8-warehouse-administrative---receive-items-uc8)
 			- [Scenario 8.1](#scenario-81)
-		- [Use case 9 (Quality office - apply test), UC9](#use-case-9-quality-office---apply-test-uc9)
+			- [Scenario 8.2](#scenario-82)
+		- [Use case 9 (Warehouse Administrative - Manage internal order), UC9](#use-case-9-warehouse-administrative---manage-internal-order-uc9)
 			- [Scenario 9.1](#scenario-91)
-		- [Use case 10 (Supplier - manage requested items), UC10](#use-case-9-supplier---manage-requested-items-uc9)
+		- [Use case 10 (Quality office - Apply test), UC10](#use-case-10-quality-office---apply-test-uc10)
 			- [Scenario 10.1](#scenario-101)
 			- [Scenario 10.2](#scenario-102)
-		- [Use case 11 (Supplier - manage offer), UC11](#use-case-11-supplier---manage-offer-uc11)
+		- [Use case 11 (Supplier - Manage requested items), UC11](#use-case-11-supplier---manage-requested-items-uc11)
 			- [Scenario 11.1](#scenario-111)
 			- [Scenario 11.2](#scenario-112)
-		- [Use case 12 (Supplier - manage order list), UC12](#use-case-12-supplier---manage-order-list-uc12)
+		- [Use case 12 (Supplier - Manage offer), UC12](#use-case-12-supplier---manage-offer-uc12)
 			- [Scenario 12.1](#scenario-121)
-		- [Use case 13 (Organizational Unit - issue internal order), UC13](#use-case-13-organizational-unit---issue-internal-order-uc13)
+			- [Scenario 12.2](#scenario-122)
+		- [Use case 13 (Supplier - Manage order list), UC13](#use-case-13-supplier---manage-order-list-uc13)
 			- [Scenario 13.1](#scenario-131)
-			- [Scenario 13.2](#scenario-132)
-		- [Use case 14 (Organizational Unit - show internal order list), UC14](#use-case-14-organizational-unit---show-internal-order-list-uc14)
+		- [Use case 14 (Organizational Unit - Issue internal order), UC14](#use-case-14-organizational-unit---issue-internal-order-uc14)
 			- [Scenario 14.1](#scenario-141)
-		- [Use case 15 (Organizational Unit - process internal order), UC15](#use-case-15-organizational-unit---process-internal-order-uc15)
+			- [Scenario 14.2](#scenario-142)
+		- [Use case 15 (Organizational Unit - Show internal order list), UC15](#use-case-15-organizational-unit---show-internal-order-list-uc15)
 			- [Scenario 15.1](#scenario-151)
-		- [Use Case 16 (System Administrator - create user), UC16](#use-case-16-system-administrator---create-user-uc16)
+		- [Use case 16 (Organizational Unit - Process internal order), UC16](#use-case-16-organizational-unit---process-internal-order-uc16)
 			- [Scenario 16.1](#scenario-161)
-			- [Scenario 16.2](#scenario-162)
-		- [Use Case 17 (System Administrator - modify user), UC17](#use-case-17-system-administrator---modify-user-uc17)
+		- [Use Case 17 (System Administrator - Create user), UC17](#use-case-17-system-administrator---create-user-uc17)
 			- [Scenario 17.1](#scenario-171)
-			- [Scenario 17.2](#scenario-172)
-		- [Use Case 18 (System Administrator - delete user), UC18](#use-case-18-system-administrator---delete-user-uc18)
+		- [Use Case 18 (System Administrator - Delete user), UC18](#use-case-18-system-administrator---delete-user-uc18)
 			- [Scenario 18.1](#scenario-181)
 			- [Scenario 18.2](#scenario-182)
-		- [Use Case 19 (Warehouse Worker - collect item), UC19](#use-case-19-warehouse-worker---collect-item-uc19)
-		- [Use Case 20 (Warehouse Worker - store item), UC20](#use-case-20-warehouse-worker---store-item-uc20)
+		- [Use Case 19 (Warehouse Worker - Collect item), UC19](#use-case-19-warehouse-worker---collect-item-uc19)
+			- [Scenario 19.1](#scenario-191)
+			- [Scenario 19.2](#scenario-192)
+		- [Use Case 20 (Warehouse Worker - Store item), UC20](#use-case-20-warehouse-worker---store-item-uc20)
 			- [Scenario 20.1](#scenario-201)
-			- [Scenario 20.2](#scenario-202)
 - [Glossary](#glossary)
 - [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
@@ -98,7 +99,6 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 # Stakeholders
 
-
 | Stakeholder name  | Description | 
 | ----------------- |:-----------:|
 |   Medium companies and retailers |	Need the software application to manage their warehouses	|
@@ -115,15 +115,10 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 # Context Diagram and interfaces
 
 ## Context Diagram
-<!--\<Define here Context diagram using UML use case diagram>-->
 
-![ContectDiagram](./img/ContextDiagram.png)
-<!--\<actors are a subset of stakeholders>-->
+![ContextDiagram](./img/ContextDiagram.png)
 
 ## Interfaces
-<!--\<describe here each interface in the context diagram>-->
-
-<!--\<GUIs will be described graphically in a separate document>-->
 
 | Actor | Logical Interface | Physical Interface  |
 | ------------- |:-------------:| -----:|
@@ -134,14 +129,8 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |	Organizational Unit	| GUI | Screen, keyboard |
 |	System administrator | GUI | Screen, keyboard |
 |	Supplier | GUI | Screen, keyboard |
-| 	Warehouse | ???? |
 
 # Stories and personas
-\<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
-
-\<Persona is-an-instance-of actor>
-
-\<stories will be formalized later as scenarios in use cases>
 
 ## Personas
 
@@ -153,6 +142,10 @@ Male, middle age, professional, married with children, employed as warehouse wor
 
 Female, about 30 years old, single, active and dynamic, employed as sales officer.
 
+### Persona 3, P3
+
+Male, middle age, employed as administrative in one of the Organizational Unit of the Company
+
 ## Stories
 
 ### Story 1 (P1)
@@ -162,6 +155,10 @@ P1 has worked for 30 years as warehouse worker for company C. C decided to buy E
 ### Story 2 (P2)
 
 Company A has bought EzWh, P2 is employed by company B, that produces items needed by A. P2 meets managers of company A to propose her company as supplier of certain products. A system administrator of company A creates for P2 an EzWh account as "Supplier": now P2 can easily view which items are needed by A, make offers for those items, and receive orders from A.
+
+### Story 3 (P3)
+
+Before the company started using EzWh, to issue an internal order P3 had to contact the warehouse administrative through emails and phone calls. With EzWh P3 finds it simpler to process orders and that the overall time of communications is reduced.
 
 
 # Functional and non functional requirements
@@ -259,7 +256,7 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 # Use case diagram and use cases
 
 ## Use case diagram
-<!-- \<define here UML Use case diagram UCD summarizing all use cases, and their relationships> -->
+
 ![UseCaseDiagram](./img/UseCaseDiagram.png)
 
 ### Use case 1 (User - LogIn), UC1
@@ -271,8 +268,8 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  Variants     | First login; Password forgotten: restore password procedure;  |
 |  Exceptions     | U types wrong UN or P, U doesn't exist: access denied |
 
-#### Scenario 3.1
-| Scenario 3.1 | |
+#### Scenario 1.1
+| Scenario 1.1 | |
 | ------------- |:-------------:| 
 |  Variant Scenario | First login: User must change password |
 |  Precondition     | User U exists and first login |
@@ -574,6 +571,7 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  6     | U is notified that the action has been completed |
 
 ### Use case 10 (Quality office - Apply test), UC10
+
 | Actors Involved        |  Quality office |
 | ------------- |:-------------:| 
 |  Precondition     | Batch B arrived in quality office, B is registered, test T exists, user U exists and is logged in as "Quality office" |
@@ -614,6 +612,7 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  6     | U confirms the operation |
 
 ### Use case 11 (Supplier - Manage requested items), UC11
+
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Supplier", List L of item descriptors set as requested exists |
@@ -649,6 +648,7 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  5     | User U confirms operation |
 
 ### Use case 12 (Supplier - Manage offer), UC12
+
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Supplier", item descriptor I exists and set as requested |
@@ -689,6 +689,7 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  7	 | U confirms operation |
 
 ### Use case 13 (Supplier - Manage order list), UC13
+
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Supplier", List L of orders exists |
@@ -711,7 +712,6 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  4	 | App shows a list of all items of the order O with quantity and a delivered field (already delivered item rows are disabled)|
 |  5	 | U checks one or more item(s) as delivered |
 |  6	 | U confirms operation |
-
 
 ### Use case 14 (Organizational Unit - Issue internal order), UC14
 | Actors Involved        | Organizational Unit |
@@ -772,6 +772,7 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  3     | User can scroll list to see all orders |
 
 ### Use case 16 (Organizational Unit - Process internal order), UC16
+
 | Actors Involved        | Organizational Unit |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Organizational Unit" |
@@ -796,7 +797,6 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  6	 | User U checks one or more item(s) as delivered |
 |  7	 | User U confirms operation |
 
-
 ### Use Case 17 (System Administrator - Create user), UC17
 
 | Actors Involved        | System Administrator |
@@ -820,8 +820,6 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  3	 | SA sets role for U |
 |  4     | SA sets a temporary password for U |
 |  5	 | SA confirms operation |
-
-
 
 ### Use Case 18 (System Administrator - Delete user), UC18
 
@@ -913,25 +911,14 @@ Company A has bought EzWh, P2 is employed by company B, that produces items need
 |  3	 | U sets the action as completed |
 
 # Glossary
-<!--
-\<use UML class diagram to define important terms, or concepts in the domain of the system, and their relationships> 
-
-\<concepts are used consistently all over the document, ex in use cases, requirements etc>
--->
 
 ![Glossary](./img/Glossary.jpg)
 
 # System Design
-<!--
-\<describe here system design>
-
-\<must be consistent with Context diagram>
--->
 
 As EzWh is a completely software product, no system design is needed.
 
 # Deployment Diagram 
-<!-- \<describe here deployment diagram > -->
 
 ![DeploymentDiagram](./img/DeploymentDiagram.png)
 
