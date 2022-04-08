@@ -143,6 +143,26 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 \<stories will be formalized later as scenarios in use cases>
 
+## Personas
+
+### Persona 1, P1
+
+Male, middle age, professional, married with children, employed as warehouse worker.
+
+### Persona 2, P2
+
+Female, about 30 years old, single, active and dynamic, employed as sales officer.
+
+## Stories
+
+### Story 1 (P1)
+
+P1 has worked for 30 years as warehouse worker for company C. C decided to buy EzWh. C gives P1 a tablet and creates for him an account as warehouse worker. Initially, P1 is not happy to change the way to do the work he always did, however his interface of EzWh is very simple and clear, so after few months he recognizes that the change was not useless.
+
+### Story 2 (P2)
+
+Company A has bought EzWh, P2 is employed by company B, that produces items needed by A. P2 meets managers of company A to propose her company as supplier of certain products. A system administrator of company A creates for P2 an EzWh account as "Supplier": now P2 can easily view which items are needed by A, make offers for those items, and receive orders from A.
+
 
 # Functional and non functional requirements
 
@@ -239,7 +259,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 # Use case diagram and use cases
 
 ## Use case diagram
-\<define here UML Use case diagram UCD summarizing all use cases, and their relationships>
+<!-- \<define here UML Use case diagram UCD summarizing all use cases, and their relationships> -->
 ![UseCaseDiagram](./img/UseCaseDiagram.png)
 
 ### Use case 1 (User - LogIn), UC1
