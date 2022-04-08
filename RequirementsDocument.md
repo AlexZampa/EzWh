@@ -374,7 +374,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5	 | U subits the procedure |
 |  6     | App asks for confirmation |
 
-### Use case 5 (Manager - manage orders), UC5
+### Use case 5 (Manager - Manage orders), UC5
 | Actors Involved        | Manager |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "manager" |
@@ -472,7 +472,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 -->
 
-### Use case 6 (Administrative 1 - physical space), UC6
+### Use case 6 (Warehouse Administrative - Manage physical space), UC6
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition     | Warehouse W exists, section S exists, user U exists and is logged in as "Warehouse administrative" |
@@ -483,8 +483,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 ##### Scenario 6.1
 
-| Scenario 6.1 | Add new warehouse |
+| Scenario 6.1 | |
 | ------------- |:-------------:| 
+|  Variant Scenario | Add new warehouse |
 |  Precondition     | User U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Warehouse W is created |
 | Step#        | Description  |
@@ -496,8 +497,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 ##### Scenario 6.2 
 
-| Scenario 6.2 | Add new section |
-| ------------- |:-------------:| 
+| Scenario 6.2 | |
+| ------------- |:-------------:|
+|  Variant Scenario | Add new section | 
 |  Precondition     | Warehouse W exists, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | Section S is created |
 | Step#        | Description  |
@@ -511,8 +513,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 ##### Scenario 6.3
 
-| Scenario 6.3 | Add new slots |
+| Scenario 6.3 | |
 | ------------- |:-------------:| 
+|  Variant Scenario | Add new slots | 
 |  Precondition     | Warehouse W, Section S, Lane L and Shelf A exist, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | A has 100 new slots |
 | Step#        | Description  |
@@ -525,8 +528,9 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 
 ##### Scenario 6.4
 
-| Scenario 5.1 | Delete a Shelf |
-| ------------- |:-------------:| 
+| Scenario 5.1 | |
+| ------------- |:-------------:|
+|  Variant Scenario | Delete a Shelf | 
 |  Precondition     | Shelf A exists, A contains no slots or empty slots, user U exists and is logged in as "Warehouse administrative" |
 |  Post condition     | A is deleted |
 | Step#        | Description  |
@@ -535,7 +539,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4     | The app asks for confirmation |
 |  5     | U confirms |
 
-### Use case 7 (Administrative 2 - receive items), UC7
+### Use case 7 (Warehouse Administrative - Receive items), UC7
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition     | Order O to supplier S exists and is PENDING, batch B of items descripted by item descriptor D arrived to warehouse, user U exists and is logged in as "Warehouse administrative" |
@@ -572,7 +576,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  6     | U sets the action "store" for the items included in B and a warehouse worker |
 
 
-### Use case 8 (Administrative 3 - manage internal order), UC8
+### Use case 8 (Warehouse Administrative - Manage internal order), UC8
 | Actors Involved        |  Warehouse administrative |
 | ------------- |:-------------:| 
 |  Precondition    | Organizational Unit OU has issued an internal order IO, user U exists and is logged in as "Warehouse administrative" |
@@ -597,7 +601,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | U sets the action "ship" for IO and another warehouse worker |
 |  6     | U is notified that the action has been completed |
 
-### Use case 9 (Quality office - apply test), UC9
+### Use case 9 (Quality office - Apply test), UC9
 | Actors Involved        |  Quality office |
 | ------------- |:-------------:| 
 |  Precondition     | Batch B arrived in quality office, B is registered, test T exists, user U exists and is logged in as "Quality office" |
@@ -639,7 +643,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  5     | U adds description for T |
 |  6     | U confirms the operation |
 
-### Use case 10 (Supplier - manage requested items), UC10
+### Use case 10 (Supplier - Manage requested items), UC10
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Supplier", List L of item descriptors set as requested exists |
@@ -674,7 +678,7 @@ EZWH (EaSy WareHouse) is a software application to support the management of a w
 |  4     | User U deselect the item descriptor D from L as available to supply | 
 |  5     | User U confirms operation |
 
-### Use case 11 (Supplier - manage offer), UC11
+### Use case 11 (Supplier - Manage offer), UC11
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Supplier", item descriptor I exists and set as requested |
