@@ -35,19 +35,19 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 |         Activity name    | Estimated effort (person hours)   |             
 | ----------- | ------------------------------- | 
 | Requirements| |
-| &emsp;Context analysis | 32 (2 -2) |
-| &emsp;Functional requirements | 160 (5 -4) |
-| &emsp;Non functional requirements | 96 (3 -4) |
-| &emsp;Use cases | 320 (10 -4) |
+| &emsp;Context analysis | 32 |
+| &emsp;Functional requirements | 160 |
+| &emsp;Non functional requirements | 96 |
+| &emsp;Use cases | 320 |
 | Design ||
-| &emsp;GUI prototype | 160 (5 -4) |
-| &emsp;Define modules | 48 (3 -2) |
-| &emsp;Design document | 160 (5 -4) |
+| &emsp;GUI prototype | 160 |
+| &emsp;Define modules | 48 |
+| &emsp;Design document | 160 |
 | Implementation ||
-| &emsp;Code | 960 (30 -4) |
-| &emsp;Unit tests | 240 (30 -1) |
-| &emsp;Integration tests | 160 (10 -2) |
-| &emsp;API tests | 160 (10 -2) |
+| &emsp;Code | 960 |
+| &emsp;Unit tests | 240 |
+| &emsp;Integration tests | 160 |
+| &emsp;API tests | 160 |
 
 
 ###
@@ -63,7 +63,7 @@ Report here the results of the three estimation approaches. The  estimates may d
 | ----------- | ------------------------------- | ---------------|
 | estimate by size | 1000 | 7 |
 | estimate by product decomposition | 1300 | 9 |
-| estimate by activity decomposition |  |
+| estimate by activity decomposition | 2500 | 15 |
 
 
 
