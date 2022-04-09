@@ -51,7 +51,9 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 
 
 ###
-Insert here Gantt chart with above activities
+Gantt chart with above activities
+
+![GanttDiagram](./img/GanttDiagram.png)
 
 # Summary
 
