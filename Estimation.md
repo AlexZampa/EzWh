@@ -1,7 +1,7 @@
 # Project Estimation  
-Date: 08/04/2022
+Date: 09/04/2022
 
-Version: 1.0
+Version: 2.0
 
 
 # Estimation approach
@@ -34,7 +34,22 @@ Consider the EZWH  project as described in YOUR requirement document, assume tha
 ### 
 |         Activity name    | Estimated effort (person hours)   |             
 | ----------- | ------------------------------- | 
-| | |
+| Requirements| |
+| &emsp;Context analysis | 32 (2 -2) |
+| &emsp;Functional requirements | 160 (5 -4) |
+| &emsp;Non functional requirements | 96 (3 -4) |
+| &emsp;Use cases | 320 (10 -4) |
+| Design ||
+| &emsp;GUI prototype | 160 (5 -4) |
+| &emsp;Define modules | 48 (3 -2) |
+| &emsp;Design document | 160 (5 -4) |
+| Implementation ||
+| &emsp;Code | 960 (30 -4) |
+| &emsp;Unit tests | 240 (30 -1) |
+| &emsp;Integration tests | 160 (10 -2) |
+| &emsp;API tests | 160 (10 -2) |
+
+
 ###
 Insert here Gantt chart with above activities
 
