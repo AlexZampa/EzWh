@@ -1,8 +1,8 @@
  #Requirements Document 
 
-Date: 08 april 2022
+Date: 09 april 2022
 
-Version: 3.2
+Version: 3.3
 
 | Version number | Change |
 | ----------------- |:-----------|
@@ -55,32 +55,29 @@ Version: 3.2
 			- [Scenario 9.1](#scenario-91)
 		- [Use case 10 (Quality office - Apply test), UC10](#use-case-10-quality-office---apply-test-uc10)
 			- [Scenario 10.1](#scenario-101)
-			- [Scenario 10.2](#scenario-102)
-		- [Use case 11 (Supplier - Manage requested items), UC11](#use-case-11-supplier---manage-requested-items-uc11)
+			- [Scenario 10.2](#scenario-102)		
+		- [Use case 11 (Supplier - Manage offer), UC11](#use-case-11-supplier---manage-offer-uc11)
 			- [Scenario 11.1](#scenario-111)
 			- [Scenario 11.2](#scenario-112)
-		- [Use case 12 (Supplier - Manage offer), UC12](#use-case-12-supplier---manage-offer-uc12)
+		- [Use case 12 (Supplier - Manage order list), UC12](#use-case-12-supplier---manage-order-list-uc12)
 			- [Scenario 12.1](#scenario-121)
-			- [Scenario 12.2](#scenario-122)
-		- [Use case 13 (Supplier - Manage order list), UC13](#use-case-13-supplier---manage-order-list-uc13)
+		- [Use case 13 (Organizational Unit - Issue internal order), UC13](#use-case-13-organizational-unit---issue-internal-order-uc13)
 			- [Scenario 13.1](#scenario-131)
-		- [Use case 14 (Organizational Unit - Issue internal order), UC14](#use-case-14-organizational-unit---issue-internal-order-uc14)
+			- [Scenario 13.2](#scenario-132)
+		- [Use case 14 (Organizational Unit - Show internal order list), UC14](#use-case-14-organizational-unit---show-internal-order-list-uc14)
 			- [Scenario 14.1](#scenario-141)
-			- [Scenario 14.2](#scenario-142)
-		- [Use case 15 (Organizational Unit - Show internal order list), UC15](#use-case-15-organizational-unit---show-internal-order-list-uc15)
+		- [Use case 15 (Organizational Unit - Process internal order), UC15](#use-case-15-organizational-unit---process-internal-order-uc15)
 			- [Scenario 15.1](#scenario-151)
-		- [Use case 16 (Organizational Unit - Process internal order), UC16](#use-case-16-organizational-unit---process-internal-order-uc16)
+		- [Use Case 16 (System Administrator - Create user), UC16](#use-case-16-system-administrator---create-user-uc16)
 			- [Scenario 16.1](#scenario-161)
-		- [Use Case 17 (System Administrator - Create user), UC17](#use-case-17-system-administrator---create-user-uc17)
+		- [Use Case 17 (System Administrator - Delete user), UC17](#use-case-17-system-administrator---delete-user-uc17)
 			- [Scenario 17.1](#scenario-171)
-		- [Use Case 18 (System Administrator - Delete user), UC18](#use-case-18-system-administrator---delete-user-uc18)
+			- [Scenario 17.2](#scenario-172)
+		- [Use Case 18 (Warehouse Worker - Collect item), UC18](#use-case-18-warehouse-worker---collect-item-uc18)
 			- [Scenario 18.1](#scenario-181)
 			- [Scenario 18.2](#scenario-182)
-		- [Use Case 19 (Warehouse Worker - Collect item), UC19](#use-case-19-warehouse-worker---collect-item-uc19)
+		- [Use Case 19 (Warehouse Worker - Store item), UC19](#use-case-19-warehouse-worker---store-item-uc19)
 			- [Scenario 19.1](#scenario-191)
-			- [Scenario 19.2](#scenario-192)
-		- [Use Case 20 (Warehouse Worker - Store item), UC20](#use-case-20-warehouse-worker---store-item-uc20)
-			- [Scenario 20.1](#scenario-201)
 - [Glossary](#glossary)
 - [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
@@ -268,7 +265,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variants     | First login; Password forgotten: restore password procedure;  |
 |  Exceptions     | U types wrong UN or P, U doesn't exist: access denied |
 
-#### Scenario 1.1
+##### Scenario 1.1
 | Scenario 1.1 | |
 | ------------- |:-------------:| 
 |  Variant Scenario | First login: User must change password |
@@ -334,7 +331,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variants     	 | U can search by item descriptor's name; U can filter by items with quantity under threshold; U can modify the quantity threshold; |
 |  Exceptions     	 | quantity threshold is not valid |
 
-#### Scenario 4.1
+##### Scenario 4.1
 | Scenario 4.1 | |
 | ------------- |:-------------:| 
 |  Nominal Scenario |  |
@@ -345,7 +342,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  2     | App shows the list of all item descriptors in I, with name, id, associated total quantity and current quantity threshold; rows with items with quantity under quantity threshold are highlighted; |
 |  3	 | U searches for A by scrolling the list |
 
-#### Scenario 4.2
+##### Scenario 4.2
 | Scenario 4.2 |  |
 | ------------- |:-------------:| 
 |  Variant Scenario | Notify when items are under a given quantity threshold |
@@ -356,7 +353,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  2	 | The app notifies U |
 |  3 	 | U reads the notification |
 
-#### Scenario 4.3
+##### Scenario 4.3
 | Scenario 4.3 |  |
 | ------------- |:-------------:| 
 |  Variant Scenario | Modify the quantity threshold |
@@ -611,43 +608,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  5     | U adds description for T |
 |  6     | U confirms the operation |
 
-### Use case 11 (Supplier - Manage requested items), UC11
-
-| Actors Involved        | Supplier |
-| ------------- |:-------------:| 
-|  Precondition     | User U exists and is logged in as "Supplier", List L of item descriptors set as requested exists |
-|  Post condition   | associated or not item descriptor D to user U |
-|  Nominal Scenario | App shows L of items descriptor needed by the company, user U selects I that can supply |
-|  Variants     	| User U searches the item descriptor D by its name; U does not provides I anymore: U deletes I from the list |
-|  Exceptions     	| user U aborts the operation |
-
-##### Scenario 11.1
-
-| Scenario 11.1 | |
-| ------------- |:-------------:| 
-| Nominal Scenario | | 
-| Precondition     | User U exists and is logged in as "Supplier", List L of item descriptors set as requested exists |
-| Post condition   | Associated one or more item descriptor D to user U |
-| Step#        	   | Description  |
-|  1	 | User starts procedure to manage requested items |
-|  3     | App shows L with item descriptor name | 
-|  4     | User U sets the item descriptor D from L as available to supply | 
-|  5     | User U confirms operation |
-
-##### Scenario 11.2
-
-| Scenario 11.2 | |
-| ------------- |:-------------:| 
-| Variant Scenario | User U exists and is logged in as "Supplier", List L of item descriptors set as requested exists, item descriptor D already setted as available to supply |
-| Precondition     | User U authenticated and authorized  as "Supplier" |
-| Post condition   | Removed association of one or more item descriptor D to user U |
-| Step#        	   | Description  |
-|  1	 | User starts procedure to manage requested items |
-|  3     | App shows L with item descriptor name, D is already shown as available to supply | 
-|  4     | User U deselect the item descriptor D from L as available to supply | 
-|  5     | User U confirms operation |
-
-### Use case 12 (Supplier - Manage offer), UC12
+### Use case 11 (Supplier - Manage offer), UC11
 
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
@@ -657,38 +618,35 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variants     	| U can filter item descriptor by name; an offer O for I already exists: U can update or delete O |
 |  Exceptions     	| user U aborts the operation: app asks for confirmation |
 
-##### Scenario 12.1
-| Scenario 12.1 |  |
+##### Scenario 11.1
+| Scenario 11.1 |  |
 | ------------- |:-------------:| 
 | Nominal Scenario | |			
 |  Precondition    | User U exists and is logged in as "Supplier", item descriptor I exists and set as requested, no offer already existing for I |
 |  Post condition  | Offer O is created for I |
 | Step#        | Description  | 
 |  1	 | U starts procedure to manage offers |
-|  2	 | app shows the list of I requested by the company and a field to manage offers |
-|  3	 | U selects I |
-|  4	 | U starts procedure to manage an offer O for I|
-|  5     | U sets the amount for O |
-|  6 	 | app checks that amount is valid |
-|  7	 | U confirms operation |
+|  2	 | App shows the list of I requested by the company, the current offer O, a field to edit or delete O |
+|  3	 | U starts procedure to edit O for I|
+|  4     | U sets the amount for O |
+|  5 	 | app checks that amount is valid |
+|  6	 | U confirms operation |
 
-##### Scenario 12.2
-| Scenario 12.2 |  |
+##### Scenario 11.2
+
+| Scenario 11.2 | |
 | ------------- |:-------------:| 
-| Variant Scenario | U update an offer already existing for I |
-|  Precondition    | User U exists and is logged in as "Supplier", item descriptor I exists and set as requested, an offer O already exists for I |
-|  Post condition  | Offer O is updated for I |
-| Step#        | Description  | 
+| Variant Scenario | U delete an offer already existing for I |
+| Precondition     | User U exists and is logged in as "Supplier", item descriptor I exists and set as requested, an offer O already exists for I |
+| Post condition   | Offer O deleted |
+| Step#        	   | Description  |
 |  1	 | U starts procedure to manage offers |
-|  2	 | app shows the list of I requested by the company and a field to manage offers |
-|  3	 | U selects I |
-|  4	 | U starts procedure to manage an offer O for I|
-|  5	 | App shows the existing offer |
-|  5     | U sets the new amount for O |
-|  6 	 | app checks that amount is valid |
-|  7	 | U confirms operation |
+|  2	 | App shows the list of I requested by the company, the current offer O, a field to edit or delete O |
+|  3     | U selects field to delete O | 
+|  4     | App asks for confirmation |
+|  5	 | U confirm operation |
 
-### Use case 13 (Supplier - Manage order list), UC13
+### Use case 12 (Supplier - Manage order list), UC12
 
 | Actors Involved        | Supplier |
 | ------------- |:-------------:| 
@@ -698,9 +656,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variants     	| User U can filter L by status; U can process an order O |
 |  Exceptions	  	| None |
 
-##### Scenario 13.1
+##### Scenario 12.1
 
-| Scenario 13.1 | |
+| Scenario 12.1 | |
 | ------------- |:-------------:| 
 | Variant Scenario | User U process order O | 
 | Precondition     | User U exists and is logged in as "Supplier", list of orders L exists |
@@ -713,7 +671,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  5	 | U checks one or more item(s) as delivered |
 |  6	 | U confirms operation |
 
-### Use case 14 (Organizational Unit - Issue internal order), UC14
+### Use case 13 (Organizational Unit - Issue internal order), UC13
 | Actors Involved        | Organizational Unit |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Organizational Unit", Inventory I exists |
@@ -722,9 +680,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variant Scenario | User U searches item descriptor I by its name; U filters I by item category | 
 |  Exceptions     	| user U aborts the operation, quantity invalid |
 
-##### Scenario 14.1
+##### Scenario 13.1
 
-| Scenario 14.1 | |
+| Scenario 13.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U exists and is logged in as "Organizational Unit", Inventory I exists |
@@ -736,9 +694,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  4     | User U confirms operation |
 |  5	 | App checks that the quantity input fields are valid|
 
-##### Scenario 14.2
+##### Scenario 13.2
 
-| Scenario 14.2 | |
+| Scenario 13.2 | |
 | ------------- |:-------------:| 
 | Exception Scenario | Quantity value checks failed | 
 | Precondition     | User U exists and is logged in as "Organizational Unit", Inventory I exists |
@@ -750,7 +708,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  4	 | One or more quantity input fields checks are failed |
 |  5     | Input fields with error are highlighted |
 
-### Use case 15 (Organizational Unit - Show internal order list), UC15
+### Use case 14 (Organizational Unit - Show internal order list), UC14
 | Actors Involved        | Organizational Unit |
 | ------------- |:-------------:| 
 |  Precondition     | User U exists and is logged in as "Organizational Unit" |
@@ -759,9 +717,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variants     	| Show list of orders filtered by status; U can see list of item descriptor |
 |  Exception 		| None |
 
-##### Scenario 15.1
+##### Scenario 14.1
 
-| Scenario 15.1 | |
+| Scenario 14.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U exists and is logged in as "Organizational Unit" |
@@ -771,7 +729,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  2	 | App shows a list of all user U orders with orderID, date and order status |
 |  3     | User can scroll list to see all orders |
 
-### Use case 16 (Organizational Unit - Process internal order), UC16
+### Use case 15 (Organizational Unit - Process internal order), UC15
 
 | Actors Involved        | Organizational Unit |
 | ------------- |:-------------:| 
@@ -781,9 +739,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variant Scenario | None |
 |  Exceptions     	| User U aborts the operation |
 
-##### Scenario 16.1
+##### Scenario 15.1
 
-| Scenario 16.1 | |
+| Scenario 15.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U exists and is logged in as "Organizational Unit" |
@@ -797,7 +755,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  6	 | User U checks one or more item(s) as delivered |
 |  7	 | User U confirms operation |
 
-### Use Case 17 (System Administrator - Create user), UC17
+### Use Case 16 (System Administrator - Create user), UC16
 
 | Actors Involved        | System Administrator |
 | ------------- |:-------------:| 
@@ -807,9 +765,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variants         | None |
 |  Exception        | Username already exists |
 
-##### Scenario 17.1
+##### Scenario 16.1
 
-| Scenario 17.1 | |
+| Scenario 16.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User SA exists and is logged in as "System Administrator", User U not defined in the system |
@@ -821,7 +779,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  4     | SA sets a temporary password for U |
 |  5	 | SA confirms operation |
 
-### Use Case 18 (System Administrator - Delete user), UC18
+### Use Case 17 (System Administrator - Delete user), UC17
 
 | Actors Involved        | System Administrator |
 | ------------- |:-------------:| 
@@ -830,9 +788,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Nominal Scenario | System Administrator SA wants to delete a User given its username |
 |  exception        | U username is not present |
 
-##### Scenario 18.1
+##### Scenario 17.1
 
-| Scenario 18.1 | |
+| Scenario 17.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User SA exists and is logged in as "System Administrator", User U exists |
@@ -842,9 +800,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  2     | SA delete the user |
 |  3	 | App asks for confirmation |
 
-#### Scenario 18.2
+#### Scenario 17.2
 
-| Scenario 18.2 | |
+| Scenario 17.2 | |
 | ------------- |:-------------:| 
 | Exception Scenario | U username is not present | 
 | Precondition     | User SA exists and is logged in as "System Administrator", User U exists |
@@ -854,7 +812,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  2     | SA doesn't find the user |
 
 
-### Use Case 19 (Warehouse Worker - Collect item), UC19
+### Use Case 18 (Warehouse Worker - Collect item), UC18
 
 | Actors Involved        | Warehouse Worker |
 | ------------- |:-------------:| 
@@ -863,9 +821,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Nominal Scenario | U collects the item found |
 |  exception        | item was not found |
 
-##### Scenario 19.1
+##### Scenario 18.1
 
-| Scenario 19.1 | |
+| Scenario 18.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U exists and is logged in as "Warehouse Worker", Item I exists and located |
@@ -875,9 +833,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  2     | App shows the position of I in the Warehouse |
 |  3	 | U sets the action as completed |
 
-##### Scenario 19.2
+##### Scenario 18.2
 
-| Scenario 19.2 | |
+| Scenario 18.2 | |
 | ------------- |:-------------:| 
 | Exception Scenario | item was not found | 
 | Precondition     | User U exists and is logged in as "Warehouse Worker", Item I exists and located |
@@ -888,7 +846,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  3	 | U set I as not found |
 |  4	 | U sets the action as completed and exception is handled externally of EzWH |
 
-### Use Case 20 (Warehouse Worker - Store item), UC20
+### Use Case 19 (Warehouse Worker - Store item), UC19
 
 | Actors Involved        | Warehouse Worker |
 | ------------- |:-------------:| 
@@ -898,9 +856,9 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Variant			| Store a whole batch instead of a single I |
 |  Exception        | none |
 
-##### Scenario 20.1
+##### Scenario 19.1
 
-| Scenario 20.1 | |
+| Scenario 19.1 | |
 | ------------- |:-------------:| 
 | Nominal Scenario | | 
 | Precondition     | User U exists and is logged in as "Warehouse Worker", item I exists and not stored, position P (set of free slots) located |
