@@ -590,23 +590,20 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  3	 | U selects the test T |
 |  4 	 | after the test has been executed, U selects "passed" |
 |  5	 | U submits the test result |
-|  6     | U sets the action "ship" for IO and another warehouse worker |
-|  7     | U is notified that the action has been completed |
 
 ##### Scenario 10.2
 
 | Scenario 10.2 |  |
 | ------------- |:-------------:| 
-|  Variant Scenario | U can define a new test for the item descriptor D of items included in B|
+|  Variant Scenario | U can define a new test |
 |  Precondition     | user U exists and is logged in as "Quality office"  |
 |  Post condition   | a new T is created for D |
 | Step#        | Description |
 |  1     | U starts procedure to create new test |
-|  2     | App shows list of all item descriptors |
-|  3 	 | U selects D from list |
-|  4	 | U starts procedure to add new test T |
-|  5     | U adds description for T |
-|  6     | U confirms the operation |
+|  2     | U adds name and description for T |
+|  3     | App shows list of all item descriptors |
+|  4 	 | U selects D from list |
+|  5     | U confirms the operation |
 
 ### Use case 11 (Supplier - Manage offer), UC11
 
