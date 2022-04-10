@@ -397,7 +397,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 |  Precondition     | User U exists and is logged in as "manager" |
 |  Post condition   | N orders created and grouped by N different Supplier |
 |  Nominal Scenario | U select one or more offer by different supplier for different items and issue N orders |
-|  Variants     	| U can remove an element from the list before submitting the order; U can modify quantity of an element already in the list, before submitting the order; U can check and update the status of existing orders |
+|  Variants     	| U can remove an element from the list before submitting the order; U can modify quantity of a row in the list, before submitting the order; U can check and update the status of existing orders |
 |  Exceptions     | U aborts the procedure to create a new order |
 
 ##### Scenario 6.1
@@ -410,13 +410,13 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 | Step#        | Description  |
 |  1     | U starts procedure to manage orders |
 |  2     | U starts procedure to create a new order |
-|  3 	 | App shows the current list of items to be ordered with supplier, quantity and total amount (initially list is empty) |
+|  3 	 | App shows the current list of items to be ordered with item, supplier, quantity, price per unit and total amount (initially list is empty) |
 |  4	 | U starts procedure to add items |
 |  5     | App shows the list of requested items |
 |  6     | U selects I |
 |  7	 | App shows the list of all suppliers that made an offer for I, and the associated offer O |
-|  8     | U selects O |
-|  9     | U sets quantity |
+|  8     | U edits quantity for O |
+|  9     | U confirms quantity |
 |  10	 | U confirms operation |
 |  11 	 | back to Step #3, U can continue to add more offer to the order or continue to step #12 |
 |  12	 | U submits the new order | 
