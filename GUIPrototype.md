@@ -120,37 +120,25 @@ Version: 1.0
 ### Manage physical space
 
 <p float="left">
-  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20A1.png" width="400" />
-  <p>
-    <em>View warehouse space organization</em>
-  </p>
-  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20confirmation%20A2.png" width="400" /> 
-  <p>
-    <em>Create new Lane</em>
-  </p>
-  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20variant%20A3.png" width="400" />
-  <p>
-    <em>Add slots</em>
-  </p>
   <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B1.png" width="400" />
   <p>
-    <em>Check sections</em>
+    <em>View warehouse space organization: lanes in section 2</em>
   </p>
-  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B2.png" width="400" />
+  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B2.png" width="400" /> 
   <p>
-    <em>Delete shelf</em>
+    <em>Add new Lane</em>
   </p>
-  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B3.png" width="400" />
+  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B3.png" width="400" /> 
   <p>
-    <em>Add section</em>
+    <em>Add new Warehouse and set slot dimension</em>
   </p>
-  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B4.png" width="400" />
+  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B4.png" width="400" /> 
   <p>
-    <em>Manage section</em>
+    <em>Add new Section</em>
   </p>
-  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B5.png" width="400" />
+  <img src="GUI/EZWhAdministrativeGUI/Administrative%20physical%20space%20B5.png" width="400" /> 
   <p>
-    <em>Submit new shelf</em>
+    <em>Add new slots</em>
   </p>
 </p>
 
@@ -159,11 +147,11 @@ Version: 1.0
 <p float="left">
   <img src="GUI/EZWhAdministrativeGUI/Administrative%20internal%20order.png" width="400" /> 
   <p>
-    <em>Check orders</em>
+    <em>Check internal orders</em>
   </p>
   <img src="GUI/EZWhAdministrativeGUI/Administrative%20internal%20order%202.png" width="400" />
   <p>
-    <em>Set order as shipped</em>
+    <em>Set the action "ship" for an internal order already collected</em>
   </p>
 </p>
 
@@ -172,15 +160,15 @@ Version: 1.0
 <p float="left">
   <img src="GUI/EZWhAdministrativeGUI/Administrative%20receive%20items.png" width="400" /> 
   <p>
-    <em>Check items to be received</em>
+    <em>Select the order</em>
   </p>
   <img src="GUI/EZWhAdministrativeGUI/Administrative%20receive%20items%202.png" width="400" />
   <p>
-    <em>Register newly received items</em>
+    <em>Register a new batch arrived</em>
   </p>
   <img src="GUI/EZWhAdministrativeGUI/Administrative%20receive%20items%203.png" width="400" />
   <p>
-    <em>Confirm received item</em>
+    <em>Set the action "store" for the new batch</em>
   </p>
 </p>
 
