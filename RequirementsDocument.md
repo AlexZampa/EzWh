@@ -6,7 +6,15 @@ Version: 3.3
 
 | Version number | Change |
 | ----------------- |:-----------|
-|  | | 
+| 1.0 | Add stakeholders, context diagram and interfaces, functional and non functional requirements |
+| 2.0 | Add use case diagram and modified FR |
+| 2.1 | Modified UC and FR (supplier management) |
+| 2.2 | Completed UC diagram |
+| 2.3 | Add Glossary and deployment diagram |
+| 3.0 | Add scenarios |
+| 3.1 | Modified scenarios manager-supplier |
+| 3.2 | Add stories and personas |
+| 3.3 | Complete scenarios |
 
 
 # Contents
