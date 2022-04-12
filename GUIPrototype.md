@@ -184,7 +184,7 @@ Version: 1.0
 ### Manage Tests
 
 <p float="left">
-  <img src="GUI/EZWhQualityOfficeGUI/QO-define_test_2step_A.png" width="400" />
+  <img src="GUI/EZWhQualityOfficeGUI/QO-define_test_2step_A2.png" width="400" />
   <p>
     <em>List of defined tests</em>
   </p>
