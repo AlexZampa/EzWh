@@ -184,15 +184,15 @@ Version: 1.0
 ### Manage Tests
 
 <p float="left">
-  <img src="GUI/EZWhQualityOfficeGUI/QO-define_test_2step_A2.png" width="400" />
+  <img src="GUI/EZWhQualityOfficeGUI/QO%20-%20define_test_2step.png" width="400" />
   <p>
     <em>List of defined tests</em>
   </p>
-  <img src="GUI/EZWhQualityOfficeGUI/QO-define_test_2step_B.png" width="400" />
+  <img src="GUI/EZWhQualityOfficeGUI/QO%20-%20define_test_2step_2.png" width="400" />
   <p>
     <em>View and modify a test</em>
   </p>
-  <img src="GUI/EZWhQualityOfficeGUI/QO%20-%20new%20test.png" width="400" />
+  <img src="GUI/EZWhQualityOfficeGUI/QO_define_test_2.png" width="400" />
   <p>
     <em>Create new test</em>
   </p>
