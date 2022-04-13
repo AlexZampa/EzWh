@@ -1,12 +1,21 @@
 # Graphical User Interface Prototype  
 
 Authors:
+Alessandro Zamparutti
+Michele Pistan
+Nicolò Gallo
+Nicola di Gruttola Giardino
 
-Date: 11/04/2022
+Date: 13/04/2022
 
-Version: 1.0
+Version: 2.0
 
 ## Generic User
+### Main Page
+<p float="left">
+  <img src="GUI/EZWhUserGUI/First_Page.png" width="400" />
+</p>
+
 ### Login
 <p float="left">
   <img src="GUI/EZWhUserGUI/login.png" width="400" />
