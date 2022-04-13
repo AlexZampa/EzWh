@@ -1,8 +1,8 @@
  #Requirements Document 
 
-Date: 09 april 2022
+Date: 13 april 2022
 
-Version: 3.3
+Version: 4.0
 
 | Version number | Change |
 | ----------------- |:-----------|
@@ -15,6 +15,7 @@ Version: 3.3
 | 3.1 | Modified scenarios manager-supplier |
 | 3.2 | Add stories and personas |
 | 3.3 | Complete scenarios |
+| 4.0 | Final version |
 
 
 # Contents
@@ -170,10 +171,6 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 
 ## Functional Requirements
 
-\<In the form DO SOMETHING, or VERB NOUN, describe high level capabilities of the system>
-
-\<they match to high level use cases>
-
 | ID        | Description  |
 | :------------- |:-------------:| 
 | FR1     | Manage users (System Administrator) |
@@ -245,8 +242,6 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 
 
 ## Non Functional Requirements
-
-\<Describe constraints on functional requirements>
 
 | ID        | Type (efficiency, reliability, ..)           | Description  | Refers to |
 | ------------- |:-------------:| :-----:| -----:|
@@ -875,7 +870,7 @@ Before the company started using EzWh, to issue an internal order P3 had to cont
 
 # Glossary
 
-![Glossary](./img/Glossary.jpg)
+![Glossary](./img/GlossaryFinal.jpg)
 
 # System Design
 
