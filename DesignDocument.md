@@ -47,23 +47,6 @@ The EzWh class can be set as a Singleton class>
 \<for each functional requirement from the requirement document, list which classes concur to implement it>
 | Class | FR |
 |:---|:---| 
-|Supplier   | 
-|Customer   |
-|Item       |
-|A          | Qty restock item
-|RestockOrder |
-|TransportNote |
-|ReturnOrder |
-|SKU        |
-|Inventory  |
-|SKUItem    |
-|AA         | Qty internal order
-|TestDescriptor |
-|AAA        | Date stock item in position
-|TestResult |
-|Warehouse  |
-|Position   |
-|InternalOrder |
 | FR1   |   SKU, Inventory, SKUItem, Position, AAA |
 | FR2   |   Position, Warehouse |
 | FR3   |   SKU, RestockOrder, SKUItem, Supplier, Item, AAA, TransportNote |
