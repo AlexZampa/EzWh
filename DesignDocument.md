@@ -603,6 +603,9 @@ ReturnOrder -> Supplier : notifySupplier
 @startuml
 mainframe **Return Order of any SKU items**
 actor Manager 
+participant GUI
+participant controllerRestockOrder
+participant controllerReturnOrder
 participant RestockOrder
 participant ReturnOrder
 participant SKUItem
@@ -612,32 +615,38 @@ participant Position
 actor Supplier
 
 autonumber
-Manager -> RestockOrder : setRO
-Manager -> RestockOrder : returnOrder
-RestockOrder -> SKUItem : getItemToReturn
+Manager -> GUI : insert ID of RestockOrder
+GUI -> controllerRestockOrder : GET/api/restockOrders/:id/returnItems -> getAllItemsToReturn
+controllerRestockOrder -> RestockOrder : initReturnOrder
+RestockOrder -> SKUItem : getAllItemsToReturn
 loop for each SKUItem
   SKUItem -> TestResult : getResult
   SKUItem <-- TestResult : return result
   alt return false
     RestockOrder <-- SKUItem : return RFID
-    Manager <-- RestockOrder : return RFID    
-    Manager -> ReturnOrder : addRFID
   else 
       SKUItem -> SKUItem : checkIfReturn
         alt return true
           RestockOrder <-- SKUItem : return RFID
-          Manager <-- RestockOrder : return RFID    
-          Manager -> ReturnOrder : addRFID
         end alt
   end alt
 end loop
 
-Manager -> ReturnOrder : confirmOrder
+RestockOrder --> controllerRestockOrder : return listSKUs
+controllerRestockOrder --> GUI : return RFID of SKUs
+
+Manager -> GUI : Add item to REO and confirm
+GUI -> controllerReturnOrder : POST/api/returnOrder -> createReturnOrder
+controllerReturnOrder -> ReturnOrder : addItems 
 loop for each RFID of item with not passed test in RO
   ReturnOrder -> SKUItem : setNotAvailable
   SKUItem -> SKU : decreaseAvailableQty
   SKUItem -> Position : increaseAvailablePos
 end loop
+ReturnOrder -> Supplier : sendNotification
+ReturnOrder --> controllerReturnOrder : return ok
+controllerReturnOrder --> GUI : return 201 Created
+GUI --> Manager : Display Created message
 @enduml
 
 ```
@@ -647,15 +656,18 @@ end loop
 @startuml
 mainframe **LogIn**
 actor User
+participant GUI
 participant Session
 
 autonumber
-User -> Session : putUsername
-User -> Session : putPassword
+User -> GUI : insert Username and Password
+GUI -> Session : POST/api/userSessions -> setCredentials
 alt Credentials are Ok
-  User <-- Session : return Ok
+  GUI <-- Session : return 200 Ok
+  User <-- GUI : display homepage
 else Credentials are wrong
-  User <-- Session : return Unauthorized
+  GUI <-- Session : return 401 Unauthorized
+  User <-- GUI : display Error Message
 end
 @enduml
 ```
@@ -665,11 +677,14 @@ end
 @startuml
 mainframe **LogOut**
 actor User
+participant GUI
 participant Session
 
 autonumber
-User -> Session : logOut
-User <-- Session : return Ok
+User -> GUI : click on Logout
+Session -> GUI : POST/api/logout
+GUI <-- Session : return 200 Ok
+User <-- GUI : display Login page
 @enduml
 ```
 
