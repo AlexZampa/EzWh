@@ -478,14 +478,14 @@ GUI -> RestockOrderController : PUT/api/restockOrder/:id/skuItems -> addSkuItems
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
 RestockOrderController -> RestockOrder : addSKUItems
-RestockOrderController <-- RestockOrderList : return success
+RestockOrderController <-- RestockOrder : return success
 GUI <-- UserController : 200 ok
 GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderState
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
 RestockOrderController -> RestockOrder : setState
-RestockOrderController <-- RestockOrderList : return success
-GUI <-- UserController : 200 ok
+RestockOrderController <-- RestockOrder : return success
+GUI <-- RestockOrderController : 200 ok
 
 @enduml
 ```
@@ -514,8 +514,8 @@ GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderSt
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
 RestockOrderController -> RestockOrder : setState
-RestockOrderController <-- RestockOrderList : return success
-GUI <-- UserController : 200 ok
+RestockOrderController <-- RestockOrder : return success
+GUI <-- RestockOrderController : 200 ok
 
 @enduml
 ```
@@ -545,8 +545,8 @@ GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderSt
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
 RestockOrderController -> RestockOrder : setState
-RestockOrderController <-- RestockOrderList : return success
-GUI <-- UserController : 200 ok
+RestockOrderController <-- RestockOrder : return success
+GUI <-- RestockOrderController : 200 ok
 
 @enduml
 ```
