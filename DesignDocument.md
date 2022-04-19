@@ -17,6 +17,8 @@ Version:
 - [Low level design](#low-level-design)
 - [Verification traceability matrix](#verification-traceability-matrix)
 - [Verification sequence diagrams](#verification-sequence-diagrams)
+    - [Scenario 6.1](#scenario-61)
+    - [Scenario 6.2](#scenario-62)
 
 # Instructions
 
@@ -361,5 +363,79 @@ Nicola -> 6 7 9
 Nicolò -> 10 11 12 >
 
 
+### Scenario 6.1
+```plantuml
+@startuml
+actor Manager 
+participant RestockOrder
+participant ReturnOrder
+participant SKUItem
+participant SKU
+participant TestResult
+actor Supplier
 
+autonumber
+Manager -> RestockOrder : setRO
+Manager -> RestockOrder : returnOrderNotPassed
+RestockOrder -> SKUItem : getNotPassed
+loop for each SKUItem
+  SKUItem -> TestResult : getResult
+  SKUItem <-- TestResult : return result
+    alt return false
+    RestockOrder <-- SKUItem : return RFID
+    Manager <-- RestockOrder : return RFID    
+    Manager -> ReturnOrder : addRFID
+    end alt
+ end loop
 
+Manager -> ReturnOrder : confirmOrder
+loop for each RFID in RO
+  ReturnOrder -> SKUItem : setNotAvailable
+end loop
+ReturnOrder -> Supplier : notifySupplier
+@enduml
+
+```
+
+### Scenario 6.2
+```plantuml
+@startuml
+actor Manager 
+participant RestockOrder
+participant ReturnOrder
+participant SKUItem
+participant SKU
+participant TestResult
+participant Position
+actor Supplier
+
+autonumber
+Manager -> RestockOrder : setRO
+Manager -> RestockOrder : returnOrder
+RestockOrder -> SKUItem : getItemToReturn
+loop for each SKUItem
+  SKUItem -> TestResult : getResult
+  SKUItem <-- TestResult : return result
+  alt return false
+    RestockOrder <-- SKUItem : return RFID
+    Manager <-- RestockOrder : return RFID    
+    Manager -> ReturnOrder : addRFID
+  else 
+      SKUItem -> SKUItem : checkIfReturn
+        alt return true
+          RestockOrder <-- SKUItem : return RFID
+          Manager <-- RestockOrder : return RFID    
+          Manager -> ReturnOrder : addRFID
+        end alt
+  end alt
+end loop
+
+Manager -> ReturnOrder : confirmOrder
+loop for each RFID of item with not passed test in RO
+  ReturnOrder -> SKUItem : setNotAvailable
+  SKUItem -> SKU : decreaseAvailableQty
+  SKUItem -> Position : increaseAvailablePos
+end loop
+@enduml
+
+```
