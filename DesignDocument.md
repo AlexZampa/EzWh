@@ -367,6 +367,62 @@ Michele -> 4 5
 Nicola -> 6 7 9
 Nicolò -> 10 11 12 >
 
+### Scenario 4.1
+
+```plantuml
+@startuml
+mainframe **Create new User**
+participant GUI
+participant UserController
+participant User
+
+autonumber
+GUI : POST/api/newUser -> UserController : newUser
+UserController -> User : User
+UserController <-- User : return success
+GUI <-- UserController : 201 created
+
+@enduml
+```
+
+### Scenario 4.2
+
+```plantuml
+@startuml
+mainframe **Modify User rights**
+participant GUI
+participant UserController
+participant UserList
+participant User
+
+autonumber
+GUI : PUT/api/users/:username -> UserController : modifyUserRights
+UserController -> UserList : getUser
+UserController <-- UserList : return User
+UserController -> User : setType
+UserController <-- User : return success
+GUI <-- UserController : 200 ok
+
+@enduml
+```
+
+### Scenario 4.2
+
+```plantuml
+@startuml
+mainframe **Delete User**
+participant GUI
+participant UserController
+participant UserList
+
+autonumber
+GUI : DELETE/api/users/:username/:type -> UserController : deleteUser
+UserController -> UserList : deleteUser
+UserController <-- UserList : return success
+GUI <-- UserController : 204 no content
+
+@enduml
+```
 
 ### Scenario 6.1
 ```plantuml
