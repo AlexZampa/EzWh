@@ -500,7 +500,7 @@ GUI <-- RestockOrderController : 200 ok
 ```plantuml
 @startuml
 mainframe **Manage testing of SKU Items of a restock Order**
-actor Quality Check Employee
+actor QualityCheckEmployee
 participant GUI
 participant TestResultController
 participant TestResult
@@ -511,14 +511,14 @@ participant RestockOrder
 autonumber
 loop for each SKUItem
   loop for each Test descriptor
-    Quality Check Employee -> GUI : POST/api/skuitems/testResult 
+    QualityCheckEmployee -> GUI : POST/api/skuitems/testResult 
     GUI -> TestResultController : newTestResult
     TestResultController -> TestResult : TestResult
     TestResultController <-- TestResult : return success
     GUI <-- TestResultController : 201 created
   end loop
 end loop
-Quality Check Employee -> GUI : PUT/api/restockOrder/:id
+QualityCheckEmployee -> GUI : PUT/api/restockOrder/:id
 GUI -> RestockOrderController : updateRestockOrderState
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
@@ -542,7 +542,7 @@ participant Position
 
 autonumber
 loop for each RFID
-  Quality Check Employee -> GUI : PUT/api/sku/:id/position
+  QualityCheckEmployee -> GUI : PUT/api/sku/:id/position
   GUI -> SKUController : SKUPosition
   SKUController -> SKUList : getSKU
   SKUController <-- SKUList : return SKU
@@ -552,7 +552,7 @@ loop for each RFID
   SKUController <-- Position : update units, volume, weight; return SKU
   GUI <-- SKUController : 200 ok
 end loop
-Quality Check Employee -> GUI : PUT/api/restockOrder/:id
+QualityCheckEmployee -> GUI : PUT/api/restockOrder/:id
 GUI -> RestockOrderController : updateRestockOrderState
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
