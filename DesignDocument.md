@@ -423,6 +423,101 @@ GUI <-- UserController : 204 no content
 
 @enduml
 ```
+### Scenario 5.1.1
+
+```plantuml
+@startuml
+mainframe **Manage reception of SKU Items of a restock Order**
+participant GUI
+participant SKUItemController
+participant SKUItem
+participant RestockOrderController
+participant RestockOrderList
+participant RestockOrder
+
+autonumber
+loop for each SKUItem
+  GUI -> SKUItemController : POST/api/skuitem -> newSKUItem
+  SKUItemController -> SKUItem : SKUItem
+  SKUItemController <-- SKUItem : return success
+  GUI <-- SKUItemController : 201 created
+end loop
+GUI -> RestockOrderController : PUT/api/restockOrder/:id/skuItems -> addSkuItems
+RestockOrderController -> RestockOrderList : getRestockOrder
+RestockOrderController <-- RestockOrderList : return RestockOrder
+RestockOrderController -> RestockOrder : addSKUItems
+RestockOrderController <-- RestockOrderList : return success
+GUI <-- UserController : 200 ok
+GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderState
+RestockOrderController -> RestockOrderList : getRestockOrder
+RestockOrderController <-- RestockOrderList : return RestockOrder
+RestockOrderController -> RestockOrder : setState
+RestockOrderController <-- RestockOrderList : return success
+GUI <-- UserController : 200 ok
+
+@enduml
+```
+
+### Scenario 5.2.(1-2-3)
+```plantuml
+@startuml
+mainframe **Manage testing of SKU Items of a restock Order**
+participant GUI
+participant TestResultController
+participant TestResult
+participant RestockOrderController
+participant RestockOrderList
+participant RestockOrder
+
+autonumber
+loop for each SKUItem
+  loop for each Test descriptor
+    GUI -> TestResultController : POST/api/skuitems/testResult -> newTestResult
+    TestResultController -> TestResult : TestResult
+    TestResultController <-- TestResult : return success
+    GUI <-- TestResultController : 201 created
+  end loop
+end loop
+GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderState
+RestockOrderController -> RestockOrderList : getRestockOrder
+RestockOrderController <-- RestockOrderList : return RestockOrder
+RestockOrderController -> RestockOrder : setState
+RestockOrderController <-- RestockOrderList : return success
+GUI <-- UserController : 200 ok
+
+@enduml
+```
+
+### Scenario 5.3.(1-3)
+```plantuml
+@startuml
+mainframe **Manage acceptance of tested SKU Items of a restock Order**
+participant GUI
+participant SKUController
+participant SKUList
+participant PositionMap
+participant Position
+
+autonumber
+loop for each RFID
+  GUI -> SKUController : PUT/api/sku/:id/position -> SKUPosition
+  SKUController -> SKUList : getSKU
+  SKUController <-- SKUList : return SKU
+  SKUController -> PositionMap : getPosition
+  SKUController <-- PositionMap : return Position
+  SKUController -> Position : addSKU
+  SKUController <-- Position : update units, volume, weight; return SKU
+  GUI <-- SKUController : 200 ok
+end loop
+GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderState
+RestockOrderController -> RestockOrderList : getRestockOrder
+RestockOrderController <-- RestockOrderList : return RestockOrder
+RestockOrderController -> RestockOrder : setState
+RestockOrderController <-- RestockOrderList : return success
+GUI <-- UserController : 200 ok
+
+@enduml
+```
 
 ### Scenario 6.1
 ```plantuml
