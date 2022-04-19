@@ -368,16 +368,17 @@ Nicola -> 6 7 9
 Nicolò -> 10 11 12 >
 
 ### Scenario 4.1
-
 ```plantuml
 @startuml
 mainframe **Create new User**
+actor Admin
 participant GUI
 participant UserController
 participant User
 
 autonumber
-GUI -> UserController : POST/api/newUser -> newUser
+Admin -> GUI : POST/api/newUser
+GUI -> UserController : newUser
 UserController -> User : User
 UserController <-- User : return success
 GUI <-- UserController : 201 created
@@ -386,17 +387,18 @@ GUI <-- UserController : 201 created
 ```
 
 ### Scenario 4.2
-
 ```plantuml
 @startuml
 mainframe **Modify User rights**
+actor Admin
 participant GUI
 participant UserController
 participant UserList
 participant User
 
 autonumber
-GUI -> UserController : PUT/api/users/:username -> modifyUserRights
+Admin -> GUI : PUT/api/users/:username
+GUI -> UserController : modifyUserRights
 UserController -> UserList : getUser
 UserController <-- UserList : return User
 UserController -> User : setType
@@ -406,17 +408,18 @@ GUI <-- UserController : 200 ok
 @enduml
 ```
 
-### Scenario 4.2
-
+### Scenario 4.3
 ```plantuml
 @startuml
 mainframe **Delete User**
+actor Admin
 participant GUI
 participant UserController
 participant UserList
 
 autonumber
-GUI -> UserController : DELETE/api/users/:username/:type -> deleteUser
+Admin -> GUI : DELETE/api/users/:username/:type
+GUI -> UserController : deleteUser
 UserController -> UserList : deleteUser
 UserController <-- UserList : return success
 GUI <-- UserController : 204 no content
@@ -424,10 +427,10 @@ GUI <-- UserController : 204 no content
 @enduml
 ```
 ### Scenario 5.1.1
-
 ```plantuml
 @startuml
 mainframe **Manage reception of SKU Items of a restock Order**
+actor Clerk
 participant GUI
 participant SKUItemController
 participant SKUItem
@@ -437,18 +440,21 @@ participant RestockOrder
 
 autonumber
 loop for each SKUItem
-  GUI -> SKUItemController : POST/api/skuitem -> newSKUItem
+  Clerk -> GUI : POST/api/skuitem
+  GUI -> SKUItemController : newSKUItem
   SKUItemController -> SKUItem : SKUItem
   SKUItemController <-- SKUItem : return success
   GUI <-- SKUItemController : 201 created
 end loop
-GUI -> RestockOrderController : PUT/api/restockOrder/:id/skuItems -> addSkuItems
+Clerk -> GUI : PUT/api/restockOrder/:id/skuItems
+GUI -> RestockOrderController : addSkuItems
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
 RestockOrderController -> RestockOrder : addSKUItems
 RestockOrderController <-- RestockOrder : return success
 GUI <-- UserController : 200 ok
-GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderState
+Clerk -> GUI : PUT/api/restockOrder/:id
+GUI -> RestockOrderController : updateRestockOrderState
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
 RestockOrderController -> RestockOrder : setState
@@ -462,6 +468,7 @@ GUI <-- RestockOrderController : 200 ok
 ```plantuml
 @startuml
 mainframe **Manage testing of SKU Items of a restock Order**
+actor Quality Check Employee
 participant GUI
 participant TestResultController
 participant TestResult
@@ -472,13 +479,15 @@ participant RestockOrder
 autonumber
 loop for each SKUItem
   loop for each Test descriptor
-    GUI -> TestResultController : POST/api/skuitems/testResult -> newTestResult
+    Quality Check Employee -> GUI : POST/api/skuitems/testResult 
+    GUI -> TestResultController : newTestResult
     TestResultController -> TestResult : TestResult
     TestResultController <-- TestResult : return success
     GUI <-- TestResultController : 201 created
   end loop
 end loop
-GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderState
+Quality Check Employee -> GUI : PUT/api/restockOrder/:id
+GUI -> RestockOrderController : updateRestockOrderState
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
 RestockOrderController -> RestockOrder : setState
@@ -492,6 +501,7 @@ GUI <-- RestockOrderController : 200 ok
 ```plantuml
 @startuml
 mainframe **Manage acceptance of tested SKU Items of a restock Order**
+actor Quality Check Employee
 participant GUI
 participant SKUController
 participant SKUList
@@ -500,7 +510,8 @@ participant Position
 
 autonumber
 loop for each RFID
-  GUI -> SKUController : PUT/api/sku/:id/position -> SKUPosition
+  Quality Check Employee -> GUI : PUT/api/sku/:id/position
+  GUI -> SKUController : SKUPosition
   SKUController -> SKUList : getSKU
   SKUController <-- SKUList : return SKU
   SKUController -> PositionMap : getPosition
@@ -509,7 +520,8 @@ loop for each RFID
   SKUController <-- Position : update units, volume, weight; return SKU
   GUI <-- SKUController : 200 ok
 end loop
-GUI -> RestockOrderController : PUT/api/restockOrder/:id -> updateRestockOrderState
+Quality Check Employee -> GUI : PUT/api/restockOrder/:id
+GUI -> RestockOrderController : updateRestockOrderState
 RestockOrderController -> RestockOrderList : getRestockOrder
 RestockOrderController <-- RestockOrderList : return RestockOrder
 RestockOrderController -> RestockOrder : setState
