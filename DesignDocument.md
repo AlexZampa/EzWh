@@ -17,6 +17,12 @@ Version:
 - [Low level design](#low-level-design)
 - [Verification traceability matrix](#verification-traceability-matrix)
 - [Verification sequence diagrams](#verification-sequence-diagrams)
+    - [Scenario 4.1](#scenario-41)
+    - [Scenario 4.2](#scenario-42)
+    - [Scenario 4.2](#scenario-42-1)
+    - [Scenario 5.1.1](#scenario-511)
+    - [Scenario 5.2.(1-2-3)](#scenario-521-2-3)
+    - [Scenario 5.3.(1-3)](#scenario-531-3)
     - [Scenario 6.1](#scenario-61)
     - [Scenario 6.2](#scenario-62)
     - [Scenario 7.1](#scenario-71)
@@ -167,6 +173,32 @@ class Position {
 }
 
 }
+
+
+controllerSKU -up- GUI
+controllerSKUItem -up- GUI
+controllerPosition -up- GUI
+controllerUser -up- GUI
+controllerUser -up- GUI
+controllerReturnOrder -up- GUI
+controllerItem -up- GUI
+controllerTestDescriptor -up- GUI
+controllerTestResult -up- GUI
+controllerInternalOrder -up- GUI
+controllerRestockOrder -up- GUI
+
+controllerSKU -- SKU
+controllerSKUItem -- SKUItem
+controllerPosition -- Position
+controllerUser -- Supplier
+controllerUser -- Customer
+controllerReturnOrder -- ReturnOrder
+controllerItem -- Item
+controllerTestDescriptor -- TestDescriptor
+controllerTestResult -- TestResult
+controllerInternalOrder -- InternalOrder
+controllerRestockOrder -- RestockOrder
+
 
 ```
 
