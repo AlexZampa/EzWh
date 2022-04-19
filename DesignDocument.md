@@ -19,6 +19,8 @@ Version:
 - [Verification sequence diagrams](#verification-sequence-diagrams)
     - [Scenario 6.1](#scenario-61)
     - [Scenario 6.2](#scenario-62)
+    - [Scenario 7.1](#scenario-71)
+    - [Scenario 7.2](#scenario-72)
 
 # Instructions
 
@@ -438,4 +440,33 @@ loop for each RFID of item with not passed test in RO
 end loop
 @enduml
 
+```
+
+### Scenario 7.1
+```plantuml
+@startuml
+actor User
+participant Session
+
+autonumber
+User -> Session : putUsername
+User -> Session : putPassword
+alt Credentials are Ok
+  User <-- Session : return Ok
+else Credentials are wrong
+  User <-- Session : return Unauthorized
+end
+@enduml
+```
+
+### Scenario 7.2
+```plantuml
+@startuml
+actor User
+participant Session
+
+autonumber
+User -> Session : logOut
+User <-- Session : return Ok
+@enduml
 ```
