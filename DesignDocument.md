@@ -21,6 +21,9 @@ Version:
     - [Scenario 6.2](#scenario-62)
     - [Scenario 7.1](#scenario-71)
     - [Scenario 7.2](#scenario-72)
+    - [Scenario 9.1](#scenario-91)
+    - [Scenario 9.2](#scenario-92)
+    - [Scenario 9.3](#scenario-93)
 
 # Instructions
 
@@ -368,6 +371,7 @@ Nicolò -> 10 11 12 >
 ### Scenario 6.1
 ```plantuml
 @startuml
+mainframe **Return Order of SKU items that failed quality tests**
 actor Manager 
 participant RestockOrder
 participant ReturnOrder
@@ -402,6 +406,7 @@ ReturnOrder -> Supplier : notifySupplier
 ### Scenario 6.2
 ```plantuml
 @startuml
+mainframe **Return Order of any SKU items**
 actor Manager 
 participant RestockOrder
 participant ReturnOrder
@@ -445,6 +450,7 @@ end loop
 ### Scenario 7.1
 ```plantuml
 @startuml
+mainframe **LogIn**
 actor User
 participant Session
 
@@ -462,11 +468,99 @@ end
 ### Scenario 7.2
 ```plantuml
 @startuml
+mainframe **LogOut**
 actor User
 participant Session
 
 autonumber
 User -> Session : logOut
 User <-- Session : return Ok
+@enduml
+```
+
+### Scenario 9.1
+```plantuml
+@startuml
+mainframe **Internal Order accepted**
+actor Customer
+actor Manager
+participant InternalOrder
+participant SKU
+
+autonumber
+Customer -> InternalOrder : createIO
+loop for each SKU needed
+  Customer -> InternalOrder : addSKU
+  Customer -> InternalOrder : setQty
+end loop
+Customer -> InternalOrder : confirmIO
+InternalOrder -> InternalOrder : set ISSUED
+loop for each SKU in IO
+  InternalOrder -> SKU : decreaseAvailableQty
+  SKU -> Position : increaseAvailablePos
+end loop
+Manager -> InternalOrder : checkIO
+Manager -> InternalOrder : confirmIO
+InternalOrder -> InternalOrder : set ACCEPTED
+@enduml
+```
+
+### Scenario 9.2
+```plantuml
+@startuml
+mainframe **Internal Order refused**
+actor Customer
+actor Manager
+participant InternalOrder
+participant SKU
+
+autonumber
+Customer -> InternalOrder : createIO
+loop for each SKU needed
+  Customer -> InternalOrder : addSKU
+  Customer -> InternalOrder : setQty
+end loop
+Customer -> InternalOrder : confirmIO
+InternalOrder -> InternalOrder : set ISSUED
+loop for each SKU in IO
+  InternalOrder -> SKU : decreaseAvailableQty
+  SKU -> Position : increaseAvailablePos
+end loop
+Manager -> InternalOrder : checkIO
+Manager -> InternalOrder : refuseIO
+loop for each SKU in IO
+  InternalOrder -> SKU : increaseAvailableQty
+  SKU -> Position : decreaseAvailablePos
+end loop
+InternalOrder -> InternalOrder : set REFUSED
+@enduml
+```
+
+### Scenario 9.3
+```plantuml
+@startuml
+mainframe **Internal Order cancelled**
+actor Customer
+participant InternalOrder
+participant SKU
+
+autonumber
+Customer -> InternalOrder : createIO
+loop for each SKU needed
+  Customer -> InternalOrder : addSKU
+  Customer -> InternalOrder : setQty
+end loop
+Customer -> InternalOrder : confirmIO
+InternalOrder -> InternalOrder : set ISSUED
+loop for each SKU in IO
+  InternalOrder -> SKU : decreaseAvailableQty
+  SKU -> Position : increaseAvailablePos
+end loop
+Customer -> InternalOrder : cancelIO
+loop for each SKU in IO
+  InternalOrder -> SKU : increaseAvailableQty
+  SKU -> Position : decreaseAvailablePos
+end loop
+InternalOrder -> InternalOrder : set CANCELLED
 @enduml
 ```
