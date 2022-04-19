@@ -377,7 +377,7 @@ participant UserController
 participant User
 
 autonumber
-GUI : POST/api/newUser -> UserController : newUser
+GUI -> UserController : POST/api/newUser -> newUser
 UserController -> User : User
 UserController <-- User : return success
 GUI <-- UserController : 201 created
@@ -396,7 +396,7 @@ participant UserList
 participant User
 
 autonumber
-GUI : PUT/api/users/:username -> UserController : modifyUserRights
+GUI -> UserController : PUT/api/users/:username -> modifyUserRights
 UserController -> UserList : getUser
 UserController <-- UserList : return User
 UserController -> User : setType
@@ -416,7 +416,7 @@ participant UserController
 participant UserList
 
 autonumber
-GUI : DELETE/api/users/:username/:type -> UserController : deleteUser
+GUI -> UserController : DELETE/api/users/:username/:type -> deleteUser
 UserController -> UserList : deleteUser
 UserController <-- UserList : return success
 GUI <-- UserController : 204 no content
