@@ -38,6 +38,11 @@ Version:
     - [Scenario 9.1](#scenario-91)
     - [Scenario 9.2](#scenario-92)
     - [Scenario 9.3](#scenario-93)
+    - [Scenario 11.1](#scenario-111)
+    - [Scenario 11.2](#scenario-112)
+    - [Scenario 12.1](#scenario-121)
+    - [Scenario 12.2](#scenario-122)
+    - [Scenario 12.3](#scenario-123)
 
 # Instructions
 
@@ -1133,5 +1138,127 @@ loop for each SKU in IO
 end loop
 controllerInternalOrder <-- InternalOrder : return ok
 GUI <-- controllerInternalOrder : return 200 OK
+@enduml
+```
+
+### Scenario 11.1
+```plantuml
+mainframe **Create Item**
+actor Supplier
+participant GUI
+participant ControllerItem
+participant Item
+
+autonumber
+Supplier -> GUI : insert description, SKUid, price 
+GUI -> ControllerItem : POST/api/item
+ControllerItem -> Item : newItem
+
+alt id is available
+  ControllerItem <-- Item : return success
+  GUI <-- ControllerItem : 201 created
+else id is already used
+  ControllerItem <-- Item : return error
+  GUI <-- ControllerItem : 422 Unprocessable Entity
+  Supplier <-- GUI : display Error Message
+end
+
+Supplier -> GUI : confirm data
+GUI -> ControllerItem : ??
+GUI <-- ControllerItem : ??
+
+@enduml
+```
+
+### Scenario 11.2
+```plantuml
+mainframe **Modify Item**
+actor Supplier
+participant GUI
+participant ControllerItem
+participant Item
+
+autonumber
+Supplier -> GUI : insert id, new price and new description
+GUI -> ControllerItem : GET/api/items/:id
+ControllerItem -> Item : modifyItem
+ControllerItem <-- Item : return success
+GUI <-- ControllerItem : 200 OK
+Supplier -> GUI : confirm data
+GUI -> ControllerItem : ??
+GUI <-- ControllerItem : ??
+
+@enduml
+```
+
+### Scenario 12.1
+```plantuml
+mainframe **Create Test Description**
+actor Manager
+participant GUI
+participant ControllerTestDescriptor
+participant TestDescriptor
+participant ControllerSKU
+
+autonumber
+GUI -> ControllerSKU : GET/api/skus
+GUI <-- ControllerSKU : 200 OK
+Manager -> GUI : M selects SKU
+Manager -> GUI : M defines name and procedure description
+GUI -> ControllerTestDescriptor : POST/api/testDescriptor
+ControllerTestDescriptor -> TestDescriptor : createTestDescriptor
+ControllerTestDescriptor <-- TestDescriptor : return success
+GUI <-- ControllerTestDescriptor : 201 Created
+Manager -> GUI : confirm data
+GUI -> ControllerTestDescriptor : ??
+GUI <-- ControllerTestDescriptor : ??
+
+@enduml
+```
+
+### Scenario 12.2
+```plantuml
+mainframe **Update Test Description**
+actor Manager
+participant GUI
+participant ControllerTestDescriptor
+participant TestDescriptor
+
+autonumber
+GUI -> ControllerTestDescriptor : GET/api/testDescriptors
+GUI <-- ControllerTestDescriptor : 200 OK
+Manager -> GUI : M selects T
+Manager -> GUI : M update procedure description
+GUI -> ControllerTestDescriptor : PUT/api/testDescriptor/:id
+ControllerTestDescriptor -> TestDescriptor : modifyTestDescriptor
+ControllerTestDescriptor <-- TestDescriptor : return success
+GUI <-- ControllerTestDescriptor : 200 OK
+Manager -> GUI : confirm data
+GUI -> ControllerTestDescriptor : ??
+GUI <-- ControllerTestDescriptor : ??
+
+@enduml
+```
+
+### Scenario 12.3
+```plantuml
+mainframe **Delete Test Description**
+actor Manager
+participant GUI
+participant ControllerTestDescriptor
+participant TestDescriptor
+
+autonumber
+GUI -> ControllerTestDescriptor : GET/api/testDescriptors
+GUI <-- ControllerTestDescriptor : 200 OK
+Manager -> GUI : M selects T
+GUI -> ControllerTestDescriptor : DELETE/api/testDescriptor/:id
+ControllerTestDescriptor -> TestDescriptor : deleteTestDescriptor
+ControllerTestDescriptor <-- TestDescriptor : return success
+GUI <-- ControllerTestDescriptor : 204 No Content
+Manager -> GUI : confirm deletion
+GUI -> ControllerTestDescriptor : ??
+GUI <-- ControllerTestDescriptor : ??
+
 @enduml
 ```
