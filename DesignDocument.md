@@ -17,27 +17,27 @@ Version:
 - [Low level design](#low-level-design)
 - [Verification traceability matrix](#verification-traceability-matrix)
 - [Verification sequence diagrams](#verification-sequence-diagrams)
-  - [Scenario 1.1](#scenario-11)
-  - [Scenario 1.2](#scenario-12)
-  - [Scenario 1.3](#scenario-13)
-  - [Scenario 2.1](#scenario-21)
-  - [Scenario 2.2](#scenario-22)
-  - [Scenario 2.3](#scenario-23)
-  - [Scenario 2.4](#scenario-24)
-  - [Scenario 2.5](#scenario-25)
-  - [Scenario 4.1](#scenario-41)
-  - [Scenario 4.2](#scenario-42)
-  - [Scenario 4.2](#scenario-42-1)
-  - [Scenario 5.1.1](#scenario-511)
-  - [Scenario 5.2.(1-2-3)](#scenario-521-2-3)
-  - [Scenario 5.3.(1-3)](#scenario-531-3)
-  - [Scenario 6.1](#scenario-61)
-  - [Scenario 6.2](#scenario-62)
-  - [Scenario 7.1](#scenario-71)
-  - [Scenario 7.2](#scenario-72)
-  - [Scenario 9.1](#scenario-91)
-  - [Scenario 9.2](#scenario-92)
-  - [Scenario 9.3](#scenario-93)
+    - [Scenario 1.1](#scenario-11)
+    - [Scenario 1.2](#scenario-12)
+    - [Scenario 1.3](#scenario-13)
+    - [Scenario 2.1](#scenario-21)
+    - [Scenario 2.2](#scenario-22)
+    - [Scenario 2.3](#scenario-23)
+    - [Scenario 2.4](#scenario-24)
+    - [Scenario 2.5](#scenario-25)
+    - [Scenario 4.1](#scenario-41)
+    - [Scenario 4.2](#scenario-42)
+    - [Scenario 4.3](#scenario-43)
+    - [Scenario 5.1.1](#scenario-511)
+    - [Scenario 5.2.(1-2-3)](#scenario-521-2-3)
+    - [Scenario 5.3.(1-3)](#scenario-531-3)
+    - [Scenario 6.1](#scenario-61)
+    - [Scenario 6.2](#scenario-62)
+    - [Scenario 7.1](#scenario-71)
+    - [Scenario 7.2](#scenario-72)
+    - [Scenario 9.1](#scenario-91)
+    - [Scenario 9.2](#scenario-92)
+    - [Scenario 9.3](#scenario-93)
 
 # Instructions
 
@@ -832,7 +832,7 @@ GUI <-- RestockOrderController : 200 ok
 ```plantuml
 @startuml
 mainframe **Manage acceptance of tested SKU Items of a restock Order**
-actor Quality Check Employee
+actor QualityCheckEmployee
 participant GUI
 participant SKUController
 participant SKUList
@@ -867,32 +867,46 @@ GUI <-- RestockOrderController : 200 ok
 @startuml
 mainframe **Return Order of SKU items that failed quality tests**
 actor Manager 
+participant GUI
+participant controllerRestockOrder
+participant controllerReturnOrder
 participant RestockOrder
 participant ReturnOrder
 participant SKUItem
 participant SKU
 participant TestResult
+participant Position
 actor Supplier
 
 autonumber
-Manager -> RestockOrder : setRO
-Manager -> RestockOrder : returnOrderNotPassed
+Manager -> GUI : Insert ID of Return Order
+GUI -> controllerRestockOrder : GET/api/restockOrders/:id/returnItems -> getAllItemsToReturn
+controllerRestockOrder -> RestockOrder : initReturnOrder
+RestockOrder -> SKUItem : getAllItemsToReturn
 RestockOrder -> SKUItem : getNotPassed
 loop for each SKUItem
   SKUItem -> TestResult : getResult
   SKUItem <-- TestResult : return result
     alt return false
     RestockOrder <-- SKUItem : return RFID
-    Manager <-- RestockOrder : return RFID    
-    Manager -> ReturnOrder : addRFID
     end alt
  end loop
 
-Manager -> ReturnOrder : confirmOrder
-loop for each RFID in RO
+RestockOrder --> controllerRestockOrder : return listSKUs
+controllerRestockOrder --> GUI : return RFID of SKUs
+
+Manager -> GUI : Add item to REO and confirm
+GUI -> controllerReturnOrder : POST/api/returnOrder -> createReturnOrder
+controllerReturnOrder -> ReturnOrder : addItems 
+loop for each RFID of item with not passed test in RO
   ReturnOrder -> SKUItem : setNotAvailable
+  SKUItem -> SKU : decreaseAvailableQty
+  SKUItem -> Position : increaseAvailablePos
 end loop
-ReturnOrder -> Supplier : notifySupplier
+ReturnOrder -> Supplier : sendNotification
+ReturnOrder --> controllerReturnOrder : return ok
+controllerReturnOrder --> GUI : return 201 Created
+GUI --> Manager : Display Created message
 @enduml
 
 ```
@@ -993,24 +1007,43 @@ User <-- GUI : display Login page
 mainframe **Internal Order accepted**
 actor Customer
 actor Manager
+participant GUI
+participant controllerInternalOrder
 participant InternalOrder
 participant SKU
 
 autonumber
-Customer -> InternalOrder : createIO
+Customer -> GUI : start internal order and add SKUs
+GUI -> controllerInternalOrder : POST/api/internalOrders
+controllerInternalOrder -> InternalOrder : newOrder
 loop for each SKU needed
-  Customer -> InternalOrder : addSKU
-  Customer -> InternalOrder : setQty
+  controllerInternalOrder -> InternalOrder : addSKU
+  controllerInternalOrder -> InternalOrder : setQty
+  controllerInternalOrder <-- InternalOrder : ok
 end loop
-Customer -> InternalOrder : confirmIO
-InternalOrder -> InternalOrder : set ISSUED
+GUI <-- controllerInternalOrder : 201 Created
+
+Customer -> GUI : confirm IO
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->ISSUED
+controllerInternalOrder -> InternalOrder : set ISSUED
 loop for each SKU in IO
   InternalOrder -> SKU : decreaseAvailableQty
   SKU -> Position : increaseAvailablePos
 end loop
-Manager -> InternalOrder : checkIO
-Manager -> InternalOrder : confirmIO
-InternalOrder -> InternalOrder : set ACCEPTED
+controllerInternalOrder <-- InternalOrder : ok
+GUI <-- controllerInternalOrder : 200 OK
+
+Manager -> GUI : check IO
+GUI -> controllerInternalOrder : GET/api/internalOrdersIssued
+controllerInternalOrder -> InternalOrder : getOrdersIssued
+controllerInternalOrder <-- InternalOrder : return list issued
+GUI <-- controllerInternalOrder : return 200 OK and list
+
+Manager -> GUI : confirm IO
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->ACCEPTED
+controllerInternalOrder -> InternalOrder : setOrderAccepted
+controllerInternalOrder <-- InternalOrder : return ok
+GUI <-- controllerInternalOrder : return 200 OK
 @enduml
 ```
 
@@ -1020,28 +1053,43 @@ InternalOrder -> InternalOrder : set ACCEPTED
 mainframe **Internal Order refused**
 actor Customer
 actor Manager
+participant GUI
+participant controllerInternalOrder
 participant InternalOrder
 participant SKU
 
 autonumber
-Customer -> InternalOrder : createIO
+Customer -> GUI : start internal order and add SKUs
+GUI -> controllerInternalOrder : POST/api/internalOrders
+controllerInternalOrder -> InternalOrder : newOrder
 loop for each SKU needed
-  Customer -> InternalOrder : addSKU
-  Customer -> InternalOrder : setQty
+  controllerInternalOrder -> InternalOrder : addSKU
+  controllerInternalOrder -> InternalOrder : setQty
+  controllerInternalOrder <-- InternalOrder : ok
 end loop
-Customer -> InternalOrder : confirmIO
-InternalOrder -> InternalOrder : set ISSUED
+GUI <-- controllerInternalOrder : 201 Created
+
+Customer -> GUI : confirm IO
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->ISSUED
+controllerInternalOrder -> InternalOrder : set ISSUED
 loop for each SKU in IO
   InternalOrder -> SKU : decreaseAvailableQty
   SKU -> Position : increaseAvailablePos
 end loop
-Manager -> InternalOrder : checkIO
-Manager -> InternalOrder : refuseIO
-loop for each SKU in IO
-  InternalOrder -> SKU : increaseAvailableQty
-  SKU -> Position : decreaseAvailablePos
-end loop
-InternalOrder -> InternalOrder : set REFUSED
+controllerInternalOrder <-- InternalOrder : ok
+GUI <-- controllerInternalOrder : 200 OK
+
+Manager -> GUI : check IO
+GUI -> controllerInternalOrder : GET/api/internalOrdersIssued
+controllerInternalOrder -> InternalOrder : getOrdersIssued
+controllerInternalOrder <-- InternalOrder : return list issued
+GUI <-- controllerInternalOrder : return 200 OK and list
+
+Manager -> GUI : refuse IO
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->REFUSED
+controllerInternalOrder -> InternalOrder : setOrderRefused
+controllerInternalOrder <-- InternalOrder : return ok
+GUI <-- controllerInternalOrder : return 200 OK
 @enduml
 ```
 
@@ -1050,26 +1098,40 @@ InternalOrder -> InternalOrder : set REFUSED
 @startuml
 mainframe **Internal Order cancelled**
 actor Customer
+participant GUI
+participant controllerInternalOrder
 participant InternalOrder
 participant SKU
 
 autonumber
-Customer -> InternalOrder : createIO
+Customer -> GUI : start internal order and add SKUs
+GUI -> controllerInternalOrder : POST/api/internalOrders
+controllerInternalOrder -> InternalOrder : newOrder
 loop for each SKU needed
-  Customer -> InternalOrder : addSKU
-  Customer -> InternalOrder : setQty
+  controllerInternalOrder -> InternalOrder : addSKU
+  controllerInternalOrder -> InternalOrder : setQty
+  controllerInternalOrder <-- InternalOrder : ok
 end loop
-Customer -> InternalOrder : confirmIO
-InternalOrder -> InternalOrder : set ISSUED
+GUI <-- controllerInternalOrder : 201 Created
+
+Customer -> GUI : confirm IO
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->ISSUED
+controllerInternalOrder -> InternalOrder : set ISSUED
 loop for each SKU in IO
   InternalOrder -> SKU : decreaseAvailableQty
   SKU -> Position : increaseAvailablePos
 end loop
-Customer -> InternalOrder : cancelIO
+controllerInternalOrder <-- InternalOrder : ok
+GUI <-- controllerInternalOrder : 200 OK
+
+Customer -> GUI : delete IO
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->CANCELLED
+controllerInternalOrder -> InternalOrder : setOrderCancelled
 loop for each SKU in IO
   InternalOrder -> SKU : increaseAvailableQty
   SKU -> Position : decreaseAvailablePos
 end loop
-InternalOrder -> InternalOrder : set CANCELLED
+controllerInternalOrder <-- InternalOrder : return ok
+GUI <-- controllerInternalOrder : return 200 OK
 @enduml
 ```
