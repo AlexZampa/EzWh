@@ -1150,7 +1150,8 @@ actor DeliveryEmployee
 participant GUI
 participant controllerInternalOrder
 participant InternalOrder
-participant SKU
+participant controllerSKUItem
+participant SKUItem
 
 autonumber
 GUI -> controllerInternalOrder : GET/api/inernalOrdersAccepted
@@ -1159,10 +1160,10 @@ DeliveryEmployee -> GUI : select internal order
 GUI -> controllerInternalOrder : GET/api/internalOrders/:id
 GUI <-- controllerInternalOrder : 200 OK
 loop for each SKUitem in products
-  GUI -> controllerInternalOrder : GET/api/skuitems/sku/:id
-  controllerInternalOrder -> InternalOrder : setNotAvailable
-  controllerInternalOrder <-- InternalOrder : ok
-  GUI <-- controllerInternalOrder : 200 OK (add to an array of rfid??)
+  GUI -> controllerSKUItem : GET/api/skuitems/sku/:id
+  controllerSKUItem -> SKUItem : setNotAvailable
+  controllerSKUItem <-- SKUItem : ok
+  GUI <-- controllerSKUItem : 200 OK (add to an array of rfid??)
 end loop
 
 GUI -> controllerInternalOrder : PUT/api/internalOrders/:id completed, array
