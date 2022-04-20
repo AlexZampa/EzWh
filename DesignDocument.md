@@ -17,19 +17,27 @@ Version:
 - [Low level design](#low-level-design)
 - [Verification traceability matrix](#verification-traceability-matrix)
 - [Verification sequence diagrams](#verification-sequence-diagrams)
-    - [Scenario 4.1](#scenario-41)
-    - [Scenario 4.2](#scenario-42)
-    - [Scenario 4.2](#scenario-42-1)
-    - [Scenario 5.1.1](#scenario-511)
-    - [Scenario 5.2.(1-2-3)](#scenario-521-2-3)
-    - [Scenario 5.3.(1-3)](#scenario-531-3)
-    - [Scenario 6.1](#scenario-61)
-    - [Scenario 6.2](#scenario-62)
-    - [Scenario 7.1](#scenario-71)
-    - [Scenario 7.2](#scenario-72)
-    - [Scenario 9.1](#scenario-91)
-    - [Scenario 9.2](#scenario-92)
-    - [Scenario 9.3](#scenario-93)
+  - [Scenario 1.1](#scenario-11)
+  - [Scenario 1.2](#scenario-12)
+  - [Scenario 1.3](#scenario-13)
+  - [Scenario 2.1](#scenario-21)
+  - [Scenario 2.2](#scenario-22)
+  - [Scenario 2.3](#scenario-23)
+  - [Scenario 2.4](#scenario-24)
+  - [Scenario 2.5](#scenario-25)
+  - [Scenario 4.1](#scenario-41)
+  - [Scenario 4.2](#scenario-42)
+  - [Scenario 4.2](#scenario-42-1)
+  - [Scenario 5.1.1](#scenario-511)
+  - [Scenario 5.2.(1-2-3)](#scenario-521-2-3)
+  - [Scenario 5.3.(1-3)](#scenario-531-3)
+  - [Scenario 6.1](#scenario-61)
+  - [Scenario 6.2](#scenario-62)
+  - [Scenario 7.1](#scenario-71)
+  - [Scenario 7.2](#scenario-72)
+  - [Scenario 9.1](#scenario-91)
+  - [Scenario 9.2](#scenario-92)
+  - [Scenario 9.3](#scenario-93)
 
 # Instructions
 
@@ -220,25 +228,48 @@ N1 .. GUI
 'End of Application Logic
 
 package "Controller" #DDDDDD {
-class controllerSKU
 
-class controllerSKUItem
+  class controllerSKU{
+    modifySKUposition(SKU) : void
+    modifySKUweight(SKU) : void
+    modifySKUvolume(SKU) : void
+  }
 
-class controllerPosition
+  class ControllerInventory{
+    getSKUbyID(int) : SKU
+  }
 
-class controllerTestDescriptor
+  class controllerSKUItem
 
-class controllerTestResult
+  class ControllerPosition{
+    newPosition(string) :  void
+    modifyPositionID(Position, string) : void
+    modifyAisleRowCol(Position, string, string, string) : void
+    modifyPositionWeight(Position, float) : void
+    modifyPositionVolume(position, float) : void
+    deletePosition(Position) : void
+  }
 
-class controllerUser
+  class ControllerWarehouse{
+    getFreePositons(SKU, int) : Position [ ]
+    addNewPosition(Position) : void
+    getAllPositions() : Position [ ]
+    deletePositionFromWarehouse(Position) : void
+  }
 
-class controllerRestockOrder
+  class controllerTestDescriptor
 
-class controllerReturnOrder
+  class controllerTestResult
 
-class controllerInternalOrder
+  class controllerUser
 
-class controllerItem
+  class controllerRestockOrder
+
+  class controllerReturnOrder
+
+  class controllerInternalOrder
+
+  class controllerItem
 
 }
 'End of Presentation
@@ -246,99 +277,148 @@ class controllerItem
 
 package "Model" #DDDDDD {
 
-class Warehouse
+  class Warehouse{
+      PositionList : Position [ ]
 
-class Supplier {
-  ID
-  name
-}
+      getPositions() : Position [ ]
+      addPosition(Position) : void
+      deletePosition(Position) : void
+  }
 
-class Customer {
-  ID
-  name
-  surname
-}
+  class Supplier {
+    ID
+    name
+  }
 
-class RestockOrder {
-  ID
-  issue date
-  state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
-}
+  class Customer {
+    ID
+    name
+    surname
+  }
 
-
-class ReturnOrder {
-  ID
-  Return date
-}
-
-class InternalOrder {
-  date
-  from
-  state [ISSUED - ACCEPTED - REFUSED - CANCELED - COMPLETED]
-}
-
-class Item {
-  ID
-  description
-  price
-}
-
-class A {
-  quantity
-}
+  class RestockOrder {
+    ID
+    issue date
+    state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
+  }
 
 
-class TransportNote {
-  Shipment date
-}
+  class ReturnOrder {
+    ID
+    Return date
+  }
 
-class SKU {
-  ID
-  description
-  weight
-  volume
-  price
-  notes
-}
+  class InternalOrder {
+    date
+    from
+    state [ISSUED - ACCEPTED - REFUSED - CANCELED - COMPLETED]
+  }
 
-class Inventory
+  class Item {
+    ID
+    description
+    price
+  }
 
-class SKUItem {
-  RFID
-  Available [0 - 1]
-}
-
-class AA {
-  quantity
-}
-
-class TestDescriptor {
-  ID
-  name
-  procedure description
-}
-
-class AAA {
-  date of stock 
-}
-
-class TestResult {
-  ID
-  date
-  result boolean
-}
+  class A {
+    quantity
+  }
 
 
-class Position {
-  positionID
-  aisle 
-  row
-  col
-  max weight
-  max volume
-  occupied weight
-  occupied volume
-}
+  class TransportNote {
+    Shipment date
+  }
+
+  class SKU {
+    ID : string
+    description : string
+    weight : float
+    volume : float
+    price : float
+    notes : string
+    assignedPositions : Position [ ]
+
+    getID() : int
+    getWeight() : float
+    getVolume() : float
+    getAssignedPositions() : Position [ ]
+    setDescription(string) : void
+    setWeight(float) : void
+    setVolume(float) : void
+    setNotes(string) : void
+    setAssignedPosition(Position) : void
+    removeAssignedPosition(Position) : void
+  }
+
+  class Inventory{
+      SKUlist : SKU [ ]
+
+      getSKUlist() : SKU [ ]
+  }
+
+  class SKUItem {
+    RFID : string
+    Available [0 - 1]
+    position : Position
+
+    getRFID() : string
+    getPosition() : Position
+    setPosition(Position) : void
+    removePosition() : void
+  }
+
+  class AA {
+    quantity
+  }
+
+  class TestDescriptor {
+    ID
+    name
+    procedure description
+  }
+
+  class AAA {
+    date of stock 
+  }
+
+  class TestResult {
+    ID
+    date
+    result boolean
+  }
+
+
+  class Position {
+    positionID : int
+    aisle : int
+    row : int
+    col : int
+    max weight : float
+    max volume : float
+    occupied weight : float
+    occupied volume : float
+    assignedSKU : SKU
+    storedSKUitems : SKUItem [ ]
+
+    getAssignedSKU() : SKU
+    getStoredSKUitems() : SKUItem [ ]
+    getMaxWeight() : float
+    getMaxVolume() : float
+    setAisle(int) : void
+    setRow(int) : void
+    setCol(int) : void
+    setPositionID(int) : void
+    setMaxWeight(float) : void
+    setMaxVolume(float) : void
+    setAssignedSKU(SKU) : void
+    setStoredSKUitem(SKUItem) : void
+    hasAssignedSKU() : boolean
+    canStoreSKUquantity(SKU, int) : boolean
+    updatePositionIDFromAisleRowCol() : void
+    updateAisleRowColFromPositionID() : void
+    removeStoreSKUitem(SKUItem) : void
+    removeAssignedSKU() : void
+  }
 
 }
 
@@ -389,8 +469,6 @@ Customer -- "*" InternalOrder : places
 
 
 
-
-
 # Verification sequence diagrams 
 \<select key scenarios from the requirement document. For each of them define a sequence diagram showing that the scenario can be implemented by the classes and methods in the design
 
@@ -398,6 +476,227 @@ Alessandro -> 1 2 3
 Michele -> 4 5
 Nicola -> 6 7 9
 Nicolò -> 10 11 12 >
+
+### Scenario 1.1
+```plantuml
+mainframe **Create SKU**
+actor Manager
+participant GUI
+participant ControllerSKU
+participant SKU
+
+autonumber
+Manager -> GUI : POST/api/sku
+GUI -> ControllerSKU : newSKU
+ControllerSKU -> SKU : SKU
+ControllerSKU <-- SKU : return success
+GUI <-- ControllerSKU : 201 created
+
+@enduml
+```
+
+### Scenario 1.2
+```plantuml
+mainframe **Modify SKU location**
+actor Manager
+participant GUI
+participant ControllerInventory
+participant Inventory
+participant ControllerWarehouse
+participant Warehouse
+participant ControllerSKU
+participant SKU
+
+autonumber
+Manager -> GUI : GET/api/skus/:id
+GUI -> ControllerInventory : getSKUbyID
+ControllerInventory -> Inventory : getSKUlist
+ControllerInventory <-- Inventory : return SKU list
+GUI <-- ControllerInventory : 200 ok
+
+Manager -> GUI : GET/api/positions
+GUI -> ControllerWarehouse : getFreePositons
+ControllerWarehouse -> Warehouse : getPositions
+ControllerWarehouse <-- Warehouse : return Position list
+GUI <-- ControllerWarehouse : 200 ok
+
+Manager -> GUI : PUT/api/sku/:id/position
+GUI -> ControllerSKU : modifySKUposition
+ControllerSKU -> SKU : setAssignedPosition
+ControllerSKU <-- SKU : return success
+GUI <-- ControllerSKU : 200 ok
+
+@enduml
+```
+
+### Scenario 1.3
+```plantuml
+mainframe **Modify SKU weight and volume**
+actor Manager
+participant GUI
+participant ControllerInventory
+participant Inventory
+participant ControllerSKU
+participant SKU
+
+autonumber
+Manager -> GUI : GET/api/skus/:id
+GUI -> ControllerInventory : getSKUbyID
+ControllerInventory -> Inventory : getSKUlist
+ControllerInventory <-- Inventory : return SKU list
+GUI <-- ControllerInventory : 200 ok
+
+Manager -> GUI : PUT/api/sku/:id
+GUI -> ControllerSKU : modifySKUweight
+ControllerSKU -> SKU : setWeight
+ControllerSKU <-- SKU : return success
+GUI -> ControllerSKU : modifySKUvolume
+ControllerSKU -> SKU : setVolume
+ControllerSKU <-- SKU : return success
+GUI <-- ControllerSKU : 200 ok
+
+@enduml
+```
+
+### Scenario 2.1
+```plantuml
+mainframe **Create Position**
+actor Manager
+participant GUI
+participant ControllerPosition
+participant Position
+participant ControllerWarehouse
+participant Warehouse
+
+autonumber
+Manager -> GUI : POST/api/position
+GUI -> ControllerPosition : newPosition
+ControllerPosition -> Position : Position
+ControllerPosition <-- Position : return success
+ControllerPosition -> ControllerWarehouse : addNewPosition
+ControllerWarehouse -> Warehouse : addPosition
+ControllerWarehouse <-- Warehouse : success
+ControllerPosition <-- ControllerWarehouse : success
+GUI <-- ControllerPosition : 201 created
+
+@enduml
+```
+
+### Scenario 2.2
+```plantuml
+mainframe **Modify positionID**
+actor Manager
+participant GUI
+participant ControllerWarehouse
+participant Warehouse
+participant ControllerPosition
+participant Position
+
+autonumber
+Manager -> GUI : GET/api/positions
+GUI -> ControllerWarehouse : getAllPositions
+ControllerWarehouse -> Warehouse : getPositions
+ControllerWarehouse <-- Warehouse : return Position list
+GUI <-- ControllerWarehouse : 200 ok
+
+Manager -> GUI : PUT/api/position/:positionID/changeID
+GUI -> ControllerPosition : modifyPositionID
+ControllerPosition -> Position : setPositionID
+ControllerPosition <-- Position : return success
+ControllerPosition -> Position : updateAisleRowColFromPositionID
+ControllerPosition <-- Position : return success
+GUI <-- ControllerPosition : 200 ok
+
+@enduml
+```
+
+### Scenario 2.3
+```plantuml
+mainframe **Modify weight and volume of Position**
+actor Manager
+participant GUI
+participant ControllerWarehouse
+participant Warehouse
+participant ControllerPosition
+participant Position
+
+autonumber
+Manager -> GUI : GET/api/positions
+GUI -> ControllerWarehouse : getAllPositions
+ControllerWarehouse -> Warehouse : getPositions
+ControllerWarehouse <-- Warehouse : return Position list
+GUI <-- ControllerWarehouse : 200 ok
+
+Manager -> GUI : PUT/api/position/:positionID
+GUI -> ControllerPosition : modifyPositionWeight
+ControllerPosition -> Position : setMaxWeight
+ControllerPosition <-- Position : return success
+GUI -> ControllerPosition : modifyPositionVolume
+ControllerPosition -> Position : setMaxVolume
+ControllerPosition <-- Position : return success
+GUI <-- ControllerPosition : 200 ok
+
+@enduml
+```
+
+### Scenario 2.4
+```plantuml
+mainframe **Modify aisle ID, row and column of Position**
+actor Manager
+participant GUI
+participant ControllerWarehouse
+participant Warehouse
+participant ControllerPosition
+participant Position
+
+autonumber
+Manager -> GUI : GET/api/positions
+GUI -> ControllerWarehouse : getAllPositions
+ControllerWarehouse -> Warehouse : getPositions
+ControllerWarehouse <-- Warehouse : return Position list
+GUI <-- ControllerWarehouse : 200 ok
+
+Manager -> GUI : PUT/api/position/:positionID
+GUI -> ControllerPosition : modifyAisleRowCol
+ControllerPosition -> Position : setAisle
+ControllerPosition <-- Position : return success
+ControllerPosition -> Position : setRow
+ControllerPosition <-- Position : return success
+ControllerPosition -> Position : setCol
+ControllerPosition <-- Position : return success
+ControllerPosition -> Position : updatePositionIDFromAisleRowCol
+ControllerPosition <-- Position : return success
+GUI <-- ControllerPosition : 200 ok
+
+@enduml
+```
+
+### Scenario 2.5
+```plantuml
+mainframe **Delete Position**
+actor Manager
+participant GUI
+participant ControllerPosition
+participant ControllerWarehouse
+participant Warehouse
+
+autonumber
+Manager -> GUI : GET/api/positions
+GUI -> ControllerWarehouse : getAllPositions
+ControllerWarehouse -> Warehouse : getPositions
+ControllerWarehouse <-- Warehouse : return Position list
+GUI <-- ControllerWarehouse : 200 ok
+
+Manager -> GUI : DELETE/api/position/:positionID
+GUI -> ControllerPosition : deletePosition
+ControllerPosition -> ControllerWarehouse : deletePositionFromWarehouse
+ControllerWarehouse -> Warehouse : deletePosition
+ControllerWarehouse <-- Warehouse : return success
+ControllerPosition <-- ControllerWarehouse : return success
+GUI <-- ControllerPosition : 204 No Content
+
+@enduml
+```
 
 ### Scenario 4.1
 ```plantuml
