@@ -38,6 +38,7 @@ Version:
     - [Scenario 9.1](#scenario-91)
     - [Scenario 9.2](#scenario-92)
     - [Scenario 9.3](#scenario-93)
+    - [Scenario 10.1](#scenario-101)
     - [Scenario 11.1](#scenario-111)
     - [Scenario 11.2](#scenario-112)
     - [Scenario 12.1](#scenario-121)
@@ -1138,6 +1139,34 @@ loop for each SKU in IO
 end loop
 controllerInternalOrder <-- InternalOrder : return ok
 GUI <-- controllerInternalOrder : return 200 OK
+@enduml
+```
+
+### Scenario 10.1
+```plantuml
+@startuml
+mainframe **Internal Order completed**
+actor DeliveryEmployee
+participant GUI
+participant controllerInternalOrder
+participant InternalOrder
+participant SKU
+
+autonumber
+GUI -> controllerInternalOrder : GET/api/inernalOrdersAccepted
+GUI <-- controllerInternalOrder : 200 OK
+DeliveryEmployee -> GUI : select internal order
+GUI -> controllerInternalOrder : GET/api/internalOrders/:id
+GUI <-- controllerInternalOrder : 200 OK
+loop for each SKUitem in products
+  GUI -> controllerInternalOrder : GET/api/skuitems/sku/:id
+  controllerInternalOrder -> InternalOrder : setNotAvailable
+  controllerInternalOrder <-- InternalOrder : ok
+  GUI <-- controllerInternalOrder : 200 OK (add to an array of rfid??)
+end loop
+
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id completed, array
+GUI <-- controllerInternalOrder : 200 OK
 @enduml
 ```
 
