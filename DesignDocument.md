@@ -505,13 +505,16 @@ mainframe **Create SKU**
 actor Manager
 participant GUI
 participant ControllerSKU
+participant Warehouse
 participant SKU
 
 autonumber
-Manager -> GUI : POST/api/sku
-GUI -> ControllerSKU : newSKU
-ControllerSKU -> SKU : SKU
-ControllerSKU <-- SKU : return success
+Manager -> GUI : inserts data
+GUI -> ControllerSKU : POST/api/sku -> createSKU
+ControllerSKU -> Warehouse : newSKU
+Warehouse -> SKU : SKU
+Warehouse <-> SKU : return success
+ControllerSKU <-- Warehouse : return success
 GUI <-- ControllerSKU : 201 created
 
 @enduml
@@ -522,30 +525,35 @@ GUI <-- ControllerSKU : 201 created
 mainframe **Modify SKU location**
 actor Manager
 participant GUI
-participant ControllerInventory
-participant Inventory
-participant ControllerWarehouse
-participant Warehouse
 participant ControllerSKU
+participant ControllerPosition
+participant Warehouse
+participant Inventory
 participant SKU
 
 autonumber
-Manager -> GUI : GET/api/skus/:id
-GUI -> ControllerInventory : getSKUbyID
-ControllerInventory -> Inventory : getSKUlist
-ControllerInventory <-- Inventory : return SKU list
-GUI <-- ControllerInventory : 200 ok
+Manager -> GUI : inserts SKU ID
+GUI -> ControllerSKU :  GET/api/skus/:id -> getSKUbyID
+ControllerSKU -> Warehouse : getSKUbyID
+Warehouse -> Inventory : getSKU
+Warehouse <-- Inventory : return SKU
+ControllerSKU <-- Warehouse : return SKU
+GUI <-- ControllerSKU : 200 ok
 
-Manager -> GUI : GET/api/positions
-GUI -> ControllerWarehouse : getFreePositons
-ControllerWarehouse -> Warehouse : getPositions
-ControllerWarehouse <-- Warehouse : return Position list
-GUI <-- ControllerWarehouse : 200 ok
+Manager -> GUI : selects SKU record
+GUI -> ControllerPosition : GET/api/positions -> getFreePositons
+ControllerPosition -> Warehouse : getFreePositions
+ControllerPosition <-- Warehouse : return Position list
+GUI <-- ControllerPosition : 200 ok
 
-Manager -> GUI : PUT/api/sku/:id/position
-GUI -> ControllerSKU : modifySKUposition
-ControllerSKU -> SKU : setAssignedPosition
-ControllerSKU <-- SKU : return success
+Manager -> GUI : selects SKU position
+GUI -> ControllerSKU : PUT/api/sku/:id/position -> modifySKUposition
+ControllerSKU -> Warehouse : modifySKUposition
+Warehouse -> Inventory : getSKU
+Warehouse <-- Inventory : return SKU
+Warehouse -> SKU : setAssignedPosition
+Warehouse <-- SKU : return success
+ControllerSKU <-- Warehouse : return success
 GUI <-- ControllerSKU : 200 ok
 
 @enduml
@@ -556,25 +564,30 @@ GUI <-- ControllerSKU : 200 ok
 mainframe **Modify SKU weight and volume**
 actor Manager
 participant GUI
-participant ControllerInventory
-participant Inventory
 participant ControllerSKU
+participant Warehouse
+participant Inventory
 participant SKU
 
 autonumber
-Manager -> GUI : GET/api/skus/:id
-GUI -> ControllerInventory : getSKUbyID
-ControllerInventory -> Inventory : getSKUlist
-ControllerInventory <-- Inventory : return SKU list
-GUI <-- ControllerInventory : 200 ok
+Manager -> GUI : inserts SKU ID
+GUI -> ControllerSKU :  GET/api/skus/:id -> getSKUbyID
+ControllerSKU -> Warehouse : getSKUbyID
+Warehouse -> Inventory : getSKU
+Warehouse <-- Inventory : return SKU
+ControllerSKU <-- Warehouse : return SKU
+GUI <-- ControllerSKU : 200 ok
 
-Manager -> GUI : PUT/api/sku/:id
-GUI -> ControllerSKU : modifySKUweight
-ControllerSKU -> SKU : setWeight
-ControllerSKU <-- SKU : return success
-GUI -> ControllerSKU : modifySKUvolume
-ControllerSKU -> SKU : setVolume
-ControllerSKU <-- SKU : return success
+Manager -> GUI : inserts data
+GUI -> ControllerSKU : PUT/api/sku/:id -> modifySKU
+ControllerSKU -> Warehouse : modifySKU
+Warehouse -> Inventory : getSKU
+Warehouse <-- Inventory : return SKU
+Warehouse -> SKU : setWeight
+Warehouse <-- SKU : return success
+Warehouse -> SKU : setVolume
+Warehouse <-- SKU : return success
+ControllerSKU <-- Warehouse : return success
 GUI <-- ControllerSKU : 200 ok
 
 @enduml
@@ -586,19 +599,16 @@ mainframe **Create Position**
 actor Manager
 participant GUI
 participant ControllerPosition
-participant Position
-participant ControllerWarehouse
 participant Warehouse
+participant Position
 
 autonumber
-Manager -> GUI : POST/api/position
-GUI -> ControllerPosition : newPosition
-ControllerPosition -> Position : Position
-ControllerPosition <-- Position : return success
-ControllerPosition -> ControllerWarehouse : addNewPosition
-ControllerWarehouse -> Warehouse : addPosition
-ControllerWarehouse <-- Warehouse : success
-ControllerPosition <-- ControllerWarehouse : success
+Manager -> GUI : inserts data
+GUI -> ControllerPosition : POST/api/position -> createPosition
+ControllerPosition -> Warehouse : newPosition
+Warehouse -> Position : Position
+Warehouse <-- Position : return success
+ControllerPosition <-- Warehouse : return success
 GUI <-- ControllerPosition : 201 created
 
 @enduml
@@ -609,24 +619,25 @@ GUI <-- ControllerPosition : 201 created
 mainframe **Modify positionID**
 actor Manager
 participant GUI
-participant ControllerWarehouse
-participant Warehouse
 participant ControllerPosition
+participant Warehouse
 participant Position
 
 autonumber
-Manager -> GUI : GET/api/positions
-GUI -> ControllerWarehouse : getAllPositions
-ControllerWarehouse -> Warehouse : getPositions
-ControllerWarehouse <-- Warehouse : return Position list
-GUI <-- ControllerWarehouse : 200 ok
+Manager -> GUI : show list of positions
+GUI -> ControllerPosition : GET/api/positions -> getAllPositions
+ControllerPosition -> Warehouse : getPositions
+ControllerPosition <-- Warehouse : return Position list
+GUI <-- ControllerPosition : 200 ok
 
-Manager -> GUI : PUT/api/position/:positionID/changeID
-GUI -> ControllerPosition : modifyPositionID
-ControllerPosition -> Position : setPositionID
-ControllerPosition <-- Position : return success
-ControllerPosition -> Position : updateAisleRowColFromPositionID
-ControllerPosition <-- Position : return success
+Manager -> GUI : inserts new PositionID
+GUI -> ControllerPosition : PUT/api/position/:positionID/changeID -> modifyPositionID
+ControllerPosition -> Warehouse : modifyPositionID
+Warehouse -> Warehouse : getPosition
+Warehouse -> Position : setPositionID
+Position -> Position : update Aisle Row Col
+Warehouse <-- Position : return success
+ControllerPosition <-- Warehouse : return success
 GUI <-- ControllerPosition : 200 ok
 
 @enduml
@@ -637,25 +648,20 @@ GUI <-- ControllerPosition : 200 ok
 mainframe **Modify weight and volume of Position**
 actor Manager
 participant GUI
-participant ControllerWarehouse
-participant Warehouse
 participant ControllerPosition
+participant Warehouse
 participant Position
 
 autonumber
-Manager -> GUI : GET/api/positions
-GUI -> ControllerWarehouse : getAllPositions
-ControllerWarehouse -> Warehouse : getPositions
-ControllerWarehouse <-- Warehouse : return Position list
-GUI <-- ControllerWarehouse : 200 ok
-
-Manager -> GUI : PUT/api/position/:positionID
-GUI -> ControllerPosition : modifyPositionWeight
-ControllerPosition -> Position : setMaxWeight
-ControllerPosition <-- Position : return success
-GUI -> ControllerPosition : modifyPositionVolume
-ControllerPosition -> Position : setMaxVolume
-ControllerPosition <-- Position : return success
+Manager -> GUI : selects position and inserts data
+GUI -> ControllerPosition : PUT/api/position/:positionID-> modifyPosition
+ControllerPosition -> Warehouse : modifyPositionWV
+Warehouse -> Warehouse : getPosition
+Warehouse -> Position : setMaxWeight
+Warehouse <-- Position : return success
+Warehouse -> Position : setMaxVolume
+Warehouse <-- Position : return success
+ControllerPosition <-- Warehouse : return success
 GUI <-- ControllerPosition : 200 ok
 
 @enduml
@@ -666,28 +672,19 @@ GUI <-- ControllerPosition : 200 ok
 mainframe **Modify aisle ID, row and column of Position**
 actor Manager
 participant GUI
-participant ControllerWarehouse
-participant Warehouse
 participant ControllerPosition
+participant Warehouse
 participant Position
 
 autonumber
-Manager -> GUI : GET/api/positions
-GUI -> ControllerWarehouse : getAllPositions
-ControllerWarehouse -> Warehouse : getPositions
-ControllerWarehouse <-- Warehouse : return Position list
-GUI <-- ControllerWarehouse : 200 ok
-
-Manager -> GUI : PUT/api/position/:positionID
-GUI -> ControllerPosition : modifyAisleRowCol
-ControllerPosition -> Position : setAisle
-ControllerPosition <-- Position : return success
-ControllerPosition -> Position : setRow
-ControllerPosition <-- Position : return success
-ControllerPosition -> Position : setCol
-ControllerPosition <-- Position : return success
-ControllerPosition -> Position : updatePositionIDFromAisleRowCol
-ControllerPosition <-- Position : return success
+Manager -> GUI : inserts new Aisle Row Col
+GUI -> ControllerPosition : PUT/api/position/:positionID -> modifyPosition
+ControllerPosition -> Warehouse : modifyPositionAisleRowCol
+Warehouse -> Warehouse : getPosition
+Warehouse -> Position : setPositionAisleRowCol
+Position -> Position : update positionID
+Warehouse <-- Position : return success
+ControllerPosition <-- Warehouse : return success
 GUI <-- ControllerPosition : 200 ok
 
 @enduml
@@ -699,22 +696,13 @@ mainframe **Delete Position**
 actor Manager
 participant GUI
 participant ControllerPosition
-participant ControllerWarehouse
 participant Warehouse
 
 autonumber
-Manager -> GUI : GET/api/positions
-GUI -> ControllerWarehouse : getAllPositions
-ControllerWarehouse -> Warehouse : getPositions
-ControllerWarehouse <-- Warehouse : return Position list
-GUI <-- ControllerWarehouse : 200 ok
-
-Manager -> GUI : DELETE/api/position/:positionID
-GUI -> ControllerPosition : deletePosition
-ControllerPosition -> ControllerWarehouse : deletePositionFromWarehouse
-ControllerWarehouse -> Warehouse : deletePosition
-ControllerWarehouse <-- Warehouse : return success
-ControllerPosition <-- ControllerWarehouse : return success
+Manager -> GUI : delete positions selected
+GUI -> ControllerPosition : DELETE/api/position/:positionID -> deletePositionFromWarehouse
+ControllerPosition -> Warehouse : deletePosition
+ControllerPosition <-- Warehouse : return success
 GUI <-- ControllerPosition : 204 No Content
 
 @enduml
