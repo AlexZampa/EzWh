@@ -708,6 +708,60 @@ GUI <-- ControllerPosition : 204 No Content
 @enduml
 ```
 
+### Scenario 3.1
+```plantuml
+mainframe **Restock Order of SKU S issued by quantity**
+actor Manager
+participant GUI
+participant ControllerUser
+participant ControllerRestockOrder
+participant Warehouse
+participant RestockOrder
+
+autonumber
+Manager -> GUI : inserts data
+GUI -> ControllerUser : ??????
+ControllerUser -> Warehouse : getSupplierThatCanSupplySKUquantity
+Manager -> GUI : inserts data
+GUI -> ControllerRestockOrder : POST/api/restockOrder -> createRestockOrder
+ControllerRestockOrder -> Warehouse : newRestockOrder
+Warehouse -> RestockOrder : RestockOrder
+Warehouse <-- RestockOrder : return success
+ControllerRestockOrder <-- Warehouse : return success
+GUI <-- ControllerRestockOrder : 201 Created
+
+@enduml
+```
+
+### Scenario 3.2
+```plantuml
+mainframe **Restock Order of SKU S issued by supplier**
+actor Manager
+participant GUI
+participant ControllerUser
+participant ControllerRestockOrder
+participant Warehouse
+participant RestockOrder
+
+autonumber
+Manager -> GUI :  show list of Supplier
+GUI -> ControllerUser : GET/api/suppliers -> getAllSuppliers
+ControllerUser -> Warehouse : getSuppliers
+ControllerUser <-- Warehouse : return Supplier list
+GUI <-- ControllerUser : 200 ok
+
+Manager -> GUI : inserts data
+GUI -> ControllerRestockOrder : POST/api/restockOrder -> createRestockOrder
+ControllerRestockOrder -> Warehouse : newRestockOrder
+Warehouse -> RestockOrder : RestockOrder
+Warehouse <-- RestockOrder : return success
+ControllerRestockOrder <-- Warehouse : return success
+GUI <-- ControllerRestockOrder : 201 Created
+
+@enduml
+```
+
+
 ### Scenario 4.1
 ```plantuml
 @startuml
