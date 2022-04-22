@@ -581,8 +581,8 @@ ControllerSKU <-- Warehouse : return SKU
 GUI <-- ControllerSKU : 200 ok
 
 Manager -> GUI : inserts data
-GUI -> ControllerSKU : PUT/api/sku/:id -> updateSKU
-  ControllerSKU -> Warehouse : updateSKU
+GUI -> ControllerSKU : PUT/api/sku/:id -> modifySKU
+  ControllerSKU -> Warehouse : modifySKU
   Warehouse -> Warehouse : getSKU
   Warehouse -> SKU : set<Field>
   Warehouse <-- SKU : return success
@@ -611,7 +611,7 @@ participant Position
 autonumber
 Manager -> GUI : inserts data
 GUI -> ControllerPosition : POST/api/position -> createPosition
-ControllerPosition -> Warehouse : newPosition
+ControllerPosition -> Warehouse : addPosition
 Warehouse -> Position : Position
 Warehouse <-- Position : return success
 ControllerPosition <-- Warehouse : return success
@@ -631,7 +631,7 @@ participant Position
 
 autonumber
 Manager -> GUI : show list of positions
-GUI -> ControllerPosition : GET/api/positions -> getAllPositions
+GUI -> ControllerPosition : GET/api/positions -> getPositions
 ControllerPosition -> Warehouse : getPositions
 ControllerPosition <-- Warehouse : return Position list
 GUI <-- ControllerPosition : 200 ok
@@ -649,9 +649,9 @@ GUI <-- ControllerPosition : 200 ok
 @enduml
 ```
 
-### Scenario 2.3
+### Scenario 2.(3-4)
 ```plantuml
-mainframe **Modify weight and volume of Position**
+mainframe **Modify weight and volume or aisle ID, row and column of Position**
 actor Manager
 participant GUI
 participant ControllerPosition
@@ -661,35 +661,13 @@ participant Position
 autonumber
 Manager -> GUI : selects position and inserts data
 GUI -> ControllerPosition : PUT/api/position/:positionID-> modifyPosition
-ControllerPosition -> Warehouse : modifyPositionWV
-Warehouse -> Warehouse : getPosition
-Warehouse -> Position : setMaxWeight
-Warehouse <-- Position : return success
-Warehouse -> Position : setMaxVolume
-Warehouse <-- Position : return success
-ControllerPosition <-- Warehouse : return success
-GUI <-- ControllerPosition : 200 ok
-
-@enduml
-```
-
-### Scenario 2.4
-```plantuml
-mainframe **Modify aisle ID, row and column of Position**
-actor Manager
-participant GUI
-participant ControllerPosition
-participant Warehouse
-participant Position
-
-autonumber
-Manager -> GUI : inserts new Aisle Row Col
-GUI -> ControllerPosition : PUT/api/position/:positionID -> modifyPosition
-ControllerPosition -> Warehouse : modifyPositionAisleRowCol
-Warehouse -> Warehouse : getPosition
+ControllerPosition -> Warehouse : modifyPosition
 Warehouse -> Position : setPositionAisleRowCol
 Position -> Position : update positionID
 Warehouse <-- Position : return success
+Warehouse -> Warehouse : getPosition
+Warehouse -> Position : set<Field>
+Warehouse <-- Position : return succes
 ControllerPosition <-- Warehouse : return success
 GUI <-- ControllerPosition : 200 ok
 
