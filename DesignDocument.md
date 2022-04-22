@@ -929,9 +929,12 @@ mainframe **Manage acceptance of tested SKU Items of a restock Order**
 actor Clerk
 participant GUI
 participant ControllerSKU
-participant SKUList
-participant PositionMap
+participant ControllerRestockOrder
+participant Warehouse
+participant SKU
 participant Position
+participant RestockOrder
+
 
 autonumber
 loop for each RFID
@@ -950,7 +953,7 @@ loop for each RFID
   end alt
   ControllerSKU <-- Warehouse : return success
   GUI <-- ControllerSKU : 200 ok
-  QualityCheckEmployee -> GUI : selects position
+  Clerk -> GUI : selects position
   GUI -> ControllerSKU : PUT/api/sku/:id/position -> SKUposition
   ControllerSKU -> Warehouse : SKUposition
   Warehouse -> Warehouse : getSKU
