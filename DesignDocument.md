@@ -252,16 +252,13 @@ N1 .. GUI
 package "Controller" #DDDDDD {
 
   class controllerSKU{
-    modifySKUposition(SKU) : void
-    modifySKUweight(SKU) : void
-    modifySKUvolume(SKU) : void
+    modifySKU(RequestBody) : Response
+    skuPosition(RequestBody) : Response
   }
 
-  class ControllerInventory{
-    getSKUbyID(int) : SKU
+  class controllerSKUItem {
+    createSKUItem(requestBody) : Response
   }
-
-  class controllerSKUItem
 
   class ControllerPosition{
     newPosition(string) :  void
@@ -272,20 +269,26 @@ package "Controller" #DDDDDD {
     deletePosition(Position) : void
   }
 
-  class ControllerWarehouse{
-    getFreePositons(SKU, int) : Position [ ]
-    addNewPosition(Position) : void
-    getAllPositions() : Position [ ]
-    deletePositionFromWarehouse(Position) : void
-  }
-
   class controllerTestDescriptor
 
-  class controllerTestResult
+  class controllerTestResult {
+    createTestResult(RequestBody) : Response
+  }
 
-  class controllerUser
+  class controllerUser {
 
-  class controllerRestockOrder
+    createUser(RequestBody) : Response
+    getUsers() : Response
+    modifyUserRights(RequestBody) : Response
+    deleteUser(RequestBody) : Response
+  }
+
+  class controllerRestockOrder{
+
+
+    addSKUItems(RequestBody) : Response
+    updateRestockOrderState(RequestBody) : Response
+  }
 
   class controllerReturnOrder
 
@@ -310,11 +313,34 @@ package "Model" #DDDDDD {
   }
 
   class Warehouse{
+      SKUItemList : SKUItem [ ]
       PositionList : Position [ ]
+      TestResultList : TestResult [ ]
+      UserList : User [ ]
+      RestockOrderList : RestockOrder [ ]
 
-      getPositions() : Position [ ]
+      getSKU(id) : SKU
+      modifySKU(id, description, weight, volume, notes, price, availableQuantity) : void
+      SKUposition(SKUId, positionId) : void
+
+      addSKUItem(RFID, SKUId, DateOfStock) : void
+      getSKUItem(rfid) : SKUItem
+
+      getPosition(positionId) : Position
       addPosition(Position) : void
       deletePosition(Position) : void
+
+      addTestResult(rfid, idTestDescriptor, Date, Result)
+
+      addUser(name, surname, email, password, type) : void
+      getUsers() : User [ ]
+      modifyUserRights(username, newType) : void
+      getUser(username) : User
+      deleteUser(username) : void
+
+      getRestockOrder(id) : RestockOrder
+      restockOrderSKUItems(ROid, SKUItemIdList) : void
+      updateRestockOrderState(id, newState) : void
   }
 
   class Supplier {
@@ -328,10 +354,25 @@ package "Model" #DDDDDD {
     surname
   }
 
+  class Product {
+    SKUId : int
+    description :String
+    price : double
+    qty : int
+  }
+
   class RestockOrder {
-    ID
-    issue date
+    id : int
+    issueDate : DateTime
+    products : Product [ ]
+    supplier : Supplier
+    transportNote : TransportNote
+    SKUItems : SKUItems [ ]
+    state : String
     state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
+
+    addSKUItems(SKUItemList) : void
+    setState(newState) : void
   }
 
 
@@ -357,36 +398,34 @@ package "Model" #DDDDDD {
   }
 
   class SKU {
-    ID : string
-    description : string
+    id : int
+    description : String
     weight : float
     volume : float
-    price : float
-    notes : string
-    assignedPositions : Position [ ]
+    notes : String
+    position : Position
+    availableQuantity : int
+    price : double
+    testDescriptors : TestDescriptor [ ]
 
-    getID() : int
-    getWeight() : float
-    getVolume() : float
-    getAssignedPositions() : Position [ ]
+    getPosition() : Position
     setDescription(string) : void
     setWeight(float) : void
     setVolume(float) : void
     setNotes(string) : void
-    setAssignedPosition(Position) : void
-    removeAssignedPosition(Position) : void
+    setPosition(Position) : void
   }
 
 
   class SKUItem {
     RFID : string
-    Available [0 - 1]
-    position : Position
+    Available : boolean
+    SKU : SKU
+    DateOfStock : DateTime
+    TestResults : TestResult [ ]
 
-    getRFID() : string
-    getPosition() : Position
-    setPosition(Position) : void
-    removePosition() : void
+    SKUItem(RFID, SKUId, DateOfStock) : void
+    addTestResult(TestResult) : void
   }
 
   class TestDescriptor {
@@ -396,9 +435,12 @@ package "Model" #DDDDDD {
   }
 
   class TestResult {
-    ID
-    date
-    result boolean
+    id : int
+    testDescriptor : TestDescriptor
+    date : Date
+    result : boolean
+
+    TestResult(idTestDescriptor, Date, Result) : void
   }
 
 
@@ -407,31 +449,27 @@ package "Model" #DDDDDD {
     aisle : int
     row : int
     col : int
-    max weight : float
-    max volume : float
-    occupied weight : float
-    occupied volume : float
-    assignedSKU : SKU
-    storedSKUitems : SKUItem [ ]
-
-    getAssignedSKU() : SKU
-    getStoredSKUitems() : SKUItem [ ]
-    getMaxWeight() : float
-    getMaxVolume() : float
-    setAisle(int) : void
-    setRow(int) : void
-    setCol(int) : void
-    setPositionID(int) : void
+    maxWeight : float
+    maxVolume : float
+    occupiedWeight : float
+    occupiedVolume : float
+    
     setMaxWeight(float) : void
     setMaxVolume(float) : void
-    setAssignedSKU(SKU) : void
-    setStoredSKUitem(SKUItem) : void
-    hasAssignedSKU() : boolean
-    canStoreSKUquantity(SKU, int) : boolean
-    updatePositionIDFromAisleRowCol() : void
-    updateAisleRowColFromPositionID() : void
-    removeStoreSKUitem(SKUItem) : void
-    removeAssignedSKU() : void
+    addSKU(SKU) : boolean
+  }
+
+  class User {
+    id : int
+    name : String
+    surname : String
+    email : String
+    password : String
+    type : String
+    type [Manager, Admin, Supplier, Clerk, QualityCheckEmployee, DeliveryEmployee, InternalCustomer]
+
+    User(name, surname, email, password, type) : User
+    setType(newType) : void
   }
 
 }
@@ -542,7 +580,7 @@ GUI -> ControllerSKU : PUT/api/sku/:id/position -> SKUposition
 ControllerSKU -> Warehouse : SKUposition
 Warehouse -> Warehouse : getSKU
 Warehouse -> Warehouse : getPosition
-Warehouse -> SKU : setAssignedPosition
+Warehouse -> SKU : setPosition
 Warehouse <-- SKU : return success
 Warehouse -> Position : addSKU
 Position -> Position : update units, volume, weight
@@ -827,7 +865,7 @@ loop for each SKUItem
   GUI <-- ControllerSKUItem : 201 created
 end loop
 Clerk -> GUI : assigns SKUItem list to a RO
-GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id/skuItems -> addSkuItems
+GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id/skuItems -> addSKUItems
 ControllerRestockOrder -> Warehouse : restockOrderSKUItems
 Warehouse -> Warehouse : getRestockOrder
 Warehouse -> RestockOrder : addSKUItems
@@ -855,6 +893,7 @@ participant ControllerTestResult
 participant ControllerRestockOrder
 participant Warehouse
 participant TestResult
+participant SKUItem
 participant RestockOrder
 
 autonumber
@@ -865,6 +904,9 @@ loop for each SKUItem
     ControllerTestResult -> Warehouse : addTestResult
     Warehouse -> TestResult : TestResult
     Warehouse <-- TestResult : return success
+    Warehouse -> Warehouse : getSKUItem
+    Warehouse -> SKUItem : addTestResult
+    Warehouse <-- SKUItem : return success
     ControllerTestResult <-- Warehouse : return success
     GUI <-- ControllerTestResult : 201 created
   end loop
@@ -916,7 +958,7 @@ loop for each RFID
   ControllerSKU -> Warehouse : SKUposition
   Warehouse -> Warehouse : getSKU
   Warehouse -> Warehouse : getPosition
-  Warehouse -> SKU : setAssignedPosition
+  Warehouse -> SKU : setPosition
   Warehouse <-- SKU : return success
   Warehouse -> Position : addSKU
   Position -> Position : update units, volume, weight
