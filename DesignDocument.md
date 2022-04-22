@@ -1374,6 +1374,7 @@ end
 
 ### Scenario 11.2
 ```plantuml
+@startuml
 mainframe **Modify Item**
 actor Supplier
 participant GUI
@@ -1396,55 +1397,64 @@ GUI <-- ControllerItem : 200 OK
 
 ### Scenario 12.1
 ```plantuml
+@startuml
 mainframe **Create Test Description**
 actor Manager
 participant GUI
 participant ControllerTestDescriptor
-participant TestDescriptor
 participant ControllerSKU
+participant Warehouse
+participant TestDescriptor
+
 
 autonumber
-GUI -> ControllerSKU : GET/api/skus
+GUI -> ControllerSKU : GET/api/skus -> getSKUs
+ControllerSKU -> Warehouse : getSKUs
+ControllerSKU <-- Warehouse : return SKU list
 GUI <-- ControllerSKU : 200 OK
 Manager -> GUI : M selects SKU
 Manager -> GUI : M defines name and procedure description
-GUI -> ControllerTestDescriptor : POST/api/testDescriptor
-ControllerTestDescriptor -> TestDescriptor : createTestDescriptor
-ControllerTestDescriptor <-- TestDescriptor : return success
+GUI -> ControllerTestDescriptor : POST/api/testDescriptor -> createTestDescriptor
+ControllerTestDescriptor -> Warehouse : addTestDescriptor
+Warehouse -> TestDescriptor : TestDescriptor
+Warehouse <-- TestDescriptor : return success
+ControllerTestDescriptor <-- Warehouse : return success
 GUI <-- ControllerTestDescriptor : 201 Created
-Manager -> GUI : confirm data
-GUI -> ControllerTestDescriptor : ??
-GUI <-- ControllerTestDescriptor : ??
 
 @enduml
 ```
 
 ### Scenario 12.2
 ```plantuml
+@stertuml
 mainframe **Update Test Description**
 actor Manager
 participant GUI
 participant ControllerTestDescriptor
+participant Warehouse
 participant TestDescriptor
 
 autonumber
-GUI -> ControllerTestDescriptor : GET/api/testDescriptors
+GUI -> ControllerTestDescriptor : GET/api/testDescriptors -> getTestDescriptors
+ControllerTestDescriptor -> Warehouse : getTestDescriptors
+ControllerTestDescriptor <-- Warehouse : return T list
 GUI <-- ControllerTestDescriptor : 200 OK
 Manager -> GUI : M selects T
 Manager -> GUI : M update procedure description
-GUI -> ControllerTestDescriptor : PUT/api/testDescriptor/:id
-ControllerTestDescriptor -> TestDescriptor : modifyTestDescriptor
-ControllerTestDescriptor <-- TestDescriptor : return success
+GUI -> ControllerTestDescriptor : PUT/api/testDescriptor/:id -> updateTestDescriptor
+ControllerTestDescriptor -> Warehouse : updateTestDescriptor
+Warehouse -> Warehouse : getTestDescriptor
+Warehouse -> TestDescriptor : set<Field>
+Warehouse <-- TestDescriptor : return success
+ControllerTestDescriptor <-- Warehouse : return success
 GUI <-- ControllerTestDescriptor : 200 OK
-Manager -> GUI : confirm data
-GUI -> ControllerTestDescriptor : ??
-GUI <-- ControllerTestDescriptor : ??
 
 @enduml
 ```
 
 ### Scenario 12.3
 ```plantuml
+@startuml
 mainframe **Delete Test Description**
 actor Manager
 participant GUI
@@ -1452,16 +1462,15 @@ participant ControllerTestDescriptor
 participant TestDescriptor
 
 autonumber
-GUI -> ControllerTestDescriptor : GET/api/testDescriptors
+GUI -> ControllerTestDescriptor : GET/api/testDescriptors -> getTestDescriptors
+ControllerTestDescriptor -> Warehouse : getTestDescriptors
+ControllerTestDescriptor <-- Warehouse : return T list
 GUI <-- ControllerTestDescriptor : 200 OK
 Manager -> GUI : M selects T
-GUI -> ControllerTestDescriptor : DELETE/api/testDescriptor/:id
-ControllerTestDescriptor -> TestDescriptor : deleteTestDescriptor
-ControllerTestDescriptor <-- TestDescriptor : return success
+GUI -> ControllerTestDescriptor : DELETE/api/testDescriptor/:id -> deleteTestDescriptor
+ControllerTestDescriptor -> Warehouse : deleteTestDescriptor
+ControllerTestDescriptor <-- Warehouse : return success
 GUI <-- ControllerTestDescriptor : 204 No Content
-Manager -> GUI : confirm deletion
-GUI -> ControllerTestDescriptor : ??
-GUI <-- ControllerTestDescriptor : ??
 
 @enduml
 ```
