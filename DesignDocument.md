@@ -299,6 +299,16 @@ package "Controller" #DDDDDD {
 
 package "Model" #DDDDDD {
 
+  class AAA{
+
+    attribute : type
+    list_attribute : type [ ]
+
+
+    method(param) : return type
+
+  }
+
   class Warehouse{
       PositionList : Position [ ]
 
@@ -342,11 +352,6 @@ package "Model" #DDDDDD {
     price
   }
 
-  class A {
-    quantity
-  }
-
-
   class TransportNote {
     Shipment date
   }
@@ -372,11 +377,6 @@ package "Model" #DDDDDD {
     removeAssignedPosition(Position) : void
   }
 
-  class Inventory{
-      SKUlist : SKU [ ]
-
-      getSKUlist() : SKU [ ]
-  }
 
   class SKUItem {
     RFID : string
@@ -389,18 +389,10 @@ package "Model" #DDDDDD {
     removePosition() : void
   }
 
-  class AA {
-    quantity
-  }
-
   class TestDescriptor {
     ID
     name
     procedure description
-  }
-
-  class AAA {
-    date of stock 
   }
 
   class TestResult {
@@ -692,31 +684,6 @@ GUI <-- ControllerPosition : 204 No Content
 @enduml
 ```
 
-### Scenario 3.1
-```plantuml
-mainframe **Restock Order of SKU S issued by quantity**
-actor Manager
-participant GUI
-participant ControllerUser
-participant ControllerRestockOrder
-participant Warehouse
-participant RestockOrder
-
-autonumber
-Manager -> GUI : inserts data
-GUI -> ControllerUser : ??????
-ControllerUser -> Warehouse : getSupplierThatCanSupplySKUquantity
-Manager -> GUI : inserts data
-GUI -> ControllerRestockOrder : POST/api/restockOrder -> createRestockOrder
-ControllerRestockOrder -> Warehouse : newRestockOrder
-Warehouse -> RestockOrder : RestockOrder
-Warehouse <-- RestockOrder : return success
-ControllerRestockOrder <-- Warehouse : return success
-GUI <-- ControllerRestockOrder : 201 Created
-
-@enduml
-```
-
 ### Scenario 3.2
 ```plantuml
 mainframe **Restock Order of SKU S issued by supplier**
@@ -733,6 +700,16 @@ GUI -> ControllerUser : GET/api/suppliers -> getAllSuppliers
 ControllerUser -> Warehouse : getSuppliers
 ControllerUser <-- Warehouse : return Supplier list
 GUI <-- ControllerUser : 200 ok
+
+Manager -> GUI : select Items
+GUI -> ControllerRestockOrder : GET/api/items -> getItems
+ControllerRestockOrder -> Warehouse : getItems
+ControllerRestockOrder <-- Warehouse : return Item list
+GUI <-- ControllerRestockOrder : return 200 ok
+GUI -> ControllerRestockOrder : GET/api/items/:id -> getItemById
+ControllerRestockOrder -> Warehouse : getItem
+ControllerRestockOrder <-- Warehouse : return Item
+GUI <-- ControllerRestockOrder : return 200 ok
 
 Manager -> GUI : inserts data
 GUI -> ControllerRestockOrder : POST/api/restockOrder -> createRestockOrder
@@ -776,7 +753,7 @@ participant User
 
 autonumber
 Admin -> GUI : defines credentials of the new account 
-GUI -> ControllerUser : POST/api/newUser -> newUser
+GUI -> ControllerUser : POST/api/newUser -> createUser
 ControllerUser -> Warehouse : addUser
 Warehouse -> User : User
 Warehouse <-- User : return success
@@ -842,7 +819,7 @@ participant RestockOrder
 autonumber
 loop for each SKUItem
   Clerk -> GUI : records item with a new RFID
-  GUI -> ControllerSKUItem : POST/api/skuitem -> newSKUItem
+  GUI -> ControllerSKUItem : POST/api/skuitem -> createSKUItem
   ControllerSKUItem -> Warehouse : addSKUItem
   Warehouse -> SKUItem : SKUItem
   Warehouse <-- SKUItem : return success
@@ -884,7 +861,7 @@ autonumber
 loop for each SKUItem
   loop for each Test descriptor
     QualityCheckEmployee -> GUI : records tests result in the system 
-    GUI -> ControllerTestResult : POST/api/skuitems/testResult -> newTestResult
+    GUI -> ControllerTestResult : POST/api/skuitems/testResult -> createTestResult
     ControllerTestResult -> Warehouse : addTestResult
     Warehouse -> TestResult : TestResult
     Warehouse <-- TestResult : return success
@@ -892,8 +869,8 @@ loop for each SKUItem
     GUI <-- ControllerTestResult : 201 created
   end loop
 end loop
-GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> updateRestockOrderState
-ControllerRestockOrder -> Warehouse : updateRestockOrderState
+GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> modifyRestockOrderState
+ControllerRestockOrder -> Warehouse : modifyRestockOrderState
 Warehouse -> Warehouse : getRestockOrder
 Warehouse -> RestockOrder : setState
 Warehouse <-- RestockOrder : return success
@@ -920,8 +897,8 @@ participant RestockOrder
 autonumber
 loop for each RFID
   Clerk -> GUI : updates SKU quantity
-  GUI -> ControllerSKU : PUT/api/sku/:id -> updateSKU
-  ControllerSKU -> Warehouse : updateSKU
+  GUI -> ControllerSKU : PUT/api/sku/:id -> modifySKU
+  ControllerSKU -> Warehouse : modifySKU
   Warehouse -> Warehouse : getSKU
   Warehouse -> SKU : set<Field>
   Warehouse <-- SKU : return success
@@ -947,8 +924,8 @@ loop for each RFID
   ControllerSKU <-- Warehouse : return success
   GUI <-- ControllerSKU : 200 ok
 end loop
-GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> updateRestockOrderState
-ControllerRestockOrder -> Warehouse : updateRestockOrderState
+GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> modifyRestockOrderState
+ControllerRestockOrder -> Warehouse : modifyRestockOrderState
 Warehouse -> Warehouse : getRestockOrder
 Warehouse -> RestockOrder : setState
 Warehouse <-- RestockOrder : return success
@@ -977,29 +954,29 @@ actor Supplier
 
 autonumber
 Manager -> GUI : Insert ID of Return Order
-GUI -> controllerRestockOrder : GET/api/restockOrders/:id/returnItems->testsNotPassed
-controllerRestockOrder -> Warehouse : returnItemsFromRO
+GUI -> controllerRestockOrder : GET/api/restockOrders/:id/returnItems -> getReturnItems
+controllerRestockOrder -> Warehouse : returnItemsFromRestockOrder
 Warehouse -> Warehouse : getRestockOrder
-Warehouse -> RestockOrder : getItemsFailedTest
+Warehouse -> RestockOrder : getSKUItemsFailedTest
 loop for each SKUItem
   RestockOrder -> SKUItem : getNotPassed
   SKUItem -> TestResult : getResult
   SKUItem <-- TestResult : return result
     alt return false
-      RestockOrder <-- SKUItem : return RFID
+      RestockOrder <-- SKUItem : return SKUItems
     end alt
  end loop
 
-RestockOrder --> Warehouse : return listSKUs
-Warehouse --> controllerRestockOrder : return listSKUs
-controllerRestockOrder --> GUI : return RFID of SKUs
+RestockOrder --> Warehouse : return SKUItem list
+Warehouse --> controllerRestockOrder : return SKUItem list
+controllerRestockOrder --> GUI : 200 ok
 
 Manager -> GUI : Add item to REO and confirm
 GUI -> controllerReturnOrder : POST/api/returnOrder -> createReturnOrder
 controllerReturnOrder -> Warehouse : addReturnOrder
-Warehouse -> ReturnOrder : returnOrder
-Warehouse <-- ReturnOrder : return success  
-controllerReturnOrder -> ReturnOrder : addItems 
+Warehouse -> ReturnOrder : ReturnOrder
+Warehouse <-- ReturnOrder : Return success  
+Warehouse -> ReturnOrder : addSKUItems 
 loop for each RFID of item with not passed test in RO
   ReturnOrder -> SKUItem : setNotAvailable
   ReturnOrder <-- SKUItem : return ok
@@ -1013,6 +990,7 @@ GUI --> Manager : Display Created message
 
 ```
 
+<!-- da cancellare -->
 ### Scenario 6.2
 ```plantuml
 @startuml
@@ -1083,7 +1061,7 @@ participant Warehouse
 autonumber
 User -> GUI : insert Username and Password
 User -> GUI : click Login
-GUI -> controllerUser : POST/api/userSessions
+GUI -> controllerUser : POST/api/userSessions -> logIn
 controllerUser -> Warehouse : logIn
 alt Credentials are Ok
   controllerUser <- Warehouse : return true
@@ -1108,7 +1086,7 @@ participant controllerUser
 
 autonumber
 User -> GUI : click on Logout
-GUI -> controllerUser : POST/api/logout
+GUI -> controllerUser : POST/api/logout -> logOut
 controllerUser -> Warehouse : logOut
 controllerUser <-- Warehouse : return ok
 GUI <-- controllerUser : return 200 Ok
@@ -1130,9 +1108,9 @@ participant SKU
 
 autonumber
 Customer -> GUI : start internal order and add SKUs
-GUI -> controllerInternalOrder : POST/api/internalOrders
-controllerInternalOrder -> Warehouse : createInternalOrder
-Warehouse -> InternalOrder : internalOrder
+GUI -> controllerInternalOrder : POST/api/internalOrders -> createInternalOrder 
+controllerInternalOrder -> Warehouse : addInternalOrder
+Warehouse -> InternalOrder : InternalOrder
 Warehouse <-- InternalOrder : return success
 loop for each SKU needed
   Warehouse -> InternalOrder : addSKU(qty)
@@ -1156,7 +1134,7 @@ controllerInternalOrder <-- Warehouse : return ok
 GUI <-- controllerInternalOrder : return 200 OK
 
 Manager -> GUI : check IO
-GUI -> controllerInternalOrder : GET/api/internalOrdersIssued
+GUI -> controllerInternalOrder : GET/api/internalOrdersIssued -> getInternalOrdersIssued
 controllerInternalOrder -> Warehouse : getInternalOrdersIssued
 controllerInternalOrder <-- Warehouse : return list issued
 GUI <-- controllerInternalOrder : return 200 OK
@@ -1186,9 +1164,9 @@ participant SKU
 
 autonumber
 Customer -> GUI : start internal order and add SKUs
-GUI -> controllerInternalOrder : POST/api/internalOrders
-controllerInternalOrder -> Warehouse : createInternalOrder
-Warehouse -> InternalOrder : internalOrder
+GUI -> controllerInternalOrder : POST/api/internalOrders -> createInternalOrder 
+controllerInternalOrder -> Warehouse : addInternalOrder
+Warehouse -> InternalOrder : InternalOrder
 Warehouse <-- InternalOrder : return success
 loop for each SKU needed
   Warehouse -> InternalOrder : addSKU(qty)
@@ -1212,7 +1190,7 @@ controllerInternalOrder <-- Warehouse : return ok
 GUI <-- controllerInternalOrder : return 200 OK
 
 Manager -> GUI : check IO
-GUI -> controllerInternalOrder : GET/api/internalOrdersIssued
+GUI -> controllerInternalOrder : GET/api/internalOrdersIssued -> getInternalOrdersIssued
 controllerInternalOrder -> Warehouse : getInternalOrdersIssued
 controllerInternalOrder <-- Warehouse : return list issued
 GUI <-- controllerInternalOrder : return 200 OK
@@ -1241,9 +1219,9 @@ participant SKU
 
 autonumber
 Customer -> GUI : start internal order and add SKUs
-GUI -> controllerInternalOrder : POST/api/internalOrders
-controllerInternalOrder -> Warehouse : createInternalOrder
-Warehouse -> InternalOrder : internalOrder
+GUI -> controllerInternalOrder : POST/api/internalOrders -> createInternalOrder 
+controllerInternalOrder -> Warehouse : addInternalOrder
+Warehouse -> InternalOrder : InternalOrder
 Warehouse <-- InternalOrder : return success
 loop for each SKU needed
   Warehouse -> InternalOrder : addSKU(qty)
@@ -1300,13 +1278,13 @@ ControllerInternalOrder <-- Warehouse : return IO list
 GUI <-- ControllerInternalOrder : return IO list
 GUI <-- ControllerInternalOrder : 200 OK
 DeliveryEmployee -> GUI : select internal order
-GUI -> ControllerInternalOrder : GET/api/internalOrders/:id
+GUI -> ControllerInternalOrder : GET/api/internalOrders/:id -> getInternalOrder
 ControllerInternalOrder -> Warehouse : getInternalOrder
 ControllerInternalOrder <-- Warehouse : return IO
 GUI <-- ControllerInternalOrder : 200 OK
 loop for each SKUitem set not available
-  GUI -> ControllerSKUItem : PUT/api/skuitems/:rfid -> updateSKUItem
-  ControllerSKUItem -> Warehouse : updateSKUItem
+  GUI -> ControllerSKUItem : PUT/api/skuitems/:rfid -> modifySKUItem
+  ControllerSKUItem -> Warehouse : modifySKUItem
   Warehouse -> Warehouse : getSKUItem
   Warehouse -> SKUItem : set<Field>
   Warehouse <-- SKUItem : return ok
@@ -1335,7 +1313,7 @@ participant Item
 
 autonumber
 Supplier -> GUI : insert description, SKUid, price 
-GUI -> ControllerItem : POST/api/item -> newItem
+GUI -> ControllerItem : POST/api/item -> createItem
 ControllerItem -> Warehouse : addItem
 Warehouse -> Item : Item
 
@@ -1365,8 +1343,8 @@ participant Item
 
 autonumber
 Supplier -> GUI : insert id, new price and new description
-GUI -> ControllerItem : PUT/api/items/:id -> updateItem
-ControllerItem -> Warehouse : updateItem
+GUI -> ControllerItem : PUT/api/items/:id -> modifyItem
+ControllerItem -> Warehouse : modifyItem
 Warehouse -> Warehouse : getItem
 Warehouse -> Item : set<Field>
 Warehouse <-- Item : return ok
@@ -1407,7 +1385,7 @@ GUI <-- ControllerTestDescriptor : 201 Created
 
 ### Scenario 12.2
 ```plantuml
-@stertuml
+@startuml
 mainframe **Update Test Description**
 actor Manager
 participant GUI
@@ -1422,8 +1400,8 @@ ControllerTestDescriptor <-- Warehouse : return T list
 GUI <-- ControllerTestDescriptor : 200 OK
 Manager -> GUI : M selects T
 Manager -> GUI : M update procedure description
-GUI -> ControllerTestDescriptor : PUT/api/testDescriptor/:id -> updateTestDescriptor
-ControllerTestDescriptor -> Warehouse : updateTestDescriptor
+GUI -> ControllerTestDescriptor : PUT/api/testDescriptor/:id -> modifyTestDescriptor
+ControllerTestDescriptor -> Warehouse : modifyTestDescriptor
 Warehouse -> Warehouse : getTestDescriptor
 Warehouse -> TestDescriptor : set<Field>
 Warehouse <-- TestDescriptor : return success
