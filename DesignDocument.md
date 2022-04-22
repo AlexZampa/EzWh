@@ -1307,54 +1307,67 @@ GUI <-- controllerInternalOrder : return 200 OK
 mainframe **Internal Order completed**
 actor DeliveryEmployee
 participant GUI
-participant controllerInternalOrder
+participant ControllerInternalOrder
 participant InternalOrder
-participant controllerSKUItem
+participant ControllerSKUItem
 participant SKUItem
 
 autonumber
-GUI -> controllerInternalOrder : GET/api/inernalOrdersAccepted
-GUI <-- controllerInternalOrder : 200 OK
+GUI -> controllerInternalOrder : GET/api/inernalOrdersAccepted -> getAcceptedInternalOrders
+ControllerInternalOrder -> Warehouse : getAcceptedInternalOrders
+ControllerInternalOrder <-- Warehouse : return IO list
+GUI <-- ControllerInternalOrder : return IO list
+GUI <-- ControllerInternalOrder : 200 OK
 DeliveryEmployee -> GUI : select internal order
-GUI -> controllerInternalOrder : GET/api/internalOrders/:id
-GUI <-- controllerInternalOrder : 200 OK
-loop for each SKUitem in products
-  GUI -> controllerSKUItem : GET/api/skuitems/sku/:id
-  controllerSKUItem -> SKUItem : setNotAvailable
-  controllerSKUItem <-- SKUItem : ok
-  GUI <-- controllerSKUItem : 200 OK (add to an array of rfid??)
+GUI -> ControllerInternalOrder : GET/api/internalOrders/:id
+ControllerInternalOrder -> Warehouse : getInternalOrder
+ControllerInternalOrder <-- Warehouse : return IO
+GUI <-- ControllerInternalOrder : 200 OK
+loop for each SKUitem set not available
+  GUI -> ControllerSKUItem : PUT/api/skuitems/:rfid -> updateSKUItem
+  ControllerSKUItem -> Warehouse : updateSKUItem
+  Warehouse -> Warehouse : getSKUItem
+  Warehouse -> SKUItem : set<Field>
+  Warehouse <-- SKUItem : return ok
+  ControllerSKUItem <-- Warehouse : return ok
+  GUI <-- ControllerSKUItem : 200 OK
 end loop
 
-GUI -> controllerInternalOrder : PUT/api/internalOrders/:id completed, array
-GUI <-- controllerInternalOrder : 200 OK
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id {COMPLETED} -> setIOStatus
+controllerInternalOrder -> Warehouse : setIOStatus(id,COMPLETED)
+Warehouse -> InternalOrder : setCompleted
+Warehouse <-- InternalOrder : return ok
+controllerInternalOrder <-- Warehouse : return ok
+GUI <-- controllerInternalOrder : return 200 OK
 @enduml
 ```
 
 ### Scenario 11.1
 ```plantuml
+@startuml
 mainframe **Create Item**
 actor Supplier
 participant GUI
 participant ControllerItem
+participant Warehouse
 participant Item
 
 autonumber
 Supplier -> GUI : insert description, SKUid, price 
-GUI -> ControllerItem : POST/api/item
-ControllerItem -> Item : newItem
+GUI -> ControllerItem : POST/api/item -> newItem
+ControllerItem -> Warehouse : addItem
+Warehouse -> Item : Item
 
 alt id is available
-  ControllerItem <-- Item : return success
+  Warehouse <-- Item : return success
+  ControllerItem <-- Warehouse : return success
   GUI <-- ControllerItem : 201 created
 else id is already used
-  ControllerItem <-- Item : return error
+  ControllerItem <-- Warehouse : return error
+  Warehouse <-- Item : return error
   GUI <-- ControllerItem : 422 Unprocessable Entity
   Supplier <-- GUI : display Error Message
 end
-
-Supplier -> GUI : confirm data
-GUI -> ControllerItem : ??
-GUI <-- ControllerItem : ??
 
 @enduml
 ```
@@ -1365,17 +1378,18 @@ mainframe **Modify Item**
 actor Supplier
 participant GUI
 participant ControllerItem
+participant Warehouse
 participant Item
 
 autonumber
 Supplier -> GUI : insert id, new price and new description
-GUI -> ControllerItem : GET/api/items/:id
-ControllerItem -> Item : modifyItem
-ControllerItem <-- Item : return success
+GUI -> ControllerItem : PUT/api/items/:id -> updateItem
+ControllerItem -> Warehouse : updateItem
+Warehouse -> Warehouse : getItem
+Warehouse -> Item : set<Field>
+Warehouse <-- Item : return ok
+ControllerItem <-- Warehouse : return success
 GUI <-- ControllerItem : 200 OK
-Supplier -> GUI : confirm data
-GUI -> ControllerItem : ??
-GUI <-- ControllerItem : ??
 
 @enduml
 ```
