@@ -547,11 +547,14 @@ ControllerPosition <-- Warehouse : return Position list
 GUI <-- ControllerPosition : 200 ok
 
 Manager -> GUI : selects SKU position
-GUI -> ControllerSKU : PUT/api/sku/:id/position -> modifySKUposition
-ControllerSKU -> Warehouse : modifySKUposition
-Warehouse -> Inventory : getSKU
-Warehouse <-- Inventory : return SKU
+GUI -> ControllerSKU : PUT/api/sku/:id/position -> SKUposition
+ControllerSKU -> Warehouse : SKUposition
+Warehouse -> Warehouse : getSKU
+Warehouse -> Warehouse : getPosition
 Warehouse -> SKU : setAssignedPosition
+Warehouse <-- SKU : return success
+Warehouse -> Position : addSKU
+Position -> Position : update units, volume, weight
 Warehouse <-- SKU : return success
 ControllerSKU <-- Warehouse : return success
 GUI <-- ControllerSKU : 200 ok
@@ -761,6 +764,24 @@ GUI <-- ControllerRestockOrder : 201 Created
 @enduml
 ```
 
+### Scenario 4.0
+```plantuml
+@startuml
+mainframe **Get User list**
+actor Admin
+participant GUI
+participant ControllerUser
+participant Warehouse
+
+autonumber
+Admin -> GUI : requires user list (no managers) 
+GUI -> ControllerUser : GET/api/users -> getUsers
+ControllerUser -> Warehouse : getUsers
+ControllerUser <-- Warehouse : return user list
+GUI <-- ControllerUser : 200 ok
+
+@enduml
+```
 
 ### Scenario 4.1
 ```plantuml
@@ -768,15 +789,18 @@ GUI <-- ControllerRestockOrder : 201 Created
 mainframe **Create new User**
 actor Admin
 participant GUI
-participant UserController
+participant ControllerUser
+participant Warehouse
 participant User
 
 autonumber
-Admin -> GUI : POST/api/newUser
-GUI -> UserController : newUser
-UserController -> User : User
-UserController <-- User : return success
-GUI <-- UserController : 201 created
+Admin -> GUI : defines credentials of the new account 
+GUI -> ControllerUser : POST/api/newUser -> newUser
+ControllerUser -> Warehouse : addUser
+Warehouse -> User : User
+Warehouse <-- User : return success
+ControllerUser <-- Warehouse : return success
+GUI <-- ControllerUser : 201 created
 
 @enduml
 ```
@@ -787,18 +811,19 @@ GUI <-- UserController : 201 created
 mainframe **Modify User rights**
 actor Admin
 participant GUI
-participant UserController
-participant UserList
+participant ControllerUser
+participant Warehouse
 participant User
 
 autonumber
-Admin -> GUI : PUT/api/users/:username
-GUI -> UserController : modifyUserRights
-UserController -> UserList : getUser
-UserController <-- UserList : return User
-UserController -> User : setType
-UserController <-- User : return success
-GUI <-- UserController : 200 ok
+Admin -> GUI : selects the access rights for user 
+GUI -> ControllerUser : PUT/api/users/:username -> modifyUserRights
+ControllerUser -> Warehouse : modifyUserRights
+Warehouse -> Warehouse : getUser
+Warehouse -> User : setType
+Warehouse <-- User : return success
+ControllerUser <-- Warehouse : return success
+GUI <-- ControllerUser : 200 ok
 
 @enduml
 ```
@@ -809,15 +834,15 @@ GUI <-- UserController : 200 ok
 mainframe **Delete User**
 actor Admin
 participant GUI
-participant UserController
-participant UserList
+participant ControllerUser
+participant Warehouse
 
 autonumber
-Admin -> GUI : DELETE/api/users/:username/:type
-GUI -> UserController : deleteUser
-UserController -> UserList : deleteUser
-UserController <-- UserList : return success
-GUI <-- UserController : 204 no content
+Admin -> GUI : selects account to delete
+GUI -> ControllerUser : DELETE/api/users/:username/:type -> deleteUser
+ControllerUser -> Warehouse : deleteUser
+ControllerUser <-- Warehouse : return success
+GUI <-- ControllerUser : 204 no content
 
 @enduml
 ```
@@ -827,34 +852,37 @@ GUI <-- UserController : 204 no content
 mainframe **Manage reception of SKU Items of a restock Order**
 actor Clerk
 participant GUI
-participant SKUItemController
+participant ControllerSKUItem
+participant ControllerRestockOrder
+participant Warehouse
 participant SKUItem
-participant RestockOrderController
-participant RestockOrderList
 participant RestockOrder
 
 autonumber
 loop for each SKUItem
-  Clerk -> GUI : POST/api/skuitem
-  GUI -> SKUItemController : newSKUItem
-  SKUItemController -> SKUItem : SKUItem
-  SKUItemController <-- SKUItem : return success
-  GUI <-- SKUItemController : 201 created
+  Clerk -> GUI : records item with a new RFID
+  GUI -> ControllerSKUItem : POST/api/skuitem -> newSKUItem
+  ControllerSKUItem -> Warehouse : addSKUItem
+  Warehouse -> SKUItem : SKUItem
+  Warehouse <-- SKUItem : return success
+  ControllerSKUItem <-- Warehouse : return success
+  GUI <-- ControllerSKUItem : 201 created
 end loop
-Clerk -> GUI : PUT/api/restockOrder/:id/skuItems
-GUI -> RestockOrderController : addSkuItems
-RestockOrderController -> RestockOrderList : getRestockOrder
-RestockOrderController <-- RestockOrderList : return RestockOrder
-RestockOrderController -> RestockOrder : addSKUItems
-RestockOrderController <-- RestockOrder : return success
+Clerk -> GUI : assigns SKUItem list to a RO
+GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id/skuItems -> addSkuItems
+ControllerRestockOrder -> Warehouse : restockOrderSKUItems
+Warehouse -> Warehouse : getRestockOrder
+Warehouse -> RestockOrder : addSKUItems
+Warehouse <-- RestockOrder : return success
+ControllerRestockOrder <-- Warehouse : return success
 GUI <-- UserController : 200 ok
-Clerk -> GUI : PUT/api/restockOrder/:id
-GUI -> RestockOrderController : updateRestockOrderState
-RestockOrderController -> RestockOrderList : getRestockOrder
-RestockOrderController <-- RestockOrderList : return RestockOrder
-RestockOrderController -> RestockOrder : setState
-RestockOrderController <-- RestockOrder : return success
-GUI <-- RestockOrderController : 200 ok
+GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> updateRestockOrderState
+ControllerRestockOrder -> Warehouse : updateRestockOrderState
+Warehouse -> Warehouse : getRestockOrder
+Warehouse -> RestockOrder : setState
+Warehouse <-- RestockOrder : return success
+ControllerRestockOrder <-- Warehouse : return success
+GUI <-- ControllerRestockOrder : 200 ok
 
 @enduml
 ```
@@ -865,29 +893,31 @@ GUI <-- RestockOrderController : 200 ok
 mainframe **Manage testing of SKU Items of a restock Order**
 actor QualityCheckEmployee
 participant GUI
-participant TestResultController
+participant ControllerTestResult
+participant ControllerRestockOrder
+participant Warehouse
 participant TestResult
-participant RestockOrderController
-participant RestockOrderList
 participant RestockOrder
 
 autonumber
 loop for each SKUItem
   loop for each Test descriptor
-    QualityCheckEmployee -> GUI : POST/api/skuitems/testResult 
-    GUI -> TestResultController : newTestResult
-    TestResultController -> TestResult : TestResult
-    TestResultController <-- TestResult : return success
-    GUI <-- TestResultController : 201 created
+    QualityCheckEmployee -> GUI : records tests result in the system 
+    GUI -> ControllerTestResult : POST/api/skuitems/testResult -> newTestResult
+    ControllerTestResult -> Warehouse : addTestResult
+    Warehouse -> TestResult : TestResult
+    Warehouse <-- TestResult : return success
+    ControllerTestResult <-- Warehouse : return success
+    GUI <-- ControllerTestResult : 201 created
   end loop
 end loop
-QualityCheckEmployee -> GUI : PUT/api/restockOrder/:id
-GUI -> RestockOrderController : updateRestockOrderState
-RestockOrderController -> RestockOrderList : getRestockOrder
-RestockOrderController <-- RestockOrderList : return RestockOrder
-RestockOrderController -> RestockOrder : setState
-RestockOrderController <-- RestockOrder : return success
-GUI <-- RestockOrderController : 200 ok
+GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> updateRestockOrderState
+ControllerRestockOrder -> Warehouse : updateRestockOrderState
+Warehouse -> Warehouse : getRestockOrder
+Warehouse -> RestockOrder : setState
+Warehouse <-- RestockOrder : return success
+ControllerRestockOrder <-- Warehouse : return success
+GUI <-- ControllerRestockOrder : 200 ok
 
 @enduml
 ```
@@ -896,32 +926,50 @@ GUI <-- RestockOrderController : 200 ok
 ```plantuml
 @startuml
 mainframe **Manage acceptance of tested SKU Items of a restock Order**
-actor QualityCheckEmployee
+actor Clerk
 participant GUI
-participant SKUController
+participant ControllerSKU
 participant SKUList
 participant PositionMap
 participant Position
 
 autonumber
 loop for each RFID
-  QualityCheckEmployee -> GUI : PUT/api/sku/:id/position
-  GUI -> SKUController : SKUPosition
-  SKUController -> SKUList : getSKU
-  SKUController <-- SKUList : return SKU
-  SKUController -> PositionMap : getPosition
-  SKUController <-- PositionMap : return Position
-  SKUController -> Position : addSKU
-  SKUController <-- Position : update units, volume, weight; return SKU
-  GUI <-- SKUController : 200 ok
+  Clerk -> GUI : updates SKU quantity
+  GUI -> ControllerSKU : PUT/api/sku/:id -> updateSKU
+  ControllerSKU -> Warehouse : updateSKU
+  Warehouse -> Warehouse : getSKU
+  Warehouse -> SKU : set<Field>
+  Warehouse <-- SKU : return success
+  Warehouse -> SKU getPosition
+  alt position exists
+    Warehouse -> Warehouse : getPosition
+    Warehouse -> Position : addSKU
+    Position -> Position : update units, volume, weight
+    Warehouse <-- SKU : return success
+  end alt
+  ControllerSKU <-- Warehouse : return success
+  GUI <-- ControllerSKU : 200 ok
+  QualityCheckEmployee -> GUI : selects position
+  GUI -> ControllerSKU : PUT/api/sku/:id/position -> SKUposition
+  ControllerSKU -> Warehouse : SKUposition
+  Warehouse -> Warehouse : getSKU
+  Warehouse -> Warehouse : getPosition
+  Warehouse -> SKU : setAssignedPosition
+  Warehouse <-- SKU : return success
+  Warehouse -> Position : addSKU
+  Position -> Position : update units, volume, weight
+  Warehouse <-- SKU : return success
+  ControllerSKU <-- Warehouse : return success
+  GUI <-- ControllerSKU : 200 ok
 end loop
-QualityCheckEmployee -> GUI : PUT/api/restockOrder/:id
-GUI -> RestockOrderController : updateRestockOrderState
-RestockOrderController -> RestockOrderList : getRestockOrder
-RestockOrderController <-- RestockOrderList : return RestockOrder
-RestockOrderController -> RestockOrder : setState
-RestockOrderController <-- RestockOrder : return success
-GUI <-- RestockOrderController : 200 ok
+GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> updateRestockOrderState
+ControllerRestockOrder -> Warehouse : updateRestockOrderState
+Warehouse -> Warehouse : getRestockOrder
+Warehouse -> RestockOrder : setState
+Warehouse <-- RestockOrder : return success
+ControllerRestockOrder <-- Warehouse : return success
+GUI <-- ControllerRestockOrder : 200 ok
 
 @enduml
 ```
