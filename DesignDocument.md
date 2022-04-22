@@ -941,7 +941,7 @@ loop for each RFID
   Warehouse -> Warehouse : getSKU
   Warehouse -> SKU : set<Field>
   Warehouse <-- SKU : return success
-  Warehouse -> SKU getPosition
+  Warehouse -> SKU : getPosition
   alt position exists
     Warehouse -> Warehouse : getPosition
     Warehouse -> Position : addSKU
