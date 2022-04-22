@@ -997,10 +997,11 @@ actor Supplier
 autonumber
 Manager -> GUI : Insert ID of Return Order
 GUI -> controllerRestockOrder : GET/api/restockOrders/:id/returnItems->testsNotPassed
-controllerRestockOrder -> Warehouse : returnItemsFromRO(notPassed = 1)
+controllerRestockOrder -> Warehouse : returnItemsFromRO
+Warehouse -> Warehouse : getRestockOrder
 Warehouse -> RestockOrder : getItemsFailedTest
-RestockOrder -> SKUItem : getNotPassed
 loop for each SKUItem
+  RestockOrder -> SKUItem : getNotPassed
   SKUItem -> TestResult : getResult
   SKUItem <-- TestResult : return result
     alt return false
@@ -1008,18 +1009,23 @@ loop for each SKUItem
     end alt
  end loop
 
-RestockOrder --> controllerRestockOrder : return listSKUs
+RestockOrder --> Warehouse : return listSKUs
+Warehouse --> controllerRestockOrder : return listSKUs
 controllerRestockOrder --> GUI : return RFID of SKUs
 
 Manager -> GUI : Add item to REO and confirm
 GUI -> controllerReturnOrder : POST/api/returnOrder -> createReturnOrder
+controllerReturnOrder -> Warehouse : addReturnOrder
+Warehouse -> ReturnOrder : returnOrder
+Warehouse <-- ReturnOrder : return success  
 controllerReturnOrder -> ReturnOrder : addItems 
 loop for each RFID of item with not passed test in RO
   ReturnOrder -> SKUItem : setNotAvailable
   ReturnOrder <-- SKUItem : return ok
 end loop
-ReturnOrder -> Supplier : sendNotification
-ReturnOrder --> controllerReturnOrder : return ok
+Warehouse <-- ReturnOrder : return success
+Warehouse --> controllerReturnOrder : return ok
+controllerReturnOrder -> Supplier : sendNotification
 controllerReturnOrder --> GUI : return 201 Created
 GUI --> Manager : Display Created message
 @enduml
@@ -1045,7 +1051,7 @@ actor Supplier
 
 autonumber
 Manager -> GUI : insert ID of RestockOrder
-GUI -> controllerRestockOrder : GET/api/restockOrders/:id/returnItems->All
+GUI -> controllerRestockOrder : GET/api/restockOrders/:id/returnItems -> getReturnItems
 controllerRestockOrder -> Warehouse : returnItemsFromRO(notPassed = 0)
 Warehouse -> RestockOrder : getAllItemsToReturn
 RestockOrder -> SKUItem : getNotPassed
@@ -1123,6 +1129,7 @@ autonumber
 User -> GUI : click on Logout
 GUI -> controllerUser : POST/api/logout
 controllerUser -> Warehouse : logOut
+controllerUser <-- Warehouse : return ok
 GUI <-- controllerUser : return 200 Ok
 User <-- GUI : display Login page
 @enduml
@@ -1144,24 +1151,24 @@ autonumber
 Customer -> GUI : start internal order and add SKUs
 GUI -> controllerInternalOrder : POST/api/internalOrders
 controllerInternalOrder -> Warehouse : createInternalOrder
+Warehouse -> InternalOrder : internalOrder
+Warehouse <-- InternalOrder : return success
 loop for each SKU needed
-  Warehouse -> InternalOrder : addSKU
-  Warehouse <-- InternalOrder : return ok
-  Warehouse -> InternalOrder : setQty
+  Warehouse -> InternalOrder : addSKU(qty)
   Warehouse <-- InternalOrder : return ok
 end loop
 controllerInternalOrder <-- Warehouse : return ok
 GUI <-- controllerInternalOrder : return 201 Created
 
 Customer -> GUI : confirm IO
-GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->ISSUED
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id {ISSUED} -> setIOStatus
 controllerInternalOrder -> Warehouse : setIOStatus(id,ISSUED)
 Warehouse -> InternalOrder : setIssued
 loop for each SKU in IO
   InternalOrder -> SKU : decreaseAvailableQty
-  InternalOrder <-- SKU : return ok
   SKU -> Position : increaseAvailablePos
   SKU <-- Position : return ok
+  InternalOrder <-- SKU : return ok
 end loop
 Warehouse <-- InternalOrder : return ok
 controllerInternalOrder <-- Warehouse : return ok
@@ -1169,13 +1176,13 @@ GUI <-- controllerInternalOrder : return 200 OK
 
 Manager -> GUI : check IO
 GUI -> controllerInternalOrder : GET/api/internalOrdersIssued
-controllerInternalOrder -> Warehouse : getOrdersIssued
+controllerInternalOrder -> Warehouse : getInternalOrdersIssued
 controllerInternalOrder <-- Warehouse : return list issued
 GUI <-- controllerInternalOrder : return 200 OK
 Manager <-- GUI : display Issued orders
 
 Manager -> GUI : confirm IO
-GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->ACCEPTED
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id {ACCEPTED} -> setIOStatus
 controllerInternalOrder -> Warehouse : setIOStatus(id,ACCEPTED)
 Warehouse -> InternalOrder : setAccepted
 Warehouse <-- InternalOrder : return ok
@@ -1200,24 +1207,24 @@ autonumber
 Customer -> GUI : start internal order and add SKUs
 GUI -> controllerInternalOrder : POST/api/internalOrders
 controllerInternalOrder -> Warehouse : createInternalOrder
+Warehouse -> InternalOrder : internalOrder
+Warehouse <-- InternalOrder : return success
 loop for each SKU needed
-  Warehouse -> InternalOrder : addSKU
-  Warehouse <-- InternalOrder : return ok
-  Warehouse -> InternalOrder : setQty
+  Warehouse -> InternalOrder : addSKU(qty)
   Warehouse <-- InternalOrder : return ok
 end loop
 controllerInternalOrder <-- Warehouse : return ok
 GUI <-- controllerInternalOrder : return 201 Created
 
 Customer -> GUI : confirm IO
-GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->ISSUED
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id {ISSUED} -> setIOStatus
 controllerInternalOrder -> Warehouse : setIOStatus(id,ISSUED)
 Warehouse -> InternalOrder : setIssued
 loop for each SKU in IO
   InternalOrder -> SKU : decreaseAvailableQty
-  InternalOrder <-- SKU : return ok
   SKU -> Position : increaseAvailablePos
   SKU <-- Position : return ok
+  InternalOrder <-- SKU : return ok
 end loop
 Warehouse <-- InternalOrder : return ok
 controllerInternalOrder <-- Warehouse : return ok
@@ -1225,13 +1232,13 @@ GUI <-- controllerInternalOrder : return 200 OK
 
 Manager -> GUI : check IO
 GUI -> controllerInternalOrder : GET/api/internalOrdersIssued
-controllerInternalOrder -> Warehouse : getOrdersIssued
+controllerInternalOrder -> Warehouse : getInternalOrdersIssued
 controllerInternalOrder <-- Warehouse : return list issued
 GUI <-- controllerInternalOrder : return 200 OK
 Manager <-- GUI : display Issued orders
 
 Manager -> GUI : refuse IO
-GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->REFUSED
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id {REFUSED} -> setIOStatus
 controllerInternalOrder -> Warehouse : setIOStatus(id,REFUSED)
 Warehouse -> InternalOrder : setRefused
 Warehouse <-- InternalOrder : return ok
@@ -1255,38 +1262,38 @@ autonumber
 Customer -> GUI : start internal order and add SKUs
 GUI -> controllerInternalOrder : POST/api/internalOrders
 controllerInternalOrder -> Warehouse : createInternalOrder
+Warehouse -> InternalOrder : internalOrder
+Warehouse <-- InternalOrder : return success
 loop for each SKU needed
-  Warehouse -> InternalOrder : addSKU
-  Warehouse <-- InternalOrder : return ok
-  Warehouse -> InternalOrder : setQty
+  Warehouse -> InternalOrder : addSKU(qty)
   Warehouse <-- InternalOrder : return ok
 end loop
 controllerInternalOrder <-- Warehouse : return ok
 GUI <-- controllerInternalOrder : return 201 Created
 
 Customer -> GUI : confirm IO
-GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->ISSUED
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id {ISSUED} -> setIOStatus
 controllerInternalOrder -> Warehouse : setIOStatus(id,ISSUED)
 Warehouse -> InternalOrder : setIssued
 loop for each SKU in IO
   InternalOrder -> SKU : decreaseAvailableQty
-  InternalOrder <-- SKU : return ok
   SKU -> Position : increaseAvailablePos
   SKU <-- Position : return ok
+  InternalOrder <-- SKU : return ok
 end loop
 Warehouse <-- InternalOrder : return ok
 controllerInternalOrder <-- Warehouse : return ok
 GUI <-- controllerInternalOrder : return 200 OK
 
 Customer -> GUI : delete IO
-GUI -> controllerInternalOrder : PUT/api/internalOrders/:id->CANCELLED
-controllerInternalOrder -> Warehouse : setIOStatus(id,CANCELLED)
-Warehouse -> InternalOrder : setIssued
+GUI -> controllerInternalOrder : PUT/api/internalOrders/:id {CANCELED} -> setIOStatus
+controllerInternalOrder -> Warehouse : setIOStatus(id,CANCELED)
+Warehouse -> InternalOrder : setCanceled
 loop for each SKU in IO
   InternalOrder -> SKU : increaseAvailableQty
-  InternalOrder <-- SKU : return ok
   SKU -> Position : decreaseAvailablePos
   SKU <-- Position : return ok
+  InternalOrder <-- SKU : return ok
 end loop
 Warehouse <-- InternalOrder : return ok
 controllerInternalOrder <-- Warehouse : return ok
