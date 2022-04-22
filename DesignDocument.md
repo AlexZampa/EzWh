@@ -511,7 +511,7 @@ participant SKU
 autonumber
 Manager -> GUI : inserts data
 GUI -> ControllerSKU : POST/api/sku -> createSKU
-ControllerSKU -> Warehouse : newSKU
+ControllerSKU -> Warehouse : addSKU
 Warehouse -> SKU : SKU
 Warehouse <-> SKU : return success
 ControllerSKU <-- Warehouse : return success
@@ -535,14 +535,13 @@ autonumber
 Manager -> GUI : inserts SKU ID
 GUI -> ControllerSKU :  GET/api/skus/:id -> getSKUbyID
 ControllerSKU -> Warehouse : getSKUbyID
-Warehouse -> Inventory : getSKU
-Warehouse <-- Inventory : return SKU
+Warehouse -> Warehouse : getSKU
 ControllerSKU <-- Warehouse : return SKU
 GUI <-- ControllerSKU : 200 ok
 
 Manager -> GUI : selects SKU record
-GUI -> ControllerPosition : GET/api/positions -> getFreePositons
-ControllerPosition -> Warehouse : getFreePositions
+GUI -> ControllerPosition : GET/api/positions -> getPositons
+ControllerPosition -> Warehouse : getPositions
 ControllerPosition <-- Warehouse : return Position list
 GUI <-- ControllerPosition : 200 ok
 
@@ -582,14 +581,18 @@ ControllerSKU <-- Warehouse : return SKU
 GUI <-- ControllerSKU : 200 ok
 
 Manager -> GUI : inserts data
-GUI -> ControllerSKU : PUT/api/sku/:id -> modifySKU
-ControllerSKU -> Warehouse : modifySKU
-Warehouse -> Inventory : getSKU
-Warehouse <-- Inventory : return SKU
-Warehouse -> SKU : setWeight
-Warehouse <-- SKU : return success
-Warehouse -> SKU : setVolume
-Warehouse <-- SKU : return success
+GUI -> ControllerSKU : PUT/api/sku/:id -> updateSKU
+  ControllerSKU -> Warehouse : updateSKU
+  Warehouse -> Warehouse : getSKU
+  Warehouse -> SKU : set<Field>
+  Warehouse <-- SKU : return success
+  Warehouse -> SKU : getPosition
+  alt position exists
+    Warehouse -> Warehouse : getPosition
+    Warehouse -> Position : addSKU
+    Position -> Position : update units, volume, weight
+    Warehouse <-- SKU : return success
+  end alt  
 ControllerSKU <-- Warehouse : return success
 GUI <-- ControllerSKU : 200 ok
 
