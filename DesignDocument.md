@@ -22,9 +22,10 @@ Version:
     - [Scenario 1.3](#scenario-13)
     - [Scenario 2.1](#scenario-21)
     - [Scenario 2.2](#scenario-22)
-    - [Scenario 2.3](#scenario-23)
-    - [Scenario 2.4](#scenario-24)
+    - [Scenario 2.(3-4)](#scenario-23-4)
     - [Scenario 2.5](#scenario-25)
+    - [Scenario 3.2](#scenario-32)
+    - [Scenario 4.0](#scenario-40)
     - [Scenario 4.1](#scenario-41)
     - [Scenario 4.2](#scenario-42)
     - [Scenario 4.3](#scenario-43)
@@ -280,19 +281,31 @@ package "Controller" #DDDDDD {
     createUser(RequestBody) : Response
     getUsers() : Response
     modifyUserRights(RequestBody) : Response
+    logIn(RequestBody) : Response
+    logOut(RequestBody) : Response
     deleteUser(RequestBody) : Response
   }
 
   class controllerRestockOrder{
 
-
     addSKUItems(RequestBody) : Response
     updateRestockOrderState(RequestBody) : Response
+
+    getReturnItems(RequestBody) : Response
+
   }
 
   class controllerReturnOrder
+  {
+    createReturnOrder(RequestBody) : Response
+  }
 
   class controllerInternalOrder
+  {
+    createInternalOrder(RequestBody) : Response
+    setIOStatus(RequestBody) : Response
+    getInternalOrdersIssued(RequestBody) : Response
+  }
 
   class controllerItem
 
@@ -318,6 +331,8 @@ package "Model" #DDDDDD {
       TestResultList : TestResult [ ]
       UserList : User [ ]
       RestockOrderList : RestockOrder [ ]
+      ReturnOrderList : ReturnOrder []
+      InternalOrderList : InternalOrder []
 
       getSKU(id) : SKU
       modifySKU(id, description, weight, volume, notes, price, availableQuantity) : void
@@ -335,12 +350,23 @@ package "Model" #DDDDDD {
       addUser(name, surname, email, password, type) : void
       getUsers() : User [ ]
       modifyUserRights(username, newType) : void
+      logIn(username, password) : bool
+      logOut() : bool
       getUser(username) : User
       deleteUser(username) : void
 
       getRestockOrder(id) : RestockOrder
       restockOrderSKUItems(ROid, SKUItemIdList) : void
       updateRestockOrderState(id, newState) : void
+
+      returnItemsFromRestockOrder(id) : SKUItem[]
+
+      addReturnOrder(SKUItem[]) : in
+      sendNotificationRO(idUser, idReturnOrder)
+
+      addInternalOrder() : int
+      setIOStatus(id, status) : bool
+      getInternalOrdersIssued(id) : InternalOrder
   }
 
   class Supplier {
@@ -373,18 +399,24 @@ package "Model" #DDDDDD {
 
     addSKUItems(SKUItemList) : void
     setState(newState) : void
+    getSKUItemsFailedTest() : SKUItem[]
   }
 
 
   class ReturnOrder {
     ID
     Return date
+
+    addSKUItems(SKUItems[]) : bool
   }
 
   class InternalOrder {
     date
     from
     state [ISSUED - ACCEPTED - REFUSED - CANCELED - COMPLETED]
+
+    addSKU(SKUItem, qty) : bool
+    setStatus(status) : bool
   }
 
   class Item {
@@ -414,6 +446,8 @@ package "Model" #DDDDDD {
     setVolume(float) : void
     setNotes(string) : void
     setPosition(Position) : void
+    decreaseAvailableQty(num) : bool
+    increaseAvailableQty(num) : bool
   }
 
 
@@ -426,6 +460,7 @@ package "Model" #DDDDDD {
 
     SKUItem(RFID, SKUId, DateOfStock) : void
     addTestResult(TestResult) : void
+    setNotAvailable() : bool
   }
 
   class TestDescriptor {
@@ -441,6 +476,7 @@ package "Model" #DDDDDD {
     result : boolean
 
     TestResult(idTestDescriptor, Date, Result) : void
+    getResult() : bool
   }
 
 
@@ -457,6 +493,8 @@ package "Model" #DDDDDD {
     setMaxWeight(float) : void
     setMaxVolume(float) : void
     addSKU(SKU) : boolean
+    increaseAvailablePos(num) : bool
+    decreaseAvailablePos(num) : bool
   }
 
   class User {
