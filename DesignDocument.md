@@ -193,6 +193,7 @@ package "Model" #DDDDDD {
 
       getUsers() : User [ ]
       getUser(username) : User
+      getSuppliers() : Supplier [ ]
       addUser(name, surname, email, password, type) : void
       modifyUserRights(username, newType) : void
       logIn(username, password) : bool
@@ -232,13 +233,14 @@ package "Model" #DDDDDD {
   class RestockOrder {
     id : int
     issueDate : DateTime
-    products : Item [ ]
-    supplier : User
+    products : Map <Item, int>
+    supplier : Supplier
     transportNote : TransportNote
     SKUItems : SKUItems [ ]
     state : string
     state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
-
+    
+    addProduct(item, quantity)
     addSKUItems(skuItemList) : void
     setState(newState) : void
     getSKUItemsFailedTest() : SKUItem[]
@@ -266,14 +268,14 @@ package "Model" #DDDDDD {
     description : string
     price : double
     associatedSKU : SKU
-    supplier : Use1r
+    supplier : Supplier
 
     getAssociatedSKU( ) : SKU
-    gerSupplier( ) : User
+    gerSupplier( ) : Supplier
     setDescription(description) : void
     setPrice(price) : void
     setAssociatedSKU(SKU) : void
-    setSupplier(User) : void
+    setSupplier(Supplier) : void
   }
 
   class TransportNote {
