@@ -57,185 +57,24 @@ top to bottom direction
 
 package "View" #DDDDDD {
 
-class GUI
-
-note " The Graphical User Interface is fixed\n and not designed in this Document " as N1  
-N1 .. GUI
 }
 
 'End of View
 
 package "Controller" #DDDDDD {
-class controllerSKU
-
-class controllerSKUItem
-
-class controllerPosition
-
-class controllerTestDescriptor
-
-class controllerTestResult
-
-class controllerUser
-
-class controllerRestockOrder
-
-class controllerReturnOrder
-
-class controllerInternalOrder
-
-class controllerItem
 
 }
 
 'End of Controller
 
-
 package "Model" #DDDDDD {
 
-class Warehouse
-
-class Supplier {
-  ID
-  name
 }
-
-note "Warehouse class is used as a Facade" as N4
-N4 .. Warehouse
-
-class Customer {
-  ID
-  name
-  surname
-}
-
-class RestockOrder {
-  ID
-  issue date
-  state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
-}
-
-
-class ReturnOrder {
-  ID
-  Return date
-}
-
-class InternalOrder {
-  date
-  from
-  state [ISSUED - ACCEPTED - REFUSED - CANCELED - COMPLETED]
-}
-
-class Item {
-  ID
-  description
-  price
-}
-
-class A {
-  quantity
-}
-
-
-class TransportNote {
-  Shipment date
-}
-
-class SKU {
-  ID
-  description
-  weight
-  volume
-  price
-  notes
-}
-
-class Inventory
-
-class SKUItem {
-  RFID
-  Available [0 - 1]
-}
-
-class AA {
-  quantity
-}
-
-class TestDescriptor {
-  ID
-  name
-  procedure description
-}
-
-class AAA {
-  date of stock 
-}
-
-class TestResult {
-  ID
-  date
-  result boolean
-}
-
-
-class Position {
-  positionID
-  aisle 
-  row
-  col
-  max weight
-  max volume
-  occupied weight
-  occupied volume
-}
-
-
-}
-
-
-controllerSKU -up- GUI
-controllerSKUItem -up- GUI
-controllerPosition -up- GUI
-controllerUser -up- GUI
-controllerUser -up- GUI
-controllerReturnOrder -up- GUI
-controllerItem -up- GUI
-controllerTestDescriptor -up- GUI
-controllerTestResult -up- GUI
-controllerInternalOrder -up- GUI
-controllerRestockOrder -up- GUI
-
-controllerSKU -- Warehouse
-controllerSKUItem -- Warehouse
-controllerPosition -- Warehouse
-controllerUser -- Warehouse
-controllerUser -- Warehouse
-controllerReturnOrder -- Warehouse
-controllerItem -- Warehouse
-controllerTestDescriptor -- Warehouse
-controllerTestResult -- Warehouse
-controllerInternalOrder -- Warehouse
-controllerRestockOrder -- Warehouse
-
-Warehouse -down- SKU
-Warehouse -down- SKUItem
-Warehouse -down- Position
-Warehouse -down- Supplier
-Warehouse -down- Customer
-Warehouse -down- ReturnOrder
-Warehouse -down- Item
-Warehouse -down- TestDescriptor
-Warehouse -down- TestResult
-Warehouse -down- InternalOrder
-Warehouse -down- RestockOrder
-
 
 ```
 
 # Low level design
 
-<for each package, report class diagram>
 
 ```plantuml
 top to bottom direction
@@ -253,21 +92,22 @@ N1 .. GUI
 package "Controller" #DDDDDD {
 
   class controllerSKU{
-    modifySKU(RequestBody) : Response
-    skuPosition(RequestBody) : Response
+    createSKU(RequestBody) : Response
+    modifySKU(RequestHeader, RequestBody) : Response
+    modifySKUposition(RequestHeader, RequestBody) : Response
+    getSKUbyID(RequestHeader) : Response
   }
 
   class controllerSKUItem {
-    createSKUItem(requestBody) : Response
+    createSKUItem(RequestBody) : Response
   }
 
   class ControllerPosition{
-    newPosition(string) :  void
-    modifyPositionID(Position, string) : void
-    modifyAisleRowCol(Position, string, string, string) : void
-    modifyPositionWeight(Position, float) : void
-    modifyPositionVolume(position, float) : void
-    deletePosition(Position) : void
+    createPosition(RequestBody) : Response
+    getPositions( ) : Response
+    modifyPosition(RequestHeader, RequestBody) : Response
+    modifyPositionID(RequestHeader, RequestBody) : Response
+    deletePosition(RequestHeader) : void
   }
 
   class controllerTestDescriptor
@@ -277,9 +117,9 @@ package "Controller" #DDDDDD {
   }
 
   class controllerUser {
-
     createUser(RequestBody) : Response
-    getUsers() : Response
+    getUsers( ) : Response
+    getAllSuppliers( ) : Response
     modifyUserRights(RequestBody) : Response
     logIn(RequestBody) : Response
     logOut(RequestBody) : Response
@@ -287,21 +127,19 @@ package "Controller" #DDDDDD {
   }
 
   class controllerRestockOrder{
-
+    getItems( ) : Response
+    getItemById(RequestHeader) : Response
+    createRestockOrder(RequestBody) : Response   
     addSKUItems(RequestBody) : Response
     updateRestockOrderState(RequestBody) : Response
-
     getReturnItems(RequestBody) : Response
-
   }
 
-  class controllerReturnOrder
-  {
+  class controllerReturnOrder{
     createReturnOrder(RequestBody) : Response
   }
 
-  class controllerInternalOrder
-  {
+  class controllerInternalOrder{
     createInternalOrder(RequestBody) : Response
     setIOStatus(RequestBody) : Response
     getInternalOrdersIssued(RequestBody) : Response
@@ -333,40 +171,51 @@ package "Model" #DDDDDD {
       RestockOrderList : RestockOrder [ ]
       ReturnOrderList : ReturnOrder []
       InternalOrderList : InternalOrder []
+      ItemList : Item [ ]
 
       getSKU(id) : SKU
-      modifySKU(id, description, weight, volume, notes, price, availableQuantity) : void
-      SKUposition(SKUId, positionId) : void
+      getSKUs() : SKU [ ]
+      addSKU(description, weight, volume, notes, price, availableQuantity) : void
+      modifySKU(skuID, description, weight, volume, notes, price, availableQuantity) : void
+      modifySKUposition(skuID, positionID) : void
 
-      addSKUItem(RFID, SKUId, DateOfStock) : void
       getSKUItem(rfid) : SKUItem
+      addSKUItem(rfid, skuID, dateOfStock) : void
 
-      getPosition(positionId) : Position
-      addPosition(Position) : void
-      deletePosition(Position) : void
+      getPosition(positionID) : Position
+      getPositions() : Position [ ]
+      addPosition(positionId, aisle, row, col, maxWeight, maxVolume) : void
+      modifyPosition(positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume)
+      modifyPositionID(oldPositionID, newPositionID) : void
+      deletePosition(positionID) : void
 
-      addTestResult(rfid, idTestDescriptor, Date, Result)
+      addTestResult(rfid, testDescriptorID, date, result)
 
-      addUser(name, surname, email, password, type) : void
       getUsers() : User [ ]
+      getUser(username) : User
+      addUser(name, surname, email, password, type) : void
       modifyUserRights(username, newType) : void
       logIn(username, password) : bool
-      logOut() : bool
-      getUser(username) : User
+      logOut( ) : bool
       deleteUser(username) : void
 
-      getRestockOrder(id) : RestockOrder
-      restockOrderSKUItems(ROid, SKUItemIdList) : void
-      updateRestockOrderState(id, newState) : void
+      getRestockOrder(restockOrderID) : RestockOrder
+      addRestockOrder(products[], supplierID, issueDate) : void
+      restockOrderSKUItems(restockOrderID, SKUItemIdList) : void
+      updateRestockOrderState(restockOrderID, newState) : void
 
-      returnItemsFromRO(id, notPassed : bool) : SKUItem[]
+      returnItemsFromRO(id, notPassed : bool) : SKUItem[ ]
 
       addReturnOrder(SKUItem[]) : in
       sendNotificationRO(idUser, idReturnOrder)
 
-      addInternalOrder() : int
+      addInternalOrder( ) : int
       setIOStatus(id, status) : bool
       getInternalOrdersIssued(id) : InternalOrder
+
+      getItems() : Item [ ]
+      getItem(itemID) : Item
+      deleteItem(itemID) : void
   }
 
   class Supplier {
@@ -380,24 +229,17 @@ package "Model" #DDDDDD {
     surname
   }
 
-  class Product {
-    SKUId : int
-    description :String
-    price : double
-    qty : int
-  }
-
   class RestockOrder {
     id : int
     issueDate : DateTime
-    products : Product [ ]
-    supplier : Supplier
+    products : Item [ ]
+    supplier : User
     transportNote : TransportNote
     SKUItems : SKUItems [ ]
-    state : String
+    state : string
     state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
 
-    addSKUItems(SKUItemList) : void
+    addSKUItems(skuItemList) : void
     setState(newState) : void
     getSKUItemsFailedTest() : SKUItem[]
   }
@@ -420,9 +262,18 @@ package "Model" #DDDDDD {
   }
 
   class Item {
-    ID
-    description
-    price
+    ID : int
+    description : string
+    price : double
+    associatedSKU : SKU
+    supplier : Use1r
+
+    getAssociatedSKU( ) : SKU
+    gerSupplier( ) : User
+    setDescription(description) : void
+    setPrice(price) : void
+    setAssociatedSKU(SKU) : void
+    setSupplier(User) : void
   }
 
   class TransportNote {
@@ -431,21 +282,23 @@ package "Model" #DDDDDD {
 
   class SKU {
     id : int
-    description : String
+    description : string
     weight : float
     volume : float
-    notes : String
+    notes : string
     position : Position
     availableQuantity : int
     price : double
     testDescriptors : TestDescriptor [ ]
 
-    getPosition() : Position
+    getID( ) : int
+    getPosition( ) : Position
     setDescription(string) : void
     setWeight(float) : void
     setVolume(float) : void
     setNotes(string) : void
     setPosition(Position) : void
+    setAvailableQuantity(quantity) : void
     decreaseAvailableQty(num) : bool
     increaseAvailableQty(num) : bool
   }
@@ -453,12 +306,12 @@ package "Model" #DDDDDD {
 
   class SKUItem {
     RFID : string
-    Available : boolean
-    SKU : SKU
+    available : boolean
+    sku : SKU
     DateOfStock : DateTime
-    TestResults : TestResult [ ]
+    testResults : TestResult [ ]
 
-    SKUItem(RFID, SKUId, DateOfStock) : void
+    SKUItem(rfid, skuID, dateOfStock) : void
     addTestResult(TestResult) : void
     setNotAvailable() : bool
   }
@@ -475,35 +328,40 @@ package "Model" #DDDDDD {
     date : Date
     result : boolean
 
-    TestResult(idTestDescriptor, Date, Result) : void
-    getResult() : bool
+    TestResult(testDescriptorID, date, result) : void
+    getResult( ) : bool
   }
 
 
   class Position {
-    positionID : int
-    aisle : int
-    row : int
-    col : int
+    positionID : string
+    aisle : string
+    row : string
+    col : string
     maxWeight : float
     maxVolume : float
     occupiedWeight : float
     occupiedVolume : float
+    assignedSKU : SKU
     
-    setMaxWeight(float) : void
-    setMaxVolume(float) : void
-    addSKU(SKU) : boolean
+    setPositionID(positionID) : void
+    setPositionAisleRowCol(aisle, row, col) : void
+    setMaxWeight(maxWeight) : void
+    setMaxVolume(maxVolume) : void
+    setOccupiedWeight(weight) : void
+    setOccupiedVolume(volume) : void
+    addSKU(sku) : bool
     increaseAvailablePos(num) : bool
     decreaseAvailablePos(num) : bool
   }
 
   class User {
-    id : int
-    name : String
-    surname : String
-    email : String
-    password : String
-    type : String
+    userID : int
+    name : string
+    surname : string
+    email : string
+    password : string
+    type : string
     type [Manager, Admin, Supplier, Clerk, QualityCheckEmployee, DeliveryEmployee, InternalCustomer]
 
     User(name, surname, email, password, type) : User
@@ -596,33 +454,31 @@ participant GUI
 participant ControllerSKU
 participant ControllerPosition
 participant Warehouse
-participant Inventory
 participant SKU
 
 autonumber
 Manager -> GUI : inserts SKU ID
 GUI -> ControllerSKU :  GET/api/skus/:id -> getSKUbyID
-ControllerSKU -> Warehouse : getSKUbyID
-Warehouse -> Warehouse : getSKU
+ControllerSKU -> Warehouse : getSKU
 ControllerSKU <-- Warehouse : return SKU
 GUI <-- ControllerSKU : 200 ok
 
 Manager -> GUI : selects SKU record
-GUI -> ControllerPosition : GET/api/positions -> getPositons
+GUI -> ControllerPosition : GET/api/positions -> getPositions
 ControllerPosition -> Warehouse : getPositions
 ControllerPosition <-- Warehouse : return Position list
 GUI <-- ControllerPosition : 200 ok
 
 Manager -> GUI : selects SKU position
-GUI -> ControllerSKU : PUT/api/sku/:id/position -> SKUposition
-ControllerSKU -> Warehouse : SKUposition
+GUI -> ControllerSKU : PUT/api/sku/:id/position -> modifySKUposition
+ControllerSKU -> Warehouse : modifySKUposition
 Warehouse -> Warehouse : getSKU
 Warehouse -> Warehouse : getPosition
 Warehouse -> SKU : setPosition
 Warehouse <-- SKU : return success
 Warehouse -> Position : addSKU
-Position -> Position : update units, volume, weight
-Warehouse <-- SKU : return success
+Position -> Position : update volume, weight
+Warehouse <-- Position : return success
 ControllerSKU <-- Warehouse : return success
 GUI <-- ControllerSKU : 200 ok
 
@@ -636,15 +492,12 @@ actor Manager
 participant GUI
 participant ControllerSKU
 participant Warehouse
-participant Inventory
 participant SKU
 
 autonumber
 Manager -> GUI : inserts SKU ID
 GUI -> ControllerSKU :  GET/api/skus/:id -> getSKUbyID
-ControllerSKU -> Warehouse : getSKUbyID
-Warehouse -> Inventory : getSKU
-Warehouse <-- Inventory : return SKU
+ControllerSKU -> Warehouse : getSKU
 ControllerSKU <-- Warehouse : return SKU
 GUI <-- ControllerSKU : 200 ok
 
@@ -658,7 +511,7 @@ GUI -> ControllerSKU : PUT/api/sku/:id -> modifySKU
   alt position exists
     Warehouse -> Warehouse : getPosition
     Warehouse -> Position : addSKU
-    Position -> Position : update units, volume, weight
+    Position -> Position : update volume, weight
     Warehouse <-- SKU : return success
   end alt  
 ControllerSKU <-- Warehouse : return success
@@ -730,10 +583,10 @@ autonumber
 Manager -> GUI : selects position and inserts data
 GUI -> ControllerPosition : PUT/api/position/:positionID-> modifyPosition
 ControllerPosition -> Warehouse : modifyPosition
+Warehouse -> Warehouse : getPosition
 Warehouse -> Position : setPositionAisleRowCol
 Position -> Position : update positionID
 Warehouse <-- Position : return success
-Warehouse -> Warehouse : getPosition
 Warehouse -> Position : set<Field>
 Warehouse <-- Position : return succes
 ControllerPosition <-- Warehouse : return success
@@ -752,7 +605,7 @@ participant Warehouse
 
 autonumber
 Manager -> GUI : delete positions selected
-GUI -> ControllerPosition : DELETE/api/position/:positionID -> deletePositionFromWarehouse
+GUI -> ControllerPosition : DELETE/api/position/:positionID -> deletePosition
 ControllerPosition -> Warehouse : deletePosition
 ControllerPosition <-- Warehouse : return success
 GUI <-- ControllerPosition : 204 No Content
@@ -789,7 +642,7 @@ GUI <-- ControllerRestockOrder : return 200 ok
 
 Manager -> GUI : inserts data
 GUI -> ControllerRestockOrder : POST/api/restockOrder -> createRestockOrder
-ControllerRestockOrder -> Warehouse : newRestockOrder
+ControllerRestockOrder -> Warehouse : addRestockOrder
 Warehouse -> RestockOrder : RestockOrder
 Warehouse <-- RestockOrder : return success
 ControllerRestockOrder <-- Warehouse : return success
