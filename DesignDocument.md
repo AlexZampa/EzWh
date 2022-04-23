@@ -359,7 +359,7 @@ package "Model" #DDDDDD {
       restockOrderSKUItems(ROid, SKUItemIdList) : void
       updateRestockOrderState(id, newState) : void
 
-      returnItemsFromRestockOrder(id) : SKUItem[]
+      returnItemsFromRO(id, notPassed : bool) : SKUItem[]
 
       addReturnOrder(SKUItem[]) : in
       sendNotificationRO(idUser, idReturnOrder)
