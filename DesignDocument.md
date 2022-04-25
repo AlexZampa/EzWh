@@ -1211,22 +1211,22 @@ GUI <-- controllerInternalOrder : return 200 OK
 mainframe **Internal Order completed**
 actor DeliveryEmployee
 participant GUI
-participant ControllerInternalOrder
+participant controllerInternalOrder
 participant InternalOrder
 participant ControllerSKUItem
 participant SKUItem
 
 autonumber
 GUI -> controllerInternalOrder : GET/api/inernalOrdersAccepted -> getAcceptedInternalOrders
-ControllerInternalOrder -> Warehouse : getAcceptedInternalOrders
-ControllerInternalOrder <-- Warehouse : return IO list
-GUI <-- ControllerInternalOrder : return IO list
-GUI <-- ControllerInternalOrder : 200 OK
+controllerInternalOrder -> Warehouse : getAcceptedInternalOrders
+controllerInternalOrder <-- Warehouse : return IO list
+GUI <-- controllerInternalOrder : return IO list
+GUI <-- controllerInternalOrder : 200 OK
 DeliveryEmployee -> GUI : select internal order
-GUI -> ControllerInternalOrder : GET/api/internalOrders/:id -> getInternalOrder
-ControllerInternalOrder -> Warehouse : getInternalOrder
-ControllerInternalOrder <-- Warehouse : return IO
-GUI <-- ControllerInternalOrder : 200 OK
+GUI -> controllerInternalOrder : GET/api/internalOrders/:id -> getInternalOrder
+controllerInternalOrder -> Warehouse : getInternalOrder
+controllerInternalOrder <-- Warehouse : return IO
+GUI <-- controllerInternalOrder : 200 OK
 loop for each SKUitem set not available
   GUI -> ControllerSKUItem : PUT/api/skuitems/:rfid -> modifySKUItem
   ControllerSKUItem -> Warehouse : modifySKUItem
