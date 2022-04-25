@@ -92,57 +92,64 @@ N1 .. GUI
 package "Controller" #DDDDDD {
 
   class controllerSKU{
-    createSKU(RequestBody) : Response
-    modifySKU(RequestHeader, RequestBody) : Response
-    modifySKUposition(RequestHeader, RequestBody) : Response
-    getSKUbyID(RequestHeader) : Response
+    createSKU(HTTPrequest) : Response
+    getSKUbyID(HTTPrequest) : Response
+    getSKUs(HTTPrequest) : Response
+    modifySKU(HTTPrequest) : Response
+    modifySKUposition(HTTPrequest) : Response
+    deleteSKU(HTTPrequest) : Response
   }
 
   class controllerSKUItem {
-    createSKUItem(RequestBody) : Response
+    createSKUItem(HTTPrequest) : Response
+    getSKUitemByRFID(HTTPrequest) : Response
+    getSKUitems(HTTPrequest) : Response
+    getSKUitemsBySKUid(HTTPrequest) : Response
+    modifySKUItem(HTTPrequest) : Response
+    deleteSKUItem(HTTPrequest) : Response
   }
 
   class ControllerPosition{
-    createPosition(RequestBody) : Response
-    getPositions( ) : Response
-    modifyPosition(RequestHeader, RequestBody) : Response
-    modifyPositionID(RequestHeader, RequestBody) : Response
-    deletePosition(RequestHeader) : void
+    createPosition(HTTPrequest) : Response
+    getPositions(HTTPrequest) : Response
+    modifyPosition(HTTPrequest) : Response
+    modifyPositionID(HTTPrequest) : Response
+    deletePosition(HTTPrequest) : Response
   }
 
   class controllerTestDescriptor
 
   class controllerTestResult {
-    createTestResult(RequestBody) : Response
+    createTestResult(HTTPrequest) : Response
   }
 
   class controllerUser {
-    createUser(RequestBody) : Response
-    getUsers( ) : Response
-    getAllSuppliers( ) : Response
-    modifyUserRights(RequestBody) : Response
-    logIn(RequestBody) : Response
-    logOut(RequestBody) : Response
-    deleteUser(RequestBody) : Response
+    createUser(HTTPrequest) : Response
+    getUsers(HTTPrequest) : Response
+    getAllSuppliers(HTTPrequest) : Response
+    modifyUserRights(HTTPrequest) : Response
+    logIn(HTTPrequest) : Response
+    logOut(HTTPrequest) : Response
+    deleteUser(HTTPrequest) : Response
   }
 
   class controllerRestockOrder{
-    getItems( ) : Response
-    getItemById(RequestHeader) : Response
-    createRestockOrder(RequestBody) : Response   
-    addSKUItems(RequestBody) : Response
-    updateRestockOrderState(RequestBody) : Response
-    getReturnItems(RequestBody) : Response
+    getItems(HTTPrequest) : Response
+    getItemById(HTTPrequest) : Response
+    createRestockOrder(HTTPrequest) : Response   
+    addSKUItems(HTTPrequest) : Response
+    modifyRestockOrderState(HTTPrequest) : Response
+    getReturnItems(HTTPrequest) : Response
   }
 
   class controllerReturnOrder{
-    createReturnOrder(RequestBody) : Response
+    createReturnOrder(HTTPrequest) : Response
   }
 
   class controllerInternalOrder{
-    createInternalOrder(RequestBody) : Response
-    setIOStatus(RequestBody) : Response
-    getInternalOrdersIssued(RequestBody) : Response
+    createInternalOrder(HTTPrequest) : Response
+    setIOStatus(HTTPrequest) : Response
+    getInternalOrdersIssued(HTTPrequest) : Response
   }
 
   class controllerItem
@@ -153,17 +160,8 @@ package "Controller" #DDDDDD {
 
 package "Model" #DDDDDD {
 
-  class AAA{
-
-    attribute : type
-    list_attribute : type [ ]
-
-
-    method(param) : return type
-
-  }
-
   class Warehouse{
+      SKUlist : SKU [ ]
       SKUItemList : SKUItem [ ]
       PositionList : Position [ ]
       TestResultList : TestResult [ ]
@@ -173,37 +171,42 @@ package "Model" #DDDDDD {
       InternalOrderList : InternalOrder []
       ItemList : Item [ ]
 
+      addSKU(description, weight, volume, notes, price, availableQuantity) : void
       getSKU(id) : SKU
       getSKUs() : SKU [ ]
-      addSKU(description, weight, volume, notes, price, availableQuantity) : void
       modifySKU(skuID, description, weight, volume, notes, price, availableQuantity) : void
       modifySKUposition(skuID, positionID) : void
+      deleteSKU(skuID) : void
 
-      getSKUItem(rfid) : SKUItem
       addSKUItem(rfid, skuID, dateOfStock) : void
+      getSKUItem(rfid) : SKUItem
+      getSKUitems() : SKUItem [ ]
+      getSKUitemsBySKUid(skuID) : SKUItem [ ]
+      modifySKUItem(rfid) : void
+      deleteSKUItem(rfid) : void
 
+      addPosition(positionId, aisle, row, col, maxWeight, maxVolume) : void
       getPosition(positionID) : Position
       getPositions() : Position [ ]
-      addPosition(positionId, aisle, row, col, maxWeight, maxVolume) : void
       modifyPosition(positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume)
       modifyPositionID(oldPositionID, newPositionID) : void
       deletePosition(positionID) : void
 
       addTestResult(rfid, testDescriptorID, date, result)
 
+      addUser(name, surname, email, password, type) : void
       getUsers() : User [ ]
       getUser(username) : User
       getSuppliers() : Supplier [ ]
-      addUser(name, surname, email, password, type) : void
       modifyUserRights(username, newType) : void
       logIn(username, password) : bool
       logOut( ) : bool
       deleteUser(username) : void
 
-      getRestockOrder(restockOrderID) : RestockOrder
       addRestockOrder(products[], supplierID, issueDate) : void
+      getRestockOrder(restockOrderID) : RestockOrder
       restockOrderSKUItems(restockOrderID, SKUItemIdList) : void
-      updateRestockOrderState(restockOrderID, newState) : void
+      modifyRestockOrderState(restockOrderID, newState) : void
 
       returnItemsFromRO(id, notPassed : bool) : SKUItem[ ]
 
@@ -211,8 +214,8 @@ package "Model" #DDDDDD {
       sendNotificationRO(idUser, idReturnOrder)
 
       addInternalOrder( ) : int
-      setIOStatus(id, status) : bool
       getInternalOrdersIssued(id) : InternalOrder
+      setIOStatus(id, status) : bool
 
       getItems() : Item [ ]
       getItem(itemID) : Item
@@ -314,8 +317,14 @@ package "Model" #DDDDDD {
     testResults : TestResult [ ]
 
     SKUItem(rfid, skuID, dateOfStock) : void
+    getRFID() : string
+    getSKU() : SKU
+    getDateOfStock() : DateTime
+    setRFID(rfid) ; void
+    setAvailable(available) : void
+    setDateOfStock(date) : void
+    isAvailable() : bool
     addTestResult(TestResult) : void
-    setNotAvailable() : bool
   }
 
   class TestDescriptor {
@@ -765,8 +774,8 @@ Warehouse -> RestockOrder : addSKUItems
 Warehouse <-- RestockOrder : return success
 ControllerRestockOrder <-- Warehouse : return success
 GUI <-- UserController : 200 ok
-GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> updateRestockOrderState
-ControllerRestockOrder -> Warehouse : updateRestockOrderState
+GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> modifyRestockOrderState
+ControllerRestockOrder -> Warehouse : modifyRestockOrderState
 Warehouse -> Warehouse : getRestockOrder
 Warehouse -> RestockOrder : setState
 Warehouse <-- RestockOrder : return success
