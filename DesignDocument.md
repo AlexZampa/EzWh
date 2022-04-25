@@ -159,9 +159,11 @@ package "Controller" #DDDDDD {
     getInternalOrder(HTTPrequest) : Response
   }
 
-  class controllerItem
+  class controllerItem {
     createItem(HTTPrequest) : Response
     modifyItem(HTTPrequest) : Response
+  }
+  
 }
 'End of Presentation
 
