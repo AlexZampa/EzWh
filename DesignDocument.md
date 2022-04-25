@@ -150,6 +150,8 @@ package "Controller" #DDDDDD {
     createInternalOrder(HTTPrequest) : Response
     setIOStatus(HTTPrequest) : Response
     getInternalOrdersIssued(HTTPrequest) : Response
+    getAcceptedInternalOrders(HTTPrequest) : Response
+    getInternalOrder(HTTPrequest) : Response
   }
 
   class controllerItem
@@ -216,6 +218,8 @@ package "Model" #DDDDDD {
       addInternalOrder( ) : int
       getInternalOrdersIssued(id) : InternalOrder
       setIOStatus(id, status) : bool
+      getAcceptedInternalOrders() : InternalOrder[]
+      getInternalOrder(id) : InternalOrder
 
       getItems() : Item [ ]
       getItem(itemID) : Item
