@@ -117,7 +117,12 @@ package "Controller" #DDDDDD {
     deletePosition(HTTPrequest) : Response
   }
 
-  class controllerTestDescriptor
+  class controllerTestDescriptor {
+    createTestDescriptor(HTTPrequest) : Response
+    getTestDescriptors(HTTPrequest) : Response
+    modifyTestDescriptor(HTTPrequest) : Response
+    deleteTestDescriptor(HTTPrequest) : Response
+  }
 
   class controllerTestResult {
     createTestResult(HTTPrequest) : Response
@@ -155,7 +160,8 @@ package "Controller" #DDDDDD {
   }
 
   class controllerItem
-
+    createItem(HTTPrequest) : Response
+    modifyItem(HTTPrequest) : Response
 }
 'End of Presentation
 
@@ -166,6 +172,7 @@ package "Model" #DDDDDD {
       SKUlist : SKU [ ]
       SKUItemList : SKUItem [ ]
       PositionList : Position [ ]
+      TestDescriptorList : TestDescriptor [ ]
       TestResultList : TestResult [ ]
       UserList : User [ ]
       RestockOrderList : RestockOrder [ ]
@@ -193,6 +200,12 @@ package "Model" #DDDDDD {
       modifyPosition(positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume)
       modifyPositionID(oldPositionID, newPositionID) : void
       deletePosition(positionID) : void
+
+      addTestDescriptor(SKU, name, description) : void
+      getTestDescriptors() : TestDescriptor [ ]
+      modifyTestDescriptor(ID, descriptor) : void
+      getTestDescriptor(ID) : TestDescriptor
+      deleteTestDescriptor(ID) : void
 
       addTestResult(rfid, testDescriptorID, date, result)
 
@@ -224,6 +237,8 @@ package "Model" #DDDDDD {
       getItems() : Item [ ]
       getItem(itemID) : Item
       deleteItem(itemID) : void
+      addItem(id, description, price, associatedSKU, supplier) : void
+      modifyItem(id, description, price) : void
   }
 
   class Supplier {
@@ -268,6 +283,7 @@ package "Model" #DDDDDD {
 
     addSKU(SKUItem, qty) : bool
     setStatus(status) : bool
+    setCompleted(id) : void?????
   }
 
   class Item {
@@ -283,6 +299,7 @@ package "Model" #DDDDDD {
     setPrice(price) : void
     setAssociatedSKU(SKU) : void
     setSupplier(Supplier) : void
+    Item(ID, description, price, associatedSKU, supplier) : Item (o bool?)
   }
 
   class TransportNote {
@@ -329,12 +346,17 @@ package "Model" #DDDDDD {
     setDateOfStock(date) : void
     isAvailable() : bool
     addTestResult(TestResult) : void
+    set<field>() : void
   }
 
   class TestDescriptor {
-    ID
-    name
-    procedure description
+    sku : SKU
+    ID : string
+    name : string
+    procedureDescription : string
+
+    TestDescriptor(ID, sku, name, procedureDescription) : TestDescriptor
+    set<field>(descriptor) : void
   }
 
   class TestResult {
@@ -1271,8 +1293,8 @@ alt id is available
   ControllerItem <-- Warehouse : return success
   GUI <-- ControllerItem : 201 created
 else id is already used
-  ControllerItem <-- Warehouse : return error
   Warehouse <-- Item : return error
+  ControllerItem <-- Warehouse : return error
   GUI <-- ControllerItem : 422 Unprocessable Entity
   Supplier <-- GUI : display Error Message
 end
@@ -1367,7 +1389,6 @@ mainframe **Delete Test Description**
 actor Manager
 participant GUI
 participant ControllerTestDescriptor
-participant TestDescriptor
 
 autonumber
 GUI -> ControllerTestDescriptor : GET/api/testDescriptors -> getTestDescriptors
