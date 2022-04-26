@@ -52,6 +52,8 @@ The design must satisfy the Official Requirements document
 
 # High level design 
 
+The EZWH application follows the architectural pattern Model-View-Control. The View package contains the GUI, and it is given: so it is not descripted in this document. The class Warehouse is a facade for the classes in the Model package.
+
 ```plantuml
 top to bottom direction
 
@@ -87,14 +89,14 @@ note " The Graphical User Interface is fixed\n and not designed in this Document
 N1 .. GUI
 }
 
-'End of Application Logic
+'End of View
 
 package "Controller" #DDDDDD {
 
   class controllerSKU{
     createSKU(HTTPrequest) : Response
-    getSKUbyID(HTTPrequest) : Response
     getSKUs(HTTPrequest) : Response
+    getSKUbyID(HTTPrequest) : Response
     modifySKU(HTTPrequest) : Response
     modifySKUposition(HTTPrequest) : Response
     deleteSKU(HTTPrequest) : Response
@@ -102,8 +104,8 @@ package "Controller" #DDDDDD {
 
   class controllerSKUItem {
     createSKUItem(HTTPrequest) : Response
-    getSKUitemByRFID(HTTPrequest) : Response
     getSKUitems(HTTPrequest) : Response
+    getSKUitemByRFID(HTTPrequest) : Response
     getSKUitemsBySKUid(HTTPrequest) : Response
     modifySKUItem(HTTPrequest) : Response
     deleteSKUItem(HTTPrequest) : Response
@@ -120,52 +122,68 @@ package "Controller" #DDDDDD {
   class controllerTestDescriptor {
     createTestDescriptor(HTTPrequest) : Response
     getTestDescriptors(HTTPrequest) : Response
+    getTestDescripotorById(HTTPrequest) : Response
     modifyTestDescriptor(HTTPrequest) : Response
     deleteTestDescriptor(HTTPrequest) : Response
   }
 
   class controllerTestResult {
     createTestResult(HTTPrequest) : Response
+    getTestResults(HTTPrequest) : Response
+    getTestResultById(HTTPrequest) : Response
+    modifyTestResult(HTTPrequest) : Response
+    deleteTestResult(HTTPrequest) : Response
   }
 
   class controllerUser {
     createUser(HTTPrequest) : Response
     getUsers(HTTPrequest) : Response
     getAllSuppliers(HTTPrequest) : Response
+    getUserInfo(HTTPrequest) : Response
     modifyUserRights(HTTPrequest) : Response
-    logIn(HTTPrequest) : Response
+    logIn<userType>(HTTPrequest) : Response
     logOut(HTTPrequest) : Response
     deleteUser(HTTPrequest) : Response
   }
 
   class controllerRestockOrder{
-    getItems(HTTPrequest) : Response
-    getItemById(HTTPrequest) : Response
-    createRestockOrder(HTTPrequest) : Response   
-    addSKUItems(HTTPrequest) : Response
-    modifyRestockOrderState(HTTPrequest) : Response
+    createRestockOrder(HTTPrequest) : Response
+    getRestockOrdes(HTTPrequest) : Response
+    getRestockOrdersIssued(HTTPrequest) : Response
     getReturnItems(HTTPrequest) : Response
+    getRestockOrderById(HTTPrequest) : Response
+    modifyRestockOrderState(HTTPrequest) : Response
+    addSKUItems(HTTPrequest) : Response
+    addTransportNote(HTTPrequest) : Response
+    deleteRestockOrder(HTTPrequest) : Response
   }
 
   class controllerReturnOrder{
     createReturnOrder(HTTPrequest) : Response
+    getReturnOrders(HTTPrequest) : Response
+    getReturnOrderById(HTTPrequest) : Response
+    deleteReturnOrder(HTTPrequest) : Response
   }
 
   class controllerInternalOrder{
     createInternalOrder(HTTPrequest) : Response
-    setIOStatus(HTTPrequest) : Response
     getInternalOrdersIssued(HTTPrequest) : Response
     getAcceptedInternalOrders(HTTPrequest) : Response
     getInternalOrder(HTTPrequest) : Response
+    setIOStatus(HTTPrequest) : Response
+    deleteInternalOrder(HTTPrequest) : Response
   }
 
   class controllerItem {
     createItem(HTTPrequest) : Response
+    getItems(HTTPrequest) : Response
+    getItemsById(HTTPrequest) : Response
     modifyItem(HTTPrequest) : Response
+    deleteItem(HTTPrequest) : Response
   }
   
 }
-'End of Presentation
+'End of Controller
 
 
 package "Model" #DDDDDD {
@@ -196,7 +214,7 @@ package "Model" #DDDDDD {
       modifySKUItem(rfid) : void
       deleteSKUItem(rfid) : void
 
-      addPosition(positionId, aisle, row, col, maxWeight, maxVolume) : void
+      addPosition(aisle, row, col, maxWeight, maxVolume) : void
       getPosition(positionID) : Position
       getPositions() : Position [ ]
       modifyPosition(positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume)
@@ -209,49 +227,150 @@ package "Model" #DDDDDD {
       getTestDescriptor(ID) : TestDescriptor
       deleteTestDescriptor(ID) : void
 
-      addTestResult(rfid, testDescriptorID, date, result)
+      addTestResult(rfid, testDescriptorID, date, result) : void
+      getTestResults() : TestResult [ ]
+      getTestResultById(ID) : TestResult
+      modifyTestResult(ID, newID, newDate, newResult) : void
+      deleteTestResult(ID) : void
 
       addUser(name, surname, email, password, type) : void
       getUsers() : User [ ]
       getUser(username) : User
       getSuppliers() : Supplier [ ]
-      modifyUserRights(username, newType) : void
+      modifyUserRights(username, oldType, newType) : void
       logIn(username, password) : bool
       logOut( ) : bool
       deleteUser(username) : void
 
-      addRestockOrder(products[], supplierID, issueDate) : void
+      addRestockOrder(products, supplierID, issueDate) : void
       getRestockOrder(restockOrderID) : RestockOrder
+      getRestockOrders() : RestockOrder [ ]
+      getRestockOrdersIssued() : RestockOrder [ ]
       restockOrderSKUItems(restockOrderID, SKUItemIdList) : void
+      restockOrderTransportNote(restockOrderID, Date) : void
       modifyRestockOrderState(restockOrderID, newState) : void
+      returnItemsFromRO(restockOrderID, notPassed : bool) : SKUItem[ ]
+      deleteRestockOrder(restockOrderID) : void
 
-      returnItemsFromRO(id, notPassed : bool) : SKUItem[ ]
+      addReturnOrder(SKUItemList, restockOrderId, returnDate) : void
+      getReturnOrders() : ReturnOrder [ ]
+      getReturnOrderById(ID) : ReturnOrder
+      deleteReturnOrder(ID) : void
+      sendNotificationRO(userID, returnOrderID)
 
-      addReturnOrder(SKUItem[]) : in
-      sendNotificationRO(idUser, idReturnOrder)
+      addInternalOrder(products, customerID, issueDate) : int
+      getInternalOrdersIssued() : InternalOrder [ ]
+      getAcceptedInternalOrders() : InternalOrder[ ]
+      getInternalOrder(ID) : InternalOrder
+      setIOStatus(ID, status) : bool
+      deleteInternalOrder(ID) : void
 
-      addInternalOrder( ) : int
-      getInternalOrdersIssued(id) : InternalOrder
-      setIOStatus(id, status) : bool
-      getAcceptedInternalOrders() : InternalOrder[]
-      getInternalOrder(id) : InternalOrder
-
+      addItem(id, description, price, associatedSKU, supplier) : void
       getItems() : Item [ ]
       getItem(itemID) : Item
+      modifyItem(ID, description, price) : void
       deleteItem(itemID) : void
-      addItem(id, description, price, associatedSKU, supplier) : void
-      modifyItem(id, description, price) : void
   }
 
-  class Supplier {
-    ID
-    name
+  class SKU {
+    id : int
+    description : String
+    weight : float
+    volume : float
+    notes : String
+    position : Position
+    availableQuantity : int
+    price : double
+    testDescriptors : TestDescriptor [ ]
+
+    SKU(description, weight, volume, notes, price, availableQuantity) : SKU
+    getID( ) : int
+    getPosition( ) : Position
+    setDescription(string) : void
+    setWeight(float) : void
+    setVolume(float) : void
+    setNotes(string) : void
+    setPosition(Position) : void
+    setAvailableQuantity(quantity) : void
+    decreaseAvailableQty(num) : bool
+    increaseAvailableQty(num) : bool
   }
 
-  class Customer {
-    ID
-    name
-    surname
+  class SKUItem {
+    RFID : String
+    available : boolean
+    sku : SKU
+    DateOfStock : DateTime
+    testResults : TestResult [ ]
+
+    SKUItem(rfid, skuID, dateOfStock) : SKUItem
+    getRFID() : string
+    getSKU() : SKU
+    getDateOfStock() : DateTime
+    setRFID(rfid) ; void
+    setAvailable(available) : void
+    setDateOfStock(date) : void
+    isAvailable() : bool
+    addTestResult(TestResult) : void
+  }
+
+  class Position {
+    positionID : String
+    aisle : String
+    row : String
+    col : String
+    maxWeight : float
+    maxVolume : float
+    occupiedWeight : float
+    occupiedVolume : float
+    assignedSKU : SKU
+    
+    Position(aisle, row, col, maxWeight, maxVolume) : Position
+    setPositionID(positionID) : void
+    setPositionAisleRowCol(aisle, row, col) : void
+    setMaxWeight(maxWeight) : void
+    setMaxVolume(maxVolume) : void
+    setOccupiedWeight(weight) : void
+    setOccupiedVolume(volume) : void
+    addSKU(sku) : bool
+    increaseAvailablePos(num) : bool
+    decreaseAvailablePos(num) : bool
+  }
+
+  class TestDescriptor {
+    id : string
+    name : string
+    procedureDescription : string
+
+    TestDescriptor(ID, sku, name, procedureDescription) : TestDescriptor
+    setName(name) : void
+    setProcedureDescription(description) : void
+  }
+
+  class TestResult {
+    id : int
+    testDescriptor : TestDescriptor
+    date : Date
+    result : boolean
+
+    TestResult(testDescriptor, date, result) : TestResult
+    getResult( ) : bool
+    setID(id) : void
+    setDate(date) : void
+    setResult(result) : void
+  }
+
+  class User {
+    userID : int
+    name : string
+    surname : string
+    email : string
+    password : string
+    type : string
+    type [Manager, Admin, Supplier, Clerk, QualityCheckEmployee, DeliveryEmployee, InternalCustomer]
+
+    User(name, surname, email, password, type) : User
+    setType(newType) : void
   }
 
   class RestockOrder {
@@ -260,32 +379,46 @@ package "Model" #DDDDDD {
     products : Map <Item, int>
     supplier : Supplier
     transportNote : TransportNote
-    SKUItems : SKUItems [ ]
+    SKUItems : SKUItem [ ]
     state : string
     state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
     
-    addProduct(item, quantity)
+    RestockOrder(supplierID, issueDate) : RestockOrder
+    addProduct(item, quantity) : void
     addSKUItems(skuItemList) : void
     setState(newState) : void
     getSKUItemsFailedTest() : SKUItem[]
   }
 
+  class TransportNote {
+    shipmentDate : Date
+
+    TransportNote(date) : TransportNote
+  }
 
   class ReturnOrder {
-    ID
-    Return date
+    id : int
+    returnDate : DateTime
+    restockOrder : RestockOrder
+    products : SKUItem [ ]
 
-    addSKUItems(SKUItems[]) : bool
+    ReturnOrder(restockOrder, returnDate) : ReturnOrder
+    addSKUItems(SKUItems) : bool
   }
 
   class InternalOrder {
-    date
-    from
+    id : int
+    issueDate : DateTime
+    products : Map <SKU, int>
+    deliveredProducts : SKUItem [ ]
+    internalCustomer : User
+    state : String
     state [ISSUED - ACCEPTED - REFUSED - CANCELED - COMPLETED]
 
-    addSKU(SKUItem, qty) : bool
-    setStatus(status) : bool
-    setCompleted(id) : void?????
+    InternalOrder(customer, issueDate) : InternalOrder
+    addSKU(SKU, qty) : bool
+    addDeliveredProducts(SKUItemList) : void
+    setStatus(status) : bool 
   }
 
   class Item {
@@ -302,111 +435,7 @@ package "Model" #DDDDDD {
     setAssociatedSKU(SKU) : void
     setSupplier(Supplier) : void
     Item(ID, description, price, associatedSKU, supplier) : Item (o bool?)
-  }
-
-  class TransportNote {
-    Shipment date
-  }
-
-  class SKU {
-    id : int
-    description : string
-    weight : float
-    volume : float
-    notes : string
-    position : Position
-    availableQuantity : int
-    price : double
-    testDescriptors : TestDescriptor [ ]
-
-    getID( ) : int
-    getPosition( ) : Position
-    setDescription(string) : void
-    setWeight(float) : void
-    setVolume(float) : void
-    setNotes(string) : void
-    setPosition(Position) : void
-    setAvailableQuantity(quantity) : void
-    decreaseAvailableQty(num) : bool
-    increaseAvailableQty(num) : bool
-  }
-
-
-  class SKUItem {
-    RFID : string
-    available : boolean
-    sku : SKU
-    DateOfStock : DateTime
-    testResults : TestResult [ ]
-
-    SKUItem(rfid, skuID, dateOfStock) : void
-    getRFID() : string
-    getSKU() : SKU
-    getDateOfStock() : DateTime
-    setRFID(rfid) ; void
-    setAvailable(available) : void
-    setDateOfStock(date) : void
-    isAvailable() : bool
-    addTestResult(TestResult) : void
-    set<field>() : void
-  }
-
-  class TestDescriptor {
-    sku : SKU
-    ID : string
-    name : string
-    procedureDescription : string
-
-    TestDescriptor(ID, sku, name, procedureDescription) : TestDescriptor
-    set<field>(descriptor) : void
-  }
-
-  class TestResult {
-    id : int
-    testDescriptor : TestDescriptor
-    date : Date
-    result : boolean
-
-    TestResult(testDescriptorID, date, result) : void
-    getResult( ) : bool
-  }
-
-
-  class Position {
-    positionID : string
-    aisle : string
-    row : string
-    col : string
-    maxWeight : float
-    maxVolume : float
-    occupiedWeight : float
-    occupiedVolume : float
-    assignedSKU : SKU
-    
-    setPositionID(positionID) : void
-    setPositionAisleRowCol(aisle, row, col) : void
-    setMaxWeight(maxWeight) : void
-    setMaxVolume(maxVolume) : void
-    setOccupiedWeight(weight) : void
-    setOccupiedVolume(volume) : void
-    addSKU(sku) : bool
-    increaseAvailablePos(num) : bool
-    decreaseAvailablePos(num) : bool
-  }
-
-  class User {
-    userID : int
-    name : string
-    surname : string
-    email : string
-    password : string
-    type : string
-    type [Manager, Admin, Supplier, Clerk, QualityCheckEmployee, DeliveryEmployee, InternalCustomer]
-
-    User(name, surname, email, password, type) : User
-    setType(newType) : void
-  }
-
+  }  
 }
 
 Warehouse -- "*" Position
@@ -442,27 +471,22 @@ Customer -- "*" InternalOrder : places
 
 # Verification traceability matrix
 
-\<for each functional requirement from the requirement document, list which classes concur to implement it>
+For each functional requirement from the requirement document, this table shows which classes concur to implement it.
 
-| FR / Class |  SKU  | SKUItem | TestDescriptor | TestResult |  AAA  | Position | Warehouse | Inventory | Customer | InternalOrder |  AA   | Supplier | RestockOrder | TransportNote |   A   | Item  | ReturnOrder |
-| :--------- | :---: | :-----: | :------------: | :--------: | :---: | :------: | :-------: | :-------: | :------: | :-----------: | :---: | :------: | :----------: | :-----------: | :---: | :---: | :---------: |
-| FR1        |       |         |                |            |       |          |     X     |           |    X     |               |       |    X     |              |               |       |       |             |
-| FR2        |   X   |    X    |                |            |   X   |    X     |           |     X     |          |               |       |          |              |               |       |       |             |
-| FR3        |   X   |    X    |       X        |     X      |   X   |    X     |     X     |     X     |          |               |       |          |              |               |       |       |             |
-| FR4        |       |         |                |            |       |          |           |           |    X     |               |       |          |              |               |       |       |             |
-| FR5        |   X   |    X    |       X        |     X      |   X   |    X     |     X     |     X     |          |               |       |    X     |      X       |               |   X   |   X   |      X      |
-| FR6        |   X   |    X    |                |            |   X   |    X     |     X     |     X     |    X     |       X       |   X   |          |              |               |       |       |             |
-| FR7        |   X   |         |                |            |       |          |     X     |           |          |               |       |    X     |              |               |       |   X   |             |
+| FR / Class |  ControllerSKU | ControllerSKUItem | ControllerPosition | ControllerTestDescriptor | ControllerTestResult | ControllerUser | ControllerRestockOrder | ControllerReturnOrder | ControllerInternalOrder | ControllerItem | Warehouse | SKU | SKUItem | Position | TestDescriptor | TestResult | User | RestockOrder | ReturnOrder | InternalOrder | Item |
+| :--------- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| FR1 | | | | | | X | | | | | X | | | | | | X | | | | |
+| FR2 | X | | | | | | | | | | X | X | | | | | | | | | |
+| FR3.1 | | | X | | | | | | | | X | | | X | | | | | | | |
+| FR3.2 | | | | X | X | | | | | | X | | | | X | X | | | | | |
+| FR4 | | | | | | X | | | | | X | | | | | | X | | | | |
+| FR5 | | X | | | | | X | X | | | X | | X | | | | | X | X | | |
+| FR6 | | | | | | | | | X | | X | | | | | | | | | X | |
+| FR7 | | | | | | | | | | X | X | | | | | | | | | | X |
 
 
 
-# Verification sequence diagrams 
-\<select key scenarios from the requirement document. For each of them define a sequence diagram showing that the scenario can be implemented by the classes and methods in the design
-
-Alessandro -> 1 2 3
-Michele -> 4 5
-Nicola -> 6 7 9
-Nicolò -> 10 11 12 >
+# Verification sequence diagrams
 
 ### Scenario 1.1
 ```plantuml
@@ -1267,7 +1291,7 @@ end loop
 
 GUI -> controllerInternalOrder : PUT/api/internalOrders/:id {COMPLETED} -> setIOStatus
 controllerInternalOrder -> Warehouse : setIOStatus(id,COMPLETED)
-Warehouse -> InternalOrder : setCompleted
+Warehouse -> InternalOrder : setStatus(COMPLETED)
 Warehouse <-- InternalOrder : return ok
 controllerInternalOrder <-- Warehouse : return ok
 GUI <-- controllerInternalOrder : return 200 OK
