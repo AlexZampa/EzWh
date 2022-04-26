@@ -2,10 +2,14 @@
 
 
 Authors: 
+Alessandro Zamparutti
+Michele Pistan
+Nicola di Gruttola Giardino
+Nicolò Gallo
 
-Date:
+Date: 26 April 2022
 
-Version:
+Version: 2.0
 
 
 # Contents
@@ -91,6 +95,9 @@ N1 .. GUI
 
 'End of View
 
+```
+
+```plantuml
 package "Controller" #DDDDDD {
 
   class controllerSKU{
@@ -184,7 +191,9 @@ package "Controller" #DDDDDD {
   
 }
 'End of Controller
+```
 
+```plantuml
 
 package "Model" #DDDDDD {
 
@@ -324,6 +333,7 @@ package "Model" #DDDDDD {
     occupiedWeight : float
     occupiedVolume : float
     assignedSKU : SKU
+    presentQty : int
     
     Position(aisle, row, col, maxWeight, maxVolume) : Position
     setPositionID(positionID) : void
@@ -360,6 +370,7 @@ package "Model" #DDDDDD {
     setResult(result) : void
   }
 
+
   class User {
     userID : int
     name : string
@@ -380,6 +391,7 @@ package "Model" #DDDDDD {
     supplier : Supplier
     transportNote : TransportNote
     SKUItems : SKUItem [ ]
+    quantities : int [ ]
     state : string
     state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
     
@@ -411,6 +423,7 @@ package "Model" #DDDDDD {
     issueDate : DateTime
     products : Map <SKU, int>
     deliveredProducts : SKUItem [ ]
+    quantities : int [ ]
     internalCustomer : User
     state : String
     state [ISSUED - ACCEPTED - REFUSED - CANCELED - COMPLETED]
@@ -437,10 +450,16 @@ package "Model" #DDDDDD {
     Item(ID, description, price, associatedSKU, supplier) : Item (o bool?)
   }  
 }
-
+Warehouse -- "*" SKU
+Warehouse -- "*" SKUItem
+Warehouse -- "*" TestDescriptor
+Warehouse -- "*" TestResult
+Warehouse -- "*" User
+Warehouse -- "*" RestockOrder
+Warehouse -- "*" ReturnOrder
+Warehouse -- "*" InternalOrder
+Warehouse -- "*" Item
 Warehouse -- "*" Position
-Supplier -- "*" Item : sells
-Supplier -- "*" RestockOrder
 RestockOrder -- "*" Item
 RestockOrder -- "0..1" TransportNote
 RestockOrder -- "0..1" ReturnOrder : refers
@@ -448,7 +467,6 @@ RestockOrder -- "*" SKUItem
 SKUItem "*" -- "0..1" ReturnOrder
 SKU -- "*" SKUItem
 SKU -- "*" Item : corresponds to 
-Inventory -- "*" SKU
 SKU "*" -- "*" TestDescriptor
 TestDescriptor -- "*" TestResult
 SKU "1" -- "1" Position: must be placed in
@@ -456,11 +474,7 @@ InternalOrder -- "*" SKU
 InternalOrder "0..1" -- "*" SKUItem
 SKUItem -- "*" TestResult
 SKUItem "*" -- "0..1" Position
-Customer -- "*" InternalOrder : places
 
-(RestockOrder, Item) .. A
-(InternalOrder, SKU) .. AA
-(SKUItem, Position) .. AAA
 
 
 
@@ -481,7 +495,7 @@ For each functional requirement from the requirement document, this table shows 
 | FR3.2 | | | | X | X | | | | | | X | | | | X | X | | | | | |
 | FR4 | | | | | | X | | | | | X | | | | | | X | | | | |
 | FR5 | | X | | | | | X | X | | | X | | X | | | | | X | X | | |
-| FR6 | | | | | | | | | X | | X | | | | | | | | | X | |
+| FR6 | | | | | | | | | X | | X | | X | | | | | | | X | |
 | FR7 | | | | | | | | | | X | X | | | | | | | | | | X |
 
 
@@ -825,7 +839,7 @@ Warehouse -> Warehouse : getRestockOrder
 Warehouse -> RestockOrder : addSKUItems
 Warehouse <-- RestockOrder : return success
 ControllerRestockOrder <-- Warehouse : return success
-GUI <-- UserController : 200 ok
+GUI <-- ControllerRestockOrder : 200 ok
 GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id -> modifyRestockOrderState
 ControllerRestockOrder -> Warehouse : modifyRestockOrderState
 Warehouse -> Warehouse : getRestockOrder
@@ -1269,6 +1283,7 @@ participant ControllerSKUItem
 participant SKUItem
 
 autonumber
+DeliveryEmployee -> GUI : get accepted internal orders
 GUI -> controllerInternalOrder : GET/api/inernalOrdersAccepted -> getAcceptedInternalOrders
 controllerInternalOrder -> Warehouse : getAcceptedInternalOrders
 controllerInternalOrder <-- Warehouse : return IO list
@@ -1364,6 +1379,7 @@ participant TestDescriptor
 
 
 autonumber
+Manager -> GUI : Refresh SKUs
 GUI -> ControllerSKU : GET/api/skus -> getSKUs
 ControllerSKU -> Warehouse : getSKUs
 ControllerSKU <-- Warehouse : return SKU list
@@ -1391,6 +1407,7 @@ participant Warehouse
 participant TestDescriptor
 
 autonumber
+Manager -> GUI : Refresh Test Descriptors
 GUI -> ControllerTestDescriptor : GET/api/testDescriptors -> getTestDescriptors
 ControllerTestDescriptor -> Warehouse : getTestDescriptors
 ControllerTestDescriptor <-- Warehouse : return T list
@@ -1417,6 +1434,7 @@ participant GUI
 participant ControllerTestDescriptor
 
 autonumber
+Manager -> GUI : Refresh Test Descriptors
 GUI -> ControllerTestDescriptor : GET/api/testDescriptors -> getTestDescriptors
 ControllerTestDescriptor -> Warehouse : getTestDescriptors
 ControllerTestDescriptor <-- Warehouse : return T list
