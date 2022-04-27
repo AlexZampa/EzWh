@@ -1,6 +1,5 @@
 # Design Document 
 
-
 Authors: 
 Alessandro Zamparutti
 Michele Pistan
@@ -56,7 +55,7 @@ The design must satisfy the Official Requirements document
 
 # High level design 
 
-The EZWH application follows the architectural pattern Model-View-Control. The View package contains the GUI, and it is given: so it is not descripted in this document. The class Warehouse is a facade for the classes in the Model package.
+The EZWH application follows the architectural pattern Model-View-Control. The View package contains the GUI, and it is given: so it is not descripted in this document. The class Warehouse is a facade for the classes in the Model package. We also used the Adapter Pattern: each Controller class is associated with a single API, it receives data from header and body of the HTTP request and transforms them in the format requested by the Warehouse class.
 
 ```plantuml
 top to bottom direction
@@ -129,7 +128,7 @@ package "Controller" #DDDDDD {
   class controllerTestDescriptor {
     createTestDescriptor(HTTPrequest) : Response
     getTestDescriptors(HTTPrequest) : Response
-    getTestDescripotorById(HTTPrequest) : Response
+    getTestDescriptorById(HTTPrequest) : Response
     modifyTestDescriptor(HTTPrequest) : Response
     deleteTestDescriptor(HTTPrequest) : Response
   }
@@ -245,7 +244,7 @@ package "Model" #DDDDDD {
       addUser(name, surname, email, password, type) : void
       getUsers() : User [ ]
       getUser(username) : User
-      getSuppliers() : Supplier [ ]
+      getSuppliers() : User [ ]
       modifyUserRights(username, oldType, newType) : void
       logIn(username, password) : bool
       logOut( ) : bool
@@ -283,10 +282,10 @@ package "Model" #DDDDDD {
 
   class SKU {
     id : int
-    description : String
+    description : string
     weight : float
     volume : float
-    notes : String
+    notes : string
     position : Position
     availableQuantity : int
     price : double
@@ -294,40 +293,47 @@ package "Model" #DDDDDD {
 
     SKU(description, weight, volume, notes, price, availableQuantity) : SKU
     getID( ) : int
+    getDescription( ) : string
+    getWeight( ) : float
+    getVolume( ) : float
+    getNotes( ) : string
+    getAvailableQuantity( ) : int
+    getPrice( ) : double
     getPosition( ) : Position
-    setDescription(string) : void
-    setWeight(float) : void
-    setVolume(float) : void
-    setNotes(string) : void
-    setPosition(Position) : void
+    setDescription(description) : void
+    setWeight(weight) : void
+    setVolume(volume) : void
+    setNotes(notes) : void
+    setPosition(position) : void
     setAvailableQuantity(quantity) : void
+    setPrice(price) : void
     decreaseAvailableQty(num) : bool
     increaseAvailableQty(num) : bool
   }
 
   class SKUItem {
-    RFID : String
+    RFID : string
     available : boolean
     sku : SKU
     DateOfStock : DateTime
     testResults : TestResult [ ]
 
     SKUItem(rfid, skuID, dateOfStock) : SKUItem
-    getRFID() : string
-    getSKU() : SKU
-    getDateOfStock() : DateTime
+    getRFID( ) : string
+    getSKU( ) : SKU
+    getDateOfStock( ) : DateTime
     setRFID(rfid) ; void
     setAvailable(available) : void
     setDateOfStock(date) : void
-    isAvailable() : bool
+    isAvailable( ) : bool
     addTestResult(TestResult) : void
   }
 
   class Position {
-    positionID : String
-    aisle : String
-    row : String
-    col : String
+    positionID : string
+    aisle : string
+    row : string
+    col : string
     maxWeight : float
     maxVolume : float
     occupiedWeight : float
@@ -336,6 +342,14 @@ package "Model" #DDDDDD {
     presentQty : int
     
     Position(aisle, row, col, maxWeight, maxVolume) : Position
+    getPositionID( ) : string
+    getAisle( ) : string
+    getRow( ) : string
+    getCol( ) : string
+    getMaxWeight( ) : float
+    getMaxVolume( ) : float
+    geOccupiedtWeight( ) : float
+    getOccupiedVolume( ) : float
     setPositionID(positionID) : void
     setPositionAisleRowCol(aisle, row, col) : void
     setMaxWeight(maxWeight) : void
@@ -353,6 +367,9 @@ package "Model" #DDDDDD {
     procedureDescription : string
 
     TestDescriptor(ID, sku, name, procedureDescription) : TestDescriptor
+    getID( ) : string
+    getName( ) : string
+    getProcedureDescription( ) : string
     setName(name) : void
     setProcedureDescription(description) : void
   }
@@ -360,16 +377,18 @@ package "Model" #DDDDDD {
   class TestResult {
     id : int
     testDescriptor : TestDescriptor
-    date : Date
+    date : DateTime
     result : boolean
 
     TestResult(testDescriptor, date, result) : TestResult
+    getID( ) : int
+    getTestDescriptor( ) : TestDescriptor
+    getDate( ) : Date
     getResult( ) : bool
     setID(id) : void
     setDate(date) : void
     setResult(result) : void
   }
-
 
   class User {
     userID : int
@@ -381,6 +400,11 @@ package "Model" #DDDDDD {
     type [Manager, Admin, Supplier, Clerk, QualityCheckEmployee, DeliveryEmployee, InternalCustomer]
 
     User(name, surname, email, password, type) : User
+    getUserID( ) : int
+    getName( ) : string
+    getSurname( ) : string
+    getEmail( ) : string
+    getType( ) : string
     setType(newType) : void
   }
 
@@ -388,14 +412,20 @@ package "Model" #DDDDDD {
     id : int
     issueDate : DateTime
     products : Map <Item, int>
-    supplier : Supplier
+    supplier : User
     transportNote : TransportNote
-    SKUItems : SKUItem [ ]
-    quantities : int [ ]
+    SKUitems : SKUItem [ ]
     state : string
     state [ISSUED - DELIVERY - DELIVERED - TESTED - COMPLETEDRETURN - COMPLETED]
     
     RestockOrder(supplierID, issueDate) : RestockOrder
+    getID( ) : int
+    getIssueDate( ) : DateTime
+    getProducts( ) : Map <Item, int>
+    getState( ) : string
+    getTransportNote( ) : TransportNote
+    getSKUitems( ) : SKUItem [ ]
+    getSupplier( ) : User
     addProduct(item, quantity) : void
     addSKUItems(skuItemList) : void
     setState(newState) : void
@@ -403,9 +433,10 @@ package "Model" #DDDDDD {
   }
 
   class TransportNote {
-    shipmentDate : Date
+    shipmentDate : DateTime
 
     TransportNote(date) : TransportNote
+    getShipmentDate( ) : DateTime
   }
 
   class ReturnOrder {
@@ -415,6 +446,10 @@ package "Model" #DDDDDD {
     products : SKUItem [ ]
 
     ReturnOrder(restockOrder, returnDate) : ReturnOrder
+    getID( ) : int
+    getReturnDate( ) : DateTime
+    getProducts( ) : SKUItem [ ]
+    getRestockOrder( ) : RestockOrder
     addSKUItems(SKUItems) : bool
   }
 
@@ -422,13 +457,17 @@ package "Model" #DDDDDD {
     id : int
     issueDate : DateTime
     products : Map <SKU, int>
-    deliveredProducts : SKUItem [ ]
-    quantities : int [ ]
+    deliveredProducts : SKUItem [ ]    
     internalCustomer : User
-    state : String
+    state : string
     state [ISSUED - ACCEPTED - REFUSED - CANCELED - COMPLETED]
 
     InternalOrder(customer, issueDate) : InternalOrder
+    getID( ) : int
+    getIssueDate( ) : DateTime
+    getProducts( ) : Map <SKU, int>
+    getDeliveredProducts( ) : SKUItem [ ]
+    getState( ) : string
     addSKU(SKU, qty) : bool
     addDeliveredProducts(SKUItemList) : void
     setStatus(status) : bool 
@@ -439,15 +478,18 @@ package "Model" #DDDDDD {
     description : string
     price : double
     associatedSKU : SKU
-    supplier : Supplier
+    supplier : User
 
+    Item(ID, description, price, associatedSKU, supplier) : Item
+    getID( ) : int
+    getDescription( ) : string
+    getPrice( ) : double
     getAssociatedSKU( ) : SKU
-    gerSupplier( ) : Supplier
+    gerSupplier( ) : User
     setDescription(description) : void
     setPrice(price) : void
     setAssociatedSKU(SKU) : void
-    setSupplier(Supplier) : void
-    Item(ID, description, price, associatedSKU, supplier) : Item (o bool?)
+    setSupplier(supplier) : void
   }  
 }
 Warehouse -- "*" SKU
@@ -475,12 +517,7 @@ InternalOrder "0..1" -- "*" SKUItem
 SKUItem -- "*" TestResult
 SKUItem "*" -- "0..1" Position
 
-
-
-
 ```
-
-
 
 
 # Verification traceability matrix
