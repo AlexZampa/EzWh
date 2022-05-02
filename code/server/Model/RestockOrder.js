@@ -6,7 +6,6 @@ class RestockOrder {
 
     getID = () => { return this.id; };
     getIssueDate = () => { return this.issueDate; };
-    getProducts = () => { return this.products; };
     getState = () => { return this.state; };
     getTransportNote = () => { return this.TransportNote };
     getSKUItems = () => { return this.SKUItems; };
@@ -41,5 +40,9 @@ class RestockOrder {
 class TransportNote {
     constructor() {
         this.dateDelivery = new Date();
+    }
+
+    getShipmentDate = () => {
+        return this.dateDelivery;
     }
 }
