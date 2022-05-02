@@ -1,3 +1,5 @@
+'use strict';
+
 class User {
     constructor(userID, name, surname, email, password, type) {
         this.userID = userID;
@@ -12,8 +14,13 @@ class User {
         this.type = type;
     }
 
-    getUserID = function () {
-        return this.userID;
-    }
+    getUserID = () => { return this.userID; };
+    getName = () => { return this.name; };
+    getSurname = () => { return this.surname; };
+    getEmail = () => { return this.email; };
+    getType = () => { return this.type; };
 
 }
+
+
+module.exports = User;
