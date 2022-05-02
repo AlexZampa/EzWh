@@ -6,7 +6,11 @@ const User = require('./User');
 
 class Warehouse{
 
-    constructor(){
+    constructor() {
+        if (Warehouse._instance) {
+            return Warehouse._instance
+        }
+        Warehouse._instance = this;
         this.db = new sqlite.Database('./Database/EzWhDatabase.db', err => { if (err) throw err; });
         this.userDAO = new UserDAO(this.db);
     };
@@ -19,9 +23,8 @@ class Warehouse{
         return {"id": user.getUserID(), "name": user.getName(), "surname": user.getSurname(), "email": user.getEmail(), "type": user.getType()};
     };
 
-
 }
 
-
+var warehouse = new Warehouse();
 
 module.exports = Warehouse;
