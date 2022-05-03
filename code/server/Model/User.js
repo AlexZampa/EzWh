@@ -10,16 +10,14 @@ class User {
         this.type = type;
     }
 
-    setType = (type) => {
-        this.type = type;
-    }
-
-    getUserID = () => { return this.userID; };
-    getName = () => { return this.name; };
-    getSurname = () => { return this.surname; };
-    getEmail = () => { return this.email; };
-    getType = () => { return this.type; };
-
+    getUserID = () => this.userID;
+    getName = () => this.name;
+    getSurname = () => this.surname;
+    getEmail = () => this.email;
+    getType = () => this.type;
+    
+    setType = (type) => { this.type = type; }
+    
 }
 
 

@@ -1,32 +1,28 @@
 'use strict';
 const sqlite = require('sqlite3');
+const ConnectionDB = require('./ConnectionDB');
 
 class UserDAO{
 
-    constructor(db){
-        this.db = db;
+    constructor(){
+        this.connectionDB = new ConnectionDB();
     };
 
-    loginUser = (username, password) => {
-        return new Promise((resolve, reject) => {
-            const sql = "SELECT * FROM User WHERE email = ?";
-            this.db.get(sql, [username], (err, row) => {
-                if (err)
-                    reject(err);
-                else {
-                    if(row !== undefined){
-                        // user exists
-                        if(password === row.password){
-                            const user = {"id": row.userID, "name": row.name, "surname": row.surname, "email": row.email};
-                            resolve(user);
-                        }
-                        else
-                            resolve({});        // wrong password
-                    }
-                    resolve({});            // user does not exist
-                }
-            });
-        });
+    loginUser = async (username, password) => {
+        this.connectionDB.DBstartConnection();
+        const sql = "SELECT * FROM User WHERE email = ?";
+        const row = await this.connectionDB.DBget(sql, [username]);
+        this.connectionDB.DBendConnection();
+           
+        if(row == undefined)       // user does not exists
+            return({});
+            
+        // user exists
+        if(password === row.password){
+            const user = {"id": row.userID, "name": row.name, "surname": row.surname, "email": row.email};
+            return(user);
+        }
+        return({});
     };
 
 }

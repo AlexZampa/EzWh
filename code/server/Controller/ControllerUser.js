@@ -1,5 +1,4 @@
 'use strict';
-const express = require('express');
 const Warehouse =  require('../Model/Warehouse')
 
 class ControllerUser{
@@ -14,7 +13,7 @@ class ControllerUser{
             if(Object.keys(user).length !== 0)
                 return res.status(200).json(user);
             else
-                return res.status(401).json({});
+                return res.status(401).json();
         }
         catch(err){
             console.log(err);

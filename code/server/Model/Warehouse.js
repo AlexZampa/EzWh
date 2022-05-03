@@ -1,8 +1,9 @@
 'use strict';
 const { use } = require('chai');
-const sqlite = require('sqlite3');
 const UserDAO = require('../Database/UserDAO');
+const SkuDAO = require('../Database/SkuDAO');
 const User = require('./User');
+const SKU = require("../Model/Sku");
 
 class Warehouse{
 
@@ -11,8 +12,8 @@ class Warehouse{
             return Warehouse._instance
         }
         Warehouse._instance = this;
-        this.db = new sqlite.Database('./Database/EzWhDatabase.db', err => { if (err) throw err; });
-        this.userDAO = new UserDAO(this.db);
+        this.userDAO = new UserDAO();
+        this.skuDAO = new SkuDAO();
     };
 
     login = async (username, password) => {
@@ -23,8 +24,12 @@ class Warehouse{
         return {"id": user.getUserID(), "name": user.getName(), "surname": user.getSurname(), "email": user.getEmail(), "type": user.getType()};
     };
 
+    addSKU = async (description, weight, volume, notes, price, availableQty) => {
+        const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty);
+    };
+
 }
 
-var warehouse = new Warehouse();
+const warehouse = new Warehouse();
 
 module.exports = Warehouse;
