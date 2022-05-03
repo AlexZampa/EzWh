@@ -2,8 +2,12 @@
 const { use } = require('chai');
 const UserDAO = require('../Database/UserDAO');
 const SkuDAO = require('../Database/SkuDAO');
+const SKUItemDAO = require("../Database/SKUItemDAO");
 const User = require('./User');
-const SKU = require("../Model/Sku");
+const SKU = require("./Sku");
+const SKUItem = require("./SKUItem");
+const RestockOrder = require("./RestockOrder");
+const ReturnOrder = require("./ReturnOrder");
 
 class Warehouse{
 
@@ -14,6 +18,7 @@ class Warehouse{
         Warehouse._instance = this;
         this.userDAO = new UserDAO();
         this.skuDAO = new SkuDAO();
+        this.skuItemDAO = new SKUItemDAO();
     };
 
     login = async (username, password) => {
@@ -26,6 +31,13 @@ class Warehouse{
 
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
         const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty);
+    };
+
+    addSKUItem = async (rfid, skuID, dateOfStock) => {
+        const SKUObj = await this.skuDAO.getSKU(skuID);
+        if (Object.keys(SKUObj).length === 0)
+            return {};
+        const res = await this.skuItemDAO.newSKUItem(rfid, SKUObj, dateOfStock);
     };
 
 }

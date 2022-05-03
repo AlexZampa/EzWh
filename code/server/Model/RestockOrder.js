@@ -1,7 +1,11 @@
+var ids = 0;
+
 class RestockOrder {
     constructor(supplierID, issueDate) {
         this.supplierID = supplierID;
         this.issueDate = issueDate;
+        this.id = ids;
+        ids += 1;
     }
 
     getID = () => { return this.id; };
