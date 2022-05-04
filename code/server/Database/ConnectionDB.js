@@ -1,26 +1,35 @@
 'use strict';
 const sqlite = require('sqlite3');
 
-const DBname = './Database/EzWhDatabase.db';
 
 class ConnectionDB{
     dbName;
     db;
 
     constructor(){
-        this.dbName = DBname;
+        this.db = new sqlite.Database('./Database/EzWhDatabase.db', (err) => { if (err) throw err; }); 
     }
 
-    DBstartConnection() {
-        this.db = new sqlite.Database(this.dbName, (err) => { if (err) throw err; }); 
-    };
-
-    DBendConnection(){  
-        this.db.close((err) => { if (err) throw err; });
-    };
-
-    // execute query for retrieving data (SELECT ...)
+    /** 
+     * Execute query for retrieving data (SELECT ...) 
+     * return only the first row of the result
+    */ 
     DBget(query, params) {
+        return new Promise((resolve, reject) => {
+            this.db.get(query, params, (err, row) => {
+                if (err)
+                    reject(err);
+                else
+                    resolve(row);
+            })
+        });
+    }
+
+    /** 
+     * Execute query for retrieving data (SELECT ...) 
+     * return all the rows as a list
+    */ 
+    DBgetAll(query, params){
         return new Promise((resolve, reject) => {
             this.db.all(query, params, (err, rows) => {
                 if (err)
@@ -35,7 +44,10 @@ class ConnectionDB{
         });
     }
 
-    // execute query for INSERT DELETE or UPDATE data
+    /** 
+     * Execute query for INSERT, DELETE or UPDATE data
+     * return the last ID of the inserted row
+    */ 
     DBexecuteQuery(query, params) {
         return new Promise((resolve, reject) => {
             this.db.run(query, params, function(err) {

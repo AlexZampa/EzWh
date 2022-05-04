@@ -1,7 +1,7 @@
 'use strict';
 
 class SKU {
-    constructor(id, description, weight, volume, notes, price, availableQty){
+    constructor(id, description, weight, volume, notes, price, availableQty, position=""){
         this.id = id;
         this.description = description;
         this.weight = weight;
@@ -9,7 +9,7 @@ class SKU {
         this.notes = notes;
         this.price = price;
         this.availableQuantity = availableQty;
-        this.position = "";
+        this.position = position;
     };
 
     getID = () => this.id;

@@ -33,6 +33,7 @@ app.post('/api/managerSessions', controllerUser.loginManager);
 
 app.post('/api/sku', controllerSKU.createSKU);
 
+app.get('/api/skus', controllerSKU.getSKUs);
 
 // activate the server
 app.listen(port, () => {

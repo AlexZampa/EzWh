@@ -9,13 +9,17 @@ class SkuDAO{
     }
 
     newSKU = async (description, weight, volume, notes, price, availableQty) => {
-        this.connectionDB.DBstartConnection();
         const sql = 'INSERT INTO SKU(description, weight, volume, notes, position, quantity, price) VALUES(?, ?, ?, ?, ?, ?, ?)';
         const result = await this.connectionDB.DBexecuteQuery(sql, [description, weight, volume, notes, null, availableQty, price]);
-        this.connectionDB.DBendConnection();
         return result;
     };
 
+    getAllSKU = async () => {
+        const sql = 'SELECT * FROM SKU';
+        const result = await this.connectionDB.DBgetAll(sql, []);
+        return result.map(r => new SKU(r.id, r.description, r.weight, r.volume, r.notes, r.price, r.quantity, r.position));
+    };
+    
 }
 
 module.exports = SkuDAO;

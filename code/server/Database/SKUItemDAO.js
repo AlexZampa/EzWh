@@ -8,11 +8,11 @@ class SKUItemDAO {
     }
 
     newSKUItem = async (RFID, sku) => {
-        this.connectionDB.DBstartConnection();
         const sql = 'INSERT INTO SKUItem(RFID, sku) VALUES(?, ?)';
         const result = await this.connectionDB.DBexecuteQuery(sql, [RFID, sku]);
-        this.connectionDB.DBendConnection();
         return result;
     };
 
 }
+
+module.exports = SKUItemDAO;

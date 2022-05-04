@@ -1,6 +1,7 @@
 'use strict';
 const sqlite = require('sqlite3');
 const ConnectionDB = require('./ConnectionDB');
+const User = require('../Model/User');
 
 class UserDAO{
 
@@ -9,20 +10,14 @@ class UserDAO{
     };
 
     loginUser = async (username, password) => {
-        this.connectionDB.DBstartConnection();
         const sql = "SELECT * FROM User WHERE email = ?";
         const row = await this.connectionDB.DBget(sql, [username]);
-        this.connectionDB.DBendConnection();
-           
-        if(row == undefined)       // user does not exists
-            return({});
-            
-        // user exists
-        if(password === row.password){
-            const user = {"id": row.userID, "name": row.name, "surname": row.surname, "email": row.email};
-            return(user);
+        
+        if(row !== undefined && password === row.password){       // user exists
+            return(new User(row.userID, row.name, row.surname, row.email));
         }
-        return({});
+        // user does not exists or wrong password
+        return(undefined);
     };
 
 }

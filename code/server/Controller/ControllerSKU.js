@@ -26,10 +26,28 @@ class ControllerSKU{
                 return res.status(422).json();
             // check if user authorized otherwise: return res.status(401).json({});
             }
-            catch(err){
-                console.log(err);
-            }
-        };   
+        catch(err){
+            console.log(err);
+        }
+    };  
+
+    getSKUs = async (req, res) => {
+        try{
+            const skuList = await this.warehouse.getSKUs();
+            const result = [];
+            
+            skuList.map(s => { 
+                const item =  {"id" : s.description, "description" : s.description }
+                result.push(item);
+            }) //creare nuovo oggetto
+
+            return res.status(200).json(result);
+        }
+        catch(err){
+            console.log(err);
+        }
+    };
+
 }
     
 

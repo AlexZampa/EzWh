@@ -22,15 +22,20 @@ class Warehouse{
     };
 
     login = async (username, password) => {
-        const userObj = await this.userDAO.loginUser(username, password);
-        if(Object.keys(userObj).length === 0)
-            return {};
-        const user = new User(userObj.id, userObj.name, userObj.surname, userObj.email);
-        return {"id": user.getUserID(), "name": user.getName(), "surname": user.getSurname(), "email": user.getEmail(), "type": user.getType()};
+        const user = await this.userDAO.loginUser(username, password);
+        if(user !== undefined)
+            return {"id": user.getUserID(), "name": user.getName(), "surname": user.getSurname(), "email": user.getEmail(), "type": user.getType()};
+        return {};
     };
 
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
         const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty);
+    };
+
+    getSKUs = async () => {
+        const skuList = await this.skuDAO.getAllSKU();
+        console.log(skuList);
+        return skuList;
     };
 
     addSKUItem = async (rfid, skuID, dateOfStock) => {
