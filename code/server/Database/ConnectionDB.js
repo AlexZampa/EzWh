@@ -35,10 +35,7 @@ class ConnectionDB{
                 if (err)
                     reject(err);
                 else{
-                    if(rows.length === 1)
-                        resolve(rows[0]);
-                    else
-                        resolve(rows);
+                    resolve(rows);
                 }
             })
         });

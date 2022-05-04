@@ -30,12 +30,18 @@ class Warehouse{
 
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
         const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty);
+        return res;
     };
 
     getSKUs = async () => {
         const skuList = await this.skuDAO.getAllSKU();
-        console.log(skuList);
+        //console.log(skuList);
         return skuList;
+    };
+
+    getSKU = async (skuID) => {
+        const sku = await this.skuDAO.getSKU(skuID);
+        return sku;
     };
 
     addSKUItem = async (rfid, skuID, dateOfStock) => {

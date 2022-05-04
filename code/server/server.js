@@ -35,6 +35,8 @@ app.post('/api/sku', controllerSKU.createSKU);
 
 app.get('/api/skus', controllerSKU.getSKUs);
 
+app.get('/api/skus/:id', controllerSKU.getSKUbyID);
+
 // activate the server
 app.listen(port, () => {
 	console.log(`Server listening at http://localhost:${port}`);

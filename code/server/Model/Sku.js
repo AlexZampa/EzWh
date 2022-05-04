@@ -10,6 +10,7 @@ class SKU {
         this.price = price;
         this.availableQuantity = availableQty;
         this.position = position;
+        this.testDescriptors = [];
     };
 
     getID = () => this.id;
@@ -20,14 +21,16 @@ class SKU {
     getPrice = () => this.price;
     getAvailableQuantity = () => this.availableQuantity;
     getPosition = () => this.position;
+    getTestDescriptors = () => this.testDescriptors;
 
-    setPosition = (position) => { this.position = position; }
-    setDescription = (description) => { this.description = description ; }
-    setWeight = (weight) => { this.weight = this.weight; }
-    setVolume = (volume) => { this.volume; }
-    setNotes = (notes) => { this.notes; }
-    setPrice = (price) => { this.price; }
-    setAvailableQuantity = (availableQty) => { this.availableQuantity = availableQty; }
+    setPosition = (position) => { this.position = position; };
+    setDescription = (description) => { this.description = description ; };
+    setWeight = (weight) => { this.weight = this.weight; };
+    setVolume = (volume) => { this.volume; };
+    setNotes = (notes) => { this.notes; };
+    setPrice = (price) => { this.price; };
+    setAvailableQuantity = (availableQty) => { this.availableQuantity = availableQty; };
+    addTestDescriptor = (testDescriptor) => { this.testDescriptors.push(testDescriptor); };
 
 }
 

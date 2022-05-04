@@ -1,5 +1,7 @@
 'use strict';
 const Warehouse =  require('../Model/Warehouse');
+const SKU = require('../Model/Sku');
+const Position = require('../Model/Position')
 
 const validateCreateSKUjson = (body) => {
     if(body.description === undefined || body.weight === undefined || body.volume === undefined || body.notes === undefined 
@@ -36,11 +38,28 @@ class ControllerSKU{
             const skuList = await this.warehouse.getSKUs();
             const result = [];
             
-            skuList.map(s => { 
-                const item =  {"id" : s.description, "description" : s.description }
-                result.push(item);
-            }) //creare nuovo oggetto
+            skuList.forEach(sku => { 
+                //console.log(sku.getPosition());
+                let skuObj = {"description" : sku.getDescription(), "weight" : sku.getWeight(), "volume" : sku.getVolume, "notes" : sku.getNotes(),
+                    "position" : sku.getPosition() ? sku.getPosition().getPositionID() : "", "availableQuantity" : sku.getAvailableQuantity(),
+                    "price" : sku.getPrice(), "testDescriptors" : sku.getTestDescriptors().map(t => t.getID()) };
+                result.push(skuObj);
+            })
+            return res.status(200).json(result);
+        }
+        catch(err){
+            console.log(err);
+        }
+    };
 
+    getSKUbyID = async (req, res) => {
+        try{
+            const sku = await this.warehouse.getSKU(req.params.id);
+            let result = {};
+            if(sku !== undefined)
+                result = {"description" : sku.getDescription(), "weight" : sku.getWeight(), "volume" : sku.getVolume, "notes" : sku.getNotes(),
+                    "position" : sku.getPosition() ? sku.getPosition().getPositionID() : "", "availableQuantity" : sku.getAvailableQuantity(),
+                    "price" : sku.getPrice(), "testDescriptors" : sku.getTestDescriptors().map(t => t.getID()) };
             return res.status(200).json(result);
         }
         catch(err){
