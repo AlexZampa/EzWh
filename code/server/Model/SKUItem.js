@@ -3,6 +3,7 @@ class SKUItem {
         this.RFID = RFID;
         this.sku = sku;
         this.dateOfStock = new Date();
+        this.testResults = [];
     }
 
     getRFID = () => { return this.RFID; };
@@ -15,6 +16,6 @@ class SKUItem {
 
     isAvailable = () => { return this.available; };
 
-    addTestResult = () => { this.testResult = this.testResult; };
+    addTestResult = (testResult) => { this.testResults.concat([testResult]); };
 
 }

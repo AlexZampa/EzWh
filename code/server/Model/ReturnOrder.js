@@ -5,6 +5,7 @@ class ReturnOrder {
         this.restockOrder = restockOrder;
         this.returnDate = returnDate;
         this.id = ids;
+        this.skuItems = [];
         ids += 1;
     }
 
