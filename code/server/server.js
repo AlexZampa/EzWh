@@ -37,6 +37,8 @@ app.get('/api/skus', controllerSKU.getSKUs);
 
 app.get('/api/skus/:id', controllerSKU.getSKUbyID);
 
+app.delete('/api/skus/:id', controllerSKU.deleteSKU);
+
 // activate the server
 app.listen(port, () => {
 	console.log(`Server listening at http://localhost:${port}`);

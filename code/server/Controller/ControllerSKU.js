@@ -39,13 +39,13 @@ class ControllerSKU{
             const result = [];
             
             skuList.forEach(sku => { 
-                //console.log(sku.getPosition());
                 let skuObj = {"description" : sku.getDescription(), "weight" : sku.getWeight(), "volume" : sku.getVolume, "notes" : sku.getNotes(),
                     "position" : sku.getPosition() ? sku.getPosition().getPositionID() : "", "availableQuantity" : sku.getAvailableQuantity(),
                     "price" : sku.getPrice(), "testDescriptors" : sku.getTestDescriptors().map(t => t.getID()) };
                 result.push(skuObj);
             })
             return res.status(200).json(result);
+            // check if user authorized otherwise: return res.status(401).json({});
         }
         catch(err){
             console.log(err);
@@ -61,6 +61,18 @@ class ControllerSKU{
                     "position" : sku.getPosition() ? sku.getPosition().getPositionID() : "", "availableQuantity" : sku.getAvailableQuantity(),
                     "price" : sku.getPrice(), "testDescriptors" : sku.getTestDescriptors().map(t => t.getID()) };
             return res.status(200).json(result);
+            // check if user authorized otherwise: return res.status(401).json({});
+        }
+        catch(err){
+            console.log(err);
+        }
+    };
+
+    deleteSKU = async (req, res) => {
+        try{
+            const result = this.warehouse.deleteSKU(req.params.id);
+            return res.status(204).json();
+            // check if user authorized otherwise: return res.status(401).json({});
         }
         catch(err){
             console.log(err);

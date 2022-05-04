@@ -28,6 +28,7 @@ class Warehouse{
         return {};
     };
 
+    /********* functions for managing SKU **********/
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
         const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty);
         return res;
@@ -35,7 +36,6 @@ class Warehouse{
 
     getSKUs = async () => {
         const skuList = await this.skuDAO.getAllSKU();
-        //console.log(skuList);
         return skuList;
     };
 
@@ -44,6 +44,12 @@ class Warehouse{
         return sku;
     };
 
+    deleteSKU = async (skuID) => {
+        const res = await this.skuDAO.deleteSKU(skuID);
+        return res;
+    };
+
+    /********* functions for managing SKUItem **********/
     addSKUItem = async (rfid, skuID, dateOfStock) => {
         const SKUObj = await this.skuDAO.getSKU(skuID);
         if (Object.keys(SKUObj).length === 0)
