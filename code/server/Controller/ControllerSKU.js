@@ -7,8 +7,7 @@ const validateCreateSKUjson = (body) => {
     if(body.description === undefined || body.weight === undefined || body.volume === undefined || body.notes === undefined 
         || body.price === undefined || body.availableQuantity === undefined)
         return false;
-    else
-        return true;
+    return true;
 }
 
 class ControllerSKU{

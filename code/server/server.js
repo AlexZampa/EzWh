@@ -2,12 +2,14 @@
 const express = require('express');
 const ControllerUser = require('./Controller/ControllerUser');
 const ControllerSKU = require('./Controller/ControllerSKU');
+const ControllerPosition = require('./Controller/ControllerPosition');
 
 // init express
 const app = new express();
 const port = 3001;
 const controllerUser = new ControllerUser();
 const controllerSKU = new ControllerSKU();
+const controllerPosition = new ControllerPosition();
 
 /*
  * Alessandro -> SKU, Position, User
@@ -38,6 +40,11 @@ app.get('/api/skus', controllerSKU.getSKUs);
 app.get('/api/skus/:id', controllerSKU.getSKUbyID);
 
 app.delete('/api/skus/:id', controllerSKU.deleteSKU);
+
+app.post('/api/position', controllerPosition.createPosition);
+
+app.get('/api/positions', controllerPosition.getPositions);
+
 
 // activate the server
 app.listen(port, () => {

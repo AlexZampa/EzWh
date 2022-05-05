@@ -2,10 +2,12 @@
 const { use } = require('chai');
 const UserDAO = require('../Database/UserDAO');
 const SkuDAO = require('../Database/SkuDAO');
-const SKUItemDAO = require("../Database/SKUItemDAO");
+const SKUItemDAO = require('../Database/SKUItemDAO');
+const PositionDAO = require('../Database/PositionDAO');
 const User = require('./User');
-const SKU = require("./Sku");
-const SKUItem = require("./SKUItem");
+const SKU = require('./Sku');
+const Position = require('./Position');
+const SKUItem = require('./SKUItem');
 const RestockOrder = require("./RestockOrder");
 const ReturnOrder = require("./ReturnOrder");
 
@@ -19,6 +21,7 @@ class Warehouse{
         this.userDAO = new UserDAO();
         this.skuDAO = new SkuDAO();
         this.skuItemDAO = new SKUItemDAO();
+        this.positionDAO = new PositionDAO();
     };
 
     login = async (username, password) => {
@@ -30,7 +33,7 @@ class Warehouse{
 
     /********* functions for managing SKU **********/
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
-        const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty);
+        const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty, null);
         return res;
     };
 
@@ -56,6 +59,20 @@ class Warehouse{
             return {};
         const res = await this.skuItemDAO.newSKUItem(rfid, SKUObj, dateOfStock);
     };
+
+    /********* functions for managing Position **********/
+    addPosition = async (positionID, aisle, row, col, maxWeight, maxVolume) => {
+        if(positionID !== aisle.concat(row).concat(col))
+            return undefined;
+        const res = await this.positionDAO.newPosition(positionID, aisle, row, col, maxWeight, maxVolume, 0, 0, null);
+        return res;
+    };
+
+    getPositions = async () => {
+        return [];
+    };
+
+
 
 }
 

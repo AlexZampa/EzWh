@@ -3,7 +3,7 @@ const sqlite = require('sqlite3');
 const ConnectionDB = require('./ConnectionDB');
 const SKU = require('../Model/Sku');
 const TestDescriptor = require('../Model/TestDescriptor');
-const Position = require('../Model/Position')
+const Position = require('../Model/Position');
 
 class SkuDAO{
 
@@ -11,9 +11,9 @@ class SkuDAO{
         this.connectionDB = new ConnectionDB();
     }
 
-    newSKU = async (description, weight, volume, notes, price, availableQty) => {
+    newSKU = async (description, weight, volume, notes, price, availableQty, position) => {
         const sql = "INSERT INTO SKU(description, weight, volume, notes, position, availableQuantity, price) VALUES(?, ?, ?, ?, ?, ?, ?)";
-        const result = await this.connectionDB.DBexecuteQuery(sql, [description, weight, volume, notes, null, availableQty, price]);
+        const result = await this.connectionDB.DBexecuteQuery(sql, [description, weight, volume, notes, position, availableQty, price]);
         return result;
     };
 
