@@ -39,11 +39,23 @@ class Warehouse{
 
     getSKUs = async () => {
         const skuList = await this.skuDAO.getAllSKU();
+        for(const sku of skuList){
+            if(sku.getPosition() !== ""){
+                const position = await this.positionDAO.getPosition(sku.getPosition());
+                sku.setPosition(position);
+            }
+        }
+        // add get all test descriptors of skuID
         return skuList;
     };
 
     getSKU = async (skuID) => {
         const sku = await this.skuDAO.getSKU(skuID);
+        if(sku.getPosition() !== ""){
+            const position = await this.positionDAO.getPosition(sku.getPosition());
+            sku.setPosition(position);
+        }
+        // add get all test descriptors of skuID
         return sku;
     };
 
@@ -69,7 +81,19 @@ class Warehouse{
     };
 
     getPositions = async () => {
-        return [];
+        const positionList = await this.positionDAO.getAllPosition();
+        for(const pos of positionList){
+            if(pos.getAssignedSKU() !== undefined){
+                const sku = await this.skuDAO.getSKU(pos.getAssignedSKU());
+                pos.setAssignedSKU(sku);
+            }
+        }
+        return positionList;
+    };
+
+    deletePosition = async (positionID) => {
+        const res = await this.positionDAO.deletePosition(positionID);
+        return res;
     };
 
 

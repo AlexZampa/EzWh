@@ -29,6 +29,7 @@ class ControllerSKU{
             }
         catch(err){
             console.log(err);
+            return res.status(500).json();
         }
     };  
 
@@ -37,17 +38,13 @@ class ControllerSKU{
             const skuList = await this.warehouse.getSKUs();
             const result = [];
             
-            skuList.forEach(sku => { 
-                let skuObj = {"description" : sku.getDescription(), "weight" : sku.getWeight(), "volume" : sku.getVolume, "notes" : sku.getNotes(),
-                    "position" : sku.getPosition() ? sku.getPosition().getPositionID() : "", "availableQuantity" : sku.getAvailableQuantity(),
-                    "price" : sku.getPrice(), "testDescriptors" : sku.getTestDescriptors().map(t => t.getID()) };
-                result.push(skuObj);
-            })
+            skuList.forEach(sku => { result.push(sku.convertToObj()); });
             return res.status(200).json(result);
             // check if user authorized otherwise: return res.status(401).json({});
         }
         catch(err){
             console.log(err);
+            return res.status(500).json();
         }
     };
 
@@ -56,25 +53,27 @@ class ControllerSKU{
             const sku = await this.warehouse.getSKU(req.params.id);
             let result = {};
             if(sku !== undefined)
-                result = {"description" : sku.getDescription(), "weight" : sku.getWeight(), "volume" : sku.getVolume, "notes" : sku.getNotes(),
-                    "position" : sku.getPosition() ? sku.getPosition().getPositionID() : "", "availableQuantity" : sku.getAvailableQuantity(),
-                    "price" : sku.getPrice(), "testDescriptors" : sku.getTestDescriptors().map(t => t.getID()) };
+                result = sku.convertToObj();
             return res.status(200).json(result);
             // check if user authorized otherwise: return res.status(401).json({});
         }
         catch(err){
             console.log(err);
+            return res.status(500).json();
         }
     };
 
     deleteSKU = async (req, res) => {
         try{
-            const result = this.warehouse.deleteSKU(req.params.id);
-            return res.status(204).json();
+            const result = await this.warehouse.deleteSKU(req.params.id);
+            if(result !== undefined)
+                return res.status(204).json();
+            return res.status(422).json();
             // check if user authorized otherwise: return res.status(401).json({});
         }
         catch(err){
             console.log(err);
+            return res.status(500).json();
         }
     };
 

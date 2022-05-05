@@ -32,27 +32,35 @@ class ControllerPosition{
             }
         catch(err){
             console.log(err);
+            return res.status(500).json();
         }
     };  
 
     getPositions = async (req, res) => {
         try{
-            
+            const positionList = await this.warehouse.getPositions();
+            const result = [];
+            positionList.forEach(pos => { result.push(pos.convertToObj()); });          
+            return res.status(200).json(result);
         }
         catch(err){
             console.log(err);
+            return res.status(500).json();
         }
     };
 
 
     deletePosition = async (req, res) => {
         try{
-            const result = this.warehouse.deleteSKU(req.params.id);
-            return res.status(204).json();
-            // check if user authorized otherwise: return res.status(401).json({});
+            const result = await this.warehouse.deletePosition(req.params.positionID);
+            if(result !== undefined)
+                return res.status(204).json();
+            return res.status(422).json();
+            // check if user authorized: return res.status(401).json({});
         }
         catch(err){
             console.log(err);
+            return res.status(500).json();
         }
     };
 

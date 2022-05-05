@@ -13,23 +13,19 @@ class SkuDAO{
 
     newSKU = async (description, weight, volume, notes, price, availableQty, position) => {
         const sql = "INSERT INTO SKU(description, weight, volume, notes, position, availableQuantity, price) VALUES(?, ?, ?, ?, ?, ?, ?)";
-        const result = await this.connectionDB.DBexecuteQuery(sql, [description, weight, volume, notes, position, availableQty, price]);
-        return result;
+        const res = await this.connectionDB.DBexecuteQuery(sql, [description, weight, volume, notes, position, availableQty, price]);
+        return res.lastID;
     };
 
     getAllSKU = async () => {
         let sql = "SELECT * FROM SKU";
         const result = await this.connectionDB.DBgetAll(sql, []);
         const skuList = result.map(r => new SKU(r.id, r.description, r.weight, r.volume, r.notes, r.price, r.availableQuantity, r.position ? r.position : ""));
+        // move to class TestDescriptorDAO
         for(const s of skuList){
             sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
             let skuTests = await this.connectionDB.DBgetAll(sql, [s.getID()]);
             skuTests.forEach(t => {s.addTestDescriptor(new TestDescriptor(t.id)); });
-            if(s.getPosition() !== ""){
-                sql = "SELECT * FROM Position WHERE positionID = ?";
-                const skuPosition = await this.connectionDB.DBget(sql, [s.getPosition()]);
-                s.setPosition(new Position(skuPosition.positionID, skuPosition.aisle, skuPosition.row, skuPosition.col, skuPosition.maxWeight, skuPosition.maxVolume));
-            }
         }
         return skuList;
     };
@@ -39,26 +35,34 @@ class SkuDAO{
         const res = await this.connectionDB.DBget(sql, [skuID]);
         if(res === undefined)
             return undefined;
+        // move to class TestDescriptorDAO
         sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
         const skuTests = await this.connectionDB.DBgetAll(sql, [skuID]);
-        let position = "";
-        if(res.position !== null){
-            sql = "SELECT * FROM Position WHERE positionID = ?";
-            const skuPosition = await this.connectionDB.DBget(sql, [res.position]);
-            position = new Position(skuPosition.positionID, skuPosition.aisle, skuPosition.row, skuPosition.col, 
-                skuPosition.maxWeight, skuPosition.maxVolume);
-        }
-        const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, position);
+        const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, res.position ? res.position : "");
         // modify new TestDescriptor when class completed
         skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
         return sku;
     };
 
     deleteSKU = async (skuID) => {
-        // consistency of the DB should be checked
-        const sql = "DELETE FROM SKU WHERE id = ?";
-        const res = await this.connectionDB.DBexecuteQuery(sql, [skuID]);
-        return res;
+        // check consistency of the DB 
+        let sql = "SELECT COUNT(*) AS num FROM SKUitem WHERE SKUid = ?";        // check SKUItem
+        let res = await this.connectionDB.DBget(sql, [skuID]);
+        if(res.num !== 0)
+            return undefined;
+        sql = "SELECT COUNT(*) AS num FROM TestDescriptor WHERE SKUid = ?";     // check TestDescriptor
+        res = await this.connectionDB.DBget(sql, [skuID]);
+        if(res.num !== 0)
+            return undefined;
+        sql = "SELECT COUNT(*) AS num FROM Position WHERE assignedSKUid = ?";    // check Position
+        res = await this.connectionDB.DBget(sql, [skuID]);
+        if(res.num !== 0)
+            return undefined;
+        sql = "DELETE FROM SKU WHERE id = ?";
+        res = await this.connectionDB.DBexecuteQuery(sql, [skuID]);     // delete Position
+        if(res.changes === 0)      // skuID not found
+            return undefined;
+        return res.changes;
     };
     
 }

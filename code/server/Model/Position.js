@@ -22,8 +22,16 @@ class Position{
     getMaxVolume = () => this.maxVolume;
     getOccupiedWeight = () => this.occupiedWeight;
     getOccupiedVolume = () => this.occupiedVolume;
+    getAssignedSKU = () => this.assignedSKU;
 
     setAssignedSKU = (sku) => {this.assignedSKU = sku};
+
+    convertToObj = () => {
+        return ( 
+            {"positionID": this.positionID, "aisleID": this.aisle, "row": this.row, "col": this.col,
+             "maxWeight": this.maxWeight, "maxVolume": this.maxVolume, 
+             "occupiedWeight": this.occupiedWeight, "occupiedVolume":this.occupiedVolume } );
+    };
 
 };
 

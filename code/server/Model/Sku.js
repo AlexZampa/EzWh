@@ -32,6 +32,13 @@ class SKU {
     setAvailableQuantity = (availableQty) => { this.availableQuantity = availableQty; };
     addTestDescriptor = (testDescriptor) => { this.testDescriptors.push(testDescriptor); };
 
+    convertToObj = () => {
+        return (
+            {"description" : this.description, "weight" : this.weight, "volume" : this.volume, "notes" : this.notes,
+             "position" : this.position ? this.position.getPositionID() : "", "availableQuantity" : this.availableQuantity,
+             "price" : this.price, "testDescriptors" : this.testDescriptors.map(t => t.getID()) } );
+    };
+
 }
 
 module.exports = SKU;

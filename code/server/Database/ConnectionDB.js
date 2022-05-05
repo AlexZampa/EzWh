@@ -12,7 +12,7 @@ class ConnectionDB{
 
     /** 
      * Execute query for retrieving data (SELECT ...) 
-     * return only the first row of the result
+     * @return only the first row of the result
     */ 
     DBget(query, params) {
         return new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ class ConnectionDB{
 
     /** 
      * Execute query for retrieving data (SELECT ...) 
-     * return all the rows as a list
+     * @return all the rows as a list
     */ 
     DBgetAll(query, params){
         return new Promise((resolve, reject) => {
@@ -43,7 +43,8 @@ class ConnectionDB{
 
     /** 
      * Execute query for INSERT, DELETE or UPDATE data
-     * return the last ID of the inserted row
+     * @return a js object with key "changes" as the number of changes in the DB and
+     * key "lastID" as the last ID of the inserted row or deleted row
     */ 
     DBexecuteQuery(query, params) {
         return new Promise((resolve, reject) => {
@@ -51,7 +52,7 @@ class ConnectionDB{
                 if (err)
                     reject(err);
                 else
-                    resolve(this.lastID);
+                    resolve({changes: this.changes, lastID: this.lastID});
             });
         });
     }
