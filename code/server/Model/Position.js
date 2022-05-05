@@ -31,9 +31,22 @@ class Position{
             {"positionID": this.positionID, "aisleID": this.aisle, "row": this.row, "col": this.col,
              "maxWeight": this.maxWeight, "maxVolume": this.maxVolume, 
              "occupiedWeight": this.occupiedWeight, "occupiedVolume":this.occupiedVolume } );
-    };
+    };  
 
 };
 
+/**
+ * 
+ * @param {*} positionID 
+ * @param {*} aisle 
+ * @param {*} row 
+ * @param {*} col 
+ * @returns true if positionID is equal to the string aisle + row + col
+ */
+function validatePositionID(positionID, aisle, row, col){
+    if(positionID !== aisle.concat(row).concat(col))
+        return false;
+    return true;
+};
 
-module.exports = Position;
+module.exports = { Position, validatePositionID };

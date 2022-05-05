@@ -3,7 +3,7 @@ const sqlite = require('sqlite3');
 const ConnectionDB = require('./ConnectionDB');
 const SKU = require('../Model/Sku');
 const TestDescriptor = require('../Model/TestDescriptor');
-const Position = require('../Model/Position');
+const { Position } = require('../Model/Position');
 
 class SkuDAO{
 

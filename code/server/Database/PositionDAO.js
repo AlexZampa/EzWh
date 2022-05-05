@@ -2,7 +2,7 @@
 const sqlite = require('sqlite3');
 const ConnectionDB = require('./ConnectionDB');
 const SKU = require('../Model/Sku');
-const Position = require('../Model/Position');
+const { Position } = require('../Model/Position');
 
 class PositionDAO{
 
@@ -12,7 +12,7 @@ class PositionDAO{
 
     newPosition = async (positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid) => {
         const sql = "INSERT INTO Position(positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        const res= await this.connectionDB.DBexecuteQuery(sql, [positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid]);
+        const res = await this.connectionDB.DBexecuteQuery(sql, [positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid]);
         if(res.changes === 0)      // positionID not unique
             return undefined;
         return res.lastID;
@@ -31,6 +31,20 @@ class PositionDAO{
         const positions = new Position(res.positionID, res.aisle, res.row, res.col, res.maxWeight, res.maxVolume, res.occupiedWeight, 
                 res.occupiedVolume, res.assignedSKUid ? res.assignedSKUid : undefined);
         return positions;
+    };
+
+    updatePosition = async (oldPositionID, newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume) => {
+        let sql = "UPDATE Position SET positionID = ?, aisle = ?, row = ?, col = ?, maxWeight = ?, maxVolume = ?, occupiedWeight = ?, occupiedVolume = ? WHERE positionID = ?";
+        const res = await this.connectionDB.DBexecuteQuery(sql, [newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, oldPositionID]);
+        if(res.changes === 0)      // positionID not unique
+            return undefined;
+        sql = "UPDATE SKU SET position = ? WHERE position = ?";
+        await this.connectionDB.DBexecuteQuery(sql, [newPositionID, oldPositionID]);  
+        return res.lastID;
+    };
+
+    updatePositionID = async (oldPositionID, newPositionID) => {
+        
     };
 
     deletePosition  = async (positionID) => {

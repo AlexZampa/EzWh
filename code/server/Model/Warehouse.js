@@ -6,7 +6,7 @@ const SKUItemDAO = require('../Database/SKUItemDAO');
 const PositionDAO = require('../Database/PositionDAO');
 const User = require('./User');
 const SKU = require('./Sku');
-const Position = require('./Position');
+const { Position } = require('./Position');
 const SKUItem = require('./SKUItem');
 const RestockOrder = require("./RestockOrder");
 const ReturnOrder = require("./ReturnOrder");
@@ -51,7 +51,8 @@ class Warehouse{
 
     getSKU = async (skuID) => {
         const sku = await this.skuDAO.getSKU(skuID);
-        if(sku.getPosition() !== ""){
+        console.log(sku === undefined);
+        if(sku !== undefined && sku.getPosition() !== ""){
             const position = await this.positionDAO.getPosition(sku.getPosition());
             sku.setPosition(position);
         }
@@ -74,8 +75,6 @@ class Warehouse{
 
     /********* functions for managing Position **********/
     addPosition = async (positionID, aisle, row, col, maxWeight, maxVolume) => {
-        if(positionID !== aisle.concat(row).concat(col))
-            return undefined;
         const res = await this.positionDAO.newPosition(positionID, aisle, row, col, maxWeight, maxVolume, 0, 0, null);
         return res;
     };
@@ -91,12 +90,16 @@ class Warehouse{
         return positionList;
     };
 
+
+    modifyPosition = async (positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume) => {
+        const result = await this.positionDAO.updatePosition(positionID, aisle.concat(row).concat(col), aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume);
+        return result;
+    };
+
     deletePosition = async (positionID) => {
         const res = await this.positionDAO.deletePosition(positionID);
         return res;
     };
-
-
 
 }
 

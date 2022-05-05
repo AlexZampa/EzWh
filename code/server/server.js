@@ -45,7 +45,10 @@ app.post('/api/position', controllerPosition.createPosition);
 
 app.get('/api/positions', controllerPosition.getPositions);
 
+app.put('/api/position/:positionID', controllerPosition.modifyPosition);
+
 app.delete('/api/position/:positionID', controllerPosition.deletePosition);
+
 
 
 // activate the server

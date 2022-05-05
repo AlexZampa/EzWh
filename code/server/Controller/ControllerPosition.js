@@ -1,14 +1,21 @@
 'use strict';
 const Warehouse =  require('../Model/Warehouse');
 const SKU = require('../Model/Sku');
-const Position = require('../Model/Position')
+const { Position, validatePositionID } = require('../Model/Position');
 
 
 const validateCreatePositionJson = (body) => {
-    if(body.positionID === undefined || body.aisleID === undefined || body.row === undefined || body.col === undefined 
-        || body.maxWeight === undefined || body.maxVolume === undefined)
-        return false;
-    return true;
+    if(((body.positionID !== undefined && body.aisleID !== undefined && body.row !== undefined && body.col !== undefined && body.maxWeight !== undefined && body.maxVolume !== undefined)) 
+        && validatePositionID(body.positionID, body.aisleID, body.row, body.col))
+        return true;
+    return false;
+}
+
+const validateModifyPositionJson = (body) => {
+    if(body.newAisleID !== undefined && body.newRow !== undefined && body.newCol !== undefined && body.newMaxWeight !== undefined 
+        && body.newMaxVolume !== undefined && body.newOccupiedWeight !== undefined && body.newOccupiedVolume !== undefined)
+        return true;
+    return false;
 }
 
 class ControllerPosition{
@@ -49,6 +56,23 @@ class ControllerPosition{
         }
     };
 
+    modifyPosition = async (req, res) => {
+        try{
+            if(validateModifyPositionJson(req.body)){
+                const result = await this.warehouse.modifyPosition(req.params.positionID, req.body.newAisleID, req.body.newRow, req.body.newCol,
+                    req.body.newMaxWeight, req.body.newMaxVolume, req.body.newOccupiedWeight, req.body.newOccupiedVolume);
+                if(result === undefined)
+                    return res.status(404).json();
+                return res.status(200).json();
+            }
+            else
+                return res.status(422).json();
+        }
+        catch(err){
+            console.log(err);
+            return res.status(500).json();
+        }
+    };
 
     deletePosition = async (req, res) => {
         try{

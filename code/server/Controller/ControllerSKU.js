@@ -1,7 +1,7 @@
 'use strict';
 const Warehouse =  require('../Model/Warehouse');
 const SKU = require('../Model/Sku');
-const Position = require('../Model/Position')
+const { Position } = require('../Model/Position')
 
 const validateCreateSKUjson = (body) => {
     if(body.description === undefined || body.weight === undefined || body.volume === undefined || body.notes === undefined 
@@ -51,10 +51,11 @@ class ControllerSKU{
     getSKUbyID = async (req, res) => {
         try{
             const sku = await this.warehouse.getSKU(req.params.id);
-            let result = {};
-            if(sku !== undefined)
-                result = sku.convertToObj();
-            return res.status(200).json(result);
+            if(sku !== undefined){
+                const result = sku.convertToObj();
+                return res.status(200).json(result);
+            }
+            return res.status(404).json();
             // check if user authorized otherwise: return res.status(401).json({});
         }
         catch(err){
