@@ -3,6 +3,8 @@ const express = require('express');
 const ControllerUser = require('./Controller/ControllerUser');
 const ControllerSKU = require('./Controller/ControllerSKU');
 const ControllerPosition = require('./Controller/ControllerPosition');
+const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
+const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
 
 // init express
 const app = new express();
@@ -10,6 +12,7 @@ const port = 3001;
 const controllerUser = new ControllerUser();
 const controllerSKU = new ControllerSKU();
 const controllerPosition = new ControllerPosition();
+const controllerInternalOrder = new ControllerInternalOrder(); 
 
 /*
  * Alessandro -> SKU, Position, User
@@ -48,6 +51,15 @@ app.get('/api/positions', controllerPosition.getPositions);
 app.put('/api/position/:positionID', controllerPosition.modifyPosition);
 
 app.delete('/api/position/:positionID', controllerPosition.deletePosition);
+
+/**** INTERNAL ORDER ****/
+app.get('/api/internalOrders', controllerInternalOrder.getInternalOrders);
+app.get('/api/internalOrdersIssued', controllerInternalOrder.getInternalOrdersIssued);
+app.get('/api/internalOrdersAccepted', controllerInternalOrder.getAcceptedInternalOrders);
+app.get('/api/internalOrders/:id', controllerInternalOrder.getInternalOrder);
+app.post('/api/internalOrders', controllerInternalOrder.createInternalOrder);
+app.put('/api/internalOrders/:id', controllerInternalOrder.setIOStatus);
+app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 
 
 

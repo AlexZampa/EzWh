@@ -10,6 +10,7 @@ const { Position } = require('./Position');
 const SKUItem = require('./SKUItem');
 const RestockOrder = require("./RestockOrder");
 const ReturnOrder = require("./ReturnOrder");
+const InternalOrder = require("./InternalOrder");
 
 class Warehouse{
 
@@ -98,6 +99,48 @@ class Warehouse{
 
     deletePosition = async (positionID) => {
         const res = await this.positionDAO.deletePosition(positionID);
+        return res;
+    };
+
+
+    /********* functions for managing Internal Order **********/
+    addInternalOrder = async (products, customerId, issueDate) => {
+        const res = await this.internalOrderDAO.newInternalOrder(issueDate, products, customerId, "ISSUED");
+        return res;
+    }
+
+    getInternalOrders = async () => {
+        const res = await this.internalOrderDAO.getAllInternalOrders();
+        return res;    
+    }
+
+    getInternalOrderIssued = async () => {
+        const res = await this.internalOrderDAO.getAllIssued();
+        return res;
+    }
+
+    getAcceptedInternalOrders = async () => {
+        const res = await this.internalOrderDAO.getAllAccepted();
+        return res;
+    }
+
+    getInternalOrder = async (ID) => {
+        const res = await this.internalOrderDAO.getInternalOrder(ID);
+        return res;
+    }
+
+    setIOStatus = async (ID, status, products) => {
+        const io = this.getInternalOrder(ID);
+        if(io == undefined)
+            return false;
+
+        deliveredProducts = products.map(p => getSKUItem(p.RFID));
+        io.setStatus(status, deliveredProducts, internalOrderDAO);
+        return true;
+    }
+
+    deleteInternalOrder = async (ID) => {
+        const res = await this.internalOrderDAO.deleteInternalOrder(ID);
         return res;
     };
 
