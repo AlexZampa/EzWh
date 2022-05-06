@@ -29,17 +29,16 @@ class ControllerPosition{
             if(validateCreatePositionJson(req.body)){
                 const result = await this.warehouse.addPosition(req.body.positionID, req.body.aisleID, req.body.row, 
                     req.body.col, req.body.maxWeight, req.body.maxVolume);
-                if(result === undefined)
-                    return res.status(422).json();
                 return res.status(201).json();
             }
-            else
-                return res.status(422).json();
-            // check if user authorized: return res.status(401).json({});
-            }
-        catch(err){
+            return res.status(422).json();
+            // check if user authorized: return res.status(401).json();
+        } catch(err){
             console.log(err);
-            return res.status(500).json();
+            switch(err.err){
+                case 422: return res.status(422).json();
+                default: return res.status(503).json();
+            }
         }
     };  
 
@@ -49,8 +48,7 @@ class ControllerPosition{
             const result = [];
             positionList.forEach(pos => { result.push(pos.convertToObj()); });          
             return res.status(200).json(result);
-        }
-        catch(err){
+        } catch(err){
             console.log(err);
             return res.status(500).json();
         }
@@ -61,30 +59,48 @@ class ControllerPosition{
             if(validateModifyPositionJson(req.body)){
                 const result = await this.warehouse.modifyPosition(req.params.positionID, req.body.newAisleID, req.body.newRow, req.body.newCol,
                     req.body.newMaxWeight, req.body.newMaxVolume, req.body.newOccupiedWeight, req.body.newOccupiedVolume);
-                if(result === undefined)
-                    return res.status(404).json();
                 return res.status(200).json();
             }
-            else
-                return res.status(422).json();
-        }
-        catch(err){
+            return res.status(422).json();
+        } catch(err){
             console.log(err);
-            return res.status(500).json();
+            switch(err.err){
+                case 404: return res.status(404).json();
+                case 422: return res.status(422).json();
+                default: return res.status(503).json();
+            }
+        }
+    };
+
+    modifyPositionID = async (req, res) => {
+        try {
+            if(req.body.newPositionID !== undefined){
+                const result = await this.warehouse.modifyPositionID(req.params.positionID, req.body.newPositionID);
+                return res.status(200).json();
+            }
+            return res.status(422).json();
+        } catch (err){ 
+            console.log(err);
+            switch(err.err){
+                case 404: return res.status(404).json();
+                case 422: return res.status(422).json();
+                default: return res.status(503).json();
+            }
         }
     };
 
     deletePosition = async (req, res) => {
         try{
             const result = await this.warehouse.deletePosition(req.params.positionID);
-            if(result !== undefined)
-                return res.status(204).json();
-            return res.status(422).json();
-            // check if user authorized: return res.status(401).json({});
-        }
-        catch(err){
+            return res.status(204).json();
+            // check if user authorized: return res.status(401).json();
+        } catch(err){
             console.log(err);
-            return res.status(500).json();
+            switch(err.err){
+                case 404: return res.status(404).json();
+                case 422: return res.status(422).json();
+                default: return res.status(503).json();
+            }
         }
     };
 

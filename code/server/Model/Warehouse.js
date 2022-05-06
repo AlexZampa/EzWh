@@ -33,36 +33,64 @@ class Warehouse{
 
     /********* functions for managing SKU **********/
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
-        const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty, null);
-        return res;
+        try{
+            const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty, null);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
     };
 
     getSKUs = async () => {
-        const skuList = await this.skuDAO.getAllSKU();
-        for(const sku of skuList){
+        try{
+            const skuList = await this.skuDAO.getAllSKU();
+            for(const sku of skuList){
+                if(sku.getPosition() !== ""){
+                    const position = await this.positionDAO.getPosition(sku.getPosition());
+                    sku.setPosition(position);
+                }
+            }
+            // add get all test descriptors of skuID
+            return skuList;
+        }
+        catch(err){
+            throw err;
+        }
+    };
+
+    getSKU = async (skuID) => {
+        try{
+            const sku = await this.skuDAO.getSKU(skuID);
             if(sku.getPosition() !== ""){
                 const position = await this.positionDAO.getPosition(sku.getPosition());
                 sku.setPosition(position);
             }
+            // add get all test descriptors of skuID
+            return sku;
         }
-        // add get all test descriptors of skuID
-        return skuList;
+        catch(err){
+            throw err;
+        }
     };
 
-    getSKU = async (skuID) => {
-        const sku = await this.skuDAO.getSKU(skuID);
-        console.log(sku === undefined);
-        if(sku !== undefined && sku.getPosition() !== ""){
-            const position = await this.positionDAO.getPosition(sku.getPosition());
-            sku.setPosition(position);
+    modifySKUposition = async (skuID, positionID) => {
+        try{
+
         }
-        // add get all test descriptors of skuID
-        return sku;
+        catch(err){
+            throw err;
+        }
     };
 
     deleteSKU = async (skuID) => {
-        const res = await this.skuDAO.deleteSKU(skuID);
-        return res;
+        try{
+            const res = await this.skuDAO.deleteSKU(skuID);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
     };
 
     /********* functions for managing SKUItem **********/
@@ -75,30 +103,68 @@ class Warehouse{
 
     /********* functions for managing Position **********/
     addPosition = async (positionID, aisle, row, col, maxWeight, maxVolume) => {
-        const res = await this.positionDAO.newPosition(positionID, aisle, row, col, maxWeight, maxVolume, 0, 0, null);
-        return res;
+        try{
+            const res = await this.positionDAO.newPosition(positionID, aisle, row, col, maxWeight, maxVolume, 0, 0, null);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
     };
 
     getPositions = async () => {
-        const positionList = await this.positionDAO.getAllPosition();
-        for(const pos of positionList){
-            if(pos.getAssignedSKU() !== undefined){
-                const sku = await this.skuDAO.getSKU(pos.getAssignedSKU());
-                pos.setAssignedSKU(sku);
+        try{
+            const positionList = await this.positionDAO.getAllPosition();
+            for(const pos of positionList){
+                if(pos.getAssignedSKU() !== undefined){
+                    const sku = await this.skuDAO.getSKU(pos.getAssignedSKU());
+                    pos.setAssignedSKU(sku);
+                }
             }
+            return positionList;
         }
-        return positionList;
+        catch(err){
+            throw err;
+        }
     };
 
 
     modifyPosition = async (positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume) => {
-        const result = await this.positionDAO.updatePosition(positionID, aisle.concat(row).concat(col), aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume);
-        return result;
+        try{
+            const pos = await this.positionDAO.getPosition(positionID);     // get position to check if exists
+            const result = await this.positionDAO.updatePosition(positionID, aisle.concat(row).concat(col), aisle, row, col, 
+                maxWeight, maxVolume, occupiedWeight, occupiedVolume);
+            return result;
+        }
+        catch(err){
+            throw err;
+        }
+    };
+
+    modifyPositionID = async (oldPositionID, newPositionID) => {
+        try{
+            const newAisle = newPositionID.slice(0, 4);     // take first 4 digits
+            const newRow = newPositionID.slice(4, 8);       // take 4 digits in the middle
+            const newCol = newPositionID.slice(8);          // take last digits
+            const pos = await this.positionDAO.getPosition(oldPositionID);     // get position to check if exists
+            // update Position modifying only positionID, aisle, row and col
+            const result = await this.positionDAO.updatePosition(oldPositionID, newPositionID, newAisle, newRow, newCol, 
+                pos.getMaxWeight(), pos.getMaxVolume(), pos.getOccupiedWeight(), pos.getOccupiedVolume());
+            return result;
+        }
+        catch(err){
+            throw err;
+        }
     };
 
     deletePosition = async (positionID) => {
-        const res = await this.positionDAO.deletePosition(positionID);
-        return res;
+        try{
+            const res = await this.positionDAO.deletePosition(positionID);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
     };
 
 }

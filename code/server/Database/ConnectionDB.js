@@ -47,14 +47,18 @@ class ConnectionDB{
      * key "lastID" as the last ID of the inserted row or deleted row
     */ 
     DBexecuteQuery(query, params) {
-        return new Promise((resolve, reject) => {
-            this.db.run(query, params, function(err) {
-                if (err)
+        try{
+            return new Promise((resolve, reject) => {
+                this.db.run(query, params, function(err) {
+                    if (err)
                     reject(err);
-                else
+                    else
                     resolve({changes: this.changes, lastID: this.lastID});
+                });
             });
-        });
+        } catch(err){
+            throw(err);
+        }
     }
 
 }

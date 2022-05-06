@@ -39,6 +39,8 @@ app.get('/api/skus', controllerSKU.getSKUs);
 
 app.get('/api/skus/:id', controllerSKU.getSKUbyID);
 
+app.put('/api/sku/:id/position', controllerSKU.modifySKUposition);
+
 app.delete('/api/skus/:id', controllerSKU.deleteSKU);
 
 app.post('/api/position', controllerPosition.createPosition);
@@ -46,6 +48,8 @@ app.post('/api/position', controllerPosition.createPosition);
 app.get('/api/positions', controllerPosition.getPositions);
 
 app.put('/api/position/:positionID', controllerPosition.modifyPosition);
+
+app.put('/api/position/:positionID/changeID', controllerPosition.modifyPositionID);
 
 app.delete('/api/position/:positionID', controllerPosition.deletePosition);
 
