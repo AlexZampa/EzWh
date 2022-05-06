@@ -26,7 +26,7 @@ class SkuDAO{
         try{
             let sql = "SELECT * FROM SKU";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const skuList = result.map(r => new SKU(r.id, r.description, r.weight, r.volume, r.notes, r.price, r.availableQuantity, r.position ? r.position : ""));
+            const skuList = result.map(r => new SKU(r.id, r.description, r.weight, r.volume, r.notes, r.price, r.availableQuantity, r.position ? r.position : undefined));
             // move to class TestDescriptorDAO
             for(const s of skuList){
                 sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
@@ -49,7 +49,7 @@ class SkuDAO{
             // move to class TestDescriptorDAO
             sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
             const skuTests = await this.connectionDB.DBgetAll(sql, [skuID]);
-            const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, res.position ? res.position : "");
+            const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, res.position ? res.position : undefined);
             // modify new TestDescriptor when class completed
             skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
             return sku;
@@ -59,9 +59,11 @@ class SkuDAO{
         }
     };
 
-    updateSKUposition = async () => {
+    updateSKU = async (skuID, newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity, newPositionID=undefined) => {
         try{
-
+            let sql = "UPDATE SKU SET description = ?, weight = ?, volume = ?, notes = ?, availableQuantity = ?, price = ?, position = ? WHERE id = ?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [newDescription, newWeight, newVolume, newNotes, newAvailableQuantity, newPrice, newPositionID ? newPositionID : null, skuID]);
+            return res.lastID;
         }
         catch(err){
             throw err;

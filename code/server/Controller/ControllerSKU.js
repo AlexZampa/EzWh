@@ -74,7 +74,11 @@ class ControllerSKU{
             return res.status(200).json();
         } catch(err){
             console.log(err);
-            return res.status(503).json();
+            switch(err.err){
+                case 404: return res.status(404).json();
+                case 422: return res.status(422).json();
+                default: return res.status(503).json();
+            }
         }
     };
 

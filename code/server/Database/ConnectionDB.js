@@ -43,7 +43,7 @@ class ConnectionDB{
 
     /** 
      * Execute query for INSERT, DELETE or UPDATE data
-     * @return a js object with key "changes" as the number of changes in the DB and
+     * @return an object with key "changes" as the number of changes in the DB and
      * key "lastID" as the last ID of the inserted row or deleted row
     */ 
     DBexecuteQuery(query, params) {

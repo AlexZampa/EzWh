@@ -1,7 +1,7 @@
 'use strict';
 
 class SKU {
-    constructor(id, description, weight, volume, notes, price, availableQty, position=""){
+    constructor(id, description, weight, volume, notes, price, availableQty, position=undefined){
         this.id = id;
         this.description = description;
         this.weight = weight;
