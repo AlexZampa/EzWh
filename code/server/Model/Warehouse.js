@@ -152,7 +152,7 @@ class Warehouse{
             const skuItemList = await this.SKUItemDAO.getSKUItems();
             let skuItems = [];
             skuItemList.forEach(skuItem => {
-                if (skuItem.getSKU().getID() === skuID) {
+                if (skuItem.getSKU().getID() === skuID && skuItem.isAvailable()) {
                     skuItems.append(skuItem);
                 }
             });
@@ -163,11 +163,9 @@ class Warehouse{
         }
     };
 
-    modifySKUItem = (rfid, newRFID, newSKUID, newDate, newTestResult) => {
+    modifySKUItem = (rfid, newRFID, newDate, newAvailable) => {
         try {
-            const skuID = await this.skuItemDAO.getSKUItem(rfid);
-            const newsku = await this.getSKU(newSKUID);
-            const result = skuID.modifySKUItem(newRFID, newsku, newDate, newTestResult);
+            const result = this.skuItemDAO.modifySKUItem(rfid, newRFID, newDate, newAvailable);
             return result;
         }
         catch (err) {

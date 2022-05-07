@@ -2,6 +2,7 @@
 const express = require('express');
 const ControllerUser = require('./Controller/ControllerUser');
 const ControllerSKU = require('./Controller/ControllerSKU');
+const ControllerSKUItem = require('./Controller/ControllerSKUItem');
 const ControllerPosition = require('./Controller/ControllerPosition');
 const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
 
@@ -10,6 +11,7 @@ const app = new express();
 const port = 3001;
 const controllerUser = new ControllerUser();
 const controllerSKU = new ControllerSKU();
+const controllerSKUItem = new ControllerSKUItem();
 const controllerPosition = new ControllerPosition();
 const controllerInternalOrder = new ControllerInternalOrder(); 
 
@@ -42,6 +44,14 @@ app.get('/api/skus/:id', controllerSKU.getSKUbyID);
 app.put('/api/sku/:id', controllerSKU.modifySKU);
 app.put('/api/sku/:id/position', controllerSKU.modifySKUposition);
 app.delete('/api/skus/:id', controllerSKU.deleteSKU);
+
+/**** SKUITEM ****/
+app.post('/api/skuitem', controllerSKUItem.createSKUItem);
+app.get('/api/skuitems', controllerSKUItem.getSKUItems);
+app.get('/api/skuitems/sku/:id', controllerSKUItem.getSKUItemsBySKUid);
+app.get('/api/skuitems/:rfid', controllerSKUItem.getSKUItemByRFID);
+app.put('/api/skuitems/:rfid', controllerSKUItem.modifySKUItem);
+app.delete('/api/skuitems/:rfid', controllerSKUItem.deleteSKUItem);
 
 /**** POSITION ****/
 app.post('/api/position', controllerPosition.createPosition);

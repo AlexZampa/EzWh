@@ -8,9 +8,9 @@ class SKUItemDAO {
         this.db = db;
     }
 
-    newSKUItem = async (RFID, sku) => {
-        const sql = 'INSERT INTO SKUItem(RFID, SKU) VALUES(?, ?)';
-        const result = await this.connectionDB.DBexecuteQuery(sql, [RFID, sku]);
+    newSKUItem = async (RFID, sku, dateOfStock) => {
+        const sql = 'INSERT INTO SKUItem(RFID, SKU, DateOfStock) VALUES(?, ?)';
+        const result = await this.connectionDB.DBexecuteQuery(sql, [RFID, sku, dateOfStock]);
         return result;
     };
 
@@ -78,10 +78,10 @@ class SKUItemDAO {
         }
     };
 
-    modifySKUItem = (newRFID, newsku, newDate, newTestResult) => {
-        let sql = "UPDATE SKUItem SET RFID = ?, SKU = ?, DateOfStock = ?, TestResult = ? WHERE RFID = ?";
-        const res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newsku, newDate, newTestResult]);
-        return res.lastID;
+    modifySKUItem = (rfid, newRFID, newDate, newAvilable) => {
+        let sql = "UPDATE SKUItem SET RFID = ?, DateOfStock = ?, Available = ? WHERE RFID = ?";
+        const res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newDate, newAvilable, rfid]);
+        return res.newRFID;
     }
 
     deleteSKUItem = (rfid) => {

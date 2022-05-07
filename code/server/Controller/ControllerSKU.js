@@ -1,7 +1,7 @@
 'use strict';
 const Warehouse =  require('../Model/Warehouse');
 const SKU = require('../Model/Sku');
-const { Position } = require('../Model/Position')
+const { Position } = require('../Model/Position');
 
 const validateCreateSKUjson = (body) => {
     if(body.description !== undefined || body.weight !== undefined || body.volume !== undefined || body.notes !== undefined 
