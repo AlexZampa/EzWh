@@ -3,10 +3,13 @@ const sqlite = require('sqlite3');
 
 
 class ConnectionDB{
-    dbName;
     db;
-
+    _counter;
     constructor(){
+        if (ConnectionDB._instance) {
+            return ConnectionDB._instance;
+        }
+        ConnectionDB._instance = this;
         this.db = new sqlite.Database('./Database/EzWhDatabase.db', (err) => { if (err) throw err; }); 
     }
 
@@ -51,9 +54,9 @@ class ConnectionDB{
             return new Promise((resolve, reject) => {
                 this.db.run(query, params, function(err) {
                     if (err)
-                    reject(err);
+                        reject(err);
                     else
-                    resolve({changes: this.changes, lastID: this.lastID});
+                        resolve({changes: this.changes, lastID: this.lastID});
                 });
             });
         } catch(err){
@@ -63,6 +66,7 @@ class ConnectionDB{
 
 }
 
-
+// Singleton class
+const connectionDB = new ConnectionDB();
 
 module.exports = ConnectionDB;

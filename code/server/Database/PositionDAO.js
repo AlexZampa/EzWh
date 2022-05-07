@@ -12,10 +12,12 @@ class PositionDAO{
 
     newPosition = async (positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid) => {
         try{
-            const sql = "INSERT INTO Position(positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            const res = await this.connectionDB.DBexecuteQuery(sql, [positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid]);
-            if(res.changes === 0)      // positionID not unique
+            let sql = "SELECT COUNT(*) AS num FROM Position WHERE positionID = ?";        // check if exists
+            let res = await this.connectionDB.DBget(sql, [positionID]);
+            if(res.num != 0)
                 throw {err : 422, msg : "positionID not unique"};
+            sql = "INSERT INTO Position(positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            res = await this.connectionDB.DBexecuteQuery(sql, [positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid]);
             return res.lastID;
         }
         catch(err){
@@ -77,7 +79,7 @@ class PositionDAO{
             sql = "DELETE FROM Position WHERE positionID = ?";
             res = await this.connectionDB.DBexecuteQuery(sql, [positionID]);
             if(res.changes === 0)      // positionID not found
-                throw {err : 404, msg : "Position not found"};
+                throw {err : 422, msg : "Position not found"};
             return res.changes;
         }
         catch(err){

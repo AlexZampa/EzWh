@@ -81,12 +81,9 @@ class SkuDAO{
             res = await this.connectionDB.DBget(sql, [skuID]);
             if(res.num !== 0)
                 throw {err : 422, msg : "Cannot delete SKU"};
-            sql = "SELECT COUNT(*) AS num FROM Position WHERE assignedSKUid = ?";    // check Position
-            res = await this.connectionDB.DBget(sql, [skuID]);
-            if(res.num !== 0)
-                throw {err : 422, msg : "Cannot delete SKU"};
+
             sql = "DELETE FROM SKU WHERE id = ?";
-            res = await this.connectionDB.DBexecuteQuery(sql, [skuID]);     // delete Position
+            res = await this.connectionDB.DBexecuteQuery(sql, [skuID]);     // delete SKU
             if(res.changes === 0)      // skuID not found
                 throw {err : 404, msg : "SKU not found"};
             return res.changes;

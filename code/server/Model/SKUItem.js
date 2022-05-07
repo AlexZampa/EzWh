@@ -19,3 +19,5 @@ class SKUItem {
     addTestResult = (testResult) => { this.testResults.concat([testResult]); };
 
 }
+
+module.exports = SKUItem;

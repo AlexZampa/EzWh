@@ -1,6 +1,6 @@
 "use strict"
 
-import {SKUItem} from './SKUItem';
+const SKUItem = require('./SKUItem');
 
 class InternalOrder{
     constructor(id, customer, issueDate){

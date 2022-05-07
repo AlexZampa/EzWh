@@ -97,7 +97,7 @@ class ControllerPosition{
         } catch(err){
             console.log(err);
             switch(err.err){
-                case 404: return res.status(404).json();
+                case 404: return res.status(422).json();    // response should be 404 but API.md require 422 in any case
                 case 422: return res.status(422).json();
                 default: return res.status(503).json();
             }

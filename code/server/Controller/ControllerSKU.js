@@ -4,11 +4,18 @@ const SKU = require('../Model/Sku');
 const { Position } = require('../Model/Position')
 
 const validateCreateSKUjson = (body) => {
-    if(body.description === undefined || body.weight === undefined || body.volume === undefined || body.notes === undefined 
-        || body.price === undefined || body.availableQuantity === undefined)
-        return false;
-    return true;
+    if(body.description !== undefined || body.weight !== undefined || body.volume !== undefined || body.notes !== undefined 
+        || body.price !== undefined || body.availableQuantity !== undefined)
+        return true;
+    return false;
 }
+
+const validateModifySKUjson = (body) => {
+    if(body.newDescription !== undefined && body.newWeight !== undefined && body.newVolume !== undefined && body.newNotes !== undefined
+        && body.newPrice !== undefined && body.newAvailableQuantity !== undefined)
+        return true;
+    return false;
+};
 
 class ControllerSKU{
     
@@ -64,13 +71,29 @@ class ControllerSKU{
         }
     };
 
+    modifySKU = async (req, res) => {
+        try {
+            if(validateModifySKUjson(req.body)){
+                const result = await this.warehouse.modifySKU(req.params.id, req.body.newDescription, req.body.newWeight, req.body.newVolume,
+                    req.body.newNotes, req.body.newPrice, req.body.newAvailableQuantity);
+                return res.status(200).json();
+            }
+            return res.status(422).json();
+        } catch (err) {
+            console.log(err);
+            switch(err.err){
+                case 404: return res.status(404).json();
+                case 422: return res.status(422).json();
+                default: return res.status(503).json();
+            }
+        }
+    };
+
     modifySKUposition = async (req, res) => {
         try{
             if(req.body.position === undefined)
                 return res.status(422).json();
             const result = await this.warehouse.modifySKUposition(req.params.id, req.body.position);
-            if(result === undefined)
-                return res.status(422).json();
             return res.status(200).json();
         } catch(err){
             console.log(err);
