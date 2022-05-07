@@ -148,10 +148,71 @@ class Warehouse{
 
     /**************** functions for managing SKUItem ***************/
     addSKUItem = async (rfid, skuID, dateOfStock) => {
-        const SKUObj = await this.skuDAO.getSKU(skuID);
-        if (Object.keys(SKUObj).length === 0)
-            return {};
-        const res = await this.skuItemDAO.newSKUItem(rfid, SKUObj, dateOfStock);
+        try {
+            const sku = await this.getSKU(skuID); 
+            const res = await this.skuItemDAO.newSKUItem(rfid, sku, dateOfStock);
+            return res;
+        }
+        catch (err) {
+            throw err;
+        }
+    };
+
+    getSKUItem = (rfid) => {
+        try {
+            const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            return skuItem;
+        }
+        catch (err) {
+            throw err;
+        }
+    };
+
+    getSKUItems = () => {
+        try {
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            return skuItemList;
+        }
+        catch (err) {
+            throw err;
+        }
+    };
+
+    getSKUItemsBySKUid = (skuID) => {
+        try {
+            const skuItemList = await this.SKUItemDAO.getSKUItems();
+            let skuItems = [];
+            skuItemList.forEach(skuItem => {
+                if (skuItem.getSKU().getID() === skuID) {
+                    skuItems.append(skuItem);
+                }
+            });
+            return skuItems;
+        }
+        catch (err) {
+            throw err;
+        }
+    };
+
+    modifySKUItem = (rfid, newRFID, newSKUID, newDate, newTestResult) => {
+        try {
+            const skuID = await this.skuItemDAO.getSKUItem(rfid);
+            const newsku = await this.getSKU(newSKUID);
+            const result = skuID.modifySKUItem(newRFID, newsku, newDate, newTestResult);
+            return result;
+        }
+        catch (err) {
+            throw err;
+        }
+    };
+
+    deleteSKUItem = (rfid) => {
+        try {
+            const res = await this.skuItemDAO.deleteSKUItem(rfid);
+        }
+        catch (err) {
+            throw err;
+        }
     };
 
     /*************** functions for managing Position ****************/
