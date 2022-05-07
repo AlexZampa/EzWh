@@ -25,13 +25,6 @@ class Warehouse{
         this.positionDAO = new PositionDAO();
     };
 
-    login = async (username, password) => {
-        const user = await this.userDAO.loginUser(username, password);
-        if(user !== undefined)
-            return {"id": user.getUserID(), "name": user.getName(), "surname": user.getSurname(), "email": user.getEmail(), "type": user.getType()};
-        return {};
-    };
-
     /*************** functions for managing SKU ***************/
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
         try{
@@ -127,7 +120,7 @@ class Warehouse{
         }
     };
 
-    getSKUItem = (rfid) => {
+    getSKUItem = async (rfid) => {
         try {
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             return skuItem;
@@ -137,7 +130,7 @@ class Warehouse{
         }
     };
 
-    getSKUItems = () => {
+    getSKUItems = async () => {
         try {
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
             return skuItemList;
@@ -147,7 +140,7 @@ class Warehouse{
         }
     };
 
-    getSKUItemsBySKUid = (skuID) => {
+    getSKUItemsBySKUid = async (skuID) => {
         try {
             const skuItemList = await this.SKUItemDAO.getSKUItems();
             let skuItems = [];
@@ -163,7 +156,7 @@ class Warehouse{
         }
     };
 
-    modifySKUItem = (rfid, newRFID, newDate, newAvailable) => {
+    modifySKUItem = async (rfid, newRFID, newDate, newAvailable) => {
         try {
             const result = this.skuItemDAO.modifySKUItem(rfid, newRFID, newDate, newAvailable);
             return result;
@@ -173,7 +166,7 @@ class Warehouse{
         }
     };
 
-    deleteSKUItem = (rfid) => {
+    deleteSKUItem = async (rfid) => {
         try {
             const res = await this.skuItemDAO.deleteSKUItem(rfid);
         }
@@ -285,6 +278,34 @@ class Warehouse{
         const res = await this.internalOrderDAO.deleteInternalOrder(ID);
         return res;
     };
+
+
+    /********* functions for managing Users **********/
+    addUser = async (username, name, surname, password, type) => {
+        try{
+            const userList = await this.userDAO.getAllUsers();
+            const alreadyExists = userList.some((user) => {
+                if(user.getEmail() === username && user.getType() === type)
+                    return true;
+                return false;
+            });
+        if(alreadyExists)
+            throw {err: 409, msg: "User already exists"};
+        const result = await this.userDAO.newUser(username, name, surname, password, type);
+        return result;
+        }
+        catch(err){
+            throw err;
+        }
+    };
+
+    login = async (username, password) => {
+        const user = await this.userDAO.loginUser(username, password);
+        if(user !== undefined)
+            return {"id": user.getUserID(), "name": user.getName(), "surname": user.getSurname(), "email": user.getEmail(), "type": user.getType()};
+        return {};
+    };
+
 
 }
 

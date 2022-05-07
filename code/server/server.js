@@ -69,6 +69,10 @@ app.post('/api/internalOrders', controllerInternalOrder.createInternalOrder);
 app.put('/api/internalOrders/:id', controllerInternalOrder.setIOStatus);
 app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 
+/**** USER ****/
+app.post('/api/managerSessions', controllerUser.loginManager);
+app.post('/api/newUser', controllerUser.createUser);
+
 
 // activate the server
 app.listen(port, () => {

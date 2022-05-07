@@ -14,6 +14,7 @@ class User {
     getName = () => this.name;
     getSurname = () => this.surname;
     getEmail = () => this.email;
+    getPassword = () => this.password;
     getType = () => this.type;
     
     setType = (type) => { this.type = type; }

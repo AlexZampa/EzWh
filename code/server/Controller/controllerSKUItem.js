@@ -34,7 +34,7 @@ class ControllerSKUItem {
         }
     };
 
-    getSKUs = async (req, res) => {
+    getSKUItems = async (req, res) => {
         try {
             const skuItemList = await this.warehouse.getSKUItems();
             const result = [];
