@@ -75,7 +75,7 @@ class PositionDAO{
             let sql = "SELECT COUNT(*) AS num FROM SKU WHERE position = ?";        // check SKU
             let res = await this.connectionDB.DBget(sql, [positionID]);
             if(res.num !== 0)
-                throw {err : 422, msg : "Cannot delete Position"};
+                throw {err : 422, msg : "Cannot delete: Position assigned to SKU"};
             sql = "DELETE FROM Position WHERE positionID = ?";
             res = await this.connectionDB.DBexecuteQuery(sql, [positionID]);
             if(res.changes === 0)      // positionID not found

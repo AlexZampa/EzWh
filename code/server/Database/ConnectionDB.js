@@ -4,7 +4,7 @@ const sqlite = require('sqlite3');
 
 class ConnectionDB{
     db;
-    _counter;
+    
     constructor(){
         if (ConnectionDB._instance) {
             return ConnectionDB._instance;
