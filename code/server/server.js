@@ -6,7 +6,6 @@ const ControllerSKUItem = require('./Controller/ControllerSKUItem');
 const ControllerPosition = require('./Controller/ControllerPosition');
 const ControllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
-const { application } = require('express');
 
 // init express
 const app = new express();
@@ -83,10 +82,17 @@ app.put('/api/internalOrders/:id', controllerInternalOrder.setIOStatus);
 app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 
 /**** USER ****/
-app.post('/api/managerSessions', controllerUser.loginManager);
-app.post('/api/newUser', controllerUser.createUser);
 app.get('/api/suppliers', controllerUser.getSuppliers);
 app.get('/api/users',  controllerUser.getUsers);
+app.post('/api/newUser', controllerUser.createUser);
+app.post('/api/managerSessions', controllerUser.loginManager);
+app.post('/api/customerSessions', controllerUser.loginCustomer);
+app.post('/api/supplierSessions', controllerUser.loginSupplier);
+app.post('/api/clerkSessions', controllerUser.loginClerk);
+app.post('/api/qualityEmployeeSessions', controllerUser.loginQualityEmployee);
+app.post('/api/deliveryEmployeeSessions', controllerUser.loginDeliveryEmployee);
+app.put('/api/users/:username', controllerUser.modifyUserRights);
+app.delete('/api/users/:username/:type', controllerUser.deleteUser);
 
 
 // activate the server

@@ -11,7 +11,7 @@ let id = 0;
 
 class RestockOrderDAO {
     constructor(db) {
-        this.db = db;
+        this.connectionDB = new ConnectionDB();
     }
 
     newRestockOrder = async (products, supplierID, issueDate) => {

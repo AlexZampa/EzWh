@@ -3,8 +3,8 @@ const UserDAO = require('../Database/UserDAO');
 const SkuDAO = require('../Database/SkuDAO');
 const SKUItemDAO = require('../Database/SKUItemDAO');
 const PositionDAO = require('../Database/PositionDAO');
-const RestockOrderDAO = rquire('../Database/RestockOrderDAO');
-const User = require('./User');
+const RestockOrderDAO = require('../Database/RestockOrderDAO');
+const { User } = require('./User');
 const SKU = require('./Sku');
 const { Position } = require('./Position');
 const SKUItem = require('./SKUItem');
@@ -326,8 +326,8 @@ class Warehouse{
     };
 
 
-    /********* functions for managing Users **********/
-    addUser = async (username, name, surname, password, type) => {
+     /********* functions for managing Users **********/
+     addUser = async (username, name, surname, password, type) => {
         try{
             const userList = await this.userDAO.getAllUsers();
             const alreadyExists = userList.some((user) => {
@@ -363,11 +363,31 @@ class Warehouse{
         }
     };
 
-    loginManager = async (username, password) => {
+    login = async (username, password, type) => {
         try{
-            const login = await this.userDAO.loginUser(username, password, "manager");
-            return login;
+            const user = await this.userDAO.loginUser(username, password, type);
+            return user;
         } catch(err){
+            throw err;
+        }
+    };
+
+    modifyUserRights = async (username, oldType, newType) => {
+        try {
+            const user = await this.userDAO.getUser(username, oldType);
+            const result = await this.userDAO.updateUser(username, oldType, newType);
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    
+    deleteUser = async (username, type) => {
+        try {
+            const result = await this.userDAO.deleteUser(username, type);
+            return result;
+        } catch (err) {
             throw err;
         }
     };

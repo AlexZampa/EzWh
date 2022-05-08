@@ -84,8 +84,6 @@ class SkuDAO{
 
             sql = "DELETE FROM SKU WHERE id = ?";
             res = await this.connectionDB.DBexecuteQuery(sql, [skuID]);     // delete SKU
-            if(res.changes === 0)      // skuID not found
-                throw {err : 404, msg : "SKU not found"};
             return res.changes;
         }
         catch(err){

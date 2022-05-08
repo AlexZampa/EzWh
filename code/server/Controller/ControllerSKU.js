@@ -1,7 +1,6 @@
 'use strict';
 const Warehouse =  require('../Model/Warehouse');
-const SKU = require('../Model/Sku');
-const { Position } = require('../Model/Position');
+
 
 const validateCreateSKUjson = (body) => {
     if(body.description !== undefined || body.weight !== undefined || body.volume !== undefined || body.notes !== undefined 
@@ -108,14 +107,13 @@ class ControllerSKU{
     deleteSKU = async (req, res) => {
         try{
             const result = await this.warehouse.deleteSKU(req.params.id);
-           
             return res.status(204).json();
             
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
             switch(err.err){
-                case 404: return res.status(404).json();
+                case 404: return res.status(424).json();      // should be 404 but API require only 422
                 case 422: return res.status(422).json();
                 default: return res.status(503).json();
             }
