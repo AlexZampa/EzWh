@@ -33,16 +33,44 @@ class ControllerUser{
     };
 
 
+    getSuppliers = async (req, res) => {
+        try {
+            const supplierList = await this.warehouse.getSuppliers();
+            const result = supplierList.map(u => u.convertToObj());
+            return res.status(200).json(result);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json();
+        }
+    };
+
+
+    getUsers = async (req, res) => {
+        try {
+            const userList = await this.warehouse.getUsers();
+            const result = userList.map(u => u.convertToObj());
+            return res.status(200).json(result);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json();
+        }
+    };
+
+
     loginManager = async (req, res) => {
         try{
-            const user = await this.warehouse.login(req.body.username, req.body.password);
-            if(Object.keys(user).length !== 0)
-                return res.status(200).json(user);
-            else
-                return res.status(401).json();
+            if(req.body.username !== undefined && req.body.password !== undefined){
+                const user = await this.warehouse.loginManager(req.body.username, req.body.password);
+                return res.status(200).json();
+            }
+            return res.status(401).json();
         }
         catch(err){
             console.log(err);
+            switch(err.err){
+                case 401: return res.status(401).json();
+                default: return res.status(500).json();
+            }
         }
     }
 

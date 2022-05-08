@@ -35,7 +35,6 @@ function hello(req, res) {
 	return res.status(200).json(message);
 }
 
-app.post('/api/managerSessions', controllerUser.loginManager);
 
 /**** SKU  ****/
 app.post('/api/sku', controllerSKU.createSKU);
@@ -72,6 +71,8 @@ app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrde
 /**** USER ****/
 app.post('/api/managerSessions', controllerUser.loginManager);
 app.post('/api/newUser', controllerUser.createUser);
+app.get('/api/suppliers', controllerUser.getSuppliers);
+app.get('/api/users',  controllerUser.getUsers);
 
 
 // activate the server

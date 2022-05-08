@@ -299,11 +299,31 @@ class Warehouse{
         }
     };
 
-    login = async (username, password) => {
-        const user = await this.userDAO.loginUser(username, password);
-        if(user !== undefined)
-            return {"id": user.getUserID(), "name": user.getName(), "surname": user.getSurname(), "email": user.getEmail(), "type": user.getType()};
-        return {};
+    getUsers = async () => {
+        try {
+            const userList = await this.userDAO.getAllUsers();
+            return userList.filter(u => u.getType() !== "manager");
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    getSuppliers = async () => {
+        try {
+            const supplierList = await this.userDAO.getAllUsersByType("supplier");
+            return supplierList;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    loginManager = async (username, password) => {
+        try{
+            const login = await this.userDAO.loginUser(username, password, "manager");
+            return login;
+        } catch(err){
+            throw err;
+        }
     };
 
 

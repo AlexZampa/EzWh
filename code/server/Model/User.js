@@ -19,6 +19,10 @@ class User {
     
     setType = (type) => { this.type = type; }
     
+    convertToObj = () => {
+        return ( { "id": this.userID, "name": this.name, "surname": this.surname, "email": this.email } );
+    };
+
 }
 
 
