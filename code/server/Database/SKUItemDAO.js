@@ -1,5 +1,6 @@
 'use strict';
 const sqlite = require('sqlite3');
+const SKUItem = require('../Model/SkuItem');
 const SKU = require('../Model/Sku');
 const ConnectionDB = require('./ConnectionDB');
 
