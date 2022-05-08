@@ -254,8 +254,8 @@ package "Model" #DDDDDD {
       getRestockOrder(restockOrderID) : RestockOrder
       getRestockOrders() : RestockOrder [ ]
       getRestockOrdersIssued() : RestockOrder [ ]
-      restockOrderSKUItems(restockOrderID, SKUItemIdList) : void
-      restockOrderTransportNote(restockOrderID, Date) : void
+      restockOrderAddSKUItems(restockOrderID, SKUItemIdList) : void
+      restockOrderAddTransportNote(restockOrderID, Date) : void
       modifyRestockOrderState(restockOrderID, newState) : void
       returnItemsFromRO(restockOrderID, notPassed : bool) : SKUItem[ ]
       deleteRestockOrder(restockOrderID) : void
@@ -426,7 +426,7 @@ package "Model" #DDDDDD {
     getTransportNote( ) : TransportNote
     getSKUitems( ) : SKUItem [ ]
     getSupplier( ) : User
-    addProduct(item, quantity) : void
+    addProduct(item, description, qty) : void
     addSKUItems(skuItemList) : void
     setState(newState) : void
     getSKUItemsFailedTest() : SKUItem[]
@@ -871,7 +871,7 @@ loop for each SKUItem
 end loop
 Clerk -> GUI : assigns SKUItem list to a RO
 GUI -> ControllerRestockOrder : PUT/api/restockOrder/:id/skuItems -> addSKUItems
-ControllerRestockOrder -> Warehouse : restockOrderSKUItems
+ControllerRestockOrder -> Warehouse : restockOrderAddSKUItems
 Warehouse -> Warehouse : getRestockOrder
 Warehouse -> RestockOrder : addSKUItems
 Warehouse <-- RestockOrder : return success

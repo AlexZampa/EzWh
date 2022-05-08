@@ -87,7 +87,7 @@ class ControllerSKUItem {
     modifySKUItem = async (req, res) => {
         try {
             if (validateModifySKUItemjson(req.body)) {
-                const result = await this.warehouse.modifySKUItem(req.params.RFID, req.body.getSKUItemByRFID, req.body.Available, req.body.DateOfStock);
+                const res = await this.warehouse.modifySKUItem(req.params.RFID, req.body.getSKUItemByRFID, req.body.Available, req.body.DateOfStock);
                 return res.status(200).json();
             }
             return res.status(422).json();
@@ -103,7 +103,7 @@ class ControllerSKUItem {
 
     deleteSKUItem = async (req, res) => {
         try {
-            const result = await this.warehouse.deleteSKUItem(req.params.rfid);
+            const res = await this.warehouse.deleteSKUItem(req.params.rfid);
 
             return res.status(204).json();
 

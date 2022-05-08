@@ -18,6 +18,13 @@ class SKUItem {
 
     addTestResult = (testResult) => { this.testResults.concat([testResult]); };
 
+    convertToObj = () => {
+        return (
+            {
+                "RFID": this.rfid, "SKUId": this.sku.getID(), "Available":this.available, "DateOfStock":this.dateOfStock
+            });
+    };
+
 }
 
 module.exports = SKUItem;

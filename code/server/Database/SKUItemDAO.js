@@ -30,12 +30,13 @@ class SKUItemDAO {
             const result = await this.connectionDB.DBgetAll(sql, [rfid]);
             sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
             const skuTests = await this.connectionDB.DBgetAll(sql, [result.id]);
-            const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, res.position ? res.position : undefined);
+            const sku = new SKU(result.id, result.description, result.weight, result.volume, result.notes, result.price, result.availableQuantity, result.position ? result.position : undefined);
             // modify new TestDescriptor when class completed
             skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
 
             /* Create new SKUItem */
             const skuItem = new SKUItem(res.RFID, sku);
+            skuItem.setAvailable(res.available);
             testResults.forEach(t => { skuItem.addTestResult(new TestResult(t.id)); });
             return skuItem;
         }
@@ -52,30 +53,29 @@ class SKUItemDAO {
             if (res === undefined)
                 throw { err: 404, msg: "SKUItem not found" };
             const skuItemList = result.map(r => new SKUItem(r.rfid, 0));
-        /*  FOREACH NON FUNZIONA CON AWAIT E ASYNC DEVI FARE CLASSICO FOR
-            skuItemList.forEach(s => {
+            for(const s of skuItemList){
                 // move to class TestResultDAO
                 sql = "SELECT * FROM TestResult WHERE RFID = ?";
                 const testResults = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-        */       
+        
                 /* Create new SKU */
-        /*
+        
                 sql = "SELECT * FROM SKU WHERE RFID = ?";
                 const result = await this.connectionDB.DBgetAll(sql, [s.rfid]);
                 sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
                 const skuTests = await this.connectionDB.DBgetAll(sql, [result.id]);
-                const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, res.position ? res.position : undefined);
+                const sku = new SKU(result.id, result.description, result.weight, result.volume, result.notes, result.price, result.availableQuantity, result.position ? result.position : undefined);
                 // modify new TestDescriptor when class completed
                 skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
-        */
+        
                 /* Create new SKUItem */
-        /*
+        
                 const skuItem = new SKUItem(res.RFID, sku);
                 testResults.forEach(t => { skuItem.addTestResult(new TestResult(t.id)); });
 
                 skuItems.append(skuItem);
-            });
-        */
+            }
+        
             return skuItems;
         }
         catch (err) {
@@ -87,7 +87,7 @@ class SKUItemDAO {
         let sql = "UPDATE SKUItem SET RFID = ?, DateOfStock = ?, Available = ? WHERE RFID = ?";
         const res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newDate, newAvilable, rfid]);
         return res.newRFID;
-    }
+    };
 
     deleteSKUItem = async (rfid) => {
         try {
@@ -110,7 +110,7 @@ class SKUItemDAO {
         catch (err) {
             throw err;
         }
-    }
+    };
 
 }
 

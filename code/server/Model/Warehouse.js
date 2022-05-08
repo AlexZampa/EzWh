@@ -3,6 +3,7 @@ const UserDAO = require('../Database/UserDAO');
 const SkuDAO = require('../Database/SkuDAO');
 const SKUItemDAO = require('../Database/SKUItemDAO');
 const PositionDAO = require('../Database/PositionDAO');
+const RestockOrderDAO = rquire('../Database/RestockOrderDAO');
 const User = require('./User');
 const SKU = require('./Sku');
 const { Position } = require('./Position');
@@ -23,6 +24,7 @@ class Warehouse{
         this.skuDAO = new SkuDAO();
         this.skuItemDAO = new SKUItemDAO();
         this.positionDAO = new PositionDAO();
+        this.restockOrderDAO = new RestockOrderDAO();
     };
 
     /*************** functions for managing SKU ***************/
@@ -237,6 +239,50 @@ class Warehouse{
         }
     };
 
+    /********* functions for managing Restock Order ***********/
+    addRestockOrder = async (products, supplierID, issueDate) => {
+        const res = await this.restockOrderDAO.newRestockOrder(products, supplierID, issueDate);
+        return res;
+    }
+
+    getRestockOrder = async (restockOrderID) => {
+        const res = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+        return res;
+    }
+
+    getRestockOrders = async () => {
+        const res = await this.restockOrderDAO.getRestockOrders();
+        return res;
+    }
+
+    getRestockOrdersIssued = async () => {
+        const res = await this.restockOrderDAO.getRestockOrdersIssued();
+        return res;
+    }
+
+    restockOrderAddSKUItems = async (restockOrderID, SKUItemIdList) => {
+        const res = await this.restockOrderDAO.addSKUItems(restockOrderID, SKUItemIdList);
+        return res;
+    }
+
+    restockOrderAddTransportNote = async (restockOrderID, date) => {
+        const res = await this.restockOrderDAO.addTransportNote(restockOrderID, date);
+        return res;
+    }
+
+    modifyRestockOrderState = async (restockOrderID, newState) => {
+        const res = await this.restockOrderDAO.modifyState(restockOrderID, newState);
+        return res;
+    }
+
+    returnItemsFromRestockOrder = async (restockOrderID, notPassed) => {
+        const res = await this.restockOrderDAO.returnItems(restockOrderID, notPassed);
+        return res;
+    }
+
+    deleteRestockOrder = async (restockOrderID) => {
+        const res = await this.restockOrderDAO.deleteRestockOrder(restockOrderID);
+    }
 
     /********* functions for managing Internal Order **********/
     addInternalOrder = async (products, customerId, issueDate) => {
