@@ -35,7 +35,7 @@ class ControllerRestockOrder {
     createRestockOrder = async (req, res) => {
         try {
             if (validateCreateRestockOrderjson(req.body)) {
-                await this.warehouse.addRestockOrder(req.body.products, req.body.supplierId);
+                await this.warehouse.addRestockOrder(req.body.products, req.body.supplierId, req.body.issueDate);
                 return res.status(201).json();
             }
             else

@@ -1,7 +1,11 @@
+'use strict';
+
 class RestockOrder {
-    constructor(id, products, supplierID, issueDate) {
+    constructor(id, issueDate, supplierID, products=undefined) {
         this.supplierID = supplierID;
-        for (prod in products) {
+        if(products === undefined)
+            this.products = [];
+        for (prod of products) {
             this.addProduct(prod.SKUId, prod.description, prod.price, prod.qty);
         }
         this.issueDate = issueDate;
@@ -96,3 +100,5 @@ class Product {
             });
     };
 } 
+
+module.exports = { RestockOrder, TransportNote, Product};

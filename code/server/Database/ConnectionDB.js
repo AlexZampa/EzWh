@@ -18,14 +18,18 @@ class ConnectionDB{
      * @return only the first row of the result
     */ 
     DBget(query, params) {
-        return new Promise((resolve, reject) => {
-            this.db.get(query, params, (err, row) => {
-                if (err)
+        try{
+            return new Promise((resolve, reject) => {
+                this.db.get(query, params, (err, row) => {
+                    if (err)
                     reject(err);
-                else
+                    else
                     resolve(row);
-            })
-        });
+                })
+            });
+        } catch(err){
+            throw err;
+        }
     }
 
     /** 
@@ -33,15 +37,19 @@ class ConnectionDB{
      * @return all the rows as a list
     */ 
     DBgetAll(query, params){
-        return new Promise((resolve, reject) => {
-            this.db.all(query, params, (err, rows) => {
-                if (err)
+        try{
+            return new Promise((resolve, reject) => {
+                this.db.all(query, params, (err, rows) => {
+                    if (err)
                     reject(err);
-                else{
-                    resolve(rows);
-                }
-            })
-        });
+                    else{
+                        resolve(rows);
+                    }
+                })
+            });
+        } catch(err){
+            throw err;
+        }
     }
 
     /** 

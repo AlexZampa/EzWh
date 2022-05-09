@@ -7,7 +7,15 @@ const TestDescriptor = require('../Model/TestDescriptor');
 const TestResult = require('../Model/TestResult');
 const ConnectionDB = require('./ConnectionDB');
 
-let id = 0;
+let id = 0;     // the Table RestockOrder can be created with PRIMARY KEY id with AUTOINCREMENT, so it is not necessary to use id
+                // just INSERT without using any id
+
+/**
+ * TABLE (possible solution)
+ * RestockOrder (id, supplierID, issueDate, state, transportNote)  id with AUTOINCREMENT
+ * RestockOrderProduct (restockOrderID, skuID, description, price, quantity)  -->  primary key are restockOrderID e skuID
+ * SKUitem (....., restockOrderID)  NULL when not needed
+ */
 
 class RestockOrderDAO {
     constructor(db) {
@@ -15,13 +23,15 @@ class RestockOrderDAO {
     }
 
     newRestockOrder = async (products, supplierID, issueDate) => {
-        const sql = 'INSERT INTO RestockOrder(ID, SupplierID, IssueDate) VALUES(?, ?, ?, ?)';
+        // sql with 4 params but only 3 are passed, why? (id not necessary --> look above)
+        const sql = 'INSERT INTO RestockOrder(id, supplierID, issueDate) VALUES(?, ?, ?, ?)';
         const result = await this.connectionDB.DBexecuteQuery(sql, [id, supplierID, issueDate]);
-        sql = "INSERT INTO RestockOrderProduct(RestockOrder, SKUID, description, price, qty) VALUES(?, ?, ?)"
+        // sql with 5 params but only 3/4 are passed, why? (id not necessary --> look above)
+        sql = "INSERT INTO RestockOrderProduct(RestockOrder, skuID, description, price, qty) VALUES(?, ?, ?)"
         for (const prod of products) {
             this.connectionDB.DBexecuteQuery(sql, [id, prod.SKUId, prod.description, prod.price, prod.qty]);
         }
-        id += 1;
+        id += 1;    // not necessary
         return result;
     };
 
@@ -65,7 +75,7 @@ class RestockOrderDAO {
             const tn = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
             const transportNote = new TransportNote(tn.Date);
 
-            sql = "SELECT * FROM RestockOrderProducts WHERE ID = ?";
+            sql = "SELECT * FROM RestockOrderProduct WHERE ID = ?";
             const products = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
             
             const restockOrder = new RestockOrder(res.ID, res.supplierID, [], res.IssueDate);
@@ -84,16 +94,16 @@ class RestockOrderDAO {
     getRestockOrders = async () => {
         try {
             let sql = "SELECT * FROM RestockOrder";
-            const res = await this.connectionDB.DBget(sql, []);
-            if (res === undefined)
-                throw { err: 404, msg: "RestockOrder not found" };
+            const res = await this.connectionDB.DBgetAll(sql, []);
+            // if (res === undefined)
+            //     throw { err: 404, msg: "RestockOrder not found" };
 
-            const restockOrderList = result.map(r => new RestockOrder(r.ID, 0, 0, r.IssueDate));
+            const restockOrderList = result.map(r => new RestockOrder(r.id, r.issueDate, r.supplierID));
             let restockOrders = [];
-            for (const ro of restockOrderList) {
+            for(const ro of restockOrderList) {
                 // move to class SKUItem
                 sql = "SELECT * FROM SKUItem WHERE ID = ?";
-                const result = await this.connectionDB.DBgetAll(sql, [ro.ID]);
+                const result = await this.connectionDB.DBget(sql, [ro.getID()]);
 
                 /* Create new SKUItem */
                 const skuItemList = result.map(r => new SKUItem(r.rfid, 0));
@@ -146,9 +156,9 @@ class RestockOrderDAO {
     getRestockOrdersIssued = async () => {
         try {
             let sql = "SELECT * FROM RestockOrder";
-            const res = await this.connectionDB.DBget(sql, []);
-            if (res === undefined)
-                throw { err: 404, msg: "RestockOrder not found" };
+            const res = await this.connectionDB.DBgetAll(sql, []);
+            // if (res === undefined)
+            //     throw { err: 404, msg: "RestockOrder not found" };
 
             const restockOrderList = result.map(r => new RestockOrder(r.ID, 0, 0, r.IssueDate));
             let restockOrders = [];
