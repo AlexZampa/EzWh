@@ -23,11 +23,9 @@ class RestockOrderDAO {
     }
 
     newRestockOrder = async (products, supplierID, issueDate) => {
-        // sql with 4 params but only 3 are passed, why? (id not necessary --> look above)
-        const sql = 'INSERT INTO RestockOrder(id, supplierID, issueDate) VALUES(?, ?, ?, ?)';
+        const sql = 'INSERT INTO RestockOrder(id, supplierID, issueDate) VALUES(?, ?, ?)';
         const result = await this.connectionDB.DBexecuteQuery(sql, [id, supplierID, issueDate]);
-        // sql with 5 params but only 3/4 are passed, why? (id not necessary --> look above)
-        sql = "INSERT INTO RestockOrderProduct(RestockOrder, skuID, description, price, qty) VALUES(?, ?, ?)"
+        sql = "INSERT INTO RestockOrderProduct(RestockOrder, skuID, description, price, qty) VALUES(?, ?, ?, ?, ?)"
         for (const prod of products) {
             this.connectionDB.DBexecuteQuery(sql, [id, prod.SKUId, prod.description, prod.price, prod.qty]);
         }
