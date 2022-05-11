@@ -1,12 +1,15 @@
 'use strict';
 const dayjs = require('dayjs');
 
+const stateList = ["ISSUED", "DELIVERY", "DELIVERED", "TESTED", "COMPLETEDRETURN", "COMPLETED"];
+
 class RestockOrder {
-    constructor(id, issueDate, supplierID, transportNote=undefined) {
+    constructor(id, issueDate, supplierID, state, transportNote=undefined) {
         this.id = id;
         this.issueDate = dayjs(issueDate);
         this.supplierID = supplierID;
         this.transportNote = transportNote ? new TransportNote(transportNote) : undefined;
+        this.state = state;
         this.products = [];
         this.skuItems = [];
     }
@@ -15,7 +18,10 @@ class RestockOrder {
     getIssueDate = () => { return this.issueDate; };
     getProducts = () => { return this.products; };
     getState = () => { return this.state; };
-    getTransportNote = () => { return this.TransportNote.getShipmentDate() };
+    getTransportNote = () => { 
+        const transportNote = this.transportNote ? this.transportNote.getShipmentDate() : undefined
+        return transportNote;
+    };
     getSKUItems = () => { return this.SKUItems; };
     getSupplier = () => { return this.supplier; };
 
@@ -31,14 +37,11 @@ class RestockOrder {
     }
     
     setState = (newState) => {
-        if (newState === "ISSUED" || newState === "DELIVERY"
-            || newState === "DELIVERED" || newState === "TESTED"
-            || newState === "COMPLETEDRETURN" || newState === "COMPLETED") {
+        if(stateList.find(state => state === newState))
             this.state = newState;
-        }
-        if (newState === "DELIVERY") {
+        
+        if (newState === "DELIVERY") 
             this.transportNote = new TransportNote();
-        }
     }
 
     getSKUItemsFailedTest = () => {
@@ -51,22 +54,14 @@ class RestockOrder {
     }
 
     convertToObj = () => {
-        return (
-            {
-                "id": this.id, "issueDate": this.issueDate.format('YYYY-MM-DD HH:mm'), "state": this.state, "products": this.products.map(p => p.convertToObj()),
-                "supplierId": this.supplierID, "transportNote": this.transportNote ? this.transportNote.convertToObj() : "", 
-                "skuItems": this.skuItems.map(s => { 
-                    console.log(s);
-                    return {"SKUId" : s.getSKU(), "rfid" : s.getRFID()}; })
-            });
-    };
-
-    convertToObjIssued = () => {
-        return (
-            {
-                "id": this.id, "issueDate": this.issueDate, "state": this.state, "products": this.products.convertToObj(),
-                "supplierId": this.supplierID, "skuItems": []
-            });
+        const obj = { "id": this.id, "issueDate": this.issueDate.format('YYYY-MM-DD HH:mm'), "state": this.state, 
+            "products": this.products.map(p => p.convertToObj()), 
+            "supplierId": this.supplierID, "transportNote": this.transportNote ? this.transportNote.convertToObj() : "", 
+            "skuItems": this.skuItems.map(s => { return {"SKUId" : s.getSKU(), "rfid" : s.getRFID()}; })
+        }
+        if(this.state === "ISSUED")
+            delete obj.transportNote;
+        return (obj);
     };
 
 }
@@ -77,7 +72,7 @@ class TransportNote {
     };
 
     getShipmentDate = () => {
-        return this.dateDelivery;
+        return this.dateDelivery.format('YYYY-MM-DD HH:mm');
     };
     
     convertToObj = () => {
@@ -98,4 +93,5 @@ class Product {
     };
 } 
 
-module.exports = { RestockOrder, TransportNote, Product};
+
+module.exports = { RestockOrder, TransportNote, Product, stateList};

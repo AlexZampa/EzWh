@@ -1,6 +1,6 @@
 'use strict';
 const Warehouse = require('../Model/Warehouse');
-const RestockOrder = require('../Model/RestockOrder');
+const {RestockOrder, stateList} = require('../Model/RestockOrder');
 
 const validateCreateRestockOrderjson = (body) => {
     if (body.issueDate !== undefined || body.products !== undefined || body.supplierId !== undefined)
@@ -9,14 +9,13 @@ const validateCreateRestockOrderjson = (body) => {
 }
 
 const validateTransportNotejson = (body) => {
-    if (body.transportNote !== undefined)
+    if (body.transportNote !== undefined && body.transportNote.deliveryDate !== undefined)
         return true;
     return false;
 };
 
 const validateStateRestockOrderjson = (body) => {
-    if (body.newState === "ISSUED" || body.newState === "DELIVERY" || body.newState === "DELIVERED" ||
-        body.newState === "TESTED" || body.newState === "COMPLETEDRETURN" || body.newState === "COMPLETED")
+    if (body.newState !== undefined && stateList.find(state => state === body.newState))
         return true;
     return false;
 };
@@ -66,12 +65,10 @@ class ControllerRestockOrder {
 
     getRestockOrdersIssued = async (req, res) => {
         try {
-            const restockOrder = await this.warehouse.getRestockOrdersIssued();
-            if (restockOrder !== undefined) {
-                const result = restockOrder.convertToObjIssued();
-                return res.status(200).json(result);
-            }
-            return res.status(404).end();
+            const RestockOrderList = await this.warehouse.getRestockOrdersIssued();
+            const result = [];
+            RestockOrderList.forEach(restockOrder => { result.push(restockOrder.convertToObj()); });
+            return res.status(200).json(result);
             // check if user authorized otherwise: return res.status(401).json({});
         } catch (err) {
             console.log(err);
@@ -87,6 +84,7 @@ class ControllerRestockOrder {
             const restockOrder = await this.warehouse.getRestockOrder(req.params.id);
             if (restockOrder !== undefined) {
                 const result = restockOrder.convertToObj();
+                delete result.id;
                 return res.status(200).json(result);
             }
             return res.status(404).end();
@@ -121,7 +119,7 @@ class ControllerRestockOrder {
     modifyState = async (req, res) => {
         try {
             if (validateStateRestockOrderjson(req.body)) {
-                const res = await this.warehouse.modifyRestockOrderState(req.params.RFID, req.body.newState);
+                const result = await this.warehouse.modifyRestockOrderState(req.params.id, req.body.newState);
                 return res.status(200).end();
             }
             return res.status(422).end();
@@ -138,7 +136,7 @@ class ControllerRestockOrder {
     addSKUItems = async (req, res) => {
         try {
             if (validateAddSKUItems(req.body)) {
-                const res = await this.warehouse.restockOrderAddSKUItems(req.params.id, req.body.skuItems);
+                const result = await this.warehouse.restockOrderAddSKUItems(req.params.id, req.body.skuItems);
                 return res.status(200).end();
             }
             return res.status(422).end();
@@ -155,7 +153,7 @@ class ControllerRestockOrder {
     addTransportNote = async (req, res) => {
         try {
             if (validateTransportNotejson(req.body)) {
-                const res = await this.warehouse.restockOrderAddTransportNote(req.params.id, req.body.transportNote);
+                const result = await this.warehouse.restockOrderAddTransportNote(req.params.id, req.body.transportNote.deliveryDate);
                 return res.status(200).end();
             }
             return res.status(422).end();

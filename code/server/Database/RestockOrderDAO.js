@@ -39,7 +39,9 @@ class RestockOrderDAO {
         try{
             let sql = "SELECT * FROM RestockOrder WHERE id = ?";
             const res = await this.connectionDB.DBget(sql, [restockOrderID]);
-            const restockOrder = new RestockOrder(res.id, res.issueDate, res.supplierID, res.transportNote ? res.transportNote : undefined);
+            if(res === undefined)
+                throw {err : 404, msg : "Restock Order not found"};
+            const restockOrder = new RestockOrder(res.id, res.issueDate, res.supplierID, res.state, res.transportNote ? res.transportNote : undefined);
             sql = "SELECT * FROM RestockOrderProduct WHERE restockOrderID = ?";
             const products = await this.connectionDB.DBgetAll(sql, [restockOrder.getID()]);
             products.forEach(p => restockOrder.addProduct(p.skuID, p.description, p.price, p.quantity));
@@ -54,7 +56,7 @@ class RestockOrderDAO {
         try {
             let sql = "SELECT * FROM RestockOrder";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const restockOrderList = result.map(r => new RestockOrder(r.id, r.issueDate, r.supplierID, r.transportNote ? r.transportNote : undefined));
+            const restockOrderList = result.map(r => new RestockOrder(r.id, r.issueDate, r.supplierID, r.state ,r.transportNote ? r.transportNote : undefined));
             sql = "SELECT * FROM RestockOrderProduct WHERE restockOrderID = ?";
             for(const ro of restockOrderList){
                 const products = await this.connectionDB.DBgetAll(sql, [ro.getID()]);
@@ -67,53 +69,18 @@ class RestockOrderDAO {
         }
     };
 
-    getRestockOrdersIssued = async () => {
-        try {
-            let sql = "SELECT * FROM RestockOrder";
-            const res = await this.connectionDB.DBgetAll(sql, []);
-            // if (res === undefined)
-            //     throw { err: 404, msg: "RestockOrder not found" };
-
-            const restockOrderList = result.map(r => new RestockOrder(r.ID, 0, 0, r.IssueDate));
-            let restockOrders = [];
-            for (const ro of restockOrderList) {
-                if (ro.State !== "ISSUED") {
-                    // move to class SKUItem
-                    let skuItems = [];
-
-                    sql = "SELECT * FROM RestockOrderProducts WHERE ID = ?";
-                    const products = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
-
-                    const restockOrder = new RestockOrder(res.ID, res.supplierID, [], res.IssueDate);
-                    products.forEach(t => { restockOrder.addProduct(t.SKUId, t.description, t.price, t.qty); });
-                    restockOrder.addSKUItems(skuItems);
-                    restockOrder.modifyState(ro.State);
-                    restockOrders.append(restockOrder);
-                }
-            }
-            return restockOrders;
-        }
-        catch (err) {
-            throw err;
-        }
+    updateRestockOrder = async (restockOrderID, newState, transportNote=undefined) => {
+        let sql = "UPDATE RestockOrder SET state = ?, transportNote = ? WHERE id = ?";
+        const res = await this.connectionDB.DBexecuteQuery(sql, [newState, transportNote ? transportNote : null, restockOrderID]);
+        return true;
     };
 
     addSKUItems = async (restockOrderID, SKUItemIdList) => {
-
-    };
-
-    addTransportNote = async (restockOrderID, date) => {
-        let sql = 'INSERT INTO TransportNote(restockOrder, Date) VALUES(?, ?)';
-        const result = await this.connectionDB.DBexecuteQuery(sql, [restockOrderID, date]);
-        sql = "UPDATE RestockOrder SET TransportNote = ? WHERE ID = ?";
-        const res = await this.connectionDB.DBexecuteQuery(sql, [result, restockOrderID]);
-        return res.newRFID;
-    };
-
-    modifyState = async (restockOrderID, newState) => {
-        let sql = "UPDATE RestockOrder SET State = ? WHERE ID = ?";
-        const res = await this.connectionDB.DBexecuteQuery(sql, [newState, restockOrderID]);
-        return true;
+        try {
+           // TODO in skuItemDAO
+        } catch (err) {
+            throw err;
+        }
     };
 
     returnItems = async (restockOrderID, notPassed) => {

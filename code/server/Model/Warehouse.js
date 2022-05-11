@@ -1,4 +1,5 @@
 'use strict';
+const dayjs = require('dayjs');
 const UserDAO = require('../Database/UserDAO');
 const SkuDAO = require('../Database/SkuDAO');
 const SKUItemDAO = require('../Database/SKUItemDAO');
@@ -274,23 +275,58 @@ class Warehouse{
     }
 
     getRestockOrdersIssued = async () => {
-        const res = await this.restockOrderDAO.getRestockOrdersIssued();
-        return res;
+        try{
+            let restockOrderList = await this.restockOrderDAO.getRestockOrders();
+            restockOrderList = restockOrderList.filter(ro => ro.getState() === "ISSUED");
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            restockOrderList.forEach(ro => {
+                const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === ro.getID());
+                ro.setSKUItems(skuItemsOfRO);
+            });
+            return restockOrderList;
+        } catch(err){
+            throw err;
+        }
     }
 
     restockOrderAddSKUItems = async (restockOrderID, SKUItemIdList) => {
-        const res = await this.restockOrderDAO.addSKUItems(restockOrderID, SKUItemIdList);
-        return res;
+        try{
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            if(restockOrder.getState !== "DELIVERED")
+                throw {err: 422, msg: "Restock Order not in DELIVERY state"};
+            const skuItemList = [];
+            for(const s of SKUItemIdList){
+                const skuItem = await this.skuItemDAO.getSKUItem(s.rfid);
+                if(s.SKUId !== skuItem.getSKU())
+                    throw {err: 422, msg: "Invalid SKUItem"};
+                skuItemList.push(skuItem);
+            }
+            // TODO
+            const res = await this.restockOrderDAO.addSKUItems(restockOrderID, skuItemList);
+            return res;
+        } catch(err){
+            throw err;
+        }
     }
 
     restockOrderAddTransportNote = async (restockOrderID, date) => {
-        const res = await this.restockOrderDAO.addTransportNote(restockOrderID, date);
-        return res;
+        try{
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY-MM-DD HH:mm'));
+            return res;
+        } catch(err){
+            throw err;
+        }
     }
 
     modifyRestockOrderState = async (restockOrderID, newState) => {
-        const res = await this.restockOrderDAO.modifyState(restockOrderID, newState);
-        return res;
+        try{
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, newState, restockOrder.getTransportNote());
+            return res;
+        } catch(err){
+            throw err;
+        }
     }
 
     returnItemsFromRestockOrder = async (restockOrderID, notPassed) => {
