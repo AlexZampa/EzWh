@@ -27,14 +27,14 @@ class ControllerSKU{
             if(validateCreateSKUjson(req.body)){
                 await this.warehouse.addSKU(req.body.description, req.body.weight, req.body.volume, 
                     req.body.notes, req.body.price, req.body.availableQuantity);
-                return res.status(201).json();
+                return res.status(201).end();
             }
             else
-                return res.status(422).json();
+                return res.status(422).end();
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
-            return res.status(503).json();
+            return res.status(503).end();
         }
     };  
 
@@ -48,7 +48,7 @@ class ControllerSKU{
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
-            return res.status(500).json();
+            return res.status(500).end();
         }
     };
 
@@ -59,13 +59,13 @@ class ControllerSKU{
                 const result = sku.convertToObj();
                 return res.status(200).json(result);
             }
-            return res.status(404).json();
+            return res.status(404).end();
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
             switch(err.err){
-                case 404: return res.status(404).json();
-                default: return res.status(500).json();
+                case 404: return res.status(404).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -75,15 +75,15 @@ class ControllerSKU{
             if(validateModifySKUjson(req.body)){
                 const result = await this.warehouse.modifySKU(req.params.id, req.body.newDescription, req.body.newWeight, req.body.newVolume,
                     req.body.newNotes, req.body.newPrice, req.body.newAvailableQuantity);
-                return res.status(200).json();
+                return res.status(200).end();
             }
-            return res.status(422).json();
+            return res.status(422).end();
         } catch (err) {
             console.log(err);
             switch(err.err){
-                case 404: return res.status(404).json();
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };
@@ -91,15 +91,15 @@ class ControllerSKU{
     modifySKUposition = async (req, res) => {
         try{
             if(req.body.position === undefined)
-                return res.status(422).json();
+                return res.status(422).end();
             const result = await this.warehouse.modifySKUposition(req.params.id, req.body.position);
-            return res.status(200).json();
+            return res.status(200).end();
         } catch(err){
             console.log(err);
             switch(err.err){
-                case 404: return res.status(404).json();
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };
@@ -107,15 +107,15 @@ class ControllerSKU{
     deleteSKU = async (req, res) => {
         try{
             const result = await this.warehouse.deleteSKU(req.params.id);
-            return res.status(204).json();
+            return res.status(204).end();
             
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
             switch(err.err){
-                case 404: return res.status(424).json();      // should be 404 but API require only 422
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(424).end();      // should be 404 but API require only 422
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };

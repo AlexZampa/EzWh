@@ -20,15 +20,15 @@ class ControllerUser{
         try {
             if(validateCreateUserJson(req.body) && userTypes.find(type => type === req.body.type)){
                 const result = await this.warehouse.addUser(req.body.username, req.body.name, req.body.surname, req.body.password, req.body.type);
-                return res.status(201).json();
+                return res.status(201).end();
             }
-            return res.status(422).json();
+            return res.status(422).end();
         } catch (err) {
             console.log(err);
             switch(err.err){
-                case 409: return res.status(409).json();
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 409: return res.status(409).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };
@@ -41,7 +41,7 @@ class ControllerUser{
             return res.status(200).json(result);
         } catch (err) {
             console.log(err);
-            return res.status(500).json();
+            return res.status(500).end();
         }
     };
 
@@ -53,7 +53,7 @@ class ControllerUser{
             return res.status(200).json(result);
         } catch (err) {
             console.log(err);
-            return res.status(500).json();
+            return res.status(500).end();
         }
     };
 
@@ -65,13 +65,13 @@ class ControllerUser{
                 const result = user.getUserInfo();
                 return res.status(200).json(result);
             }
-            return res.status(401).json();
+            return res.status(401).end();
         }
         catch(err){
             console.log(err);
             switch(err.err){
-                case 401: return res.status(401).json();
-                default: return res.status(500).json();
+                case 401: return res.status(401).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -83,13 +83,13 @@ class ControllerUser{
                 const result = user.getUserInfo();
                 return res.status(200).json(result);
             }
-            return res.status(401).json();
+            return res.status(401).end();
         }
         catch(err){
             console.log(err);
             switch(err.err){
-                case 401: return res.status(401).json();
-                default: return res.status(500).json();
+                case 401: return res.status(401).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -101,13 +101,13 @@ class ControllerUser{
                 const result = user.getUserInfo();
                 return res.status(200).json(result);
             }
-            return res.status(401).json();
+            return res.status(401).end();
         }
         catch(err){
             console.log(err);
             switch(err.err){
-                case 401: return res.status(401).json();
-                default: return res.status(500).json();
+                case 401: return res.status(401).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -119,13 +119,13 @@ class ControllerUser{
                 const result = user.getUserInfo();
                 return res.status(200).json(result);
             }
-            return res.status(401).json();
+            return res.status(401).end();
         }
         catch(err){
             console.log(err);
             switch(err.err){
-                case 401: return res.status(401).json();
-                default: return res.status(500).json();
+                case 401: return res.status(401).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -137,13 +137,13 @@ class ControllerUser{
                 const result = user.getUserInfo();
                 return res.status(200).json(result);
             }
-            return res.status(401).json();
+            return res.status(401).end();
         }
         catch(err){
             console.log(err);
             switch(err.err){
-                case 401: return res.status(401).json();
-                default: return res.status(500).json();
+                case 401: return res.status(401).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -156,13 +156,13 @@ class ControllerUser{
                 const result = user.getUserInfo();
                 return res.status(200).json(result);
             }
-            return res.status(401).json();
+            return res.status(401).end();
         }
         catch(err){
             console.log(err);
             switch(err.err){
-                case 401: return res.status(401).json();
-                default: return res.status(500).json();
+                case 401: return res.status(401).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -174,13 +174,13 @@ class ControllerUser{
                 const result = await this.warehouse.modifyUserRights(req.params.username, req.body.oldType, req.body.newType);
                 return res.status(200).json(result);
             }
-            return res.status(422).json();
+            return res.status(422).end();
         } catch (err) {
             console.log(err);
             switch(err.err){
-                case 404: return res.status(404).json();   
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(404).end();   
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }    
     };
@@ -190,15 +190,15 @@ class ControllerUser{
         try {
             if(req.params.type !== "manager" && req.params.type !== "administrator"){
                 const result = await this.warehouse.deleteUser(req.params.username, req.params.type);
-                return res.status(200).json();
+                return res.status(204).end();
             }
-            return res.status(422).json();
+            return res.status(422).end();
         } catch (err) {
             console.log(err);
             switch(err.err){
-                case 404: return res.status(422).json();   // not specified in the API (choose 200 or 422)
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(422).end();   // not specified in the API
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };

@@ -241,18 +241,36 @@ class Warehouse{
 
     /********* functions for managing Restock Order ***********/
     addRestockOrder = async (products, supplierID, issueDate) => {
+        for(const prod of products){
+            await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
+        }
         const res = await this.restockOrderDAO.newRestockOrder(products, supplierID, issueDate);
         return res;
     }
 
     getRestockOrder = async (restockOrderID) => {
-        const res = await this.restockOrderDAO.getRestockOrder(restockOrderID);
-        return res;
+        try{
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            restockOrder.setSKUItems(skuItemList.filter(s => s.getRestockOrder() === restockOrder.getID()));
+            return restockOrder;
+        } catch(err){
+            throw err;
+        }
     }
 
     getRestockOrders = async () => {
-        const res = await this.restockOrderDAO.getRestockOrders();
-        return res;
+        try{
+            const restockOrderList = await this.restockOrderDAO.getRestockOrders();
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            restockOrderList.forEach(ro => {
+                const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === ro.getID());
+                ro.setSKUItems(skuItemsOfRO);
+            });
+            return restockOrderList;
+        } catch(err){
+            throw err;
+        }
     }
 
     getRestockOrdersIssued = async () => {

@@ -23,14 +23,14 @@ class ControllerSKUItem {
         try {
             if (validateCreateSKUItemjson(req.body)) {
                 await this.warehouse.addSKUItem(req.body.RFID, req.body.SKUId, req.body.DateOfStock);
-                return res.status(201).json();
+                return res.status(201).end();
             }
             else
-                return res.status(422).json();
+                return res.status(422).end();
             // check if user authorized otherwise: return res.status(401).json({});
         } catch (err) {
             console.log(err);
-            return res.status(503).json();
+            return res.status(503).end();
         }
     };
 
@@ -44,7 +44,7 @@ class ControllerSKUItem {
             // check if user authorized otherwise: return res.status(401).json({});
         } catch (err) {
             console.log(err);
-            return res.status(500).json();
+            return res.status(500).end();
         }
     };
 
@@ -55,13 +55,13 @@ class ControllerSKUItem {
                 const result = skuItem.convertToObj();
                 return res.status(200).json(result);
             }
-            return res.status(404).json();
+            return res.status(404).end();
             // check if user authorized otherwise: return res.status(401).json({});
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                default: return res.status(500).json();
+                case 404: return res.status(404).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -73,13 +73,13 @@ class ControllerSKUItem {
                 const result = skuItem.convertToObj();
                 return res.status(200).json(result);
             }
-            return res.status(404).json();
+            return res.status(404).end();
             // check if user authorized otherwise: return res.status(401).json({});
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                default: return res.status(500).json();
+                case 404: return res.status(404).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -88,15 +88,15 @@ class ControllerSKUItem {
         try {
             if (validateModifySKUItemjson(req.body)) {
                 const res = await this.warehouse.modifySKUItem(req.params.RFID, req.body.getSKUItemByRFID, req.body.Available, req.body.DateOfStock);
-                return res.status(200).json();
+                return res.status(200).end();
             }
-            return res.status(422).json();
+            return res.status(422).end();
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };
@@ -105,15 +105,15 @@ class ControllerSKUItem {
         try {
             const res = await this.warehouse.deleteSKUItem(req.params.rfid);
 
-            return res.status(204).json();
+            return res.status(204).end();
 
             // check if user authorized otherwise: return res.status(401).json({});
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };

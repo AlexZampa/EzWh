@@ -1,14 +1,11 @@
 'use strict';
 const sqlite = require('sqlite3');
-const RestockOrder = require('../Model/RestockOrder');
+const {RestockOrder} = require('../Model/RestockOrder');
 const SKUItem = require('../Model/SKUItem');
 const SKU = require('../Model/SKU');
 const TestDescriptor = require('../Model/TestDescriptor');
 const TestResult = require('../Model/TestResult');
 const ConnectionDB = require('./ConnectionDB');
-
-let id = 0;     // the Table RestockOrder can be created with PRIMARY KEY id with AUTOINCREMENT, so it is not necessary to use id
-                // just INSERT without using any id
 
 /**
  * TABLE (possible solution)
@@ -23,65 +20,29 @@ class RestockOrderDAO {
     }
 
     newRestockOrder = async (products, supplierID, issueDate) => {
-        const sql = 'INSERT INTO RestockOrder(id, supplierID, issueDate) VALUES(?, ?, ?)';
-        const result = await this.connectionDB.DBexecuteQuery(sql, [id, supplierID, issueDate]);
-        sql = "INSERT INTO RestockOrderProduct(RestockOrder, skuID, description, price, qty) VALUES(?, ?, ?, ?, ?)"
-        for (const prod of products) {
-            this.connectionDB.DBexecuteQuery(sql, [id, prod.SKUId, prod.description, prod.price, prod.qty]);
+        try{
+            let sql = 'INSERT INTO RestockOrder(supplierID, state, issueDate) VALUES(?, "ISSUED", ?)';
+            const result = await this.connectionDB.DBexecuteQuery(sql, [supplierID, issueDate]);
+            sql = "INSERT INTO RestockOrderProduct(RestockOrderID, skuID, description, price, quantity) VALUES(?, ?, ?, ?, ?)";
+            for(const prod of products) {
+                // result.lastID = RestockOrderID
+                this.connectionDB.DBexecuteQuery(sql, [result.lastID, prod.SKUId, prod.description, prod.price, prod.qty]);
+            }
+            return result;
+        } catch(err){
+            throw err;
         }
-        id += 1;    // not necessary
-        return result;
+        
     };
 
     getRestockOrder = async (restockOrderID) => {
-        try {
-            let sql = "SELECT * FROM RestockOrder WHERE ID = ?";
+        try{
+            let sql = "SELECT * FROM RestockOrder WHERE id = ?";
             const res = await this.connectionDB.DBget(sql, [restockOrderID]);
-            if (res === undefined)
-                throw { err: 404, msg: "RestockOrder not found" };
-            // move to class SKUItem
-            sql = "SELECT * FROM SKUItem WHERE ID = ?";
-            const result = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
-
-            /* Create new SKUItem */
-            const skuItemList = result.map(r => new SKUItem(r.rfid, 0));
-            let skuItems = [];
-            for (const s of skuItemList) {
-                // move to class TestResultDAO
-                sql = "SELECT * FROM TestResult WHERE RFID = ?";
-                const testResults = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-
-                /* Create new SKU */
-
-                sql = "SELECT * FROM SKU WHERE RFID = ?";
-                const result = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-                sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
-                const skuTests = await this.connectionDB.DBgetAll(sql, [result.id]);
-                const sku = new SKU(result.id, result.description, result.weight, result.volume, result.notes, result.price, result.availableQuantity, result.position ? result.position : undefined);
-                // modify new TestDescriptor when class completed
-                skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
-
-                /* Create new SKUItem */
-                const skuItem = new SKUItem(res.RFID, sku);
-                skuItem.setAvailable(res.available);
-                testResults.forEach(t => { skuItem.addTestResult(new TestResult(t.id, t.testDescriptor, t.date, t.result)); });
-
-                skuItems.append(skuItem);
-            }
-
-            sql = "SELECT * FROM TransportNote WHERE ID = ?";
-            const tn = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
-            const transportNote = new TransportNote(tn.Date);
-
-            sql = "SELECT * FROM RestockOrderProduct WHERE ID = ?";
-            const products = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
-            
-            const restockOrder = new RestockOrder(res.ID, res.supplierID, [], res.IssueDate);
-            products.forEach(t => { restockOrder.addProduct(t.SKUId,t.description, t.price, t.qty); });
-            restockOrder.addSKUItems(skuItems);
-            restockOrder.addTransportNote(transportNote);
-            restockOrder.modifyState(res.State);
-
+            const restockOrder = new RestockOrder(res.id, res.issueDate, res.supplierID, res.transportNote ? res.transportNote : undefined);
+            sql = "SELECT * FROM RestockOrderProduct WHERE restockOrderID = ?";
+            const products = await this.connectionDB.DBgetAll(sql, [restockOrder.getID()]);
+            products.forEach(p => restockOrder.addProduct(p.skuID, p.description, p.price, p.quantity));
             return restockOrder;
         }
         catch (err) {
@@ -92,59 +53,14 @@ class RestockOrderDAO {
     getRestockOrders = async () => {
         try {
             let sql = "SELECT * FROM RestockOrder";
-            const res = await this.connectionDB.DBgetAll(sql, []);
-            // if (res === undefined)
-            //     throw { err: 404, msg: "RestockOrder not found" };
-
-            const restockOrderList = result.map(r => new RestockOrder(r.id, r.issueDate, r.supplierID));
-            let restockOrders = [];
-            for(const ro of restockOrderList) {
-                // move to class SKUItem
-                sql = "SELECT * FROM SKUItem WHERE ID = ?";
-                const result = await this.connectionDB.DBget(sql, [ro.getID()]);
-
-                /* Create new SKUItem */
-                const skuItemList = result.map(r => new SKUItem(r.rfid, 0));
-                let skuItems = [];
-                for (const s of skuItemList) {
-                    // move to class TestResultDAO
-                    sql = "SELECT * FROM TestResult WHERE RFID = ?";
-                    const testResults = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-
-                    /* Create new SKU */
-
-                    sql = "SELECT * FROM SKU WHERE RFID = ?";
-                    const result = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-                    sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
-                    const skuTests = await this.connectionDB.DBgetAll(sql, [result.id]);
-                    const sku = new SKU(result.id, result.description, result.weight, result.volume, result.notes, result.price, result.availableQuantity, result.position ? result.position : undefined);
-                    // modify new TestDescriptor when class completed
-                    skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
-
-                    /* Create new SKUItem */
-
-                    const skuItem = new SKUItem(res.RFID, sku);
-                    skuItem.setAvailable(res.available);
-                    testResults.forEach(t => { skuItem.addTestResult(new TestResult(t.id, t.testDescriptor, t.date, t.result)); });
-
-                    skuItems.append(skuItem);
-                }
-
-                sql = "SELECT * FROM TransportNote WHERE ID = ?";
-                const tn = await this.connectionDB.DBgetAll(sql, [ro.ID]);
-                const transportNote = new TransportNote(tn.Date);
-
-                sql = "SELECT * FROM RestockOrderProducts WHERE ID = ?";
-                const products = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
-
-                const restockOrder = new RestockOrder(res.ID, res.supplierID, [], res.IssueDate);
-                products.forEach(t => { restockOrder.addProduct(t.SKUId, t.description, t.price, t.qty); });
-                restockOrder.addSKUItems(skuItems);
-                restockOrder.addTransportNote(transportNote);
-                restockOrder.modifyState(ro.State);
-                restockOrders.append(restockOrder);
+            const result = await this.connectionDB.DBgetAll(sql, []);
+            const restockOrderList = result.map(r => new RestockOrder(r.id, r.issueDate, r.supplierID, r.transportNote ? r.transportNote : undefined));
+            sql = "SELECT * FROM RestockOrderProduct WHERE restockOrderID = ?";
+            for(const ro of restockOrderList){
+                const products = await this.connectionDB.DBgetAll(sql, [ro.getID()]);
+                products.forEach(p => ro.addProduct(p.skuID, p.description, p.price, p.quantity));
             }
-            return restockOrders;
+            return restockOrderList;
         }
         catch (err) {
             throw err;

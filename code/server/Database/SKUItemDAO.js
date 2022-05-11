@@ -6,7 +6,7 @@ const ConnectionDB = require('./ConnectionDB');
 
 class SKUItemDAO {
     constructor(db) {
-        this.db = db;
+        this.connectionDB = new ConnectionDB();
     }
 
     newSKUItem = async (RFID, sku, dateOfStock) => {
@@ -47,36 +47,10 @@ class SKUItemDAO {
 
     getAllSKUItems = async () => {
         try {
-            let skuItems = [];
             let sql = "SELECT * FROM SKUItem";
-            const res = await this.connectionDB.DBget(sql, []);
-            if (res === undefined)
-                throw { err: 404, msg: "SKUItem not found" };
-            const skuItemList = result.map(r => new SKUItem(r.rfid, 0));
-            for(const s of skuItemList){
-                // move to class TestResultDAO
-                sql = "SELECT * FROM TestResult WHERE RFID = ?";
-                const testResults = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-        
-                /* Create new SKU */
-        
-                sql = "SELECT * FROM SKU WHERE RFID = ?";
-                const result = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-                sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
-                const skuTests = await this.connectionDB.DBgetAll(sql, [result.id]);
-                const sku = new SKU(result.id, result.description, result.weight, result.volume, result.notes, result.price, result.availableQuantity, result.position ? result.position : undefined);
-                // modify new TestDescriptor when class completed
-                skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
-        
-                /* Create new SKUItem */
-        
-                const skuItem = new SKUItem(res.RFID, sku);
-                testResults.forEach(t => { skuItem.addTestResult(new TestResult(t.id)); });
-
-                skuItems.append(skuItem);
-            }
-        
-            return skuItems;
+            const result = await this.connectionDB.DBgetAll(sql, []);
+            const skuItemList = result.map(r => new SKUItem(r.rfid, r.SKUid, 0, r.dateOfStock ? r.dateOfStock : undefined, r.restockOrderID ? r.restockOrderID : undefined ));
+            return skuItemList;
         }
         catch (err) {
             throw err;
