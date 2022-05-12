@@ -7,7 +7,7 @@ const ConnectionDB = require('./ConnectionDB');
 class SKUItemDAO {
     constructor(db) {
         this.connectionDB = new ConnectionDB();
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "SKUitem" ("rfid" TEXT NOT NULL UNIQUE, "SKUid" INTEGER NOT NULL, "available" INTEGER NOT NULL, "dateOfStock" TEXT, "restockOrderID"	INTEGER, PRIMARY KEY("rfid"));');
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "SKUitem" ("rfid" TEXT NOT NULL UNIQUE, "SKUid" INTEGER NOT NULL, "available" INTEGER NOT NULL, "dateOfStock" TEXT, "restockOrderID" INTEGER, PRIMARY KEY("rfid"));');
     }
 
     newSKUItem = async (RFID, sku, available, dateOfStock, restockOrder=null) => {
@@ -46,7 +46,7 @@ class SKUItemDAO {
         }
     };
 
-    updateSKUItem = async (oldRFID, newRFID, newAvailable, newDate) => {
+    updateSKUItem = async (oldRFID, newRFID, newAvailable, newDate, restockOrderID) => {
         try{
             if(oldRFID !== newRFID){
                 let sql = "SELECT COUNT(*) AS num FROM SKUItem WHERE rfid = ?";
@@ -54,8 +54,8 @@ class SKUItemDAO {
                 if(res.num > 0)
                     throw {err : 422, msg : "RFID not unique"};
             }
-            let sql = "UPDATE SKUItem SET rfid = ?, available = ?, dateOfStock = ? WHERE rfid = ?";
-            let res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newAvailable, newDate, oldRFID]);
+            let sql = "UPDATE SKUItem SET rfid = ?, available = ?, dateOfStock = ?, restockOrderID = ? WHERE rfid = ?";
+            let res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newAvailable, newDate, restockOrderID ? restockOrderID : null, oldRFID]);
             return res.lastID;      
         } catch (err) {
             throw err;

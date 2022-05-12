@@ -66,60 +66,11 @@ class RestockOrderDAO {
     };
 
     updateRestockOrder = async (restockOrderID, newState, transportNote=undefined) => {
-        let sql = "UPDATE RestockOrder SET state = ?, transportNote = ? WHERE id = ?";
-        const res = await this.connectionDB.DBexecuteQuery(sql, [newState, transportNote ? transportNote : null, restockOrderID]);
-        return true;
-    };
-
-    addSKUItems = async (restockOrderID, SKUItemIdList) => {
-        try {
-           // TODO in skuItemDAO
-        } catch (err) {
-            throw err;
-        }
-    };
-
-    returnItems = async (restockOrderID, notPassed) => {
-        try {
-            let sql = "SELECT * FROM RestockOrder WHERE ID = ?";
-            const res = await this.connectionDB.DBget(sql, [restockOrderID]);
-            if (res === undefined)
-                throw { err: 404, msg: "RestockOrder not found" };
-            // move to class SKUItem
-            sql = "SELECT * FROM SKUItem WHERE ID = ?";
-            const result = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
-
-            /* Create new SKUItem */
-            const skuItemList = result.map(r => new SKUItem(r.rfid, 0));
-            let skuItems = [];
-            for (const s of skuItemList) {
-                // move to class TestResultDAO
-                sql = "SELECT * FROM TestResult WHERE RFID = ?";
-                const testResults = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-
-                /* Create new SKU */
-
-                sql = "SELECT * FROM SKU WHERE RFID = ?";
-                const result = await this.connectionDB.DBgetAll(sql, [s.rfid]);
-                sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
-                const skuTests = await this.connectionDB.DBgetAll(sql, [result.id]);
-                const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, res.position ? res.position : undefined);
-                // modify new TestDescriptor when class completed
-                skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
-
-                /* Create new SKUItem */
-
-                const skuItem = new SKUItem(res.RFID, sku);
-                skuItem.setAvailable(res.available);
-                testResults.forEach(t => { skuItem.addTestResult(new TestResult(t.id)); });
-
-                if ((skuItem.testResult.result === true && notPassed === true) || notPassed === false) {
-                    skuItems.append(skuItem);
-                }
-            }
-            return skuItems;
-        }
-        catch (err) {
+        try{
+            let sql = "UPDATE RestockOrder SET state = ?, transportNote = ? WHERE id = ?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [newState, transportNote ? transportNote : null, restockOrderID]);
+            return true;
+        } catch(err) {
             throw err;
         }
     };
@@ -127,23 +78,16 @@ class RestockOrderDAO {
     deleteRestockOrder = async (restockOrderID) => {
         try {
             // check consistency of the DB 
-            let sql = "SELECT COUNT(*) AS num FROM SKUItem WHERE ID = ?";        
+            let sql = "SELECT COUNT(*) AS num FROM SKUItem WHERE restockOrderID = ?";     // check SKUItems   
             let res = await this.connectionDB.DBget(sql, [restockOrderID]);
             if (res.num !== 0)
-                throw { err: 422, msg: "Cannot delete SKUItem" };
+                throw { err: 422, msg: "Cannot delete Restock Order" };
             
-            sql = "DELETE FROM TransportNote WHERE ID = ?";     
-            res = await this.connectionDB.DBget(sql, [restockOrderID]);
-            if (res.changes === 0)
-                throw { err: 404, msg: "TransportNote not found" };
-            
-            sql = "DELETE FROM RestockOrderProduct WHERE ID = ?";     
-            res = await this.connectionDB.DBget(sql, [restockOrderID]);
-            if (res.changes === 0)
-                throw { err: 404, msg: "RestockOrderProduct not found" };
+            sql = "DELETE FROM RestockOrderProduct WHERE restockOrderID = ?";     // delete product
+            res = await this.connectionDB.DBexecuteQuery(sql, [restockOrderID]);
             
             sql = "DELETE FROM RestockOrder WHERE id = ?";
-            res = await this.connectionDB.DBexecuteQuery(sql, [restockOrderID]);    
+            res = await this.connectionDB.DBexecuteQuery(sql, [restockOrderID]);    // delete Restock Order
             if (res.changes === 0)     
                 throw { err: 404, msg: "RestockOrder not found" };
             return res.changes;

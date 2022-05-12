@@ -54,7 +54,7 @@ class RestockOrder {
     }
 
     convertToObj = () => {
-        const obj = { "id": this.id, "issueDate": this.issueDate.format('YYYY-MM-DD HH:mm'), "state": this.state, 
+        const obj = { "id": this.id, "issueDate": this.issueDate.format('YYYY/MM/DD HH:mm'), "state": this.state, 
             "products": this.products.map(p => p.convertToObj()), 
             "supplierId": this.supplierID, "transportNote": this.transportNote ? this.transportNote.convertToObj() : "", 
             "skuItems": this.skuItems.map(s => { return {"SKUId" : s.getSKU(), "rfid" : s.getRFID()}; })
@@ -72,11 +72,11 @@ class TransportNote {
     };
 
     getShipmentDate = () => {
-        return this.dateDelivery.format('YYYY-MM-DD HH:mm');
+        return this.dateDelivery.format('YYYY/MM/DD HH:mm');
     };
     
     convertToObj = () => {
-        return ( { "deliveryDate": this.dateDelivery.format('YYYY-MM-DD HH:mm') } );
+        return ( { "deliveryDate": this.dateDelivery.format('YYYY/MM/DD HH:mm') } );
     };
 }
 

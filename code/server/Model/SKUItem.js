@@ -12,6 +12,7 @@ class SKUItem {
 
     getRFID = () => this.RFID;
     getSKU = () => this.sku;
+    getAvailable = () => this.available;
     getDateOfStock = () => this.dateOfStock.format('YYYY/MM/DD HH:mm');
     getRestockOrder = () => this.restockOrder;
     

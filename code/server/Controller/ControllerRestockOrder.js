@@ -44,6 +44,7 @@ class ControllerRestockOrder {
             console.log(err);
             switch(err.err){
                 case 404: return res.status(422).end();        // skuID of a product does not exists
+                case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
         }
@@ -169,15 +170,12 @@ class ControllerRestockOrder {
 
     deleteRestockOrder = async (req, res) => {
         try {
-            const res = await this.warehouse.deleteRestockOrder(req.params.id);
-
+            const result = await this.warehouse.deleteRestockOrder(req.params.id);
             return res.status(204).end();
-
-            // check if user authorized otherwise: return res.status(401).json({});
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).end();
+                case 404: return res.status(422).end();     // API requires 422 in any case
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
