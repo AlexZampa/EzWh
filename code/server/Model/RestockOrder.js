@@ -61,6 +61,8 @@ class RestockOrder {
         }
         if(this.state === "ISSUED")
             delete obj.transportNote;
+        if(this.state === "ISSUED" || this.state === "DELIVERY")
+            obj.products = [];
         return (obj);
     };
 

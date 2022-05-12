@@ -1,5 +1,6 @@
 'use strict';
 const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat');
 const UserDAO = require('../Database/UserDAO');
 const SkuDAO = require('../Database/SkuDAO');
 const SKUItemDAO = require('../Database/SKUItemDAO');
@@ -13,9 +14,10 @@ const RestockOrder = require("./RestockOrder");
 const ReturnOrder = require("./ReturnOrder");
 const InternalOrder = require("./InternalOrder");
 
+dayjs.extend(customParseFormat);
 
 class Warehouse{
-
+    
     constructor() {
         if (Warehouse._instance) {
             return Warehouse._instance;
@@ -114,6 +116,8 @@ class Warehouse{
     /**************** functions for managing SKUItem ***************/
     addSKUItem = async (rfid, skuID, dateOfStock) => {
         try{
+            if(!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
+                throw {err : 422, msg : "Invalid Date"};
             const sku = await this.getSKU(skuID); 
             const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock);
             return res;
@@ -153,7 +157,7 @@ class Warehouse{
         try {
             const sku =  await this.skuDAO.getSKU(skuID);
             let skuItems = await this.skuItemDAO.getAllSKUItems();
-            skuItems = skuItems.filter(s => s.getSKU() === skuID);
+            skuItems = skuItems.filter(s => s.getSKU() === skuID && s.getAvailable() === 1);
             skuItems.forEach(s => s.setSKU(sku));
             return skuItems;
         }
@@ -164,6 +168,8 @@ class Warehouse{
 
     modifySKUItem = async (rfid, newRFID, newAvailable, newDate) => {
         try {
+            if(!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid() || newDate === null))
+                throw {err : 422, msg : "Invalid Date"};
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const result = this.skuItemDAO.updateSKUItem(rfid, newRFID, newAvailable, newDate ? newDate : skuItem.getDateOfStock(), skuItem.getRestockOrder());
             return result;
@@ -246,11 +252,13 @@ class Warehouse{
 
     /********* functions for managing Restock Order ***********/
     addRestockOrder = async (products, supplierID, issueDate) => {
+        if(!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
+            throw {err : 422, msg : "Invalid Date"};
         for(const prod of products){
             await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
         }
         const users = await this.userDAO.getAllUsers();
-        if(!users.find(u => u.getUserID() === supplierID))
+        if(!users.find(u => u.getUserID() === supplierID && u.getType() === "supplier"))
             throw {err : 422, msg : "Supplier Not Found" };
         const res = await this.restockOrderDAO.newRestockOrder(products, supplierID, issueDate);
         return res;
@@ -322,6 +330,8 @@ class Warehouse{
 
     restockOrderAddTransportNote = async (restockOrderID, date) => {
         try{
+            if(!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
+                throw {err : 422, msg : "Invalid Date"};
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
             const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY-MM-DD HH:mm'));
             return res;
