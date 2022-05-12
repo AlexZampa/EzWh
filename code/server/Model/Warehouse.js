@@ -113,9 +113,9 @@ class Warehouse{
 
     /**************** functions for managing SKUItem ***************/
     addSKUItem = async (rfid, skuID, dateOfStock) => {
-        try {
+        try{
             const sku = await this.getSKU(skuID); 
-            const res = await this.skuItemDAO.newSKUItem(rfid, sku, dateOfStock);
+            const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock);
             return res;
         }
         catch (err) {
@@ -126,6 +126,8 @@ class Warehouse{
     getSKUItem = async (rfid) => {
         try {
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            const sku = await this.skuDAO.getSKU(skuItem.getSKU());
+            skuItem.setSKU(sku);
             return skuItem;
         }
         catch (err) {
@@ -134,8 +136,12 @@ class Warehouse{
     };
 
     getSKUItems = async () => {
-        try {
+        try{
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            for(const skuItem of skuItemList){
+                const sku = await this.skuDAO.getSKU(skuItem.getSKU());
+                skuItem.setSKU(sku);
+            }
             return skuItemList;
         }
         catch (err) {
@@ -145,13 +151,10 @@ class Warehouse{
 
     getSKUItemsBySKUid = async (skuID) => {
         try {
-            const skuItemList = await this.SKUItemDAO.getSKUItems();
-            let skuItems = [];
-            skuItemList.forEach(skuItem => {
-                if (skuItem.getSKU().getID() === skuID && skuItem.isAvailable()) {
-                    skuItems.append(skuItem);
-                }
-            });
+            const sku =  await this.skuDAO.getSKU(skuID);
+            let skuItems = await this.skuItemDAO.getAllSKUItems();
+            skuItems = skuItems.filter(s => s.getSKU() === skuID);
+            skuItems.forEach(s => s.setSKU(sku));
             return skuItems;
         }
         catch (err) {
@@ -159,9 +162,11 @@ class Warehouse{
         }
     };
 
-    modifySKUItem = async (rfid, newRFID, newDate, newAvailable) => {
+    modifySKUItem = async (rfid, newRFID, newAvailable, newDate) => {
         try {
-            const result = this.skuItemDAO.modifySKUItem(rfid, newRFID, newDate, newAvailable);
+            const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            console.log(newDate);
+            const result = this.skuItemDAO.updateSKUItem(rfid, newRFID, newAvailable, newDate ? newDate : skuItem.getDateOfStock());
             return result;
         }
         catch (err) {

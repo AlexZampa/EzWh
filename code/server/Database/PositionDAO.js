@@ -8,6 +8,7 @@ class PositionDAO{
 
     constructor(){
         this.connectionDB = new ConnectionDB();
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "Position" ("positionID" TEXT NOT NULL UNIQUE, "aisle" TEXT NOT NULL, "row" TEXT NOT NULL, "col" TEXT NOT NULL, "maxWeight" NUMERIC NOT NULL, "maxVolume" NUMERIC NOT NULL, "occupiedWeight" NUMERIC NOT NULL, "occupiedVolume" NUMERIC NOT NULL, "assignedSKUid" INTEGER, PRIMARY KEY("positionID"));');
     };
 
     newPosition = async (positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid) => {

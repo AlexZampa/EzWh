@@ -7,16 +7,12 @@ const TestDescriptor = require('../Model/TestDescriptor');
 const TestResult = require('../Model/TestResult');
 const ConnectionDB = require('./ConnectionDB');
 
-/**
- * TABLE (possible solution)
- * RestockOrder (id, supplierID, issueDate, state, transportNote)  id with AUTOINCREMENT
- * RestockOrderProduct (restockOrderID, skuID, description, price, quantity)  -->  primary key are restockOrderID e skuID
- * SKUitem (....., restockOrderID)  NULL when not needed
- */
 
 class RestockOrderDAO {
     constructor(db) {
         this.connectionDB = new ConnectionDB();
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "skuID" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","skuID"));');
     }
 
     newRestockOrder = async (products, supplierID, issueDate) => {

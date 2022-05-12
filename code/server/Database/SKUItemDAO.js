@@ -7,37 +7,26 @@ const ConnectionDB = require('./ConnectionDB');
 class SKUItemDAO {
     constructor(db) {
         this.connectionDB = new ConnectionDB();
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "SKUitem" ("rfid" TEXT NOT NULL UNIQUE, "SKUid" INTEGER NOT NULL, "available" INTEGER NOT NULL, "dateOfStock" TEXT, "restockOrderID"	INTEGER, PRIMARY KEY("rfid"));');
     }
 
-    newSKUItem = async (RFID, sku, dateOfStock) => {
-        const sql = 'INSERT INTO SKUItem(RFID, SKU, DateOfStock) VALUES(?, ?)';
-        const result = await this.connectionDB.DBexecuteQuery(sql, [RFID, sku, dateOfStock]);
-        return result;
+    newSKUItem = async (RFID, sku, available, dateOfStock, restockOrder=null) => {
+        let sql = "SELECT COUNT(*) AS num FROM SKUItem WHERE rfid = ?";        // check if exists
+        let res = await this.connectionDB.DBget(sql, [RFID]);
+        if(res.num != 0)
+            throw {err : 422, msg : "SKUItem not unique"};
+        sql = 'INSERT INTO SKUItem(rfid, SKUid, available, dateOfStock, restockOrderID) VALUES(?, ?, ?, ?, ?)';
+        res = await this.connectionDB.DBexecuteQuery(sql, [RFID, sku, available, dateOfStock, restockOrder]);
+        return res;
     };
 
     getSKUItem = async (rfid) => {
         try {
-            let sql = "SELECT * FROM SKUItem WHERE RFID = ?";
+            let sql = "SELECT * FROM SKUItem WHERE rfid = ?";
             const res = await this.connectionDB.DBget(sql, [rfid]);
-            if (res === undefined)
-                throw { err: 404, msg: "SKUItem not found" };
-            // move to class TestResultDAO
-            sql = "SELECT * FROM TestResult WHERE RFID = ?";
-            const testResults = await this.connectionDB.DBgetAll(sql, [rfid]);
-
-            /* Create new SKU */
-            sql = "SELECT * FROM SKU WHERE RFID = ?";
-            const result = await this.connectionDB.DBgetAll(sql, [rfid]);
-            sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
-            const skuTests = await this.connectionDB.DBgetAll(sql, [result.id]);
-            const sku = new SKU(result.id, result.description, result.weight, result.volume, result.notes, result.price, result.availableQuantity, result.position ? result.position : undefined);
-            // modify new TestDescriptor when class completed
-            skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
-
-            /* Create new SKUItem */
-            const skuItem = new SKUItem(res.RFID, sku);
-            skuItem.setAvailable(res.available);
-            testResults.forEach(t => { skuItem.addTestResult(new TestResult(t.id)); });
+            if(res === undefined)
+                throw {err : 404, msg : "SKUItem not found"};
+            const skuItem = new SKUItem(res.rfid, res.SKUid, res.available, res.dateOfStock ? res.dateOfStock : undefined, res.restockOrderID ? res.restockOrderID : undefined );
             return skuItem;
         }
         catch (err) {
@@ -46,10 +35,10 @@ class SKUItemDAO {
     };
 
     getAllSKUItems = async () => {
-        try {
+        try{
             let sql = "SELECT * FROM SKUItem";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const skuItemList = result.map(r => new SKUItem(r.rfid, r.SKUid, 0, r.dateOfStock ? r.dateOfStock : undefined, r.restockOrderID ? r.restockOrderID : undefined ));
+            const skuItemList = result.map(r => new SKUItem(r.rfid, r.SKUid, r.available, r.dateOfStock ? r.dateOfStock : undefined, r.restockOrderID ? r.restockOrderID : undefined ));
             return skuItemList;
         }
         catch (err) {
@@ -57,27 +46,40 @@ class SKUItemDAO {
         }
     };
 
-    modifySKUItem = async (rfid, newRFID, newDate, newAvilable) => {
-        let sql = "UPDATE SKUItem SET RFID = ?, DateOfStock = ?, Available = ? WHERE RFID = ?";
-        const res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newDate, newAvilable, rfid]);
-        return res.newRFID;
+    updateSKUItem = async (oldRFID, newRFID, newAvailable, newDate) => {
+        try{
+            if(oldRFID !== newRFID){
+                let sql = "SELECT COUNT(*) AS num FROM SKUItem WHERE rfid = ?";
+                let res = await this.connectionDB.DBget(sql, [newRFID]);
+                if(res.num > 0)
+                    throw {err : 422, msg : "RFID not unique"};
+            }
+            let sql = "UPDATE SKUItem SET rfid = ?, available = ?, dateOfStock = ? WHERE rfid = ?";
+            let res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newAvailable, newDate, oldRFID]);
+            return res.lastID;      
+        } catch (err) {
+            throw err;
+        }
     };
 
     deleteSKUItem = async (rfid) => {
         try {
-            // check consistency of the DB 
-            let sql = "SELECT COUNT(*) AS num FROM SKU WHERE RFID = ?";        // check SKU
+        /*
+            letsql = "SELECT COUNT(*) AS num FROM TestResult WHERE RFID = ?";     // check TestResult
             let res = await this.connectionDB.DBget(sql, [rfid]);
             if (res.num !== 0)
                 throw { err: 422, msg: "Cannot delete SKUItem" };
-            sql = "SELECT COUNT(*) AS num FROM TestResult WHERE RFID = ?";     // check TestResult
-            res = await this.connectionDB.DBget(sql, [rfid]);
-            if (res.num !== 0)
+        */
+            let sql = "SELECT restockOrderID FROM SKUItem WHERE rfid = ?";     // check Restock Order
+            let res = await this.connectionDB.DBget(sql, [rfid]);
+            if (res === undefined)
+                throw { err: 404, msg: "SKUItem not found" };
+            if(res.restockOrderID !== null)
                 throw { err: 422, msg: "Cannot delete SKUItem" };
-
-            sql = "DELETE FROM SKUItem WHERE id = ?";
+                
+            sql = "DELETE FROM SKUItem WHERE rfid = ?";
             res = await this.connectionDB.DBexecuteQuery(sql, [rfid]);     // delete SKUItem
-            if (res.changes === 0)      // rfid not found
+            if (res.changes === 0)
                 throw { err: 404, msg: "SKUItem not found" };
             return res.changes;
         }

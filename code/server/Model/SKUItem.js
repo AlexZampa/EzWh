@@ -12,13 +12,14 @@ class SKUItem {
 
     getRFID = () => this.RFID;
     getSKU = () => this.sku;
-    getDateOfStock = () => this.dateOfStock;
+    getDateOfStock = () => this.dateOfStock.format('YYYY/MM/DD HH:mm');
     getRestockOrder = () => this.restockOrder;
     
     setRFID = (RFID) => { this.RFID = RFID; };
     setAvailable = (available) => { this.available = available; };
     setDateOfStock = (dateOfStock) => { this.dateOfStock = dayjs(dateOfStock); };
     setRestockOrder = (restockOrder) => { this.restockOrder = restockOrder};
+    setSKU = (sku) => { this.sku = sku; };
 
     isAvailable = () => { return this.available; };
 
@@ -27,7 +28,7 @@ class SKUItem {
     convertToObj = () => {
         return (
             {
-                "RFID": this.rfid, "SKUId": this.sku.getID(), "Available":this.available, "DateOfStock": this.dateOfStock ?  this.dateOfStock.format('YYYY-MM-DD HH:mm') : ""
+                "RFID": this.RFID, "SKUId": this.sku.getID(), "Available":this.available, "DateOfStock": this.dateOfStock ?  this.dateOfStock.format('YYYY/MM/DD HH:mm') : ""
             });
     };
 
