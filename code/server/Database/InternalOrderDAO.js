@@ -8,7 +8,7 @@ const InternalOrder = require('../Model/InternalOrder');
 const buildInternalOrder = async (io) => {
     let sql = "SELECT SKU, qty FROM InternalOrderProduct WHERE internalOrder=?";
     const productList = this.connectionDB.DBgetAll(sql, io.getId());
-    for(const p of productList){
+    for (const p of productList) {
         const sku = SkuDAO.getSKU(p.SKU);
         io.addSKU(sku, p.qty);
     }
@@ -16,14 +16,14 @@ const buildInternalOrder = async (io) => {
     const skuItemList = await this.connectionDB.DBgetAll(sql, io.getId());
     io.deliveredProducts.concat(skuItemList.map(id => SKUItemDAO.getSKUItem(id.SKUItem)));
 }
- 
-class InternalOrderDAO{
 
-    constructor(db){
+class InternalOrderDAO {
+
+    constructor(db) {
         this.connectionDB = new ConnectionDB();
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrder" ("id" INTEGER PRIMARY KEY, "issueDate" DATETIME NOT NULL, "internalCustomer" INTEGER, "state" VARCHAR(20)) NOT NULL, FOREIGN KEY ("internalCustomer") REFERENCES user.id) ', []);
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderProduct" ( "internalOrder" INTEGER NOT NULL, "SKU" INTEGER NOT NULL, "qty" INTEGER NOT NULL, PRIMARY KEY ("internalOrder", "SKU"), FOREIGN KEY ("internalOrder") REFERENCES InternalOrder.id, FOREIGN KEY ("SKU") REFERENCES SKU.id)', []);
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderSKUItems" ( "internalOrder" INTEGER NOT NULL, "SKUItem" INTEGER NOT NULL, PRIMARY KEY ("internalOrder", "SKUItem") FOREIGN KEY ("internalOrder") REFERENCES InternalOrder.id, FOREIGN KEY ("SKUItem") REFERENCES SKUItem.id ', []);
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrder" ("id" INTEGER PRIMARY KEY, "issueDate" DATETIME NOT NULL, "internalCustomer" INTEGER, "state" VARCHAR(20)) NOT NULL, FOREIGN KEY ("internalCustomer") REFERENCES user."id") ', []);
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderProduct" ( "internalOrder" INTEGER NOT NULL, "SKU" INTEGER NOT NULL, "qty" INTEGER NOT NULL, PRIMARY KEY ("internalOrder", "SKU"), FOREIGN KEY ("internalOrder") REFERENCES InternalOrder."id", FOREIGN KEY ("SKU") REFERENCES SKU."id")', []);
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderSKUItems" ( "internalOrder" INTEGER NOT NULL, "SKUItem" INTEGER NOT NULL, PRIMARY KEY ("internalOrder", "SKUItem") FOREIGN KEY ("internalOrder") REFERENCES InternalOrder."id", FOREIGN KEY ("SKUItem") REFERENCES SKUItem."id" ', []);
     }
 
     newInternalOrder = async (issueDate, products, customerId, state) => {
@@ -31,7 +31,7 @@ class InternalOrderDAO{
         const res = await this.connectionDB.DBexecuteQuery(sql, [issueDate, customerId, state]);
 
         sql = "INSERT INTO InternalOrderProduct(internalOrder, SKU, qty) VALUES(?, ?, ?)"
-        for(const prod of products){
+        for (const prod of products) {
             this.connectionDB.DBexecuteQuery(sql, [res.lastID, prod.sku.getId(), prod.qty]);
         }
         return res.lastID;
@@ -42,7 +42,7 @@ class InternalOrderDAO{
         const result = await this.connectionDB.DBgetAll(sql, []);
         const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, r.issueDate));
 
-        for(const io of internalOrders){
+        for (const io of internalOrders) {
             buildInternalOrder(io);
         }
 
@@ -54,7 +54,7 @@ class InternalOrderDAO{
         const result = await this.connectionDB.DBgetAll(sql, []);
         const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, r.issueDate));
 
-        for(const io of internalOrders){
+        for (const io of internalOrders) {
             buildInternalOrder(io);
         }
 
@@ -66,7 +66,7 @@ class InternalOrderDAO{
         const result = await this.connectionDB.DBgetAll(sql, []);
         const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, r.issueDate));
 
-        for(const io of internalOrders){
+        for (const io of internalOrders) {
             buildInternalOrder(io);
         }
 
@@ -84,7 +84,7 @@ class InternalOrderDAO{
 
     addDeliveredProducts = async (ID, SKUItemList) => {
         const sql = "INSERT INTO InternalOrderSKUItems(internalOrder, SKUItem) VALUES(?, ?) ";
-        for(const i of SKUItemList){
+        for (const i of SKUItemList) {
             this.connectionDB.DBexecuteQuery(sql, [ID, i.getId()]);
         }
     }
@@ -95,12 +95,18 @@ class InternalOrderDAO{
     }
 
     deleteInternalOrder = async (ID) => {
-        let sql = "DELETE FROM InternalOrderSKUItems WHERE internalOrder=?";
-        this.connectionDB.DBexecuteQuery(sql, [ID]);
-        sql = "DELETE FROM InternalOrderProduct WHERE internalOrder=?";
-        this.connectionDB.DBexecuteQuery(sql, [ID]);
-        sql = "DELETE FROM InternalOrder WHERE id=?";
-        this.connectionDB.DBexecuteQuery(sql, [ID]);
+        try {
+            let sql = "DELETE FROM InternalOrderSKUItems WHERE internalOrder=?";
+            let res = this.connectionDB.DBexecuteQuery(sql, [ID]);
+            sql = "DELETE FROM InternalOrderProduct WHERE internalOrder=?";
+            res = this.connectionDB.DBexecuteQuery(sql, [ID]);
+            sql = "DELETE FROM InternalOrder WHERE id=?";
+            res = this.connectionDB.DBexecuteQuery(sql, [ID]);
+            return res.changes;
+        }
+        catch (err) {
+            return err;
+        }
     }
 
 
