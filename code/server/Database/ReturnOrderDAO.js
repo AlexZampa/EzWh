@@ -34,7 +34,7 @@ class ReturnOrderDAO {
 
     newReturnOrder = async (products, restockOrderId, returnDate) => {
         const sql = 'INSERT INTO ReturnOrder(restockOrderId, returnDate) VALUES(?, ?)';
-        const result = await this.connectionDB.DBexecuteQuery(sql, [supplierID, issueDate]);
+        const result = await this.connectionDB.DBexecuteQuery(sql, [restockOrderId, returnDate]);
         sql = "INSERT INTO ReturnOrderProduct(returnOrder, SKUItem, SKUId, description, price) VALUES(?, ?, ?, ?)"
         for (const prod of products) {
             this.connectionDB.DBexecuteQuery(sql, [result.lastId, prod.RFID, prod.SKUId, prod.description, prod.price]);

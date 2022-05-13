@@ -15,6 +15,17 @@ const RestockOrder = require("./RestockOrder");
 const ReturnOrder = require("./ReturnOrder");
 const InternalOrder = require("./InternalOrder");
 
+/* Mock DAO */
+const Mock_internalOrderDAO = require("../Mock_databases/Mock_internalOrderDAO");
+const Mock_positionDAO = require("../Mock_databases/Mock_positionDAO");
+const Mock_restockOrderDAO = require("../Mock_databases/Mock_restockOrderDAO");
+const Mock_returnOrderDAO = require("../Mock_databases/Mock_returnOrderDAO");
+const Mock_skuDAO = require("../Mock_databases/Mock_skuDAO");
+const Mock_skuItemDAO = require("../Mock_databases/Mock_skuItemDAO");
+const Mock_testDescriptorDAO = require("../Mock_databases/Mock_testDescriptorDAO");
+const Mock_testResultDAO = require("../Mock_databases/Mock_testResultDAO");
+const Mock_userDAO = require("../Mock_databases/Mock_userDAO");
+
 dayjs.extend(customParseFormat);
 
 class Warehouse{
@@ -31,6 +42,21 @@ class Warehouse{
         this.restockOrderDAO = new RestockOrderDAO();
         this.returnOrderDAO = new ReturnOrderDAO();
     };
+
+    /* This function must be executed BEFORE EACH unit test on Warehouse:
+    *  it sets each DAO to the corresponding Mock DAO
+    */
+    initTest = () => {
+        this.internalOrderDAO = new Mock_internalOrderDAO;
+        this.positionDAO = new Mock_positionDAO;
+        this.restockOrderDAO = new Mock_restockOrderDAO;
+        this.returnOrderDAO = new Mock_returnOrderDAO;
+        this.skuDAO = new Mock_skuDAO;
+        this.skuItemDAO = new Mock_skuItemDAO;
+        this.testDescriptorDAO = new Mock_testDescriptorDAO;
+        this.testResultDAO = new Mock_testResultDAO;
+        this.userDAO = new Mock_userDAO;
+    }
 
     /*************** functions for managing SKU ***************/
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
