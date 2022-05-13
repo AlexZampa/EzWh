@@ -10,8 +10,12 @@ const warehouse = new Warehouse();
 
 // CREATE NEW POSITION
 router.post('/position', 
-    [check("positionID").exists(), check("aisleID").exists(), check("row").exists(), check("col").exists(), 
-     check("maxWeight").exists(), check("maxVolume").exists()],
+    [check("positionID").exists().isNumeric({no_symbols: true}),
+     check("aisleID").exists().isNumeric({no_symbols: true}),
+     check("row").exists().isNumeric({no_symbols: true}),
+     check("col").exists().isNumeric({no_symbols: true}),
+     check("maxWeight").exists().isNumeric(),
+     check("maxVolume").exists().isNumeric()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -49,8 +53,14 @@ router.get('/positions', async (req, res) => {
 
 // MODIFY POSITION
 router.put('/position/:positionID', 
-    [check("positionID").isNumeric(), check("newAisleID").exists(), check("newRow").exists(), check("newCol").exists(), check("newMaxWeight").exists(), 
-     check("newMaxVolume").exists(), check("newOccupiedWeight").exists(), check("newOccupiedVolume").exists],
+    [check("positionID").isNumeric({no_symbols: true}),
+     check("newAisleID").exists().isNumeric({no_symbols: true}),
+     check("newRow").exists().isNumeric({no_symbols: true}), 
+     check("newCol").exists().isNumeric({no_symbols: true}), 
+     check("newMaxWeight").exists().isNumeric(), 
+     check("newMaxVolume").exists().isNumeric(),
+     check("newOccupiedWeight").exists().isNumeric(), 
+     check("newOccupiedVolume").exists().isNumeric()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -75,7 +85,8 @@ router.put('/position/:positionID',
 
 // MODIFY POSITION ID
 router.put('/position/:positionID/changeID', 
-    [check("positionID").isNumeric(), check("newPositionID").exists().bail().isNumeric()],
+    [check("positionID").isNumeric({no_symbols: true}),
+    check("newPositionID").exists().isNumeric({no_symbols: true})],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -98,8 +109,15 @@ router.put('/position/:positionID/changeID',
 
 
 // DELETE POSITION
-router.delete('/position/:positionID', async (req, res) => {
+router.delete('/position/:positionID',
+    [check("positionID").isNumeric({no_symbols: true})],
+    async (req, res) => {
         try{
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                console.log({ errors: errors.array() });
+                return res.status(422).end();
+            }
             const result = await warehouse.deletePosition(req.params.positionID);
             return res.status(204).end();
             // check if user authorized: return res.status(401).end();
