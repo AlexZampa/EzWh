@@ -402,7 +402,7 @@ class Warehouse{
         if(ro !== undefined){
             
             console.log("*** RETURN ORDER NOTIFICATION ***");
-            console.log(`To SUPPLIER: ${supplierID}`);
+            console.log(`To SUPPLIER: ${userID}`);
             console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId}`);
             console.log(`For products: ${ro.getProducts}`);
         }
