@@ -55,7 +55,7 @@ class SKUItemDAO {
                     throw {err : 422, msg : "RFID not unique"};
             }
             let sql = "UPDATE SKUItem SET rfid = ?, available = ?, dateOfStock = ?, restockOrderID = ? WHERE rfid = ?";
-            let res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newAvailable, newDate, restockOrderID ? restockOrderID : null, oldRFID]);
+            let res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newAvailable, newDate, restockOrderID, oldRFID]);
             return res.lastID;      
         } catch (err) {
             throw err;
@@ -64,21 +64,8 @@ class SKUItemDAO {
 
     deleteSKUItem = async (rfid) => {
         try {
-        /*
-            letsql = "SELECT COUNT(*) AS num FROM TestResult WHERE RFID = ?";     // check TestResult
-            let res = await this.connectionDB.DBget(sql, [rfid]);
-            if (res.num !== 0)
-                throw { err: 422, msg: "Cannot delete SKUItem" };
-        */
-            let sql = "SELECT restockOrderID FROM SKUItem WHERE rfid = ?";     // check Restock Order
-            let res = await this.connectionDB.DBget(sql, [rfid]);
-            if (res === undefined)
-                throw { err: 404, msg: "SKUItem not found" };
-            if(res.restockOrderID !== null)
-                throw { err: 422, msg: "Cannot delete SKUItem" };
-                
-            sql = "DELETE FROM SKUItem WHERE rfid = ?";
-            res = await this.connectionDB.DBexecuteQuery(sql, [rfid]);     // delete SKUItem
+            const sql = "DELETE FROM SKUItem WHERE rfid = ?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [rfid]);     // delete SKUItem
             if (res.changes === 0)
                 throw { err: 404, msg: "SKUItem not found" };
             return res.changes;

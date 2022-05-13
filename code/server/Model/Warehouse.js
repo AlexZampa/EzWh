@@ -194,10 +194,12 @@ class Warehouse{
     /**************** functions for managing SKUItem ***************/
     addSKUItem = async (rfid, skuID, dateOfStock) => {
         try{
-            if(!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
-                throw {err : 422, msg : "Invalid Date"};
-            const sku = await this.getSKU(skuID); 
-            const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock);
+            if(dateOfStock !== undefined && dateOfStock !== null){
+                if(!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
+                    throw {err : 422, msg : "Invalid Date"};
+            }
+            const sku = await this.getSKU(skuID);       // get SKU
+            const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock ? dateOfStock : null, null);
             return res;
         }
         catch (err) {
@@ -246,8 +248,10 @@ class Warehouse{
 
     modifySKUItem = async (rfid, newRFID, newAvailable, newDate) => {
         try {
-            if(!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid() || newDate === null))
-                throw {err : 422, msg : "Invalid Date"};
+            if(newDate !== undefined && newDate !== null){
+                if(!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid()))
+                    throw {err : 422, msg : "Invalid Date"};
+            }
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const result = this.skuItemDAO.updateSKUItem(rfid, newRFID, newAvailable, newDate ? newDate : skuItem.getDateOfStock(), skuItem.getRestockOrder());
             return result;
@@ -259,7 +263,12 @@ class Warehouse{
 
     deleteSKUItem = async (rfid) => {
         try {
+            const skuItem = await this.skuItemDAO.getSKUItem(rfid);            // get SKUItem
+            if(skuItem.getRestockOrder() !== undefined)
+                throw { err: 422, msg: "Cannot delete SKUItem" };              // check Restock Order
+            // TODO check TestResult
             const res = await this.skuItemDAO.deleteSKUItem(rfid);
+            return res;
         }
         catch (err) {
             throw err;

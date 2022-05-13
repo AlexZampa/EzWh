@@ -3,7 +3,7 @@ const express = require('express');
 // const ControllerUser = require('./Controller/ControllerUser');
 // const ControllerSKU = require('./Controller/ControllerSKU');
 // const ControllerPosition = require('./Controller/ControllerPosition');
-const ControllerSKUItem = require('./Controller/ControllerSKUItem');
+// const ControllerSKUItem = require('./Controller/ControllerSKUItem');
 const ControllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
 const ControllerReturnOrder = require('./Controller/ControllerReturnOrder');
@@ -11,7 +11,7 @@ const ControllerReturnOrder = require('./Controller/ControllerReturnOrder');
 const controllerSKU = require('./Controller/ControllerSKU');
 const controllerPosition = require('./Controller/ControllerPosition');
 const controllerUser =  require('./Controller/ControllerUser');
-
+const controllerSKUItem = require('./Controller/ControllerSKUItem');
 
 // init express
 const app = new express();
@@ -20,7 +20,7 @@ const port = 3001;
 // const controllerUser = new ControllerUser();
 // const controllerSKU = new ControllerSKU();
 // const controllerPosition = new ControllerPosition();
-const controllerSKUItem = new ControllerSKUItem();
+// const controllerSKUItem = new ControllerSKUItem();
 const controllerRestockOrder = new ControllerRestockOrder();
 const controllerInternalOrder = new ControllerInternalOrder();
 const controllerReturnOrder = new ControllerReturnOrder(); 
@@ -37,7 +37,7 @@ app.use(express.json());
 app.use('/api', controllerSKU);
 app.use('/api', controllerPosition);
 app.use('/api', controllerUser);
-
+app.use('/api', controllerSKUItem);
 
 //GET /api/test
 app.get('/api/hello', hello);
@@ -60,12 +60,12 @@ function hello(req, res) {
 // app.delete('/api/skus/:id', controllerSKU.deleteSKU);
 
 /**** SKUITEM ****/
-app.post('/api/skuitem', controllerSKUItem.createSKUItem);
-app.get('/api/skuitems', controllerSKUItem.getSKUItems);
-app.get('/api/skuitems/sku/:id', controllerSKUItem.getSKUItemsBySKUid);
-app.get('/api/skuitems/:rfid', controllerSKUItem.getSKUItemByRFID);
-app.put('/api/skuitems/:rfid', controllerSKUItem.modifySKUItem);
-app.delete('/api/skuitems/:rfid', controllerSKUItem.deleteSKUItem);
+// app.post('/api/skuitem', controllerSKUItem.createSKUItem);
+// app.get('/api/skuitems', controllerSKUItem.getSKUItems);
+// app.get('/api/skuitems/sku/:id', controllerSKUItem.getSKUItemsBySKUid);
+// app.get('/api/skuitems/:rfid', controllerSKUItem.getSKUItemByRFID);
+// app.put('/api/skuitems/:rfid', controllerSKUItem.modifySKUItem);
+// app.delete('/api/skuitems/:rfid', controllerSKUItem.deleteSKUItem);
 
 /**** POSITION ****/
 // app.post('/api/position', controllerPosition.createPosition);
