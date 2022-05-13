@@ -1,18 +1,26 @@
+const dayjs = require("dayjs");
+
 class SKUItem {
-    constructor(RFID, sku) {
+    constructor(RFID, sku, available, dateOfStock=undefined, restockOrder=undefined) {
         this.RFID = RFID;
         this.sku = sku;
-        this.dateOfStock = new Date();
+        this.dateOfStock = dateOfStock ? dayjs(dateOfStock) : "";
         this.testResults = [];
+        this.restockOrder = restockOrder;
+        this.available = available;
     }
 
-    getRFID = () => { return this.RFID; };
-    getSKU = () => { return this.sku; };
-    getDateOfStock = () => { return this.dateOfStock; };
+    getRFID = () => this.RFID;
+    getSKU = () => this.sku;
+    getAvailable = () => this.available;
+    getDateOfStock = () => this.dateOfStock.format('YYYY/MM/DD HH:mm');
+    getRestockOrder = () => this.restockOrder;
     
     setRFID = (RFID) => { this.RFID = RFID; };
     setAvailable = (available) => { this.available = available; };
-    setDateOfStock = (dateOfStock) => { this.dateOfStock = dateOfStock; };
+    setDateOfStock = (dateOfStock) => { this.dateOfStock = dayjs(dateOfStock); };
+    setRestockOrder = (restockOrder) => { this.restockOrder = restockOrder};
+    setSKU = (sku) => { this.sku = sku; };
 
     isAvailable = () => { return this.available; };
 
@@ -21,7 +29,7 @@ class SKUItem {
     convertToObj = () => {
         return (
             {
-                "RFID": this.rfid, "SKUId": this.sku.getID(), "Available":this.available, "DateOfStock":this.dateOfStock
+                "RFID": this.RFID, "SKUId": this.sku.getID(), "Available":this.available, "DateOfStock": this.dateOfStock ?  this.dateOfStock.format('YYYY/MM/DD HH:mm') : ""
             });
     };
 

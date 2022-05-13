@@ -9,6 +9,7 @@ class SkuDAO{
 
     constructor(db){
         this.connectionDB = new ConnectionDB();
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "SKU" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT, "weight" NUMERIC NOT NULL, "volume" NUMERIC NOT NULL, "notes" TEXT NOT NULL, "availableQuantity" INTEGER NOT NULL, "price" NUMERIC NOT NULL, "position" TEXT, PRIMARY KEY("id"));');
     }
 
     newSKU = async (description, weight, volume, notes, price, availableQty, position) => {

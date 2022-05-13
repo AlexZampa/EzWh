@@ -9,7 +9,7 @@ const validateCreateSKUItemjson = (body) => {
 }
 
 const validateModifySKUItemjson = (body) => {
-    if (body.newRFID !== undefined && body.newAvailable !== undefined && body.newDateOfStock !== undefined && body.newNotes !== undefined)
+    if (body.newRFID !== undefined && body.newAvailable !== undefined && body.newDateOfStock !== undefined)
         return true;
     return false;
 };
@@ -21,16 +21,18 @@ class ControllerSKUItem {
 
     createSKUItem = async (req, res) => {
         try {
-            if (validateCreateSKUItemjson(req.body)) {
+            if(validateCreateSKUItemjson(req.body)) {
                 await this.warehouse.addSKUItem(req.body.RFID, req.body.SKUId, req.body.DateOfStock);
-                return res.status(201).json();
+                return res.status(201).end();
             }
-            else
-                return res.status(422).json();
-            // check if user authorized otherwise: return res.status(401).json({});
+            return res.status(422).end();
         } catch (err) {
             console.log(err);
-            return res.status(503).json();
+            switch(err.err){
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
+            }
         }
     };
 
@@ -38,30 +40,32 @@ class ControllerSKUItem {
         try {
             const skuItemList = await this.warehouse.getSKUItems();
             const result = [];
-
             skuItemList.forEach(skuItem => { result.push(skuItem.convertToObj()); });
             return res.status(200).json(result);
-            // check if user authorized otherwise: return res.status(401).json({});
         } catch (err) {
             console.log(err);
-            return res.status(500).json();
+            return res.status(500).end();
         }
     };
 
     getSKUItemsBySKUid = async (req, res) => {
         try {
-            const skuItem = await this.warehouse.getSKUItemsBySKUid(req.params.id);
-            if (skuItem !== undefined) {
-                const result = skuItem.convertToObj();
+            if(Number(req.params.id)){
+                const skuItemList = await this.warehouse.getSKUItemsBySKUid(Number(req.params.id));
+                const result = [];
+                skuItemList.forEach(skuItem => { 
+                    const obj = skuItem.convertToObj();
+                    delete obj.Available;
+                    result.push(obj);
+                });
                 return res.status(200).json(result);
             }
-            return res.status(404).json();
-            // check if user authorized otherwise: return res.status(401).json({});
+            return res.status(422).end();
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                default: return res.status(500).json();
+                case 404: return res.status(404).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -69,17 +73,13 @@ class ControllerSKUItem {
     getSKUItemByRFID = async (req, res) => {
         try {
             const skuItem = await this.warehouse.getSKUItem(req.params.rfid);
-            if (skuItem !== undefined) {
-                const result = skuItem.convertToObj();
-                return res.status(200).json(result);
-            }
-            return res.status(404).json();
-            // check if user authorized otherwise: return res.status(401).json({});
+            const result = skuItem.convertToObj();
+            return res.status(200).json(result);
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                default: return res.status(500).json();
+                case 404: return res.status(404).end();
+                default: return res.status(500).end();
             }
         }
     };
@@ -87,33 +87,30 @@ class ControllerSKUItem {
     modifySKUItem = async (req, res) => {
         try {
             if (validateModifySKUItemjson(req.body)) {
-                const res = await this.warehouse.modifySKUItem(req.params.RFID, req.body.getSKUItemByRFID, req.body.Available, req.body.DateOfStock);
-                return res.status(200).json();
+                const result = await this.warehouse.modifySKUItem(req.params.rfid, req.body.newRFID, req.body.newAvailable, req.body.newDateOfStock);
+                return res.status(200).end();
             }
-            return res.status(422).json();
+            return res.status(422).end();
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };
 
     deleteSKUItem = async (req, res) => {
         try {
-            const res = await this.warehouse.deleteSKUItem(req.params.rfid);
-
-            return res.status(204).json();
-
-            // check if user authorized otherwise: return res.status(401).json({});
+            const result = await this.warehouse.deleteSKUItem(req.params.rfid);
+            return res.status(204).end();
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(422).end();     // API requires 422 in any case    
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     };

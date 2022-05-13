@@ -1,4 +1,6 @@
 'use strict';
+const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat');
 const UserDAO = require('../Database/UserDAO');
 const SkuDAO = require('../Database/SkuDAO');
 const SKUItemDAO = require('../Database/SKUItemDAO');
@@ -13,9 +15,10 @@ const RestockOrder = require("./RestockOrder");
 const ReturnOrder = require("./ReturnOrder");
 const InternalOrder = require("./InternalOrder");
 
+dayjs.extend(customParseFormat);
 
 class Warehouse{
-
+    
     constructor() {
         if (Warehouse._instance) {
             return Warehouse._instance;
@@ -114,9 +117,11 @@ class Warehouse{
 
     /**************** functions for managing SKUItem ***************/
     addSKUItem = async (rfid, skuID, dateOfStock) => {
-        try {
+        try{
+            if(!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
+                throw {err : 422, msg : "Invalid Date"};
             const sku = await this.getSKU(skuID); 
-            const res = await this.skuItemDAO.newSKUItem(rfid, sku, dateOfStock);
+            const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock);
             return res;
         }
         catch (err) {
@@ -127,6 +132,8 @@ class Warehouse{
     getSKUItem = async (rfid) => {
         try {
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            const sku = await this.skuDAO.getSKU(skuItem.getSKU());
+            skuItem.setSKU(sku);
             return skuItem;
         }
         catch (err) {
@@ -135,8 +142,12 @@ class Warehouse{
     };
 
     getSKUItems = async () => {
-        try {
+        try{
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            for(const skuItem of skuItemList){
+                const sku = await this.skuDAO.getSKU(skuItem.getSKU());
+                skuItem.setSKU(sku);
+            }
             return skuItemList;
         }
         catch (err) {
@@ -146,13 +157,10 @@ class Warehouse{
 
     getSKUItemsBySKUid = async (skuID) => {
         try {
-            const skuItemList = await this.SKUItemDAO.getSKUItems();
-            let skuItems = [];
-            skuItemList.forEach(skuItem => {
-                if (skuItem.getSKU().getID() === skuID && skuItem.isAvailable()) {
-                    skuItems.append(skuItem);
-                }
-            });
+            const sku =  await this.skuDAO.getSKU(skuID);
+            let skuItems = await this.skuItemDAO.getAllSKUItems();
+            skuItems = skuItems.filter(s => s.getSKU() === skuID && s.getAvailable() === 1);
+            skuItems.forEach(s => s.setSKU(sku));
             return skuItems;
         }
         catch (err) {
@@ -160,9 +168,12 @@ class Warehouse{
         }
     };
 
-    modifySKUItem = async (rfid, newRFID, newDate, newAvailable) => {
+    modifySKUItem = async (rfid, newRFID, newAvailable, newDate) => {
         try {
-            const result = this.skuItemDAO.modifySKUItem(rfid, newRFID, newDate, newAvailable);
+            if(!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid() || newDate === null))
+                throw {err : 422, msg : "Invalid Date"};
+            const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            const result = this.skuItemDAO.updateSKUItem(rfid, newRFID, newAvailable, newDate ? newDate : skuItem.getDateOfStock(), skuItem.getRestockOrder());
             return result;
         }
         catch (err) {
@@ -243,47 +254,123 @@ class Warehouse{
 
     /********* functions for managing Restock Order ***********/
     addRestockOrder = async (products, supplierID, issueDate) => {
+        if(!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
+            throw {err : 422, msg : "Invalid Date"};
+        for(const prod of products){
+            await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
+        }
+        const users = await this.userDAO.getAllUsers();
+        if(!users.find(u => u.getUserID() === supplierID && u.getType() === "supplier"))
+            throw {err : 422, msg : "Supplier Not Found" };
         const res = await this.restockOrderDAO.newRestockOrder(products, supplierID, issueDate);
         return res;
     }
 
     getRestockOrder = async (restockOrderID) => {
-        const res = await this.restockOrderDAO.getRestockOrder(restockOrderID);
-        return res;
+        try{
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            restockOrder.setSKUItems(skuItemList.filter(s => s.getRestockOrder() === restockOrder.getID()));
+            return restockOrder;
+        } catch(err){
+            throw err;
+        }
     }
 
     getRestockOrders = async () => {
-        const res = await this.restockOrderDAO.getRestockOrders();
-        return res;
+        try{
+            const restockOrderList = await this.restockOrderDAO.getRestockOrders();
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            restockOrderList.forEach(ro => {
+                const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === ro.getID());
+                ro.setSKUItems(skuItemsOfRO);
+            });
+            return restockOrderList;
+        } catch(err){
+            throw err;
+        }
     }
 
     getRestockOrdersIssued = async () => {
-        const res = await this.restockOrderDAO.getRestockOrdersIssued();
-        return res;
+        try{
+            let restockOrderList = await this.restockOrderDAO.getRestockOrders();
+            restockOrderList = restockOrderList.filter(ro => ro.getState() === "ISSUED");
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            restockOrderList.forEach(ro => {
+                const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === ro.getID());
+                ro.setSKUItems(skuItemsOfRO);
+            });
+            return restockOrderList;
+        } catch(err){
+            throw err;
+        }
     }
 
     restockOrderAddSKUItems = async (restockOrderID, SKUItemIdList) => {
-        const res = await this.restockOrderDAO.addSKUItems(restockOrderID, SKUItemIdList);
-        return res;
+        try{
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            if(restockOrder.getState() !== "DELIVERED")
+                throw {err: 422, msg: "Restock Order not in DELIVERED state"};
+            const allSKUItems = await this.skuItemDAO.getAllSKUItems();
+            const skuItemList = [];
+            for(const s of SKUItemIdList){
+                const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
+                // if SKUItem not found or SKUid passed as params is different from the real SKUid or SKUItem has already a restockOrder
+                if(!skuItem || s.SKUId !== skuItem.getSKU() || skuItem.getRestockOrder() !== undefined)
+                    throw {err: 422, msg: "Invalid SKUItem"};
+                skuItemList.push(skuItem);
+            }
+            for(const skuItem of skuItemList){
+                // update skuItem with all fields equal but the restockOrderID
+                const res = await this.skuItemDAO.updateSKUItem(skuItem.getRFID(), skuItem.getRFID(), skuItem.getAvailable(), skuItem.getDateOfStock(), restockOrderID);
+            }
+            return restockOrder;
+        } catch(err){
+            throw err;
+        }
     }
 
     restockOrderAddTransportNote = async (restockOrderID, date) => {
-        const res = await this.restockOrderDAO.addTransportNote(restockOrderID, date);
-        return res;
+        try{
+            if(!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
+                throw {err : 422, msg : "Invalid Date"};
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY-MM-DD HH:mm'));
+            return res;
+        } catch(err){
+            throw err;
+        }
     }
 
     modifyRestockOrderState = async (restockOrderID, newState) => {
-        const res = await this.restockOrderDAO.modifyState(restockOrderID, newState);
-        return res;
+        try{
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, newState, restockOrder.getTransportNote());
+            return res;
+        } catch(err){
+            throw err;
+        }
     }
 
-    returnItemsFromRestockOrder = async (restockOrderID, notPassed) => {
-        const res = await this.restockOrderDAO.returnItems(restockOrderID, notPassed);
-        return res;
+    returnItemsFromRestockOrder = async (restockOrderID) => {
+        try {
+            const res = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            // call testResultDAO get testResult
+            // TODO
+            return res;
+        } catch (err) {
+            throw err;
+        }
     }
 
     deleteRestockOrder = async (restockOrderID) => {
-        const res = await this.restockOrderDAO.deleteRestockOrder(restockOrderID);
+        try {
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const res = await this.restockOrderDAO.deleteRestockOrder(restockOrderID);
+            return res;
+        } catch (err) {
+            throw err;
+        }
     }
 
     /********* functions for managing Return Orders **********/
