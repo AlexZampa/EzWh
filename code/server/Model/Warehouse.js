@@ -4,6 +4,7 @@ const SkuDAO = require('../Database/SkuDAO');
 const SKUItemDAO = require('../Database/SKUItemDAO');
 const PositionDAO = require('../Database/PositionDAO');
 const RestockOrderDAO = require('../Database/RestockOrderDAO');
+const ReturnOrderDAO = require('../Database/ReturnOrderDAO');
 const { User } = require('./User');
 const SKU = require('./Sku');
 const { Position } = require('./Position');
@@ -25,6 +26,7 @@ class Warehouse{
         this.skuItemDAO = new SKUItemDAO();
         this.positionDAO = new PositionDAO();
         this.restockOrderDAO = new RestockOrderDAO();
+        this.returnOrderDAO = new ReturnOrderDAO();
     };
 
     /*************** functions for managing SKU ***************/
@@ -283,6 +285,42 @@ class Warehouse{
     deleteRestockOrder = async (restockOrderID) => {
         const res = await this.restockOrderDAO.deleteRestockOrder(restockOrderID);
     }
+
+    /********* functions for managing Return Orders **********/
+
+    addReturnOrder = async (SKUItemList, restockOrderId, returnDate) => {
+        const res = await this.returnOrderDao.newReturnOrder(SKUItemList, restockOrderId, returnDate);
+        const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
+        if(res !== undefined && restockOrder !== undefined){
+            this.sendNotificationRO(restockOrder.supplierID, res.lastId);
+        }
+    }
+
+    getReturnOrders = async () => {
+        const res = await this.returnOrderDAO.getAllReturnOrders();
+        return res;
+    }
+
+    getReturnOrderById = async (id) => {
+        const res = await this.returnOrderDAO.getReturnOrderById(id);
+        return res;
+    }
+
+    deleteReturnOrder = async (id) => {
+        const res = await this.returnOrderDAO.deleteReturnOrder();
+    }
+    
+    sendNotificationRO = async (userID, returnOrderID)=> {
+        const ro = await this.returnOrderDAO.getReturnOrderById(returnOrderID);
+        if(ro !== undefined){
+            
+            console.log("*** RETURN ORDER NOTIFICATION ***");
+            console.log(`To SUPPLIER: ${supplierID}`);
+            console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId}`);
+            console.log(`For products: ${ro.getProducts}`);
+        }
+    }
+    
 
     /********* functions for managing Internal Order **********/
     addInternalOrder = async (products, customerId, issueDate) => {

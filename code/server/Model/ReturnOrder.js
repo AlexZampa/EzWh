@@ -1,18 +1,16 @@
-var ids = 0;
+"use strict"
+
 
 class ReturnOrder {
-    constructor(restockOrder, returnDate) {
+    constructor(id, restockOrder, returnDate, products) {
+        this.id = id;
         this.restockOrder = restockOrder;
         this.returnDate = returnDate;
-        this.id = ids;
-        this.skuItems = [];
-        ids += 1;
+        this.products = products;
     }
 
-    getID = () => { return this.id; };
+    getId = () => { return this.id; };
     getReturnDate = () => { return this.returnDate; };
     getProducts = () => { return this.products; };
-
-    addSKUItems = (skuItems) => { this.skuItems = skuItems; };
-
+    getRestickOrderId = () => { return this.restockOrder.getId };
 }

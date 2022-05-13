@@ -6,6 +6,8 @@ const ControllerSKUItem = require('./Controller/ControllerSKUItem');
 const ControllerPosition = require('./Controller/ControllerPosition');
 const ControllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
+const ControllerReturnOrder = require('./Controller/ControllerReturnOrder');
+const { application } = require('express');
 
 // init express
 const app = new express();
@@ -15,7 +17,8 @@ const controllerSKU = new ControllerSKU();
 const controllerSKUItem = new ControllerSKUItem();
 const controllerPosition = new ControllerPosition();
 const controllerRestockOrder = new ControllerRestockOrder();
-const controllerInternalOrder = new ControllerInternalOrder(); 
+const controllerInternalOrder = new ControllerInternalOrder();
+const controllerReturnOrder = new ControllerReturnOrder(); 
 
 /*
  * Alessandro -> SKU, Position, User
@@ -94,6 +97,12 @@ app.post('/api/deliveryEmployeeSessions', controllerUser.loginDeliveryEmployee);
 app.put('/api/users/:username', controllerUser.modifyUserRights);
 app.delete('/api/users/:username/:type', controllerUser.deleteUser);
 
+/**** RETURN ORDER ****/
+
+app.get('/api/returnOrders', controllerReturnOrder.getReturnOrders);
+app.get('/api/returnOrders/:id', controllerReturnOrder.getReturnOrderById);
+app.post('/api/returnOrder', controllerReturnOrder.createReturnOrder);
+app.delete('/api/returnOrder/:id', controllerReturnOrder.deleteReturnOrder);
 
 // activate the server
 app.listen(port, () => {
