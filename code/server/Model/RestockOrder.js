@@ -4,10 +4,10 @@ const dayjs = require('dayjs');
 const stateList = ["ISSUED", "DELIVERY", "DELIVERED", "TESTED", "COMPLETEDRETURN", "COMPLETED"];
 
 class RestockOrder {
-    constructor(id, issueDate, supplierID, state, transportNote=undefined) {
+    constructor(id, issueDate, supplier, state, transportNote=undefined) {
         this.id = id;
         this.issueDate = dayjs(issueDate);
-        this.supplierID = supplierID;
+        this.supplier = supplier;
         this.transportNote = transportNote ? new TransportNote(transportNote) : undefined;
         this.state = state;
         this.products = [];
@@ -56,7 +56,7 @@ class RestockOrder {
     convertToObj = () => {
         const obj = { "id": this.id, "issueDate": this.issueDate.format('YYYY/MM/DD HH:mm'), "state": this.state, 
             "products": this.products.map(p => p.convertToObj()), 
-            "supplierId": this.supplierID, "transportNote": this.transportNote ? this.transportNote.convertToObj() : "", 
+            "supplierId": this.supplier, "transportNote": this.transportNote ? this.transportNote.convertToObj() : "", 
             "skuItems": this.skuItems.map(s => { return {"SKUId" : s.getSKU(), "rfid" : s.getRFID()}; })
         }
         if(this.state === "ISSUED")

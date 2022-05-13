@@ -1,25 +1,26 @@
 'use strict';
 const express = require('express');
-const ControllerUser = require('./Controller/ControllerUser');
+// const ControllerUser = require('./Controller/ControllerUser');
 // const ControllerSKU = require('./Controller/ControllerSKU');
-const ControllerSKUItem = require('./Controller/ControllerSKUItem');
 // const ControllerPosition = require('./Controller/ControllerPosition');
+const ControllerSKUItem = require('./Controller/ControllerSKUItem');
 const ControllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
 const ControllerReturnOrder = require('./Controller/ControllerReturnOrder');
-const { application } = require('express');
 
 const controllerSKU = require('./Controller/ControllerSKU');
 const controllerPosition = require('./Controller/ControllerPosition');
+const controllerUser =  require('./Controller/ControllerUser');
+
 
 // init express
 const app = new express();
 const port = 3001;
 
-const controllerUser = new ControllerUser();
+// const controllerUser = new ControllerUser();
 // const controllerSKU = new ControllerSKU();
-const controllerSKUItem = new ControllerSKUItem();
 // const controllerPosition = new ControllerPosition();
+const controllerSKUItem = new ControllerSKUItem();
 const controllerRestockOrder = new ControllerRestockOrder();
 const controllerInternalOrder = new ControllerInternalOrder();
 const controllerReturnOrder = new ControllerReturnOrder(); 
@@ -31,9 +32,11 @@ const controllerReturnOrder = new ControllerReturnOrder();
  * Nicolò 	  -> Test Descriptor, Test Result, Item
  */
 
+// set Middlewares
 app.use(express.json());
 app.use('/api', controllerSKU);
 app.use('/api', controllerPosition);
+app.use('/api', controllerUser);
 
 
 //GET /api/test
@@ -98,17 +101,17 @@ app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrde
 // app.delete('/api/returnOrder/:id', controllerReturnOrder.deleteReturnOrder);
 
 /**** USER ****/
-app.get('/api/suppliers', controllerUser.getSuppliers);
-app.get('/api/users',  controllerUser.getUsers);
-app.post('/api/newUser', controllerUser.createUser);
-app.post('/api/managerSessions', controllerUser.loginManager);
-app.post('/api/customerSessions', controllerUser.loginCustomer);
-app.post('/api/supplierSessions', controllerUser.loginSupplier);
-app.post('/api/clerkSessions', controllerUser.loginClerk);
-app.post('/api/qualityEmployeeSessions', controllerUser.loginQualityEmployee);
-app.post('/api/deliveryEmployeeSessions', controllerUser.loginDeliveryEmployee);
-app.put('/api/users/:username', controllerUser.modifyUserRights);
-app.delete('/api/users/:username/:type', controllerUser.deleteUser);
+// app.get('/api/suppliers', controllerUser.getSuppliers);
+// app.get('/api/users',  controllerUser.getUsers);
+// app.post('/api/newUser', controllerUser.createUser);
+// app.post('/api/managerSessions', controllerUser.loginManager);
+// app.post('/api/customerSessions', controllerUser.loginCustomer);
+// app.post('/api/supplierSessions', controllerUser.loginSupplier);
+// app.post('/api/clerkSessions', controllerUser.loginClerk);
+// app.post('/api/qualityEmployeeSessions', controllerUser.loginQualityEmployee);
+// app.post('/api/deliveryEmployeeSessions', controllerUser.loginDeliveryEmployee);
+// app.put('/api/users/:username', controllerUser.modifyUserRights);
+// app.delete('/api/users/:username/:type', controllerUser.deleteUser);
 
 // activate the server
 app.listen(port, () => {

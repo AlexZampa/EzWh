@@ -58,6 +58,7 @@ class RestockOrderDAO {
                 const products = await this.connectionDB.DBgetAll(sql, [ro.getID()]);
                 products.forEach(p => ro.addProduct(p.skuID, p.description, p.price, p.quantity));
             }
+            console.log(restockOrderList);
             return restockOrderList;
         }
         catch (err) {

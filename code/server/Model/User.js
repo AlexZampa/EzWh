@@ -23,10 +23,6 @@ class User {
         return ( { "id": this.userID, "name": this.name, "surname": this.surname, "email": this.email } );
     };
 
-    getUserInfo = () => { 
-        return ( { "id": this.userID, "username": this.email , "name": this.name} );
-    }
-
 }
 
 

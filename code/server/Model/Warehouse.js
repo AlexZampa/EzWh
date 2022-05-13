@@ -10,7 +10,7 @@ const InternalOrderDAO = require('../Database/InternalOrderDAO');
 const RestockOrderDAO = require('../Database/RestockOrderDAO');
 const ReturnOrderDAO = require('../Database/ReturnOrderDAO');
 
-const { User } = require('./User');
+const { User, userTypes } = require('./User');
 const SKU = require('./Sku');
 const Position = require('./Position');
 const SKUItem = require('./SKUItem');
@@ -564,16 +564,22 @@ class Warehouse{
      /********* functions for managing Users **********/
      addUser = async (username, name, surname, password, type) => {
         try{
+            if(type === "manager" || type === "administrator")
+                throw {err : 422, msg : "attempt to create manager or administrator accounts"};
+            if(password.length < 8)
+                throw {err : 422, msg : "Password must be at least 8 characters"};
+            if(!userTypes.find(t => t === type))
+                throw {err : 422, msg : "Invalid user type"};
             const userList = await this.userDAO.getAllUsers();
             const alreadyExists = userList.some((user) => {
                 if(user.getEmail() === username && user.getType() === type)
                     return true;
                 return false;
             });
-        if(alreadyExists)
-            throw {err: 409, msg: "User already exists"};
-        const result = await this.userDAO.newUser(username, name, surname, password, type);
-        return result;
+            if(alreadyExists)
+                throw {err: 409, msg: "User already exists"};
+            const result = await this.userDAO.newUser(username, name, surname, password, type);
+            return result;
         }
         catch(err){
             throw err;
@@ -609,6 +615,8 @@ class Warehouse{
 
     modifyUserRights = async (username, oldType, newType) => {
         try {
+            if(!userTypes.filter(t => (t !== "manager" && t !== "administrator")).find(type => type === newType))
+                throw {err : 422, msg : "Invalid user type"};
             const user = await this.userDAO.getUser(username, oldType);
             const result = await this.userDAO.updateUser(username, oldType, newType);
             return result;
@@ -620,6 +628,14 @@ class Warehouse{
     
     deleteUser = async (username, type) => {
         try {
+            const user = await this.userDAO.getUser(username, type);
+            if(type === "manager" || type === "administrator")
+                throw {err : 422, msg : "Attempt to delete manager/administrator" };
+            if(type === "supplier"){
+                const roList = await this.restockOrderDAO.getRestockOrders();
+                if(roList.find(ro => ro.getSupplier() === user.getUserID()))
+                    throw {err : 422, msg : "Cannot delete supplier: Restock Order assigned to the user" };
+            }
             const result = await this.userDAO.deleteUser(username, type);
             return result;
         } catch (err) {
