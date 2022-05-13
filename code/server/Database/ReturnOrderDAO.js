@@ -28,9 +28,9 @@ const buildReturnOrder = async (res, connectionDB) => {
 
 class ReturnOrderDAO {
     constructor(db) {
-        this.connectionDB = new ConnectionDB();
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrder" ("id" INTEGER PRIMARY KEY, "returnDate" DATETIME NOT NULL, "restockOrderId" INTEGER NOT NULL, FOREIGN KEY ("restockOrderId") REFERENCES "RestockOrder"."id") ', []);
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"), FOREIGN KEY ("returnOrder") REFERENCES "ReturnOrder"."id", FOREIGN KEY ("SKUItem") REFERENCES "SKUItem"."RFID")', []);
+        // this.connectionDB = new ConnectionDB();
+        // this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrder" ("id" INTEGER PRIMARY KEY, "returnDate" DATETIME NOT NULL, "restockOrderId" INTEGER NOT NULL, FOREIGN KEY ("restockOrderId") REFERENCES "RestockOrder"."id") ', []);
+        // this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"), FOREIGN KEY ("returnOrder") REFERENCES "ReturnOrder"."id", FOREIGN KEY ("SKUItem") REFERENCES "SKUItem"."RFID")', []);
     }
 
     newReturnOrder = async (products, restockOrderId, returnDate) => {

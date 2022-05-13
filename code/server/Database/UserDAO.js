@@ -99,7 +99,7 @@ class UserDAO{
 
 
 const generateSecurePassword = async (password) => {
-    const buf = crypto.randomBytes(128);            // generete random bytes
+    const buf = crypto.randomBytes(128);            // generate random bytes
     const salt = buf.toString('hex');               // convert bytes to hex string (to store in the DB)
     const hash = crypto.createHash('sha256');
     hash.update(password);                          // generate digest as SHA-256(password | salt)

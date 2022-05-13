@@ -60,10 +60,10 @@ class SkuDAO{
         }
     };
 
-    updateSKU = async (skuID, newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity, newPositionID=undefined) => {
+    updateSKU = async (skuID, newDescription, newWeight, newVolume, newNotes, newPrice, newAvailableQuantity, newPositionID) => {
         try{
             let sql = "UPDATE SKU SET description = ?, weight = ?, volume = ?, notes = ?, availableQuantity = ?, price = ?, position = ? WHERE id = ?";
-            const res = await this.connectionDB.DBexecuteQuery(sql, [newDescription, newWeight, newVolume, newNotes, newAvailableQuantity, newPrice, newPositionID ? newPositionID : null, skuID]);
+            const res = await this.connectionDB.DBexecuteQuery(sql, [newDescription, newWeight, newVolume, newNotes, newAvailableQuantity, newPrice, newPositionID, skuID]);
             return res.lastID;
         }
         catch(err){

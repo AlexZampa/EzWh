@@ -53,7 +53,7 @@ class PositionDAO{
         }
     };
 
-    updatePosition = async (oldPositionID, newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, skuID=undefined) => {
+    updatePosition = async (oldPositionID, newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, skuID) => {
         try{
             if(oldPositionID !== newPositionID){
                 let sql = "SELECT COUNT(*) AS num FROM Position WHERE positionID = ?";
@@ -62,7 +62,7 @@ class PositionDAO{
                     throw {err : 422, msg : "positionID not unique"};
             }
             let sql = "UPDATE Position SET positionID = ?, aisle = ?, row = ?, col = ?, maxWeight = ?, maxVolume = ?, occupiedWeight = ?, occupiedVolume = ?, assignedSKUid = ? WHERE positionID = ?";
-            let res = await this.connectionDB.DBexecuteQuery(sql, [newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, skuID ? skuID : null, oldPositionID]);
+            let res = await this.connectionDB.DBexecuteQuery(sql, [newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, skuID, oldPositionID]);
             return res.lastID;
         }
         catch(err){

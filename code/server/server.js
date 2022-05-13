@@ -1,21 +1,25 @@
 'use strict';
 const express = require('express');
 const ControllerUser = require('./Controller/ControllerUser');
-const ControllerSKU = require('./Controller/ControllerSKU');
+// const ControllerSKU = require('./Controller/ControllerSKU');
 const ControllerSKUItem = require('./Controller/ControllerSKUItem');
-const ControllerPosition = require('./Controller/ControllerPosition');
+// const ControllerPosition = require('./Controller/ControllerPosition');
 const ControllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
 const ControllerReturnOrder = require('./Controller/ControllerReturnOrder');
 const { application } = require('express');
 
+const controllerSKU = require('./Controller/ControllerSKU');
+const controllerPosition = require('./Controller/ControllerPosition');
+
 // init express
 const app = new express();
 const port = 3001;
+
 const controllerUser = new ControllerUser();
-const controllerSKU = new ControllerSKU();
+// const controllerSKU = new ControllerSKU();
 const controllerSKUItem = new ControllerSKUItem();
-const controllerPosition = new ControllerPosition();
+// const controllerPosition = new ControllerPosition();
 const controllerRestockOrder = new ControllerRestockOrder();
 const controllerInternalOrder = new ControllerInternalOrder();
 const controllerReturnOrder = new ControllerReturnOrder(); 
@@ -28,6 +32,9 @@ const controllerReturnOrder = new ControllerReturnOrder();
  */
 
 app.use(express.json());
+app.use('/api', controllerSKU);
+app.use('/api', controllerPosition);
+
 
 //GET /api/test
 app.get('/api/hello', hello);
@@ -42,12 +49,12 @@ function hello(req, res) {
 
 
 /**** SKU  ****/
-app.post('/api/sku', controllerSKU.createSKU);
-app.get('/api/skus', controllerSKU.getSKUs);
-app.get('/api/skus/:id', controllerSKU.getSKUbyID);
-app.put('/api/sku/:id', controllerSKU.modifySKU);
-app.put('/api/sku/:id/position', controllerSKU.modifySKUposition);
-app.delete('/api/skus/:id', controllerSKU.deleteSKU);
+// app.post('/api/sku', controllerSKU.createSKU);
+// app.get('/api/skus', controllerSKU.getSKUs);
+// app.get('/api/skus/:id', controllerSKU.getSKUbyID);
+// app.put('/api/sku/:id', controllerSKU.modifySKU);
+// app.put('/api/sku/:id/position', controllerSKU.modifySKUposition);
+// app.delete('/api/skus/:id', controllerSKU.deleteSKU);
 
 /**** SKUITEM ****/
 app.post('/api/skuitem', controllerSKUItem.createSKUItem);
@@ -58,11 +65,11 @@ app.put('/api/skuitems/:rfid', controllerSKUItem.modifySKUItem);
 app.delete('/api/skuitems/:rfid', controllerSKUItem.deleteSKUItem);
 
 /**** POSITION ****/
-app.post('/api/position', controllerPosition.createPosition);
-app.get('/api/positions', controllerPosition.getPositions);
-app.put('/api/position/:positionID', controllerPosition.modifyPosition);
-app.put('/api/position/:positionID/changeID', controllerPosition.modifyPositionID);
-app.delete('/api/position/:positionID', controllerPosition.deletePosition);
+// app.post('/api/position', controllerPosition.createPosition);
+// app.get('/api/positions', controllerPosition.getPositions);
+// app.put('/api/position/:positionID', controllerPosition.modifyPosition);
+// app.put('/api/position/:positionID/changeID', controllerPosition.modifyPositionID);
+// app.delete('/api/position/:positionID', controllerPosition.deletePosition);
 
 /**** RESTOCK ORDER ****/
 app.post('/api/restockOrder', controllerRestockOrder.createRestockOrder);
@@ -85,10 +92,10 @@ app.put('/api/internalOrders/:id', controllerInternalOrder.setIOStatus);
 app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 
 /**** RETURN ORDER ****/
-app.get('/api/returnOrders', controllerReturnOrder.getReturnOrders);
-app.get('/api/returnOrders/:id', controllerReturnOrder.getReturnOrderById);
-app.post('/api/returnOrder', controllerReturnOrder.createReturnOrder);
-app.delete('/api/returnOrder/:id', controllerReturnOrder.deleteReturnOrder);
+// app.get('/api/returnOrders', controllerReturnOrder.getReturnOrders);
+// app.get('/api/returnOrders/:id', controllerReturnOrder.getReturnOrderById);
+// app.post('/api/returnOrder', controllerReturnOrder.createReturnOrder);
+// app.delete('/api/returnOrder/:id', controllerReturnOrder.deleteReturnOrder);
 
 /**** USER ****/
 app.get('/api/suppliers', controllerUser.getSuppliers);
