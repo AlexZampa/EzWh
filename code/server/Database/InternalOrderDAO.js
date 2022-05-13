@@ -5,7 +5,7 @@ const SkuDAO = require('./SkuDAO');
 const SKUItemDAO = require('./SKUItemDAO');
 const InternalOrder = require('../Model/InternalOrder');
 
-buildInternalOrder = (io) => {
+const buildInternalOrder = async (io) => {
     let sql = "SELECT SKU, qty FROM InternalOrderProduct WHERE internalOrder=?";
     const productList = this.connectionDB.DBgetAll(sql, io.getId());
     for(const p of productList){
@@ -13,7 +13,7 @@ buildInternalOrder = (io) => {
         io.addSKU(sku, p.qty);
     }
     sql = "SELECT SKUItem FROM InternalOrderSKUItems WHERE internalOrder=?";
-    const skuItemList = this.connectionDB.DBgetAll(sql, io.getId());
+    const skuItemList = await this.connectionDB.DBgetAll(sql, io.getId());
     io.deliveredProducts.concat(skuItemList.map(id => SKUItemDAO.getSKUItem(id.SKUItem)));
 }
  

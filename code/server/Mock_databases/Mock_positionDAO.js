@@ -1,11 +1,6 @@
 "use strict";
-
-class Mock_positionDAO {
-    newPosition = (positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid) => jest.fn();
-    getAllPosition = () => jest.fn();
-    getPosition = (positionID) => jest.fn();
-    updatePosition = (oldPositionID, newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, skuID=undefined) => jest.fn();
-    deletePosition  = (positionID) => jest.fn();
-}
-
-module.exports = Mock_positionDAO;
+exports.newPosition = jest.fn();
+exports.getAllPosition = jest.fn();
+exports.getPosition = jest.fn();
+exports.updatePosition = jest.fn();
+exports.deletePosition  = jest.fn();

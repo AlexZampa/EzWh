@@ -2,8 +2,9 @@
 const sqlite = require('sqlite3');
 const ReturnOrder = require('../Model/ReturnOrder');
 const RestockOrderDAO = require('../Database/RestockOrderDAO');
+const ConnectionDB = require('./ConnectionDB');
 
-buildReturnOrder = (res, connectionDB) => {
+const buildReturnOrder = async (res, connectionDB) => {
     const restockOrderDAO = new RestockOrderDAO;
 
     //Retrieve RestockOrder

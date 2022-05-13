@@ -1,11 +1,6 @@
 "use strict";
-
-class Mock_restockOrderDAO {
-    newRestockOrder = (products, supplierID, issueDate) => jest.fn();
-    getRestockOrder = (restockOrderID) => jest.fn();
-    getRestockOrders =  () => jest.fn();
-    updateRestockOrder = (restockOrderID, newState, transportNote=undefined) => jest.fn();
-    deleteRestockOrder = (restockOrderID) => jest.fn();
-}
-
-module.exports = Mock_restockOrderDAO;
+exports.newRestockOrder = jest.fn();
+exports.getRestockOrder = jest.fn();
+exports.getRestockOrders =   jest.fn();
+exports.updateRestockOrder = jest.fn();
+exports.deleteRestockOrder =  jest.fn();

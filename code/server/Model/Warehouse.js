@@ -5,6 +5,7 @@ const UserDAO = require('../Database/UserDAO');
 const SkuDAO = require('../Database/SkuDAO');
 const SKUItemDAO = require('../Database/SKUItemDAO');
 const PositionDAO = require('../Database/PositionDAO');
+const InternalOrderDAO = require('../Database/InternalOrderDAO');
 const RestockOrderDAO = require('../Database/RestockOrderDAO');
 const ReturnOrderDAO = require('../Database/ReturnOrderDAO');
 const { User } = require('./User');
@@ -16,7 +17,7 @@ const ReturnOrder = require("./ReturnOrder");
 const InternalOrder = require("./InternalOrder");
 
 /* Mock DAO */
-const Mock_internalOrderDAO = require("../Mock_databases/Mock_internalOrderDAO");
+const Mock_internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
 const Mock_positionDAO = require("../Mock_databases/Mock_positionDAO");
 const Mock_restockOrderDAO = require("../Mock_databases/Mock_restockOrderDAO");
 const Mock_returnOrderDAO = require("../Mock_databases/Mock_returnOrderDAO");
@@ -41,21 +42,22 @@ class Warehouse{
         this.positionDAO = new PositionDAO();
         this.restockOrderDAO = new RestockOrderDAO();
         this.returnOrderDAO = new ReturnOrderDAO();
+        this.internalOrderDAO = new InternalOrderDAO();
     };
 
     /* This function must be executed BEFORE EACH unit test on Warehouse:
     *  it sets each DAO to the corresponding Mock DAO
     */
     initTest = () => {
-        this.internalOrderDAO = new Mock_internalOrderDAO;
-        this.positionDAO = new Mock_positionDAO;
-        this.restockOrderDAO = new Mock_restockOrderDAO;
-        this.returnOrderDAO = new Mock_returnOrderDAO;
-        this.skuDAO = new Mock_skuDAO;
-        this.skuItemDAO = new Mock_skuItemDAO;
-        this.testDescriptorDAO = new Mock_testDescriptorDAO;
-        this.testResultDAO = new Mock_testResultDAO;
-        this.userDAO = new Mock_userDAO;
+        this.internalOrderDAO = Mock_internalOrderDAO;
+        this.positionDAO = Mock_positionDAO;
+        this.restockOrderDAO = Mock_restockOrderDAO;
+        this.returnOrderDAO = Mock_returnOrderDAO;
+        this.skuDAO = Mock_skuDAO;
+        this.skuItemDAO = Mock_skuItemDAO;
+        this.testDescriptorDAO = Mock_testDescriptorDAO;
+        this.testResultDAO = Mock_testResultDAO;
+        this.userDAO = Mock_userDAO;
     }
 
     /*************** functions for managing SKU ***************/

@@ -84,6 +84,12 @@ app.post('/api/internalOrders', controllerInternalOrder.createInternalOrder);
 app.put('/api/internalOrders/:id', controllerInternalOrder.setIOStatus);
 app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 
+/**** RETURN ORDER ****/
+app.get('/api/returnOrders', controllerReturnOrder.getReturnOrders);
+app.get('/api/returnOrders/:id', controllerReturnOrder.getReturnOrderById);
+app.post('/api/returnOrder', controllerReturnOrder.createReturnOrder);
+app.delete('/api/returnOrder/:id', controllerReturnOrder.deleteReturnOrder);
+
 /**** USER ****/
 app.get('/api/suppliers', controllerUser.getSuppliers);
 app.get('/api/users',  controllerUser.getUsers);
@@ -96,13 +102,6 @@ app.post('/api/qualityEmployeeSessions', controllerUser.loginQualityEmployee);
 app.post('/api/deliveryEmployeeSessions', controllerUser.loginDeliveryEmployee);
 app.put('/api/users/:username', controllerUser.modifyUserRights);
 app.delete('/api/users/:username/:type', controllerUser.deleteUser);
-
-/**** RETURN ORDER ****/
-
-app.get('/api/returnOrders', controllerReturnOrder.getReturnOrders);
-app.get('/api/returnOrders/:id', controllerReturnOrder.getReturnOrderById);
-app.post('/api/returnOrder', controllerReturnOrder.createReturnOrder);
-app.delete('/api/returnOrder/:id', controllerReturnOrder.deleteReturnOrder);
 
 // activate the server
 app.listen(port, () => {

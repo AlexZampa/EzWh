@@ -1,14 +1,10 @@
 "use strict";
 
-class Mock_internalOrderDAO {
-    newInternalOrder = (issueDate, products, customerId, state) => jest.fn();
-    getAllInternalOrders = () => jest.fn();
-    getAllIssued = () => jest.fn();
-    getAllAccepted = () => jest.fn();
-    getInternalOrder = (ID) => jest.fn();
-    addDeliveredProducts = (ID, SKUItemList) => jest.fn();
-    setStatus = (ID, newState) => jest.fn();
-    deleteInternalOrder = (ID) => jest.fn();
-}
-
-module.exports = Mock_internalOrderDAO
+exports.newInternalOrder = jest.fn();
+exports.getAllInternalOrders = jest.fn();
+exports.getAllIssued = jest.fn();
+exports.getAllAccepted = jest.fn();
+exports.getInternalOrder = jest.fn();
+exports.addDeliveredProducts = jest.fn();
+exports.setStatus = jest.fn();
+exports.deleteInternalOrder = jest.fn();
