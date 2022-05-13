@@ -21,9 +21,9 @@ class InternalOrderDAO{
 
     constructor(db){
         this.connectionDB = new ConnectionDB();
-        this.connectionDB.DBexecuteQuery("CREATE TABLE IF NOT EXISTS InternalOrder (id NUMBER PRIMARY KEY, issueDate DATETIME, internalCustomer NUMBER, state VARCHAR(20)), FOREIGN KEY (internalCustomer) REFERENCES user.id) ", []);
-        this.connectionDB.DBexecuteQuery("CREATE TABLE IF NOT EXISTS InternalOrderProduct ( internalOrder NUMBER, SKU NUMBER, qty NUMBER, PRIMARY KEY (internalOrder, SKU), FOREIGN KEY (internalOrder) REFERENCES InternalOrder.id, FOREIGN KEY (SKU) REFERENCES SKU.id)", []);
-        this.connectionDB.DBexecuteQuery("CREATE TABLE IF NOT EXISTS InternalOrderSKUItems ( internalOrder NUMBER, SKUItem NUMBER, PRIMARY KEY (internalOrder, SKUItem) FOREIGN KEY (internalOrder) REFERENCES InternalOrder.id, FOREIGN KEY (SKUItem) REFERENCES SKUItem.id ", [])
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrder" ("id" INTEGER PRIMARY KEY, "issueDate" DATETIME NOT NULL, "internalCustomer" INTEGER, "state" VARCHAR(20)) NOT NULL, FOREIGN KEY ("internalCustomer") REFERENCES user.id) ', []);
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderProduct" ( "internalOrder" INTEGER NOT NULL, "SKU" INTEGER NOT NULL, "qty" INTEGER NOT NULL, PRIMARY KEY ("internalOrder", "SKU"), FOREIGN KEY ("internalOrder") REFERENCES InternalOrder.id, FOREIGN KEY ("SKU") REFERENCES SKU.id)', []);
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderSKUItems" ( "internalOrder" INTEGER NOT NULL, "SKUItem" INTEGER NOT NULL, PRIMARY KEY ("internalOrder", "SKUItem") FOREIGN KEY ("internalOrder") REFERENCES InternalOrder.id, FOREIGN KEY ("SKUItem") REFERENCES SKUItem.id ', []);
     }
 
     newInternalOrder = async (issueDate, products, customerId, state) => {
