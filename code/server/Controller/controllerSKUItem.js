@@ -10,7 +10,9 @@ const warehouse = new Warehouse();
 
 // CREATE NEW SKUITEM
 router.post('/skuitem', 
-    [check("RFID").exists().isNumeric(), check("SKUId").exists().isNumeric(), check("DateOfStock").optional({nullable: true}).exists().isString()],
+    [check("RFID").exists().isNumeric(),
+     check("SKUId").exists().isNumeric(),
+     check("DateOfStock").optional({nullable: true}).exists().isString()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -145,24 +147,5 @@ router.delete('/skuitems/:rfid',
         }
     }
 });
-
-
-//     deleteSKUItem = async (req, res) => {
-//         try {
-//             const result = await this.warehouse.deleteSKUItem(req.params.rfid);
-//             return res.status(204).end();
-//         } catch (err) {
-//             console.log(err);
-//             switch (err.err) {
-//                 case 404: return res.status(422).end();     // API requires 422 in any case    
-//                 case 422: return res.status(422).end();
-//                 default: return res.status(503).end();
-//             }
-//         }
-//     };
-
-// }
-
-// module.exports = ControllerSKUItem;
 
 module.exports = router;

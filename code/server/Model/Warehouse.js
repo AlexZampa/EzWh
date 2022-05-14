@@ -14,7 +14,7 @@ const { User, userTypes } = require('./User');
 const SKU = require('./Sku');
 const Position = require('./Position');
 const SKUItem = require('./SKUItem');
-const RestockOrder = require("./RestockOrder");
+const { RestockOrder, restockOrderstateList} = require("./RestockOrder");
 const ReturnOrder = require("./ReturnOrder");
 const InternalOrder = require("./InternalOrder");
 
@@ -166,7 +166,7 @@ class Warehouse{
     deleteSKU = async (skuID) => {
         try{
             const sku = await this.skuDAO.getSKU(skuID);        // check if SKU exists
-            const roList = await this.restockOrderDAO.getRestockOrders();       // check if RestockOrderProducts has SKU
+            const roList = await this.restockOrderDAO.getAllRestockOrders();       // check if RestockOrderProducts has SKU
             for(const ro of roList){
                 if(ro.getProducts().find(p => p.SKUId === skuID))
                     throw {err : 422, msg : "Cannot delete SKU"};
@@ -381,7 +381,7 @@ class Warehouse{
         const users = await this.userDAO.getAllUsers();
         if(!users.find(u => u.getUserID() === supplierID && u.getType() === "supplier"))
             throw {err : 422, msg : "Supplier Not Found" };
-        const res = await this.restockOrderDAO.newRestockOrder(products, supplierID, issueDate);
+        const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
         return res;
     }
 
@@ -398,7 +398,7 @@ class Warehouse{
 
     getRestockOrders = async () => {
         try{
-            const restockOrderList = await this.restockOrderDAO.getRestockOrders();
+            const restockOrderList = await this.restockOrderDAO.getAllRestockOrders();
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
             restockOrderList.forEach(ro => {
                 const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === ro.getID());
@@ -412,7 +412,7 @@ class Warehouse{
 
     getRestockOrdersIssued = async () => {
         try{
-            let restockOrderList = await this.restockOrderDAO.getRestockOrders();
+            let restockOrderList = await this.restockOrderDAO.getAllRestockOrders();
             restockOrderList = restockOrderList.filter(ro => ro.getState() === "ISSUED");
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
             restockOrderList.forEach(ro => {
@@ -434,8 +434,8 @@ class Warehouse{
             const skuItemList = [];
             for(const s of SKUItemIdList){
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
-                // if SKUItem not found or SKUid passed as params is different from the real SKUid or SKUItem has already a restockOrder
-                if(!skuItem || s.SKUId !== skuItem.getSKU() || skuItem.getRestockOrder() !== undefined)
+                // if SKUItem not found or skuID passed as params is different from the real SKUid or SKUItem has already a restockOrder
+                if(!skuItem || s.skuID !== skuItem.getSKU() || skuItem.getRestockOrder() !== undefined)
                     throw {err: 422, msg: "Invalid SKUItem"};
                 skuItemList.push(skuItem);
             }
@@ -452,9 +452,11 @@ class Warehouse{
     restockOrderAddTransportNote = async (restockOrderID, date) => {
         try{
             if(!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
-                throw {err : 422, msg : "Invalid Date"};
-            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
-            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY-MM-DD HH:mm'));
+                throw {err : 422, msg : "Invalid date"};
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
+            if( dayjs(date).isBefore( dayjs(restockOrder.getIssueDate())) )
+                throw {err: 422, msg: "Invalid date: deliveryDate is before issueDate"};
+            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY/MM/DD HH:mm'));
             return res;
         } catch(err){
             throw err;
@@ -463,8 +465,10 @@ class Warehouse{
 
     modifyRestockOrderState = async (restockOrderID, newState) => {
         try{
+            if(!restockOrderstateList.find(state => state === newState.toUpperCase()))
+                throw { err: 422, msg: "newState invalid" };
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
-            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, newState, restockOrder.getTransportNote());
+            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, newState.toUpperCase(), restockOrder.getTransportNote() ? restockOrder.getTransportNote() : null);
             return res;
         } catch(err){
             throw err;
@@ -484,8 +488,13 @@ class Warehouse{
 
     deleteRestockOrder = async (restockOrderID) => {
         try {
-            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
-            const res = await this.restockOrderDAO.deleteRestockOrder(restockOrderID);
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();             // get SKUItems
+            for(const skuItem of skuItemList){
+                if(skuItem.getRestockOrder() === restockOrderID)                    // check SKUItems
+                    throw { err: 422, msg: "Cannot delete Restock Order" };
+            }
+            const res = await this.restockOrderDAO.deleteRestockOrder(restockOrderID);      // delete RestockOrder
             return res;
         } catch (err) {
             throw err;
@@ -641,7 +650,7 @@ class Warehouse{
             if(type === "manager" || type === "administrator")
                 throw {err : 422, msg : "Attempt to delete manager/administrator" };
             if(type === "supplier"){
-                const roList = await this.restockOrderDAO.getRestockOrders();
+                const roList = await this.restockOrderDAO.getAllRestockOrders();
                 if(roList.find(ro => ro.getSupplier() === user.getUserID()))
                     throw {err : 422, msg : "Cannot delete supplier: Restock Order assigned to the user" };
             }

@@ -1,7 +1,7 @@
 'use strict';
 const dayjs = require('dayjs');
 
-const stateList = ["ISSUED", "DELIVERY", "DELIVERED", "TESTED", "COMPLETEDRETURN", "COMPLETED"];
+const restockOrderstateList = ["ISSUED", "DELIVERY", "DELIVERED", "TESTED", "COMPLETEDRETURN", "COMPLETED"];
 
 class RestockOrder {
     constructor(id, issueDate, supplier, state, transportNote=undefined) {
@@ -37,7 +37,7 @@ class RestockOrder {
     }
     
     setState = (newState) => {
-        if(stateList.find(state => state === newState))
+        if(restockOrderstateList.find(state => state === newState))
             this.state = newState;
         
         if (newState === "DELIVERY") 
@@ -62,7 +62,7 @@ class RestockOrder {
         if(this.state === "ISSUED")
             delete obj.transportNote;
         if(this.state === "ISSUED" || this.state === "DELIVERY")
-            obj.products = [];
+            obj.skuItems = [];
         return (obj);
     };
 
@@ -96,4 +96,4 @@ class Product {
 } 
 
 
-module.exports = { RestockOrder, TransportNote, Product, stateList};
+module.exports = { RestockOrder, TransportNote, Product, restockOrderstateList};

@@ -15,10 +15,10 @@ class RestockOrderDAO {
         this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "skuID" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","skuID"));');
     }
 
-    newRestockOrder = async (products, supplierID, issueDate) => {
+    newRestockOrder = async (products, state, supplierID, issueDate, transportNote) => {
         try{
-            let sql = 'INSERT INTO RestockOrder(supplierID, state, issueDate) VALUES(?, "ISSUED", ?)';
-            const result = await this.connectionDB.DBexecuteQuery(sql, [supplierID, issueDate]);
+            let sql = 'INSERT INTO RestockOrder(supplierID, state, issueDate, transportNote) VALUES(?, ?, ?, ?)';
+            const result = await this.connectionDB.DBexecuteQuery(sql, [supplierID, state, issueDate, transportNote]);
             sql = "INSERT INTO RestockOrderProduct(RestockOrderID, skuID, description, price, quantity) VALUES(?, ?, ?, ?, ?)";
             for(const prod of products) {
                 // result.lastID = RestockOrderID
@@ -39,7 +39,7 @@ class RestockOrderDAO {
                 throw {err : 404, msg : "Restock Order not found"};
             const restockOrder = new RestockOrder(res.id, res.issueDate, res.supplierID, res.state, res.transportNote ? res.transportNote : undefined);
             sql = "SELECT * FROM RestockOrderProduct WHERE restockOrderID = ?";
-            const products = await this.connectionDB.DBgetAll(sql, [restockOrder.getID()]);
+            const products = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
             products.forEach(p => restockOrder.addProduct(p.skuID, p.description, p.price, p.quantity));
             return restockOrder;
         }
@@ -48,7 +48,7 @@ class RestockOrderDAO {
         }
     };
 
-    getRestockOrders = async () => {
+    getAllRestockOrders = async () => {
         try {
             let sql = "SELECT * FROM RestockOrder";
             const result = await this.connectionDB.DBgetAll(sql, []);
@@ -66,10 +66,10 @@ class RestockOrderDAO {
         }
     };
 
-    updateRestockOrder = async (restockOrderID, newState, transportNote=undefined) => {
+    updateRestockOrder = async (restockOrderID, newState, transportNote) => {
         try{
             let sql = "UPDATE RestockOrder SET state = ?, transportNote = ? WHERE id = ?";
-            const res = await this.connectionDB.DBexecuteQuery(sql, [newState, transportNote ? transportNote : null, restockOrderID]);
+            const res = await this.connectionDB.DBexecuteQuery(sql, [newState, transportNote, restockOrderID]);
             return true;
         } catch(err) {
             throw err;
@@ -78,14 +78,8 @@ class RestockOrderDAO {
 
     deleteRestockOrder = async (restockOrderID) => {
         try {
-            // check consistency of the DB 
-            let sql = "SELECT COUNT(*) AS num FROM SKUItem WHERE restockOrderID = ?";     // check SKUItems   
-            let res = await this.connectionDB.DBget(sql, [restockOrderID]);
-            if (res.num !== 0)
-                throw { err: 422, msg: "Cannot delete Restock Order" };
-            
-            sql = "DELETE FROM RestockOrderProduct WHERE restockOrderID = ?";     // delete product
-            res = await this.connectionDB.DBexecuteQuery(sql, [restockOrderID]);
+            let sql = "DELETE FROM RestockOrderProduct WHERE restockOrderID = ?";     // delete product
+            let res = await this.connectionDB.DBexecuteQuery(sql, [restockOrderID]);
             
             sql = "DELETE FROM RestockOrder WHERE id = ?";
             res = await this.connectionDB.DBexecuteQuery(sql, [restockOrderID]);    // delete Restock Order

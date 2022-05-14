@@ -4,7 +4,7 @@ const express = require('express');
 // const ControllerSKU = require('./Controller/ControllerSKU');
 // const ControllerPosition = require('./Controller/ControllerPosition');
 // const ControllerSKUItem = require('./Controller/ControllerSKUItem');
-const ControllerRestockOrder = require('./Controller/ControllerRestockOrder');
+// const ControllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
 const ControllerReturnOrder = require('./Controller/ControllerReturnOrder');
 
@@ -12,6 +12,8 @@ const controllerSKU = require('./Controller/ControllerSKU');
 const controllerPosition = require('./Controller/ControllerPosition');
 const controllerUser =  require('./Controller/ControllerUser');
 const controllerSKUItem = require('./Controller/ControllerSKUItem');
+const controllerRestockOrder = require('./Controller/ControllerRestockOrder');
+
 
 // init express
 const app = new express();
@@ -21,7 +23,7 @@ const port = 3001;
 // const controllerSKU = new ControllerSKU();
 // const controllerPosition = new ControllerPosition();
 // const controllerSKUItem = new ControllerSKUItem();
-const controllerRestockOrder = new ControllerRestockOrder();
+// const controllerRestockOrder = new ControllerRestockOrder();
 const controllerInternalOrder = new ControllerInternalOrder();
 const controllerReturnOrder = new ControllerReturnOrder(); 
 
@@ -38,6 +40,9 @@ app.use('/api', controllerSKU);
 app.use('/api', controllerPosition);
 app.use('/api', controllerUser);
 app.use('/api', controllerSKUItem);
+app.use('/api', controllerRestockOrder);
+
+
 
 //GET /api/test
 app.get('/api/hello', hello);
@@ -75,15 +80,15 @@ function hello(req, res) {
 // app.delete('/api/position/:positionID', controllerPosition.deletePosition);
 
 /**** RESTOCK ORDER ****/
-app.post('/api/restockOrder', controllerRestockOrder.createRestockOrder);
-app.get('/api/restockOrders', controllerRestockOrder.getRestockOrders);
-app.get('/api/restockOrdersIssued', controllerRestockOrder.getRestockOrdersIssued);
-app.get('/api/restockOrders/:id', controllerRestockOrder.getRestockOrderByID);
-app.get('/api/restockOrders/:id/returnItems', controllerRestockOrder.getItemsToReturnFromRO);
-app.put('/api/restockOrder/:id', controllerRestockOrder.modifyState);
-app.put('/api/restockOrder/:id/skuItems', controllerRestockOrder.addSKUItems);
-app.put('/api/restockOrder/:id/transportNote', controllerRestockOrder.addTransportNote);
-app.delete('/api/restockOrder/:id', controllerRestockOrder.deleteRestockOrder);
+// app.post('/api/restockOrder', controllerRestockOrder.createRestockOrder);
+// app.get('/api/restockOrders', controllerRestockOrder.getRestockOrders);
+// app.get('/api/restockOrdersIssued', controllerRestockOrder.getRestockOrdersIssued);
+// app.get('/api/restockOrders/:id', controllerRestockOrder.getRestockOrderByID);
+// app.get('/api/restockOrders/:id/returnItems', controllerRestockOrder.getItemsToReturnFromRO);
+// app.put('/api/restockOrder/:id', controllerRestockOrder.modifyState);
+// app.put('/api/restockOrder/:id/skuItems', controllerRestockOrder.addSKUItems);
+// app.put('/api/restockOrder/:id/transportNote', controllerRestockOrder.addTransportNote);
+// app.delete('/api/restockOrder/:id', controllerRestockOrder.deleteRestockOrder);
 
 /**** INTERNAL ORDER ****/
 app.get('/api/internalOrders', controllerInternalOrder.getInternalOrders);
