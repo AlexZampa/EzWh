@@ -32,6 +32,7 @@ app.use('/api', controllerPosition);
 app.use('/api', controllerUser);
 app.use('/api', controllerSKUItem);
 app.use('/api', controllerRestockOrder);
+app.use('/api', controllerInternalOrder);
 
 
 
@@ -45,16 +46,6 @@ function hello(req, res) {
 	}
 	return res.status(200).json(message);
 }
-
-
-/**** INTERNAL ORDER ****/
-app.get('/api/internalOrders', controllerInternalOrder.getInternalOrders);
-app.get('/api/internalOrdersIssued', controllerInternalOrder.getInternalOrdersIssued);
-app.get('/api/internalOrdersAccepted', controllerInternalOrder.getAcceptedInternalOrders);
-app.get('/api/internalOrders/:id', controllerInternalOrder.getInternalOrder);
-app.post('/api/internalOrders', controllerInternalOrder.createInternalOrder);
-app.put('/api/internalOrders/:id', controllerInternalOrder.setIOStatus);
-app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 
 /**** RETURN ORDER ****/
 // app.get('/api/returnOrders', controllerReturnOrder.getReturnOrders);

@@ -27,14 +27,20 @@ class InternalOrderDAO {
     }
 
     newInternalOrder = async (issueDate, products, customerId, state) => {
-        let sql = "INSERT INTO InternalOrder(issueDate, internalCustomer, state) VALUES(?, ?, ?)";
-        const res = await this.connectionDB.DBexecuteQuery(sql, [issueDate, customerId, state]);
 
-        sql = "INSERT INTO InternalOrderProduct(internalOrder, SKU, qty) VALUES(?, ?, ?)"
-        for (const prod of products) {
-            this.connectionDB.DBexecuteQuery(sql, [res.lastID, prod.sku.getId(), prod.qty]);
+        try {
+            let sql = "INSERT INTO InternalOrder(issueDate, internalCustomer, state) VALUES(?, ?, ?)";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [issueDate, customerId, state]);
+
+            sql = "INSERT INTO InternalOrderProduct(internalOrder, SKU, qty) VALUES(?, ?, ?)"
+            for (const prod of products) {
+                this.connectionDB.DBexecuteQuery(sql, [res.lastID, prod.sku.getId(), prod.qty]);
+            }
+            return res.lastID;
         }
-        return res.lastID;
+        catch (err) {
+            throw err;
+        }
     };
 
     getAllInternalOrders = async () => {
