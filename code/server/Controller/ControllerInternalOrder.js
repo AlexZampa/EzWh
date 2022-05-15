@@ -3,8 +3,8 @@
 const express = require('express');
 const { expressValidator, check, validationResult } = require('express-validator');
 const Warehouse = require('../Model/Warehouse');
-const router = express.Router();
 
+const router = express.Router();
 const warehouse = new Warehouse();
 
 //GET ALL INTERNAl ORDERS
@@ -101,7 +101,7 @@ router.get('/internalOrders/:id',
 //CREATE NEW INTERNAL ORDER
 router.post('/internalOrders',
     [check("issueDate").exists().isDate("YYYY/MM/DD hh:mm"), check("products").exists(), check("customerId").exists().isNumeric()],
-    (req, res) => {
+    async (req, res) => {
 
         // check if user authorized: return res.status(401).end();
 
@@ -112,7 +112,8 @@ router.post('/internalOrders',
         }
 
         try {
-            await this.warehouse.addInternalOrder(req.body.products, req.body.customerId, req.body.issueDate);
+            await warehouse.addInternalOrder(req.body.products, req.body.customerId, req.body.issueDate);
+            return res.status(201).json();
         }
         catch (err) {
             console.log(err);
@@ -165,7 +166,7 @@ router.put('/internalOrders/:id',
 //DELETE INTERNAL ORDER
 app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 router.delete('/internalOrders/:id',
-    (req, res) => {
+    async (req, res) => {
         
         // check if user authorized: return res.status(401).json({});
 
@@ -173,7 +174,7 @@ router.delete('/internalOrders/:id',
             return res.status(422).end();
 
         try {
-            result = this.warehouse.deleteInternalOrder(req.params.id)
+            result = warehouse.deleteInternalOrder(req.params.id)
             if (result === false)
                 return res.status(422).end();
             return res.status(204).end();

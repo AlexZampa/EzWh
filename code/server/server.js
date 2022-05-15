@@ -1,22 +1,19 @@
 'use strict';
 const express = require('express');
 
-const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
-const ControllerReturnOrder = require('./Controller/ControllerReturnOrder');
 
 const controllerSKU = require('./Controller/ControllerSKU');
 const controllerPosition = require('./Controller/ControllerPosition');
 const controllerUser =  require('./Controller/ControllerUser');
 const controllerSKUItem = require('./Controller/ControllerSKUItem');
 const controllerRestockOrder = require('./Controller/ControllerRestockOrder');
+const controllerInternalOrder = require('./Controller/ControllerInternalOrder');
+const controllerReturnOrder = require('./Controller/ControllerReturnOrder');
 
 
 // init express
 const app = new express();
 const port = 3001;
-
-const controllerInternalOrder = new ControllerInternalOrder();
-const controllerReturnOrder = new ControllerReturnOrder(); 
 
 /*
  * Alessandro -> SKU, Position, User
@@ -33,6 +30,7 @@ app.use('/api', controllerUser);
 app.use('/api', controllerSKUItem);
 app.use('/api', controllerRestockOrder);
 app.use('/api', controllerInternalOrder);
+app.use('/api', controllerReturnOrder);
 
 
 
@@ -46,12 +44,6 @@ function hello(req, res) {
 	}
 	return res.status(200).json(message);
 }
-
-/**** RETURN ORDER ****/
-// app.get('/api/returnOrders', controllerReturnOrder.getReturnOrders);
-// app.get('/api/returnOrders/:id', controllerReturnOrder.getReturnOrderById);
-// app.post('/api/returnOrder', controllerReturnOrder.createReturnOrder);
-// app.delete('/api/returnOrder/:id', controllerReturnOrder.deleteReturnOrder);
 
 // activate the server
 app.listen(port, () => {
