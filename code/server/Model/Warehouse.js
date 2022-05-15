@@ -490,8 +490,14 @@ class Warehouse{
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);     // get Restock Order
             if(restockOrder.getState() !== "COMPLETEDRETURN")
                 throw {err : 422, msg : "Restock Order not in COMPLETEDRETURN state"};
-            // call testResultDAO get testResult
-            // TODO
+            const skuItems = restockOrder.getSKUItems();
+            const returnItems = [];
+            const testResults = null; // TODO wait for impl of testResult/Descriptor to implement this
+            for (r of testResults) {
+                if (r.getResult() === false) {
+                    returnItems.push(s);
+                }
+            }
             return res;
         } catch (err) {
             throw err;

@@ -15,7 +15,8 @@ class SKUItem {
     getAvailable = () => this.available;
     getDateOfStock = () => this.dateOfStock.format('YYYY/MM/DD HH:mm');
     getRestockOrder = () => this.restockOrder;
-    
+    getTestResults = () => this.testResults;
+
     setRFID = (RFID) => { this.RFID = RFID; };
     setAvailable = (available) => { this.available = available; };
     setDateOfStock = (dateOfStock) => { this.dateOfStock = dayjs(dateOfStock); };
