@@ -1,4 +1,5 @@
 'use strict';
+
 const express = require('express');
 const {expressValidator, check , validationResult} = require('express-validator');
 const router = express.Router();
@@ -57,7 +58,7 @@ router.get('/skus/:id', [check("id").isInt({ min: 1})],
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const sku = await warehouse.getSKU(req.params.id);
+            const sku = await warehouse.getSKU(Number(req.params.id));
             const result = sku.convertToObj();
             delete result.id;
             return res.status(200).json(result);
@@ -84,7 +85,7 @@ router.put('/sku/:id',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const result = await warehouse.modifySKU(req.params.id, req.body.newDescription, req.body.newWeight, req.body.newVolume,
+            const result = await warehouse.modifySKU(Number(req.params.id), req.body.newDescription, req.body.newWeight, req.body.newVolume,
                 req.body.newNotes, req.body.newPrice, req.body.newAvailableQuantity);
             return res.status(200).end();
             // check if user authorized otherwise: return res.status(401).end();
@@ -109,7 +110,7 @@ router.put('/sku/:id/position',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const result = await warehouse.modifySKUposition(req.params.id, req.body.position);
+            const result = await warehouse.modifySKUposition(Number(req.params.id), req.body.position);
             return res.status(200).end();
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
@@ -126,7 +127,7 @@ router.put('/sku/:id/position',
 // DELETE SKU
 router.delete('/skus/:id', async (req, res) => {
         try{
-            const result = await warehouse.deleteSKU(req.params.id);
+            const result = await warehouse.deleteSKU(Number(req.params.id));
             return res.status(204).end();
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){

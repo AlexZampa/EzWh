@@ -1,10 +1,6 @@
 'use strict';
 const express = require('express');
-// const ControllerUser = require('./Controller/ControllerUser');
-// const ControllerSKU = require('./Controller/ControllerSKU');
-// const ControllerPosition = require('./Controller/ControllerPosition');
-// const ControllerSKUItem = require('./Controller/ControllerSKUItem');
-// const ControllerRestockOrder = require('./Controller/ControllerRestockOrder');
+
 const ControllerInternalOrder = require('./Controller/ControllerInternalOrder');
 const ControllerReturnOrder = require('./Controller/ControllerReturnOrder');
 
@@ -19,11 +15,6 @@ const controllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const app = new express();
 const port = 3001;
 
-// const controllerUser = new ControllerUser();
-// const controllerSKU = new ControllerSKU();
-// const controllerPosition = new ControllerPosition();
-// const controllerSKUItem = new ControllerSKUItem();
-// const controllerRestockOrder = new ControllerRestockOrder();
 const controllerInternalOrder = new ControllerInternalOrder();
 const controllerReturnOrder = new ControllerReturnOrder(); 
 
@@ -56,40 +47,6 @@ function hello(req, res) {
 }
 
 
-/**** SKU  ****/
-// app.post('/api/sku', controllerSKU.createSKU);
-// app.get('/api/skus', controllerSKU.getSKUs);
-// app.get('/api/skus/:id', controllerSKU.getSKUbyID);
-// app.put('/api/sku/:id', controllerSKU.modifySKU);
-// app.put('/api/sku/:id/position', controllerSKU.modifySKUposition);
-// app.delete('/api/skus/:id', controllerSKU.deleteSKU);
-
-/**** SKUITEM ****/
-// app.post('/api/skuitem', controllerSKUItem.createSKUItem);
-// app.get('/api/skuitems', controllerSKUItem.getSKUItems);
-// app.get('/api/skuitems/sku/:id', controllerSKUItem.getSKUItemsBySKUid);
-// app.get('/api/skuitems/:rfid', controllerSKUItem.getSKUItemByRFID);
-// app.put('/api/skuitems/:rfid', controllerSKUItem.modifySKUItem);
-// app.delete('/api/skuitems/:rfid', controllerSKUItem.deleteSKUItem);
-
-/**** POSITION ****/
-// app.post('/api/position', controllerPosition.createPosition);
-// app.get('/api/positions', controllerPosition.getPositions);
-// app.put('/api/position/:positionID', controllerPosition.modifyPosition);
-// app.put('/api/position/:positionID/changeID', controllerPosition.modifyPositionID);
-// app.delete('/api/position/:positionID', controllerPosition.deletePosition);
-
-/**** RESTOCK ORDER ****/
-// app.post('/api/restockOrder', controllerRestockOrder.createRestockOrder);
-// app.get('/api/restockOrders', controllerRestockOrder.getRestockOrders);
-// app.get('/api/restockOrdersIssued', controllerRestockOrder.getRestockOrdersIssued);
-// app.get('/api/restockOrders/:id', controllerRestockOrder.getRestockOrderByID);
-// app.get('/api/restockOrders/:id/returnItems', controllerRestockOrder.getItemsToReturnFromRO);
-// app.put('/api/restockOrder/:id', controllerRestockOrder.modifyState);
-// app.put('/api/restockOrder/:id/skuItems', controllerRestockOrder.addSKUItems);
-// app.put('/api/restockOrder/:id/transportNote', controllerRestockOrder.addTransportNote);
-// app.delete('/api/restockOrder/:id', controllerRestockOrder.deleteRestockOrder);
-
 /**** INTERNAL ORDER ****/
 app.get('/api/internalOrders', controllerInternalOrder.getInternalOrders);
 app.get('/api/internalOrdersIssued', controllerInternalOrder.getInternalOrdersIssued);
@@ -104,19 +61,6 @@ app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrde
 // app.get('/api/returnOrders/:id', controllerReturnOrder.getReturnOrderById);
 // app.post('/api/returnOrder', controllerReturnOrder.createReturnOrder);
 // app.delete('/api/returnOrder/:id', controllerReturnOrder.deleteReturnOrder);
-
-/**** USER ****/
-// app.get('/api/suppliers', controllerUser.getSuppliers);
-// app.get('/api/users',  controllerUser.getUsers);
-// app.post('/api/newUser', controllerUser.createUser);
-// app.post('/api/managerSessions', controllerUser.loginManager);
-// app.post('/api/customerSessions', controllerUser.loginCustomer);
-// app.post('/api/supplierSessions', controllerUser.loginSupplier);
-// app.post('/api/clerkSessions', controllerUser.loginClerk);
-// app.post('/api/qualityEmployeeSessions', controllerUser.loginQualityEmployee);
-// app.post('/api/deliveryEmployeeSessions', controllerUser.loginDeliveryEmployee);
-// app.put('/api/users/:username', controllerUser.modifyUserRights);
-// app.delete('/api/users/:username/:type', controllerUser.deleteUser);
 
 // activate the server
 app.listen(port, () => {

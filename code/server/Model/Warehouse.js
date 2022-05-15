@@ -29,6 +29,7 @@ const Mock_testDescriptorDAO = require("../Mock_databases/Mock_testDescriptorDAO
 const Mock_testResultDAO = require("../Mock_databases/Mock_testResultDAO");
 const Mock_userDAO = require("../Mock_databases/Mock_userDAO");
 
+// used for date vaidation
 dayjs.extend(customParseFormat);
 
 class Warehouse{
@@ -75,6 +76,7 @@ class Warehouse{
         }
     };
 
+    /********** TODO add testDescriptor ***************/
     getSKUs = async () => {
         try{
             const skuList = await this.skuDAO.getAllSKU();
@@ -92,6 +94,7 @@ class Warehouse{
         }
     };
 
+    /********** TODO add testDescriptor ***************/
     getSKU = async (skuID) => {
         try{
             const sku = await this.skuDAO.getSKU(skuID);
@@ -163,6 +166,7 @@ class Warehouse{
         }
     };
 
+    /********** TODO add check on testDescriptor ***************/
     deleteSKU = async (skuID) => {
         try{
             const sku = await this.skuDAO.getSKU(skuID);        // check if SKU exists
@@ -261,6 +265,7 @@ class Warehouse{
         }
     };
 
+    /********** TODO check on TestResult ***************/
     deleteSKUItem = async (rfid) => {
         try {
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);            // get SKUItem
@@ -313,6 +318,8 @@ class Warehouse{
                 throw {err : 422, msg : "Invalid Position data"};
 
             const newPositionID = aisle.concat(row).concat(col);
+
+            // CHECK IF NECESSARY TO DO THIS
             if(pos.getAssignedSKU() !== undefined){
                 const sku = await this.skuDAO.getSKU(pos.getAssignedSKU());         // get SKU of Position
                 const totWeight = sku.getWeight() * sku.getAvailableQuantity();
@@ -323,6 +330,7 @@ class Warehouse{
                 const res = await this.skuDAO.updateSKU(sku.getID(), sku.getDescription(), sku.getWeight(), sku.getVolume(), sku.getNotes(),
                     sku.getPrice(), sku.getAvailableQuantity(), newPositionID);
             }
+            // update Position
             const result = await this.positionDAO.updatePosition(positionID, newPositionID, aisle, row, col, 
                 maxWeight, maxVolume, occupiedWeight, occupiedVolume, pos.getAssignedSKU() ? pos.getAssignedSKU() : null);
             return result;
@@ -425,6 +433,7 @@ class Warehouse{
         }
     }
 
+    // receive an object SKUItemIdList: [{"skuID" : skuid, "rfid" : rfid},...]
     restockOrderAddSKUItems = async (restockOrderID, SKUItemIdList) => {
         try{
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
@@ -475,9 +484,12 @@ class Warehouse{
         }
     }
 
+    /************************* TODO *****************************************/
     returnItemsFromRestockOrder = async (restockOrderID) => {
         try {
-            const res = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);     // get Restock Order
+            if(restockOrder.getState() !== "COMPLETEDRETURN")
+                throw {err : 422, msg : "Restock Order not in COMPLETEDRETURN state"};
             // call testResultDAO get testResult
             // TODO
             return res;

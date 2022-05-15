@@ -1,4 +1,5 @@
 'use strict';
+
 const Warehouse = require('../Model/Warehouse');
 const express = require('express');
 const {expressValidator, check , validationResult} = require('express-validator');
