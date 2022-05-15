@@ -34,6 +34,13 @@ class SKUItem {
             });
     };
 
+    convertToObjSimple = () => {
+        return (
+            {
+                "RFID": this.RFID, "SKUId": this.sku.getID()
+            });
+    }
+
 }
 
 module.exports = SKUItem;
