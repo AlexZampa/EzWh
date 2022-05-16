@@ -9,6 +9,9 @@ const PositionDAO = require('../Database/PositionDAO');
 const InternalOrderDAO = require('../Database/InternalOrderDAO');
 const RestockOrderDAO = require('../Database/RestockOrderDAO');
 const ReturnOrderDAO = require('../Database/ReturnOrderDAO');
+const ItemDAO = require('../Database/ItemDAO');
+const TestDescriptorDAO = require('../Database/TestDescriptorDAO');
+const TestResultDAO = require('../Database/TestResultDAO');
 
 const { User, userTypes } = require('./User');
 const SKU = require('./Sku');
@@ -17,6 +20,9 @@ const SKUItem = require('./SKUItem');
 const { RestockOrder, restockOrderstateList} = require("./RestockOrder");
 const ReturnOrder = require("./ReturnOrder");
 const InternalOrder = require("./InternalOrder");
+const Item = require('./Item');
+const TestDescriptor = require('./TestDescriptor');
+const TestResult = require('./TestResult');
 
 /* Mock DAO */
 const Mock_internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
@@ -46,6 +52,9 @@ class Warehouse{
         this.restockOrderDAO = new RestockOrderDAO();
         this.returnOrderDAO = new ReturnOrderDAO();
         this.internalOrderDAO = new InternalOrderDAO();
+        this.itemDAO = new ItemDAO();
+        this.testDescriptorDAO = new TestDescriptorDAO();
+        this.testResultDAO = new TestResultDAO();
     };
 
     /* This function must be executed BEFORE EACH unit test on Warehouse:
@@ -679,7 +688,162 @@ class Warehouse{
         }
     };
 
+    /********* functions for managing Item ***********/
+    getItems = async () => {
+        try{
+            const itemList = await this.itemDAO.getAllItem();
+            return itemList;
+        }catch(err){
+            throw err;
+        }
+    }
 
+    getItem = async (id) => {
+        try{
+            const item = await this.itemDAO.getItem(id);
+            return item;
+        }catch(err){
+            throw err;
+        }
+    }
+
+    addItem = async (description, price, SKUId, supplierId) => {
+        try{
+            const res = await this.itemDAO.newItem(description, price, SKUId, supplierId);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
+    }
+
+    modifyItem = async (id, newDescription, newPrice) => {
+        try {
+            const item = await this.itemDAO.getItem(id);
+            const result = await item.modifyItemData(newDescription, newPrice, this.itemDAO);
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    deleteItem = async (id) => {
+        try{
+            const res = await this.itemDAO.deleteItem(id);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
+    }
+
+    /********* functions for managing Test Descriptor ***********/
+    getTestDescriptors = async () => {
+        try{
+            const testDescriptorList = await this.testDescriptorDAO.getAllTestDescriptor();
+            return testDescriptorList;
+        }catch(err){
+            throw err;
+        }
+    }
+
+    getTestDescriptor = async (id) => {
+        try{
+            const td = await this.testDescriptorDAO.getTestDescriptor(id);
+            return td;
+        }catch(err){
+            throw err;
+        }
+    }
+
+    addTestDescriptor = async (name, procedureDescription, idSKU) => {
+        try{
+            const res = await this.testDescriptorDAO.newTestDescriptor(name, procedureDescription, idSKU);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
+    }
+
+    modifyTestDescriptor = async (id, newName, newProcedureDescription, newIdSKU) => {
+        try {
+            const td = await this.testDescriptorDAO.getTestDescriptor(id);
+            const result = await td.modifyTestDescriptorData(newName, newProcedureDescription, newIdSKU);
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    deleteTestDescriptor = async (id) => {
+        try{
+            const td = await this.testDescriptorDAO.getTestDescriptor(id);
+            const res = await this.testDescriptorDAO.deleteTestDescriptor(id);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
+    }
+
+    /********* functions for managing Test Result ***********/
+
+    getTestResults = async (rfid) => {
+        try{
+            const testResultList = await this.testResultDAO.getAllTestResult(rfid);
+            return testResultList;
+        }
+        catch(err){
+            throw err;
+        }
+    }
+
+    getTestResult = async (rfid, id) => {
+        try{
+            const testResult = await this.testResultDAO.getTestResult(rfid, id);
+            return testResult;
+        }
+        catch(err){
+            throw err;
+        }
+    }
+
+    addTestResult = async (rfid, idTestDescriptor, date, result) => {
+        try{
+            const skuItems = this.getSKUItems();
+            const testDescriptor = this.getTestDescriptor();
+            if(skuItems.some(s => {rfid === s.getRFID()}))
+                throw {err : 404, msg : "rfid not valid"};
+            if(testDescriptor.some(td => {idTestDescriptor === td.getID()}))
+                throw {err : 404, msg : "idTestDescriptor not valid"};
+            const res = await this.testResultDAO.newTestResult(rfid, idTestDescriptor, date, result);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
+    }
+
+    modifyTestResult = async (rfid, id, newIdTestDescriptor, newDate, newResult) => {
+        try {
+            const tr = await this.testResultDAO.getTestResult(rfid, id);
+            const result = await tr.modifyTestResultdata(newIdTestDescriptor, newDate, newResult);
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    deleteTestResult = async (id, rfid) => {
+        try{
+            const res = await this.testResultDAO.deleteTestResult(id, rfid);
+            return res;
+        }
+        catch(err){
+            throw err;
+        }
+    }
 }
 
 
