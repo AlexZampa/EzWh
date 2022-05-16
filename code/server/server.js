@@ -9,6 +9,9 @@ const controllerSKUItem = require('./Controller/ControllerSKUItem');
 const controllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const controllerInternalOrder = require('./Controller/ControllerInternalOrder');
 const controllerReturnOrder = require('./Controller/ControllerReturnOrder');
+const ControllerItem = require('./Controller/ControllerItem');
+const ControllerTestDescriptor = require('./Controller/ControllertestDescriptor');
+const ControllerTestResult = require('./Controller/ControllertestResult');
 
 
 // init express
@@ -31,6 +34,9 @@ app.use('/api', controllerSKUItem);
 app.use('/api', controllerRestockOrder);
 app.use('/api', controllerInternalOrder);
 app.use('/api', controllerReturnOrder);
+app.use('/api', ControllerItem);
+app.use('/api', ControllerTestDescriptor);
+app.use('/api', ControllerTestResult);
 
 
 
