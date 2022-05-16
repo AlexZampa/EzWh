@@ -493,7 +493,6 @@ class Warehouse{
         }
     }
 
-    /************************* TODO *****************************************/
     returnItemsFromRestockOrder = async (restockOrderID) => {
         try {
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);     // get Restock Order
@@ -501,13 +500,16 @@ class Warehouse{
                 throw {err : 422, msg : "Restock Order not in COMPLETEDRETURN state"};
             const skuItems = restockOrder.getSKUItems();
             const returnItems = [];
-            const testResults = null; // TODO wait for impl of testResult/Descriptor to implement this
-            for (r of testResults) {
-                if (r.getResult() === false) {
-                    returnItems.push(s);
+            for (s of skuItems) {
+                const testResults = this.testResultDAO.getAllTestResult(s.getRFID());
+                for (r of testResults) {
+                    if (r.result === false) {
+                        returnItems.push(s);
+                        break;
+                    }
                 }
             }
-            return res;
+            return returnItems;
         } catch (err) {
             throw err;
         }
