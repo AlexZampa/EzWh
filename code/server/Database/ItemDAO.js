@@ -7,6 +7,7 @@ class ItemDAO{
 
     constructor(db){
         this.connectionDB = new ConnectionDB();
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "Item" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT NOT NULL, "price" NUMERIC NOT NULL, "associatedSKU" INTEGER NOT NULL, "supplier" INTEGER NOT NULL, PRIMARY KEY("id"));');
     }
 
     getAllItem = async () => {

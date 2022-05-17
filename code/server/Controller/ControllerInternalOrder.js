@@ -164,7 +164,7 @@ router.put('/internalOrders/:id',
     });
 
 //DELETE INTERNAL ORDER
-app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
+// app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 router.delete('/internalOrders/:id',
     async (req, res) => {
         

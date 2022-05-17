@@ -10,7 +10,7 @@ const controllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const controllerInternalOrder = require('./Controller/ControllerInternalOrder');
 const controllerReturnOrder = require('./Controller/ControllerReturnOrder');
 const ControllerItem = require('./Controller/ControllerItem');
-const ControllerTestDescriptor = require('./Controller/ControllertestDescriptor');
+const ControllerTestDescriptor = require('./Controller/ControllerTestDescriptor');
 const ControllerTestResult = require('./Controller/ControllertestResult');
 
 

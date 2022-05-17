@@ -25,15 +25,15 @@ const TestDescriptor = require('./TestDescriptor');
 const TestResult = require('./TestResult');
 
 /* Mock DAO */
-const Mock_internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
-const Mock_positionDAO = require("../Mock_databases/Mock_positionDAO");
-const Mock_restockOrderDAO = require("../Mock_databases/Mock_restockOrderDAO");
-const Mock_returnOrderDAO = require("../Mock_databases/Mock_returnOrderDAO");
-const Mock_skuDAO = require("../Mock_databases/Mock_skuDAO");
-const Mock_skuItemDAO = require("../Mock_databases/Mock_skuItemDAO");
-const Mock_testDescriptorDAO = require("../Mock_databases/Mock_testDescriptorDAO");
-const Mock_testResultDAO = require("../Mock_databases/Mock_testResultDAO");
-const Mock_userDAO = require("../Mock_databases/Mock_userDAO");
+// const Mock_internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
+// const Mock_positionDAO = require("../Mock_databases/Mock_positionDAO");
+// const Mock_restockOrderDAO = require("../Mock_databases/Mock_restockOrderDAO");
+// const Mock_returnOrderDAO = require("../Mock_databases/Mock_returnOrderDAO");
+// const Mock_skuDAO = require("../Mock_databases/Mock_skuDAO");
+// const Mock_skuItemDAO = require("../Mock_databases/Mock_skuItemDAO");
+// const Mock_testDescriptorDAO = require("../Mock_databases/Mock_testDescriptorDAO");
+// const Mock_testResultDAO = require("../Mock_databases/Mock_testResultDAO");
+// const Mock_userDAO = require("../Mock_databases/Mock_userDAO");
 
 // used for date vaidation
 dayjs.extend(customParseFormat);
@@ -85,17 +85,20 @@ class Warehouse{
         }
     };
 
-    /********** TODO add testDescriptor ***************/
     getSKUs = async () => {
         try{
             const skuList = await this.skuDAO.getAllSKU();
+            const tests = await this.testDescriptorDAO.getAllTestDescriptor();
             for(const sku of skuList){
                 if(sku.getPosition() !== undefined){
                     const position = await this.positionDAO.getPosition(sku.getPosition());
                     sku.setPosition(position);
                 }
+                tests.forEach(t => {
+                    if(t.getSKUid() === sku.getID())
+                        sku.addTestDescriptor(t);
+                });
             }
-            // add get all test descriptors of skuID
             return skuList;
         }
         catch(err){
@@ -103,7 +106,6 @@ class Warehouse{
         }
     };
 
-    /********** TODO add testDescriptor ***************/
     getSKU = async (skuID) => {
         try{
             const sku = await this.skuDAO.getSKU(skuID);
@@ -111,7 +113,11 @@ class Warehouse{
                 const position = await this.positionDAO.getPosition(sku.getPosition());
                 sku.setPosition(position);
             }
-            // add get all test descriptors of skuID
+            const tests = await this.testDescriptorDAO.getAllTestDescriptor();
+            tests.forEach(t => {
+                if(t.getSKUid() === skuID)
+                    sku.addTestDescriptor(t);
+            });
             return sku;
         }
         catch(err){
@@ -175,7 +181,7 @@ class Warehouse{
         }
     };
 
-    /********** TODO add check on testDescriptor ***************/
+
     deleteSKU = async (skuID) => {
         try{
             const sku = await this.skuDAO.getSKU(skuID);        // check if SKU exists
@@ -189,7 +195,9 @@ class Warehouse{
             if(skuItemList.find(s => s.getSKU() === skuID))
                 throw {err : 422, msg : "Cannot delete SKU"};
 
-            // TODO: add check on TestDescriptor
+            const tests = await this.testDescriptorDAO.getAllTestDescriptor();  // check if SKU has TestDescriptor
+            if(tests.some(t => t.getSKUid() === skuID))
+                throw {err : 422, msg : "Cannot delete SKU"};
 
             const res = await this.skuDAO.deleteSKU(skuID);     // delete SKU
             if(sku.getPosition() !== undefined){                // if SKU has a Position assigned
@@ -203,6 +211,7 @@ class Warehouse{
             throw err;
         }
     };
+
 
     /**************** functions for managing SKUItem ***************/
     addSKUItem = async (rfid, skuID, dateOfStock) => {
@@ -274,13 +283,13 @@ class Warehouse{
         }
     };
 
-    /********** TODO check on TestResult ***************/
+
     deleteSKUItem = async (rfid) => {
         try {
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);            // get SKUItem
             if(skuItem.getRestockOrder() !== undefined)
                 throw { err: 422, msg: "Cannot delete SKUItem" };              // check Restock Order
-            // TODO check TestResult
+                
             const res = await this.skuItemDAO.deleteSKUItem(rfid);
             return res;
         }
@@ -387,6 +396,7 @@ class Warehouse{
             throw err;
         }
     };
+
 
     /********* functions for managing Restock Order ***********/
     addRestockOrder = async (products, supplierID, issueDate) => {
@@ -530,8 +540,8 @@ class Warehouse{
         }
     }
 
-    /********* functions for managing Return Orders **********/
 
+    /********* functions for managing Return Orders **********/
     addReturnOrder = async (SKUItemList, restockOrderId, returnDate) => {
         const res = await this.returnOrderDao.newReturnOrder(SKUItemList, restockOrderId, returnDate);
         const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
@@ -758,6 +768,7 @@ class Warehouse{
         }
     }
 
+    // missing check that sku exists (just use skuDAO.getSKU(idSKU))
     addTestDescriptor = async (name, procedureDescription, idSKU) => {
         try{
             const res = await this.testDescriptorDAO.newTestDescriptor(name, procedureDescription, idSKU);
@@ -768,6 +779,7 @@ class Warehouse{
         }
     }
 
+    // missing check that SKU exists (just use skuDAO.getSKU(idSKU))
     modifyTestDescriptor = async (id, newName, newProcedureDescription, newIdSKU) => {
         try {
             const td = await this.testDescriptorDAO.getTestDescriptor(id);
@@ -789,8 +801,9 @@ class Warehouse{
         }
     }
 
-    /********* functions for managing Test Result ***********/
 
+    /********* functions for managing Test Result ***********/
+    // missing check that SKUItem exists
     getTestResults = async (rfid) => {
         try{
             const testResultList = await this.testResultDAO.getAllTestResult(rfid);
@@ -801,6 +814,7 @@ class Warehouse{
         }
     }
 
+    // missing check that SKUItem exists
     getTestResult = async (rfid, id) => {
         try{
             const testResult = await this.testResultDAO.getTestResult(rfid, id);
@@ -811,6 +825,7 @@ class Warehouse{
         }
     }
 
+    //usa skUItemDAO.getSKUItem(rfid) invece di fare list.some(...), idem per testDescriptor (entrambe lanciano già err: 404)
     addTestResult = async (rfid, idTestDescriptor, date, result) => {
         try{
             const skuItems = this.getSKUItems();

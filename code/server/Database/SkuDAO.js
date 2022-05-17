@@ -28,12 +28,6 @@ class SkuDAO{
             let sql = "SELECT * FROM SKU";
             const result = await this.connectionDB.DBgetAll(sql, []);
             const skuList = result.map(r => new SKU(r.id, r.description, r.weight, r.volume, r.notes, r.price, r.availableQuantity, r.position ? r.position : undefined));
-            // move to class TestDescriptorDAO
-            for(const s of skuList){
-                sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
-                let skuTests = await this.connectionDB.DBgetAll(sql, [s.getID()]);
-                skuTests.forEach(t => {s.addTestDescriptor(new TestDescriptor(t.id)); });
-            }
             return skuList;
         }
         catch(err){
@@ -47,12 +41,7 @@ class SkuDAO{
             const res = await this.connectionDB.DBget(sql, [skuID]);
             if(res === undefined)
                 throw {err : 404, msg : "SKU not found"};
-            // move to class TestDescriptorDAO
-            sql = "SELECT * FROM TestDescriptor WHERE SKUid = ?";
-            const skuTests = await this.connectionDB.DBgetAll(sql, [skuID]);
             const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, res.position ? res.position : undefined);
-            // modify new TestDescriptor when class completed
-            skuTests.forEach(t => { sku.addTestDescriptor(new TestDescriptor(t.id)); });
             return sku;
         }
         catch(err){

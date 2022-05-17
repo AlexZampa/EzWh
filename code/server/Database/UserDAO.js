@@ -7,6 +7,7 @@ class UserDAO{
 
     constructor(){
         this.connectionDB = new ConnectionDB();
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "User" ("userID" INTEGER NOT NULL UNIQUE, "name" TEXT NOT NULL, "surname" TEXT NOT NULL, "email" TEXT NOT NULL, "type" TEXT NOT NULL, "password" TEXT NOT NULL, "salt" TEXT NOT NULL, PRIMARY KEY("userID"));');
     };
 
     newUser = async (username, name, surname, password, type) => {

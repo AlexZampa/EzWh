@@ -7,13 +7,14 @@ class TestDescriptorDAO{
 
     constructor(db){
         this.connectionDB = new ConnectionDB();
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "TestDescriptor" ("id" INTEGER NOT NULL UNIQUE, "name" TEXT NOT NULL, "procedureDescription" TEXT NOT NULL, "idSKU" INTEGER NOT NULL, PRIMARY KEY("id"));');
     }
 
     getAllTestDescriptor = async () => {
         try{
             let sql = "SELECT * FROM TestDescriptor";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const testDescriptorList = result.map(r => new TestDescriptor(r.id, r.name, r.procedureDescription, r.SKUid));
+            const testDescriptorList = result.map(r => new TestDescriptor(r.id, r.name, r.procedureDescription, r.idSKU));
             return testDescriptorList;
         }
         catch(err){
@@ -21,6 +22,8 @@ class TestDescriptorDAO{
         }
     }
 
+    // manca new TestDescriptor(...) nel return
+    // il msg dell'errore è sbagliato, poi controlla anche gli altri
     getTestDescriptor = async (id) => {
         try{
             let sql = "SELECT * FROM TestDescriptor WHERE id = ?";

@@ -11,8 +11,12 @@ const warehouse = new Warehouse();
 
 // CREATE NEW SKU
 router.post('/sku', 
-    [check("description").exists().trim().isAscii(), check("weight").exists().isNumeric(), check("volume").exists().isNumeric(), check("notes").exists().trim().isAscii(), 
-     check("price").exists().isNumeric(), check("availableQuantity").exists().isInt({ min: 0})],
+    [check("description").exists().trim().isAscii(),
+     check("weight").exists().isNumeric(),
+     check("volume").exists().isNumeric(),
+     check("notes").exists().trim().isAscii(), 
+     check("price").exists().isNumeric(),
+     check("availableQuantity").exists().isInt({ min: 0})],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -75,9 +79,13 @@ router.get('/skus/:id', [check("id").isInt({ min: 1})],
 
 // MODIFY SKU 
 router.put('/sku/:id', 
-    [check("id").isInt({ min: 1}), check("newDescription").exists().trim().isAscii(), check("newWeight").exists().isNumeric(),
-    check("newVolume").exists().isNumeric(), check("newNotes").exists().trim().isAscii(), 
-    check("newPrice").exists().isNumeric(), check("newAvailableQuantity").exists().isInt({ min: 0})],
+    [check("id").isInt({ min: 1}),
+     check("newDescription").exists().trim().isAscii(),
+     check("newWeight").exists().isNumeric(),
+     check("newVolume").exists().isNumeric(),
+     check("newNotes").exists().trim().isAscii(), 
+     check("newPrice").exists().isNumeric(),
+     check("newAvailableQuantity").exists().isInt({ min: 0})],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -102,7 +110,8 @@ router.put('/sku/:id',
 
 // MODIFY SKU POSITION
 router.put('/sku/:id/position',
-    [check("id").isNumeric()], check("position").exists().isNumeric({no_symbols: true}),
+    [check("id").isNumeric()], 
+    check("position").exists().isNumeric({no_symbols: true}),
     async (req, res) => {
         try{
             const errors = validationResult(req);
