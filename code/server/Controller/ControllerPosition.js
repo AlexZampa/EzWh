@@ -28,7 +28,7 @@ router.post('/position',
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
-            switch(err.err){
+            switch(err.status){
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
@@ -72,7 +72,7 @@ router.put('/position/:positionID',
             return res.status(200).end();
         } catch(err){
             console.log(err);
-            switch(err.err){
+            switch(err.status){
                 case 404: return res.status(404).end();
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
@@ -97,7 +97,7 @@ router.put('/position/:positionID/changeID',
             return res.status(200).end();
         } catch(err){
             console.log(err);
-            switch(err.err){
+            switch(err.status){
                 case 404: return res.status(404).end();
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
@@ -122,7 +122,7 @@ router.delete('/position/:positionID',
             // check if user authorized: return res.status(401).end();
         } catch(err){
             console.log(err);
-            switch(err.err){
+            switch(err.status){
                 case 404: return res.status(422).end();    // response should be 404 but API.md require 422 in any case
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();

@@ -39,8 +39,11 @@ class SkuDAO{
         try{
             let sql = "SELECT * FROM SKU WHERE id = ?";
             const res = await this.connectionDB.DBget(sql, [skuID]);
-            if(res === undefined)
-                throw {err : 404, msg : "SKU not found"};
+            if(res === undefined){
+                const error = new Error("404: SKU not found");
+                error.status = 404;
+                throw error;
+            }
             const sku = new SKU(res.id, res.description, res.weight, res.volume, res.notes, res.price, res.availableQuantity, res.position ? res.position : undefined);
             return sku;
         }
