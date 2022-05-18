@@ -17,15 +17,18 @@ class SKUItemDAO {
             throw {err : 422, msg : "SKUItem not unique"};
         sql = 'INSERT INTO SKUItem(rfid, SKUid, available, dateOfStock, restockOrderID) VALUES(?, ?, ?, ?, ?)';
         res = await this.connectionDB.DBexecuteQuery(sql, [RFID, sku, available, dateOfStock, restockOrder]);
-        return res;
+        return res.lastID;
     };
 
     getSKUItem = async (rfid) => {
         try {
             let sql = "SELECT * FROM SKUItem WHERE rfid = ?";
             const res = await this.connectionDB.DBget(sql, [rfid]);
-            if(res === undefined)
-                throw {err : 404, msg : "SKUItem not found"};
+            if (res === undefined) {
+                const error = new Error("404: SKUItem not found");
+                error.status = 404;
+                throw error;
+            }
             const skuItem = new SKUItem(res.rfid, res.SKUid, res.available, res.dateOfStock ? res.dateOfStock : undefined, res.restockOrderID ? res.restockOrderID : undefined );
             return skuItem;
         }
@@ -71,6 +74,15 @@ class SKUItemDAO {
             return res.changes;
         }
         catch (err) {
+            throw err;
+        }
+    };
+
+    resetTable = async () => {
+        try {
+            let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS SKUItem');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "SKUItem" ("rfid" TEXT NOT NULL UNIQUE, "SKUid" INTEGER NOT NULL, "available" INTEGER NOT NULL, "dateOfStock" TEXT, "restockOrderID" INTEGER, PRIMARY KEY("rfid"));')
+        } catch (err) {
             throw err;
         }
     };
