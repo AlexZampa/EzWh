@@ -814,7 +814,7 @@ class Warehouse{
         try {
             const td = await this.testDescriptorDAO.getTestDescriptor(id);
             const skuId = await this.skuDAO.getSKU(newIdSKU);
-            const result = await td.modifyTestDescriptorData(newName, newProcedureDescription, newIdSKU);
+            const result = await td.modifyTestDescriptorData(newName, newProcedureDescription, newIdSKU, this.testDescriptorDAO);
             return result;
         } catch (err) {
             throw err;
@@ -836,7 +836,7 @@ class Warehouse{
     /********* functions for managing Test Result ***********/
     getTestResults = async (rfid) => {
         try{
-            const skuItem = this.skuItemDAO.getSKUItem(rfid);
+            const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testResultList = await this.testResultDAO.getAllTestResult(rfid);
             return testResultList;
         }
@@ -845,10 +845,9 @@ class Warehouse{
         }
     }
 
-    // missing check that SKUItem exists
     getTestResult = async (rfid, id) => {
         try{
-            const skuItem = this.skuItemDAO.getSKUItem(rfid);
+            const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testResult = await this.testResultDAO.getTestResult(rfid, id);
             return testResult;
         }
@@ -859,8 +858,8 @@ class Warehouse{
 
     addTestResult = async (rfid, idTestDescriptor, date, result) => {
         try{
-            const skuItem = this.skuItemDAO.getSKUItem(rfid);
-            const testDescriptor = this.getTestDescriptor(idTestDescriptor);
+            const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(idTestDescriptor);
             const res = await this.testResultDAO.newTestResult(rfid, idTestDescriptor, date, result);
             return res;
         }
@@ -871,10 +870,9 @@ class Warehouse{
 
     modifyTestResult = async (rfid, id, newIdTestDescriptor, newDate, newResult) => {
         try {
-            const skuItem = this.skuItemDAO.getSKUItem(rfid);
-            const testDescriptor = this.getTestDescriptor(newIdTestDescriptor);
+            const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const tr = await this.testResultDAO.getTestResult(rfid, id);
-            const result = await tr.modifyTestResultdata(newIdTestDescriptor, newDate, newResult);
+            const result = await tr.modifyTestResultdata(newIdTestDescriptor, newDate, newResult, this.testResultDAO);
             return result;
         } catch (err) {
             throw err;

@@ -49,7 +49,7 @@ class TestDescriptorDAO{
 
     updateTestDescriptor = async (id, newName, newProcedureDescription, newIdSKU) => {
         try{
-            let sql = "UPDATE TestDescriptor SET name = ?, procedureDescription = ?, idSKU = ?, WHERE id = ?";
+            let sql = "UPDATE TestDescriptor SET name = ?, procedureDescription = ?, idSKU = ? WHERE id = ?";
             const res = await this.connectionDB.DBexecuteQuery(sql, [newName, newProcedureDescription, newIdSKU, id]);
             return res.lastID;
         }
@@ -60,8 +60,8 @@ class TestDescriptorDAO{
 
     deleteTestDescriptor = async (id) => {
         try{
-            sql = "DELETE FROM TestDescriptor WHERE id = ?";
-            res = await this.connectionDB.DBexecuteQuery(sql, [id]);
+            const sql = "DELETE FROM TestDescriptor WHERE id = ?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [id]);
             return res.changes;
         }
         catch(err){

@@ -14,8 +14,8 @@ class TestResultDAO{
     getAllTestResult = async (rfid) => {
         try{
             let sql = "SELECT * FROM TestResult WHERE rfid = ?";
-            const result = await this.connectionDB.DBgetAll(sql, [rfid]);
-            const trList = result.map(r => new TestResult(r.id, r.rfid, r.idTestDescriptor, r.date, r.result));
+            const res = await this.connectionDB.DBgetAll(sql, [rfid]);
+            const trList = res.map(r => new TestResult(r.id, r.rfid, r.idTestDescriptor, r.Date, r.Result));
             return trList;
         }
         catch(err){
@@ -26,10 +26,10 @@ class TestResultDAO{
     getTestResult = async (rfid, id) => {
         try{
             let sql = "SELECT * FROM TestResult WHERE (rfid = ?) AND (id = ?)";
-            const result = await this.connectionDB.DBgetAll(sql, [rfid, id]);
-            if(result === undefined)
+            const res = await this.connectionDB.DBget(sql, [rfid, id]);
+            if(res === undefined)
                 throw {err : 404, msg : "Test result not found"};
-            const tr = new TestResult(r.id, r.rfid, r.idTestDescriptor, r.date, r.result);
+            const tr = new TestResult(res.id, res.rfid, res.idTestDescriptor, res.Date, res.Result);
             return tr;
         }
         catch(err){
@@ -50,7 +50,7 @@ class TestResultDAO{
 
     updateTestResult = async (id, rfid, newIdTestDescriptor, newDate, newResult) => {
         try{
-            let sql = "UPDATE TestResult SET idTestDescription = ?, Date = ?, Result = ? WHERE (rfid = ?) AND (id = ?) ";
+            let sql = "UPDATE TestResult SET idTestDescriptor = ?, Date = ?, Result = ? WHERE (rfid = ?) AND (id = ?) ";
             const res = await this.connectionDB.DBexecuteQuery(sql, [newIdTestDescriptor, newDate, newResult, rfid, id]);
             return res.lastID;
         }
@@ -61,8 +61,8 @@ class TestResultDAO{
 
     deleteTestResult = async (id, rfid) => {
         try{
-            sql = "DELETE FROM TestResult WHERE (rfid = ?) AND (id = ?)";
-            res = await this.connectionDB.DBexecuteQuery(sql, [id, rfid]);     // delete SKU
+            const sql = "DELETE FROM TestResult WHERE (rfid = ?) AND (id = ?)";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [rfid, id]);
             return res.changes;
         }
         catch(err){

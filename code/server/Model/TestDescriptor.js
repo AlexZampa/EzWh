@@ -19,7 +19,7 @@ class TestDescriptor {
     setProcedureDescription = (procedureDescription) => {this.procedureDescription = procedureDescription; };
     setSKUid = (SKUid) => {this.SKUid = SKUid; };
 
-    modifyTestDescriptorData = async (newName, newProcedureDescription, newIdSKU) => {
+    modifyTestDescriptorData = async (newName, newProcedureDescription, newIdSKU, TestDescriptorDAO) => {
         try{
             const res = await TestDescriptorDAO.updateTestDescriptor(this.id, newName, newProcedureDescription, newIdSKU);
             this.name = newName;
