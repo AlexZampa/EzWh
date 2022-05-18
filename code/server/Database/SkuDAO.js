@@ -56,7 +56,7 @@ class SkuDAO{
         try{
             let sql = "UPDATE SKU SET description = ?, weight = ?, volume = ?, notes = ?, availableQuantity = ?, price = ?, position = ? WHERE id = ?";
             const res = await this.connectionDB.DBexecuteQuery(sql, [newDescription, newWeight, newVolume, newNotes, newAvailableQuantity, newPrice, newPositionID, skuID]);
-            return res.lastID;
+            return res.changes;
         }
         catch(err){
             throw err;
