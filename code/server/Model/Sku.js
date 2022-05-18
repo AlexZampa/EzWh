@@ -1,7 +1,7 @@
 'use strict';
 
 class SKU {
-    constructor(id, description, weight, volume, notes, price, availableQty, position=undefined){
+    constructor(id, description, weight, volume, notes, price, availableQty, positionID=undefined){
         this.id = id;
         this.description = description;
         this.weight = weight;
@@ -9,7 +9,7 @@ class SKU {
         this.notes = notes;
         this.price = price;
         this.availableQuantity = availableQty;
-        this.position = position;
+        this.position = positionID ? positionID : undefined;
         this.testDescriptors = [];
     };
 
@@ -29,14 +29,14 @@ class SKU {
     setNotes = (notes) => { this.notes; };
     setPrice = (price) => { this.price; };
     setAvailableQuantity = (availableQty) => { this.availableQuantity = availableQty; };
-    setPosition = (position) => { this.position = position};
+    setPosition = (positionID) => { this.position = positionID};
 
     addTestDescriptor = (testDescriptor) => { this.testDescriptors.push(testDescriptor); };
 
     convertToObj = () => {
         return (
             {"id" : this.id, "description" : this.description, "weight" : this.weight, "volume" : this.volume, "notes" : this.notes,
-             "position" : this.position ? this.position.getPositionID() : "", "availableQuantity" : this.availableQuantity,
+             "position" : this.position ? this.position : "", "availableQuantity" : this.availableQuantity,
              "price" : this.price, "testDescriptors" : this.testDescriptors.map(t => t.getID()) } );
     };
 

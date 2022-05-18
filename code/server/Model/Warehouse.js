@@ -75,8 +75,11 @@ class Warehouse{
     /*************** functions for managing SKU ***************/
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
         try{
-            if(weight <= 0 || volume <= 0 || price <= 0 || availableQty <= 0)
-                throw {err : 422, msg : "Invalid data"};
+            if(weight <= 0 || volume <= 0 || price <= 0 || availableQty <= 0){
+                const error = new Error("422: Invalid data");
+                error.status = 422;
+                throw error;
+            }
             const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty, null);
             return res;
         }
@@ -94,10 +97,10 @@ class Warehouse{
                     const position = await this.positionDAO.getPosition(sku.getPosition());
                     sku.setPosition(position);
                 }
-                tests.forEach(t => {
-                    if(t.getSKUid() === sku.getID())
-                        sku.addTestDescriptor(t);
-                });
+            tests.forEach(t => {
+                if(t.getSKUid() === sku.getID())
+                    sku.addTestDescriptor(t);
+            });
             }
             return skuList;
         }
@@ -128,16 +131,22 @@ class Warehouse{
     
     modifySKU = async (skuID, description, weight, volume, notes, price, availableQty) => {
         try {
-            if(weight <= 0 || volume <= 0 || price <= 0 || availableQty <= 0)
-                throw {err : 422, msg : "Invalid data"};
+            if(weight <= 0 || volume <= 0 || price <= 0 || availableQty <= 0){
+                const error = new Error("422: Invalid data");
+                error.status = 422;
+                throw error;
+            }
             const sku = await this.skuDAO.getSKU(skuID);                    // get SKU
             // if SKU has a Position and availableQty, weight or volume is changed -> check that Position can store SKU
             if(sku.getPosition() !== undefined && (availableQty !== sku.getAvailableQuantity() || weight !== sku.getWeight() || volume !== sku.getVolume())) {
                 const pos = await this.positionDAO.getPosition(sku.getPosition());      // get Position
                 const newTotWeight = weight * availableQty;
                 const newTotVolume = volume * availableQty;
-                if((pos.getMaxWeight() < newTotWeight) || (pos.getMaxVolume() < newTotVolume))     // check if Position can store SKU
-                    throw {err : 422, msg : "Position cannot store the SKU"};
+                if((pos.getMaxWeight() < newTotWeight) || (pos.getMaxVolume() < newTotVolume)){    // check if Position can store SKU
+                    const error = new Error("422: Position cannot store the SKU");
+                    error.status = 422;
+                    throw error;
+                }
                 // update occupiedWeight and occupiedVolume of Position
                 const res = await positionDAO.updatePosition(pos.getPositionID(), pos.getPositionID(), pos.getAisle(), pos.getRow(), pos.getCol(), pos.getMaxWeight(), pos.getMaxVolume(),
                         newTotWeight, newTotVolume, skuID);      
@@ -156,12 +165,18 @@ class Warehouse{
             const sku = await this.skuDAO.getSKU(skuID);                         // get SKU
             const position = await this.positionDAO.getPosition(positionID);     // get Position
 
-            if(position.getAssignedSKU() !== undefined)                   // check if Position has already a SKU assigned
-                throw {err : 422, msg : "A SKU is already assigned to the Position"};
+            if(position.getAssignedSKU() !== undefined){                   // check if Position has already a SKU assigned
+                const error = new Error("422: A SKU is already assigned to the Position");
+                error.status = 422;
+                throw error;
+            }
             const totWeight = sku.getWeight() * sku.getAvailableQuantity();
             const totVolume = sku.getVolume() * sku.getAvailableQuantity();
-            if((position.getMaxWeight() < totWeight) || (position.getMaxVolume() < totVolume))     // check if Position can store SKU
-                throw {err : 422, msg : "Position cannot store the SKU"};
+            if((position.getMaxWeight() < totWeight) || (position.getMaxVolume() < totVolume)){     // check if Position can store SKU
+                const error = new Error("422: Position cannot store the SKU");
+                error.status = 422;
+                throw error;
+            }
             
             if(sku.getPosition() !== undefined){
                 // release Position assigned to the SKU (set occupiedVolume and occupiedWeight to 0)
@@ -187,17 +202,26 @@ class Warehouse{
             const sku = await this.skuDAO.getSKU(skuID);        // check if SKU exists
             const roList = await this.restockOrderDAO.getAllRestockOrders();       // check if RestockOrderProducts has SKU
             for(const ro of roList){
-                if(ro.getProducts().find(p => p.SKUId === skuID))
-                    throw {err : 422, msg : "Cannot delete SKU"};
+                if(ro.getProducts().find(p => p.SKUId === skuID)){
+                    const error = new Error("422: Cannot delete SKU");
+                    error.status = 422;
+                    throw error;
+                }
             }
             
             const skuItemList = await this.skuItemDAO.getAllSKUItems();         // check if SKUItem has SKU
-            if(skuItemList.find(s => s.getSKU() === skuID))
-                throw {err : 422, msg : "Cannot delete SKU"};
+            if(skuItemList.find(s => s.getSKU() === skuID)){
+                const error = new Error("422: Cannot delete SKU");
+                    error.status = 422;
+                    throw error;
+            }
 
             const tests = await this.testDescriptorDAO.getAllTestDescriptor();  // check if SKU has TestDescriptor
-            if(tests.some(t => t.getSKUid() === skuID))
-                throw {err : 422, msg : "Cannot delete SKU"};
+            if(tests.some(t => t.getSKUid() === skuID)){
+                const error = new Error("422: Cannot delete SKU");
+                    error.status = 422;
+                    throw error;
+            }
 
             const res = await this.skuDAO.deleteSKU(skuID);     // delete SKU
             if(sku.getPosition() !== undefined){                // if SKU has a Position assigned
@@ -301,8 +325,11 @@ class Warehouse{
     /*************** functions for managing Position ****************/
     addPosition = async (positionID, aisle, row, col, maxWeight, maxVolume) => {
         try{
-            if(positionID !== aisle.concat(row).concat(col) || maxWeight <= 0 || maxVolume <= 0)
-                throw {err : 422, msg : "Invalid Position data"};
+            if(positionID !== aisle.concat(row).concat(col) || maxWeight <= 0 || maxVolume <= 0){
+                const error = new Error("422: Invalid Position data");
+                error.status = 422;
+                throw error;
+            }
             const res = await this.positionDAO.newPosition(positionID, aisle, row, col, maxWeight, maxVolume, 0, 0, null);
             return res;
         }
@@ -331,19 +358,16 @@ class Warehouse{
     modifyPosition = async (positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume) => {
         try{
             const pos = await this.positionDAO.getPosition(positionID);     // get position to check if exists
-            if(maxWeight <= 0 || maxVolume <= 0 || occupiedWeight <= 0 || occupiedVolume <= 0 
-                || occupiedVolume > maxVolume || occupiedWeight > maxWeight)
-                throw {err : 422, msg : "Invalid Position data"};
+            if(maxWeight <= 0 || maxVolume <= 0 || occupiedWeight <= 0 || occupiedVolume <= 0 || occupiedVolume > maxVolume || occupiedWeight > maxWeight){
+                const error = new Error("422: Invalid Position data");
+                error.status = 422;
+                throw error;
+            }
 
             const newPositionID = aisle.concat(row).concat(col);
 
-            // CHECK IF NECESSARY TO DO THIS
-            if(pos.getAssignedSKU() !== undefined){
+            if(pos.getAssignedSKU() !== undefined && newPositionID !== positionID){
                 const sku = await this.skuDAO.getSKU(pos.getAssignedSKU());         // get SKU of Position
-                const totWeight = sku.getWeight() * sku.getAvailableQuantity();
-                const totVolume = sku.getVolume() * sku.getAvailableQuantity();
-                if(totWeight > maxWeight || totVolume > maxVolume )
-                    throw {err : 422, msg : "Cannot update position"};
                 // update positionID of the SKU
                 const res = await this.skuDAO.updateSKU(sku.getID(), sku.getDescription(), sku.getWeight(), sku.getVolume(), sku.getNotes(),
                     sku.getPrice(), sku.getAvailableQuantity(), newPositionID);
@@ -361,8 +385,11 @@ class Warehouse{
     modifyPositionID = async (oldPositionID, newPositionID) => {
         try{
             const pos = await this.positionDAO.getPosition(oldPositionID);     // get position to check if exists
-            if(!Number(newPositionID))
-                throw {err : 422, msg : "Invalid Position data"};
+            if(!Number(newPositionID)){
+                const error = new Error("422: Invalid Position data");
+                error.status = 422;
+                throw error;
+            }
             
             const newAisle = newPositionID.slice(0, 4);     // take first 4 digits
             const newRow = newPositionID.slice(4, 8);       // take 4 digits in the middle
@@ -387,8 +414,11 @@ class Warehouse{
     deletePosition = async (positionID) => {
         try{
             const pos = await this.positionDAO.getPosition(positionID);
-            if(pos.getAssignedSKU() !== undefined)
-                throw {err : 422, msg : "Cannot delete: Position assigned to SKU"};
+            if(pos.getAssignedSKU() !== undefined){
+                const error = new Error("422: Cannot delete: Position assigned to SKU");
+                error.status = 422;
+                throw error;
+            }
             const res = await this.positionDAO.deletePosition(positionID);
             return res;
         }
