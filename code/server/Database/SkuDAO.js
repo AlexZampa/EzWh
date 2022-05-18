@@ -7,9 +7,9 @@ const { Position } = require('../Model/Position');
 
 class SkuDAO{
 
-    constructor(db){
+    constructor(){
         this.connectionDB = new ConnectionDB();
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "SKU" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT, "weight" NUMERIC NOT NULL, "volume" NUMERIC NOT NULL, "notes" TEXT NOT NULL, "availableQuantity" INTEGER NOT NULL, "price" NUMERIC NOT NULL, "position" TEXT, PRIMARY KEY("id"));');
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "SKU" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT, "weight" NUMERIC NOT NULL, "volume" NUMERIC NOT NULL, "notes" TEXT NOT NULL, "availableQuantity" INTEGER NOT NULL, "price" NUMERIC NOT NULL, "position" TEXT, PRIMARY KEY("id"));')
     }
 
     newSKU = async (description, weight, volume, notes, price, availableQty, position) => {
@@ -62,12 +62,21 @@ class SkuDAO{
 
     deleteSKU = async (skuID) => {
         try{
-            sql = "DELETE FROM SKU WHERE id = ?";
-            res = await this.connectionDB.DBexecuteQuery(sql, [skuID]);     // delete SKU
+            const sql = "DELETE FROM SKU WHERE id = ?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [skuID]);     // delete SKU
             return res.changes;
         }
         catch(err){
             throw err;
+        }
+    };
+    
+    resetTable = async () => {
+        try {
+            let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS SKU');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "SKU" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT, "weight" NUMERIC NOT NULL, "volume" NUMERIC NOT NULL, "notes" TEXT NOT NULL, "availableQuantity" INTEGER NOT NULL, "price" NUMERIC NOT NULL, "position" TEXT, PRIMARY KEY("id"));')
+        } catch (err) {
+            throw err;    
         }
     };
     

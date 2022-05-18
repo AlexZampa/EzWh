@@ -94,10 +94,10 @@ class Warehouse{
                     const position = await this.positionDAO.getPosition(sku.getPosition());
                     sku.setPosition(position);
                 }
-                tests.forEach(t => {
-                    if(t.getSKUid() === sku.getID())
-                        sku.addTestDescriptor(t);
-                });
+            tests.forEach(t => {
+                if(t.getSKUid() === sku.getID())
+                    sku.addTestDescriptor(t);
+            });
             }
             return skuList;
         }
