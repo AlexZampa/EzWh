@@ -55,7 +55,10 @@ router.post('/testDescriptor', [check("name").exists().trim().isAscii(), check("
             return res.status(201).end();
         } catch (err) {
             console.log(err);
-            return res.status().end();
+            switch (err.err) {
+                case 404: return res.status(404).end();
+                default: return res.status(503).end();
+            }
         }
     }
 );
@@ -84,8 +87,13 @@ check("newProcedureDescription").exists().trim().isAscii(), check("newIdSKU").ex
 );
 
 //delete testDescriptor
-router.delete('/testDescriptor/:id', async (req, res) => {
+router.delete('/testDescriptor/:id', [check("id").exists().isInt({ min: 1 })], async (req, res) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            console.log({ errors: errors.array() });
+            return res.status(422).end();
+        }
         const result = await warehouse.deleteTestDescriptor(req.params.id);
         return res.status(204).end();
     } catch (err) {

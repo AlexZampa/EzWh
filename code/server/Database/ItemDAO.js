@@ -59,16 +59,6 @@ class ItemDAO{
 
     deleteItem = async (id) => {
         try{
-            // check consistency of the DB 
-            let sql = "SELECT COUNT(*) AS num FROM SKUitem WHERE SKUid = ?";        // check SKUItem
-            let res = await this.connectionDB.DBget(sql, [skuID]);
-            if(res.num !== 0)
-                throw {err : 422, msg : "Cannot delete SKU"};
-            sql = "SELECT COUNT(*) AS num FROM TestDescriptor WHERE SKUid = ?";     // check TestDescriptor
-            res = await this.connectionDB.DBget(sql, [skuID]);
-            if(res.num !== 0)
-                throw {err : 422, msg : "Cannot delete SKU"};
-
             sql = "DELETE FROM ITEM WHERE id = ?";
             res = await this.connectionDB.DBexecuteQuery(sql, [id]);
             return res.changes;

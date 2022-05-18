@@ -22,15 +22,14 @@ class TestDescriptorDAO{
         }
     }
 
-    // manca new TestDescriptor(...) nel return
-    // il msg dell'errore è sbagliato, poi controlla anche gli altri
     getTestDescriptor = async (id) => {
         try{
             let sql = "SELECT * FROM TestDescriptor WHERE id = ?";
             const res = await this.connectionDB.DBget(sql, [id]);
             if(res === undefined)
-                throw {err : 404, msg : "SKU not found"};
-            return res;
+                throw {err : 404, msg : "Test descriptor not found"};
+            const td = new TestDescriptor(res.id, res.name, res.procedureDescription, res.idSKU);
+            return td;
         }
         catch(err){
             throw err;
@@ -62,7 +61,7 @@ class TestDescriptorDAO{
     deleteTestDescriptor = async (id) => {
         try{
             sql = "DELETE FROM TestDescriptor WHERE id = ?";
-            res = await this.connectionDB.DBexecuteQuery(sql, [id]);     // delete SKU
+            res = await this.connectionDB.DBexecuteQuery(sql, [id]);
             return res.changes;
         }
         catch(err){
