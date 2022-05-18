@@ -100,13 +100,16 @@ router.put('/skuitems/:rfid/testResult/:id',
 );
 
 //delete testResult
-router.delete('/skuitems/:rfid/testResult/:id',
+router.delete('/skuitems/:rfid/testResult/:id', [check("rfid").exists().isNumeric(), check("id").exists().isInt()],
     async (req, res) => {
         try {
-
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                console.log({ errors: errors.array() });
+                return res.status(422).end();
+            }
             const result = await warehouse.deleteTestResult(req.params.id, req.params.rfid);
             return res.status(204).end();
-
         } catch (err) {
             console.log(err);
             switch (err.err) {

@@ -87,17 +87,19 @@ router.put('/item/:id', [check("id").exists().isInt({ min: 0 }), check("newDescr
 );
 
 //delete item
-router.delete('/items/:id',
+router.delete('/items/:id', [check("id").exists().isInt({ min: 0 })],
     async (req, res) => {
         try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                console.log({ errors: errors.array() });
+                return res.status(422).end();
+            }
             const result = await warehouse.deleteItem(req.params.id);
             return res.status(204).end();
         } catch (err) {
             console.log(err);
-            switch (err.err) {
-                case 422: return res.status(422).end();
-                default: return res.status(503).end();
-            }
+            return res.status(503).end();
         }
     });
 

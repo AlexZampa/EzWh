@@ -751,6 +751,7 @@ class Warehouse{
 
     addItem = async (description, price, SKUId, supplierId) => {
         try{
+            const sku = await this.skuDAO.getSKU(SKUId);
             const res = await this.itemDAO.newItem(description, price, SKUId, supplierId);
             return res;
         }
@@ -798,9 +799,9 @@ class Warehouse{
         }
     }
 
-    // missing check that sku exists (just use skuDAO.getSKU(idSKU))
     addTestDescriptor = async (name, procedureDescription, idSKU) => {
         try{
+            const skuId = await this.skuDAO.getSKU(idSKU);
             const res = await this.testDescriptorDAO.newTestDescriptor(name, procedureDescription, idSKU);
             return res;
         }
@@ -809,10 +810,10 @@ class Warehouse{
         }
     }
 
-    // missing check that SKU exists (just use skuDAO.getSKU(idSKU))
     modifyTestDescriptor = async (id, newName, newProcedureDescription, newIdSKU) => {
         try {
             const td = await this.testDescriptorDAO.getTestDescriptor(id);
+            const skuId = await this.skuDAO.getSKU(newIdSKU);
             const result = await td.modifyTestDescriptorData(newName, newProcedureDescription, newIdSKU);
             return result;
         } catch (err) {
@@ -833,9 +834,9 @@ class Warehouse{
 
 
     /********* functions for managing Test Result ***********/
-    // missing check that SKUItem exists
     getTestResults = async (rfid) => {
         try{
+            const skuItem = this.skuItemDAO.getSKUItem(rfid);
             const testResultList = await this.testResultDAO.getAllTestResult(rfid);
             return testResultList;
         }
@@ -847,6 +848,7 @@ class Warehouse{
     // missing check that SKUItem exists
     getTestResult = async (rfid, id) => {
         try{
+            const skuItem = this.skuItemDAO.getSKUItem(rfid);
             const testResult = await this.testResultDAO.getTestResult(rfid, id);
             return testResult;
         }
@@ -855,15 +857,10 @@ class Warehouse{
         }
     }
 
-    //usa skUItemDAO.getSKUItem(rfid) invece di fare list.some(...), idem per testDescriptor (entrambe lanciano già err: 404)
     addTestResult = async (rfid, idTestDescriptor, date, result) => {
         try{
-            const skuItems = this.getSKUItems();
-            const testDescriptor = this.getTestDescriptor();
-            if(skuItems.some(s => {rfid === s.getRFID()}))
-                throw {err : 404, msg : "rfid not valid"};
-            if(testDescriptor.some(td => {idTestDescriptor === td.getID()}))
-                throw {err : 404, msg : "idTestDescriptor not valid"};
+            const skuItem = this.skuItemDAO.getSKUItem(rfid);
+            const testDescriptor = this.getTestDescriptor(idTestDescriptor);
             const res = await this.testResultDAO.newTestResult(rfid, idTestDescriptor, date, result);
             return res;
         }
@@ -874,6 +871,8 @@ class Warehouse{
 
     modifyTestResult = async (rfid, id, newIdTestDescriptor, newDate, newResult) => {
         try {
+            const skuItem = this.skuItemDAO.getSKUItem(rfid);
+            const testDescriptor = this.getTestDescriptor(newIdTestDescriptor);
             const tr = await this.testResultDAO.getTestResult(rfid, id);
             const result = await tr.modifyTestResultdata(newIdTestDescriptor, newDate, newResult);
             return result;

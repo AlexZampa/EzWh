@@ -27,6 +27,8 @@ class TestResultDAO{
         try{
             let sql = "SELECT * FROM TestResult WHERE (rfid = ?) AND (id = ?)";
             const result = await this.connectionDB.DBgetAll(sql, [rfid, id]);
+            if(result === undefined)
+                throw {err : 404, msg : "Test result not found"};
             const tr = new TestResult(r.id, r.rfid, r.idTestDescriptor, r.date, r.result);
             return tr;
         }
