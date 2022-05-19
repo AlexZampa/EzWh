@@ -39,8 +39,9 @@ router.get('/skuitems/:rfid/testResults/:id', [check("rfid").exists().isNumeric(
             return res.status(422).end();
         }
 
-        const testResult = await warehouse.getTestResult(req.params.rfid, req.params.id);
-        return res.status(200).json(testResult);
+        const testResult = await warehouse.getTestResult(req.params.rfid, Number(req.params.id));
+        const result = testResult.convertToObj();
+        return res.status(200).json(result);
     } catch (err) {
         console.log(err);
         switch (err.err) {

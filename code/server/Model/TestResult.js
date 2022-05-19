@@ -12,7 +12,7 @@ class TestResult{
         this.result = result;
     };
 
-    modifyTestResultdata = async (newIdTestDescriptor, newDate, newResult) => {
+    modifyTestResultdata = async (newIdTestDescriptor, newDate, newResult, TestResultDAO) => {
         try{
             const res = await TestResultDAO.updateTestResult(this.id, this.rfid, newIdTestDescriptor, newDate, newResult);
             this.idTestDescriptor = newIdTestDescriptor;
@@ -27,10 +27,9 @@ class TestResult{
     convertToObj = () => {
         return(
             {
-                "id" : this.id, "idTestDescriptor" : this.idTestDescriptor, "date" : this.date, "result" : this.result
+                "id" : this.id, "idTestDescriptor" : this.idTestDescriptor, "date" : this.date ? this.date.format('YYYY/DD/MM') : "", "result" : this.result
             }
         )
     }
 };
-
 module.exports = TestResult;

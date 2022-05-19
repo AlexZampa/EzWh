@@ -13,7 +13,7 @@ class SKUItem {
     getRFID = () => this.RFID;
     getSKU = () => this.sku;
     getAvailable = () => this.available;
-    getDateOfStock = () => this.dateOfStock.format('YYYY/MM/DD HH:mm');
+    getDateOfStock = () => this.dateOfStock;
     getRestockOrder = () => this.restockOrder;
     getTestResults = () => this.testResults;
 
@@ -30,7 +30,7 @@ class SKUItem {
     convertToObj = () => {
         return (
             {
-                "RFID": this.RFID, "SKUId": this.sku.getID(), "Available":this.available, "DateOfStock": this.dateOfStock ?  this.dateOfStock.format('YYYY/MM/DD HH:mm') : ""
+                "RFID": this.RFID, "SKUId": this.sku.getID(), "Available": this.available, "DateOfStock": this.dateOfStock ? this.dateOfStock.format('YYYY-MM-DD') : ""
             });
     };
 
