@@ -1,12 +1,11 @@
 'use strict';
 
 class User {
-    constructor(userID, name, surname, email, password, type) {
+    constructor(userID, name, surname, email, type) {
         this.userID = userID;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.password = password;
         this.type = type;
     }
 
@@ -14,7 +13,6 @@ class User {
     getName = () => this.name;
     getSurname = () => this.surname;
     getEmail = () => this.email;
-    getPassword = () => this.password;
     getType = () => this.type;
     
     setType = (type) => { this.type = type; }

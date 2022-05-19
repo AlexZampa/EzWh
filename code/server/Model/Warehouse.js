@@ -597,14 +597,14 @@ class Warehouse{
                 throw {err : 422, msg : "Password must be at least 8 characters"};
             if(!userTypes.find(t => t === type))
                 throw {err : 422, msg : "Invalid user type"};
-            const userList = await this.userDAO.getAllUsers();
-            const alreadyExists = userList.some((user) => {
-                if(user.getEmail() === username && user.getType() === type)
-                    return true;
-                return false;
-            });
-            if(alreadyExists)
-                throw {err: 409, msg: "User already exists"};
+            // const userList = await this.userDAO.getAllUsers();
+            // const alreadyExists = userList.some((user) => {
+            //     if(user.getEmail() === username && user.getType() === type)
+            //         return true;
+            //     return false;
+            // });
+            // if(alreadyExists)
+            //     throw {err: 409, msg: "User already exists"};
             const result = await this.userDAO.newUser(username, name, surname, password, type);
             return result;
         }

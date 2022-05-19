@@ -12,9 +12,13 @@ class UserDAO{
 
     newUser = async (username, name, surname, password, type) => {
         try{
-            const sql = "INSERT INTO User(name, surname, email, type, password, salt) VALUES(?, ?, ?, ?, ?, ?)";
+            let sql = "SELECT COUNT(*) AS num FROM User WHERE email = ? AND type = ?";        // check if exists
+            let res = await this.connectionDB.DBget(sql, [username, type]);
+            if(res.num != 0)
+                throw {err: 409, msg: "User already exists"};
+            sql = "INSERT INTO User(name, surname, email, type, password, salt) VALUES(?, ?, ?, ?, ?, ?)";
             const secPwd = await generateSecurePassword(password);
-            const res = await this.connectionDB.DBexecuteQuery(sql, [name, surname, username, type, secPwd.pwd, secPwd.salt]);
+            res = await this.connectionDB.DBexecuteQuery(sql, [name, surname, username, type, secPwd.pwd, secPwd.salt]);
             return res.lastID;
         }
         catch(err){
@@ -26,7 +30,7 @@ class UserDAO{
         try{
             const sql = "SELECT * FROM User";
             const res = await this.connectionDB.DBgetAll(sql, []);
-            return res.map(u => new User(u.userID, u.name, u.surname, u.email, u.password, u.type));
+            return res.map(u => new User(u.userID, u.name, u.surname, u.email, u.type));
         }
         catch(err){
             throw err;
@@ -37,7 +41,7 @@ class UserDAO{
         try{
             const sql = "SELECT * FROM User WHERE type = ?";
             const res = await this.connectionDB.DBgetAll(sql, [type]);
-            return res.map(u => new User(u.userID, u.name, u.surname, u.email, u.password, u.type));
+            return res.map(u => new User(u.userID, u.name, u.surname, u.email, u.type));
         }
         catch(err){
             throw err;
@@ -51,7 +55,7 @@ class UserDAO{
             if(user === undefined){       // user does not exist
                 throw {err : 404, msg : "User not found" };
             }
-            return new User(user.userID, user.name, user.surname, user.email, user.password, user.type);
+            return new User(user.userID, user.name, user.surname, user.email, user.type);
         } catch (err) {
             throw err;
         }
@@ -61,7 +65,7 @@ class UserDAO{
         try {
             const sql = "UPDATE User SET type = ? WHERE email = ? AND type = ?";
             const res = await this.connectionDB.DBexecuteQuery(sql, [newType, username, oldType]);
-            return res.lastID;
+            return res.changes
         } catch (err) {
             throw err;
         }
@@ -77,7 +81,7 @@ class UserDAO{
             const login = await verifyPassword(user.password, user.salt, password);
             if(!login)
                 throw {err : 401, msg : "Invalid password" };
-            return new User(user.userID, user.name, user.surname, user.email, user.password, user.type);
+            return new User(user.userID, user.name, user.surname, user.email, user.type);
         }
         catch(err){
             throw err;
@@ -90,11 +94,20 @@ class UserDAO{
             const res = await this.connectionDB.DBexecuteQuery(sql, [username, type]);
             if(res.changes === 0)
                 throw {err : 404, msg : "User not found" };
-            return res;
+            return res.changes;
         } catch (err) {
             throw err;
         }
     };
+
+    resetTable = async () =>{
+        try {
+            let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS User');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "User" ("userID" INTEGER NOT NULL UNIQUE, "name" TEXT NOT NULL, "surname" TEXT NOT NULL, "email" TEXT NOT NULL, "type" TEXT NOT NULL, "password" TEXT NOT NULL, "salt" TEXT NOT NULL, PRIMARY KEY("userID"));');
+        } catch (err) {
+            throw err;    
+        }
+    }
 
 }
 

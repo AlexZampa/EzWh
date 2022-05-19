@@ -63,7 +63,7 @@ class PositionDAO{
             }
             let sql = "UPDATE Position SET positionID = ?, aisle = ?, row = ?, col = ?, maxWeight = ?, maxVolume = ?, occupiedWeight = ?, occupiedVolume = ?, assignedSKUid = ? WHERE positionID = ?";
             let res = await this.connectionDB.DBexecuteQuery(sql, [newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, skuID, oldPositionID]);
-            return res.lastID;
+            return res.changes;
         }
         catch(err){
             throw err;
