@@ -1,4 +1,3 @@
-"use strict";
 exports.newPosition = jest.fn();
 exports.getAllPosition = jest.fn();
 exports.getPosition = jest.fn();

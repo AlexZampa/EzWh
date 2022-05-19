@@ -51,7 +51,7 @@ class Warehouse{
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
         try{
             if(weight <= 0 || volume <= 0 || price <= 0 || availableQty <= 0)
-                throw {err: 422, msg:  "Invalid data"};
+                throw {err: 422, msg: "Invalid data"};
             const res = await this.skuDAO.newSKU(description, weight, volume, notes, price, availableQty, null);
             return res;
         }
@@ -65,14 +65,10 @@ class Warehouse{
             const skuList = await this.skuDAO.getAllSKU();
             const tests = await this.testDescriptorDAO.getAllTestDescriptor();
             for(const sku of skuList){
-                if(sku.getPosition() !== undefined){
-                    const position = await this.positionDAO.getPosition(sku.getPosition());
-                    sku.setPosition(position);
-                }
-            tests.forEach(t => {
-                if(t.getSKUid() === sku.getID())
-                    sku.addTestDescriptor(t);
-            });
+                tests.forEach(t => {
+                    if(t.getSKUid() === sku.getID())
+                        sku.addTestDescriptor(t);
+                });
             }
             return skuList;
         }
@@ -84,10 +80,6 @@ class Warehouse{
     getSKU = async (skuID) => {
         try{
             const sku = await this.skuDAO.getSKU(skuID);
-            if(sku.getPosition() !== undefined){
-                const position = await this.positionDAO.getPosition(sku.getPosition());
-                sku.setPosition(position);
-            }
             const tests = await this.testDescriptorDAO.getAllTestDescriptor();
             tests.forEach(t => {
                 if(t.getSKUid() === skuID)
@@ -114,7 +106,7 @@ class Warehouse{
                 if((pos.getMaxWeight() < newTotWeight) || (pos.getMaxVolume() < newTotVolume))    // check if Position can store SKU
                     throw {err: 422, msg:  "Position cannot store the SKU"};
                 // update occupiedWeight and occupiedVolume of Position
-                const res = await positionDAO.updatePosition(pos.getPositionID(), pos.getPositionID(), pos.getAisle(), pos.getRow(), pos.getCol(), pos.getMaxWeight(), pos.getMaxVolume(),
+                const res = await this.positionDAO.updatePosition(pos.getPositionID(), pos.getPositionID(), pos.getAisle(), pos.getRow(), pos.getCol(), pos.getMaxWeight(), pos.getMaxVolume(),
                         newTotWeight, newTotVolume, skuID);      
             }
             // update SKU
@@ -179,7 +171,7 @@ class Warehouse{
             if(sku.getPosition() !== undefined){                // if SKU has a Position assigned
                 const pos = await this.positionDAO.getPosition(sku.getPosition());
                 // remove assignedSKU to the Position and set occupiedWeight and occupiedVolume to 0
-                const result = await this.positionDAO.updatePosition(pos.getPositionID(), pos.getPositionID(), pos.getAisle(), pos.getRow(), pos.getCol(), pos.getMaxWeight(), pos.getMaxVolume(), 0, 0);
+                const result = await this.positionDAO.updatePosition(pos.getPositionID(), pos.getPositionID(), pos.getAisle(), pos.getRow(), pos.getCol(), pos.getMaxWeight(), pos.getMaxVolume(), 0, 0, null);
             }
             return res;
         }
@@ -597,14 +589,6 @@ class Warehouse{
                 throw {err : 422, msg : "Password must be at least 8 characters"};
             if(!userTypes.find(t => t === type))
                 throw {err : 422, msg : "Invalid user type"};
-            // const userList = await this.userDAO.getAllUsers();
-            // const alreadyExists = userList.some((user) => {
-            //     if(user.getEmail() === username && user.getType() === type)
-            //         return true;
-            //     return false;
-            // });
-            // if(alreadyExists)
-            //     throw {err: 409, msg: "User already exists"};
             const result = await this.userDAO.newUser(username, name, surname, password, type);
             return result;
         }

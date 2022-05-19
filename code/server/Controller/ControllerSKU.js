@@ -24,8 +24,8 @@ router.post('/sku',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            await warehouse.addSKU(req.body.description, req.body.weight, req.body.volume, 
-                req.body.notes, req.body.price, req.body.availableQuantity);
+            await warehouse.addSKU(req.body.description, Number(req.body.weight), Number(req.body.volume), 
+                req.body.notes, Number(req.body.price), Number(req.body.availableQuantity));
             return res.status(201).end();
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
@@ -93,8 +93,8 @@ router.put('/sku/:id',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const result = await warehouse.modifySKU(Number(req.params.id), req.body.newDescription, req.body.newWeight, req.body.newVolume,
-                req.body.newNotes, req.body.newPrice, req.body.newAvailableQuantity);
+            const result = await warehouse.modifySKU(Number(req.params.id), req.body.newDescription, Number(req.body.newWeight), Number(req.body.newVolume),
+                req.body.newNotes, Number(req.body.newPrice), Number(req.body.newAvailableQuantity));
             return res.status(200).end();
             // check if user authorized otherwise: return res.status(401).end();
         } catch(err){
