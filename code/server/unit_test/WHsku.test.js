@@ -28,10 +28,10 @@ describe("Test add SKU", () => {
 
     testAddSKU("description 1", 20, 30, "notes 1", 10.99, 50, 1);
     testAddSKU("description 2", 100, 300, "notes 2", 15.99, 500, 2);
-    testAddSKUError("description", -10, 30, "notes", 10.99, 50, {err: 422, msg: "Invalid data"});
-    testAddSKUError("description", 10, -30, "notes", 10.99, 50, {err: 422, msg: "Invalid data"});
-    testAddSKUError("description", 10, 30, "notes", -10, 50, {err: 422, msg: "Invalid data"});
-    testAddSKUError("description", 10, 30, "notes", 10.99, -50, {err: 422, msg: "Invalid data"});
+    testAddSKUError('throw error on negative weight', "description", -10, 30, "notes", 10.99, 50, {err: 422, msg: "Invalid data"});
+    testAddSKUError('throw error on negative volume', "description", 10, -30, "notes", 10.99, 50, {err: 422, msg: "Invalid data"});
+    testAddSKUError('throw error on negative price', "description", 10, 30, "notes", -10, 50, {err: 422, msg: "Invalid data"});
+    testAddSKUError('throw error on negative quantity', "description", 10, 30, "notes", 10.99, -50, {err: 422, msg: "Invalid data"});
 
     function testAddSKU(description, weight, volume, notes, price, availableQty, expectedResult) {
         test('Add SKU', async () => {
@@ -40,16 +40,16 @@ describe("Test add SKU", () => {
         })
     }
 
-    function testAddSKUError(description, weight, volume, notes, price, availableQty, expectedError) {
-        test('throw 422 on add SKU', async () => {
+    function testAddSKUError(testMessage, description, weight, volume, notes, price, availableQty, expectedError) {
+        test(testMessage, async () => {
             async function invalidAddSKU(){
                await wh.addSKU(description, weight, volume, notes, price, availableQty);
             }
             await expect(invalidAddSKU).rejects.toEqual(expectedError);
         })
     }
-
 });
+
 
 describe("test get all SKU", () => {
     
@@ -132,12 +132,6 @@ describe("Test get SKU", () => {
 
 
 describe("Test modify SKU", () => {
-    let testList = [];
-    const test1 = new TestDescriptor(1, "test 1", "procedure 1", 2);
-    const test2 = new TestDescriptor(2, "test 2", "procedure 2", 2);
-    testList.push(test1);
-    testList.push(test2);
-
     const sku1 = new SKU(1, "description 1", 30, 20, "notes 1", 10.99, 40, null);
     const sku2 = new SKU(2, "description 2", 20, 50, "notes 2", 20.99, 50, "123456789900");
     const pos = new Position("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, 2);
@@ -187,16 +181,16 @@ describe("Test modify SKU", () => {
             skuDAO.updateSKU.mockReturnValue(1);
         });    
 
-        testModifySKUError(5, "description", 300, 400, "notes", 100.99, 50, {err: 404, msg: "SKU not found"});
-        testModifySKUError(2, "description", -10, 10, "notes", 10.99, 10, {err: 422, msg:  "Invalid data"});
-        testModifySKUError(2, "description", 10, -10, "notes", 10.99, 10, {err: 422, msg:  "Invalid data"});
-        testModifySKUError(2, "description", 10, 10, "notes", -10.99, 10, {err: 422, msg:  "Invalid data"});
-        testModifySKUError(2, "description", 10, 10, "notes", 10.99, -10, {err: 422, msg:  "Invalid data"});
-        testModifySKUError(2, "description", 500, 10, "notes", 10.99, 10, {err: 422, msg:  "Position cannot store the SKU"});
-        testModifySKUError(2, "description", 10, 500, "notes", 10.99, 10, {err: 422, msg:  "Position cannot store the SKU"});
+        testModifySKUError("throw error on SKU not found", 5, "description", 300, 400, "notes", 100.99, 50, {err: 404, msg: "SKU not found"});
+        testModifySKUError("throw error on negative weight", 2, "description", -10, 10, "notes", 10.99, 10, {err: 422, msg:  "Invalid data"});
+        testModifySKUError("throw error on negative volume", 2, "description", 10, -10, "notes", 10.99, 10, {err: 422, msg:  "Invalid data"});
+        testModifySKUError("throw error on negative price", 2, "description", 10, 10, "notes", -10.99, 10, {err: 422, msg:  "Invalid data"});
+        testModifySKUError("throw error on negative quantity", 2, "description", 10, 10, "notes", 10.99, -10, {err: 422, msg:  "Invalid data"});
+        testModifySKUError("throw error on maxWeight of position", 2, "description", 500, 10, "notes", 10.99, 10, {err: 422, msg:  "Position cannot store the SKU"});
+        testModifySKUError("throw error on maxVolume of position", 2, "description", 10, 500, "notes", 10.99, 10, {err: 422, msg:  "Position cannot store the SKU"});
         
-        function testModifySKUError(skuID, description, weight, volume, notes, price, availableQty, expectedError){
-            test('throw error on delete SKU', async () => {
+        function testModifySKUError(testMessage, skuID, description, weight, volume, notes, price, availableQty, expectedError){
+            test(testMessage, async () => {
                 async function invalidModify(){
                     await wh.modifySKU(skuID, description, weight, volume, notes, price, availableQty);
                 };
@@ -208,12 +202,6 @@ describe("Test modify SKU", () => {
 
 
 describe("Test modify SKU position", () => {
-    let testList = [];
-    const test1 = new TestDescriptor(1, "test 1", "procedure 1", 2);
-    const test2 = new TestDescriptor(2, "test 2", "procedure 2", 2);
-    testList.push(test1);
-    testList.push(test2);
-
     const sku1 = new SKU(1, "description 1", 30, 20, "notes 1", 10.99, 30, null);
     const sku2 = new SKU(2, "description 2", 20, 30, "notes 2", 20.99, 10, "112233445566");
     const pos1 = new Position("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null);
@@ -234,7 +222,7 @@ describe("Test modify SKU position", () => {
             skuDAO.updateSKU.mockReturnValue(1);
         });
 
-        test('Modify SKU', async () => {
+        test('Modify position of SKU', async () => {
             const occupiedWeight = 30 * 30;
             const occupiedVolume = 20 * 30;
             const skuID = 1;
@@ -261,7 +249,7 @@ describe("Test modify SKU position", () => {
             skuDAO.updateSKU.mockReturnValue(1);
         });
 
-        test('Modify position of a SKU with position assigned', async () => {
+        test('Modify position of SKU', async () => {
             const occupiedWeight = 200;
             const occupiedVolume = 300;
             const skuID = 2;
@@ -273,7 +261,6 @@ describe("Test modify SKU position", () => {
     });
     
 });
-
 
 
 
@@ -352,11 +339,11 @@ describe("Test delete SKU", () => {
             positionDAO.updatePosition.mockReturnValue(1);
         });    
 
-        testDeleteSKUError(2, {err: 422, msg:  "Cannot delete SKU"});
-        testDeleteSKUError(5, {err: 404, msg:  "SKU not found"});
+        testDeleteSKUError("throw error on TestDescriptor assigned to SKU", 2, {err: 422, msg:  "Cannot delete SKU"});
+        testDeleteSKUError("throw error on SKU not found", 5, {err: 404, msg:  "SKU not found"});
 
-        function testDeleteSKUError(skuID, expectedError){
-            test('throw error on delete SKU', async () => {
+        function testDeleteSKUError(testMessage, skuID, expectedError){
+            test(testMessage, async () => {
                 async function invalidDelete(){
                     await wh.deleteSKU(skuID);
                 };
