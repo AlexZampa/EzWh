@@ -11,7 +11,7 @@ class Position{
         this.maxVolume = maxVolume;
         this.occupiedWeight = occupiedWeight;
         this.occupiedVolume = occupiedVolume;
-        this.assignedSKU = assignedSKU;
+        this.assignedSKU = assignedSKU ? assignedSKU : undefined;
     }
 
     getPositionID = () => this.positionID;

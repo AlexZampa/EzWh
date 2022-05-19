@@ -1,4 +1,3 @@
-"use strict";
 
 exports.newInternalOrder = jest.fn();
 exports.getAllInternalOrders = jest.fn();
