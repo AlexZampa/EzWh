@@ -31,7 +31,7 @@ describe('Test throw err on get SKU', () => {
         await skuDAO.resetTable();
         await skuDAO.newSKU("description 1", 30, 20, "notes 1", 10.99, 40, null);
     });
-    testGetSKUerror(3, "404");
+    testGetSKUerror(3, {err: 404, msg:  "SKU not found"});
 });
 
 
@@ -101,7 +101,7 @@ function testGetSKUerror(skuID, expectedError){
         async function getNonExistentSKU(){
             await skuDAO.getSKU(skuID); 
         };
-        await expect(getNonExistentSKU).rejects.toThrowError(expectedError);
+        await expect(getNonExistentSKU).rejects.toEqual(expectedError);
     });
 }
 

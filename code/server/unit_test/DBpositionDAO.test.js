@@ -18,11 +18,11 @@ describe('Test Create and Get Position', () => {
     const expectedPosition1 = new Position("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null);
     const expectedPosition2 = new Position("112233445566", "1122", "3344", "5566", 1500, 1500, 0, 0, 2);
 
-    let expectedID = "123456789900";
+    let expectedID = 1;
     testCreatePosition("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null, expectedID);
     testGetPosition("123456789900", expectedPosition1);
 
-    expectedID = "112233445566";
+    expectedID = 2;
     testCreatePosition("112233445566", "1122", "3344", "5566", 1500, 1500, 0, 0, 2, expectedID);
     testGetPosition("112233445566", expectedPosition2);
 });
@@ -34,7 +34,7 @@ describe('Test throw err on get Position', () => {
         await positionDAO.newPosition("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null);
     });
 
-    testGetPositionError("1234", "404");
+    testGetPositionError("1234", {err: 422, msg:  "Position not found"});
 });
 
 
@@ -106,7 +106,7 @@ function testGetPositionError(positionID, expectedError){
         async function getNonExistentPosition(){
             await positionDAO.getPosition(positionDAO); 
         };
-        await expect(getNonExistentPosition).rejects.toThrowError(expectedError);
+        await expect(getNonExistentPosition).rejects.toEqual(expectedError);
     });
 }
 
@@ -131,7 +131,7 @@ function testUpdatePosition(oldPositionID, newPositionID, aisle, row, col, maxWe
 
 function testDeletePosition(positionID, expectedChanges) {
     test('delete Position', async () => {
-        let res = await skuDAO.deleteSKU(skuID);
+        let res = await positionDAO.deletePosition(positionID);
         expect(res).toStrictEqual(expectedChanges);
     });
 }

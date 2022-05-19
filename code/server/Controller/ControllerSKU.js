@@ -30,7 +30,7 @@ router.post('/sku',
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
-            switch(err.status){
+            switch(err.err){
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
@@ -69,7 +69,7 @@ router.get('/skus/:id', [check("id").isInt({ min: 1})],
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
-            switch(err.status){
+            switch(err.err){
                 case 404: return res.status(404).end();
                 default: return res.status(500).end();
             }
@@ -99,7 +99,7 @@ router.put('/sku/:id',
             // check if user authorized otherwise: return res.status(401).end();
         } catch(err){
             console.log(err);
-            switch(err.status){
+            switch(err.err){
                 case 404: return res.status(404).end();
                 case 422: return res.status(422).end();
                 default: return res.status(500).end();
@@ -124,7 +124,7 @@ router.put('/sku/:id/position',
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
-            switch(err.status){
+            switch(err.err){
                 case 404: return res.status(404).end();
                 case 422: return res.status(422).end();
                 default: return res.status(500).end();
@@ -141,7 +141,7 @@ router.delete('/skus/:id', async (req, res) => {
             // check if user authorized otherwise: return res.status(401).json({});
         } catch(err){
             console.log(err);
-            switch(err.status){
+            switch(err.err){
                 case 404: return res.status(422).end();      // should be 404 but API require only 422
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();

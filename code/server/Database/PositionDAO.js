@@ -15,11 +15,8 @@ class PositionDAO{
         try{
             let sql = "SELECT COUNT(*) AS num FROM Position WHERE positionID = ?";        // check if exists
             let res = await this.connectionDB.DBget(sql, [positionID]);
-            if(res.num != 0){
-                const error = new Error("422: positionID not unique");
-                error.status = 422;
-                throw error;
-            }
+            if(res.num != 0)
+                throw {err: 422, msg:  "positionID not unique"};
             sql = "INSERT INTO Position(positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             res = await this.connectionDB.DBexecuteQuery(sql, [positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, assignedSKUid]);
             return res.lastID;
@@ -45,11 +42,8 @@ class PositionDAO{
         try{
             let sql = "SELECT * FROM Position WHERE positionID = ?";
             const res = await this.connectionDB.DBget(sql, [positionID]);
-            if(res === undefined){
-                const error = new Error("404: Position not found");
-                error.status = 404;
-                throw error;
-            }
+            if(res === undefined)
+                throw {err: 422, msg:  "Position not found"};
             const positions = new Position(res.positionID, res.aisle, res.row, res.col, res.maxWeight, res.maxVolume, res.occupiedWeight, 
                 res.occupiedVolume, res.assignedSKUid ? res.assignedSKUid : undefined);
             return positions;
@@ -64,11 +58,8 @@ class PositionDAO{
             if(oldPositionID !== newPositionID){
                 let sql = "SELECT COUNT(*) AS num FROM Position WHERE positionID = ?";
                 let res = await this.connectionDB.DBget(sql, [newPositionID]);
-                if(res.num > 0){     // newPositionID not unique
-                    const error = new Error("422: positionID not unique");
-                    error.status = 422;
-                    throw error;
-                }
+                if(res.num > 0)          // newPositionID not unique
+                    throw {err: 422, msg:  "positionID not unique"};
             }
             let sql = "UPDATE Position SET positionID = ?, aisle = ?, row = ?, col = ?, maxWeight = ?, maxVolume = ?, occupiedWeight = ?, occupiedVolume = ?, assignedSKUid = ? WHERE positionID = ?";
             let res = await this.connectionDB.DBexecuteQuery(sql, [newPositionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume, skuID, oldPositionID]);
@@ -81,13 +72,10 @@ class PositionDAO{
 
     deletePosition  = async (positionID) => {
         try{
-            sql = "DELETE FROM Position WHERE positionID = ?";
-            res = await this.connectionDB.DBexecuteQuery(sql, [positionID]);
-            if(res.changes === 0){      // positionID not found
-                const error = new Error("404: Position not found");
-                error.status = 404;
-                throw error;
-            }
+            const sql = "DELETE FROM Position WHERE positionID = ?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [positionID]);
+            if(res.changes === 0)      // positionID not found
+                throw {err: 422, msg:  "Position not found"};
             return res.changes;
         }
         catch(err){
@@ -99,7 +87,7 @@ class PositionDAO{
     resetTable = async () => {
         try {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS Position');
-            res = this.connectionDB.DBexecuteQuery('CREATE TABLE "Position" ("positionID" TEXT NOT NULL UNIQUE, "aisle" TEXT NOT NULL, "row" TEXT NOT NULL, "col" TEXT NOT NULL, "maxWeight" NUMERIC NOT NULL, "maxVolume" NUMERIC NOT NULL, "occupiedWeight" NUMERIC NOT NULL, "occupiedVolume" NUMERIC NOT NULL, "assignedSKUid" INTEGER, PRIMARY KEY("positionID"));');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "Position" ("positionID" TEXT NOT NULL UNIQUE, "aisle" TEXT NOT NULL, "row" TEXT NOT NULL, "col" TEXT NOT NULL, "maxWeight" NUMERIC NOT NULL, "maxVolume" NUMERIC NOT NULL, "occupiedWeight" NUMERIC NOT NULL, "occupiedVolume" NUMERIC NOT NULL, "assignedSKUid" INTEGER, PRIMARY KEY("positionID"));');
         } catch (err) {
             throw err;    
         }
