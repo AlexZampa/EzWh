@@ -24,53 +24,28 @@ const Item = require('./Item');
 const TestDescriptor = require('./TestDescriptor');
 const TestResult = require('./TestResult');
 
-/* Mock DAO */
-// const Mock_internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
-// const Mock_positionDAO = require("../Mock_databases/Mock_positionDAO");
-// const Mock_restockOrderDAO = require("../Mock_databases/Mock_restockOrderDAO");
-// const Mock_returnOrderDAO = require("../Mock_databases/Mock_returnOrderDAO");
-// const Mock_skuDAO = require("../Mock_databases/Mock_skuDAO");
-// const Mock_skuItemDAO = require("../Mock_databases/Mock_skuItemDAO");
-// const Mock_testDescriptorDAO = require("../Mock_databases/Mock_testDescriptorDAO");
-// const Mock_testResultDAO = require("../Mock_databases/Mock_testResultDAO");
-// const Mock_userDAO = require("../Mock_databases/Mock_userDAO");
-
 // used for date vaidation
 dayjs.extend(customParseFormat);
 
 class Warehouse{
-    
-    constructor() {
+
+    constructor(userDAO, skuDAO, skuItemDAO, positionDAO, restockOrderDAO, returnOrderDAO, internalOrderDAO, itemDAO, testDescriptorDAO, testResultDAO) {
         if (Warehouse._instance) {
             return Warehouse._instance;
         }
-        Warehouse._instance = this;
-        this.userDAO = new UserDAO();
-        this.skuDAO = new SkuDAO();
-        this.skuItemDAO = new SKUItemDAO();
-        this.positionDAO = new PositionDAO();
-        this.restockOrderDAO = new RestockOrderDAO();
-        this.returnOrderDAO = new ReturnOrderDAO();
-        this.internalOrderDAO = new InternalOrderDAO();
-        this.itemDAO = new ItemDAO();
-        this.testDescriptorDAO = new TestDescriptorDAO();
-        this.testResultDAO = new TestResultDAO();
-    };
 
-    /* This function must be executed BEFORE EACH unit test on Warehouse:
-    *  it sets each DAO to the corresponding Mock DAO
-    */
-    initTest = () => {
-        this.internalOrderDAO = Mock_internalOrderDAO;
-        this.positionDAO = Mock_positionDAO;
-        this.restockOrderDAO = Mock_restockOrderDAO;
-        this.returnOrderDAO = Mock_returnOrderDAO;
-        this.skuDAO = Mock_skuDAO;
-        this.skuItemDAO = Mock_skuItemDAO;
-        this.testDescriptorDAO = Mock_testDescriptorDAO;
-        this.testResultDAO = Mock_testResultDAO;
-        this.userDAO = Mock_userDAO;
-    }
+        Warehouse._instance = this;
+        this.userDAO = userDAO ? userDAO : new UserDAO();
+        this.skuDAO = skuDAO ? skuDAO : new SkuDAO();
+        this.skuItemDAO = skuItemDAO ? skuItemDAO : new SKUItemDAO();
+        this.positionDAO = positionDAO ? positionDAO : new PositionDAO();
+        this.restockOrderDAO = restockOrderDAO ? restockOrderDAO : new RestockOrderDAO();
+        this.returnOrderDAO = returnOrderDAO ? returnOrderDAO : new ReturnOrderDAO();
+        this.internalOrderDAO = internalOrderDAO ? internalOrderDAO : new InternalOrderDAO();
+        this.itemDAO = itemDAO ? itemDAO : new ItemDAO();
+        this.testDescriptorDAO = testDescriptorDAO ? testDescriptorDAO : new TestDescriptorDAO();
+        this.testResultDAO = testResultDAO ? testResultDAO : new TestResultDAO();
+    };
 
     /*************** functions for managing SKU ***************/
     addSKU = async (description, weight, volume, notes, price, availableQty) => {
@@ -891,10 +866,6 @@ class Warehouse{
         }
     }
 }
-
-
-// Singleton class
-const warehouse = new Warehouse();
 
 
 module.exports = Warehouse;

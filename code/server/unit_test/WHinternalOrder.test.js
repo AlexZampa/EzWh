@@ -1,17 +1,17 @@
 "use strict";
 
 const Warehouse = require("../Model/Warehouse");
+const internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
+
+const wh = new Warehouse(undefined, undefined, undefined, undefined, undefined, undefined, internalOrderDAO);
 
 describe("Add internal order test", () => {
 
     let id = 0;
 
-    const wh = new Warehouse();
-    wh.initTest(); //sets all DAO to the corresponding mock db
-
     beforeEach(() => {
-        wh.internalOrderDAO.newInternalOrder.mockReset();
-        wh.internalOrderDAO.newInternalOrder.mockReturnValue(id);
+        internalOrderDAO.newInternalOrder.mockReset();
+        internalOrderDAO.newInternalOrder.mockReturnValue(id);
         id++;
     });
 
@@ -76,12 +76,9 @@ describe("Get all internal orders test", () => {
         }
     ]
 
-    const wh = new Warehouse();
-    wh.initTest(); //sets all DAO to the corresponding mock db
-
     beforeEach(() => {
-        wh.internalOrderDAO.getAllInternalOrders.mockReset();
-        wh.internalOrderDAO.getAllInternalOrders.mockReturnValue(list);
+        internalOrderDAO.getAllInternalOrders.mockReset();
+        internalOrderDAO.getAllInternalOrders.mockReturnValue(list);
     });
 
     testGetAllInternalOrders(list);
@@ -139,12 +136,9 @@ describe("Get all issued internal orders test", () => {
         }
     ]
 
-    const wh = new Warehouse();
-    wh.initTest(); //sets all DAO to the corresponding mock db
-
     beforeEach(() => {
-        wh.internalOrderDAO.getAllIssued.mockReset();
-        wh.internalOrderDAO.getAllIssued.mockReturnValue(list);
+        internalOrderDAO.getAllIssued.mockReset();
+        internalOrderDAO.getAllIssued.mockReturnValue(list);
     });
 
     testGetAllIssuedInternalOrders(list);
@@ -202,12 +196,9 @@ describe("Get all accepted internal orders test", () => {
         }
     ]
 
-    const wh = new Warehouse();
-    wh.initTest(); //sets all DAO to the corresponding mock db
-
     beforeEach(() => {
-        wh.internalOrderDAO.getAllAccepted.mockReset();
-        wh.internalOrderDAO.getAllAccepted.mockReturnValue(list);
+        internalOrderDAO.getAllAccepted.mockReset();
+        internalOrderDAO.getAllAccepted.mockReturnValue(list);
     });
 
     testGetAllAcceptedInternalOrders(list);
@@ -244,12 +235,9 @@ describe("Get internal order test", () => {
         customerId: 1
     }
 
-    const wh = new Warehouse();
-    wh.initTest(); //sets all DAO to the corresponding mock db
-
     beforeEach(() => {
-        wh.internalOrderDAO.getInternalOrder.mockReset();
-        wh.internalOrderDAO.getInternalOrder.mockReturnValue(internalOrder);
+        internalOrderDAO.getInternalOrder.mockReset();
+        internalOrderDAO.getInternalOrder.mockReturnValue(internalOrder);
     });
 
     testGetInternalOrder(1, internalOrder);
@@ -263,12 +251,10 @@ describe("Get internal order test", () => {
 });
 
 describe("Delete internal order test", () => {
-    const wh = new Warehouse();
-    wh.initTest(); //sets all DAO to the corresponding mock db
 
     beforeEach(() => {
-        wh.internalOrderDAO.deleteInternalOrder.mockReset();
-        wh.internalOrderDAO.deleteInternalOrder.mockReturnValue(0);
+        internalOrderDAO.deleteInternalOrder.mockReset();
+        internalOrderDAO.deleteInternalOrder.mockReturnValue(0);
     });
 
     testDeleteInternalOrder(1, 0);

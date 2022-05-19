@@ -23,8 +23,6 @@ describe('Test Create and Get SKU', () => {
 
     testCreateSKU("description 2", 20, 50, "notes 2", 20.99, 50, "123456789900", 2);
     testGetSKU(2, expectedSKU2);
-
-
 });
 
 
