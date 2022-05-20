@@ -35,7 +35,7 @@ describe('Test throw err on get and new Position', () => {
     });
 
     testCreatePositionError("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null, {err: 422, msg:  "positionID not unique"});
-    testGetPositionError("1234", {err: 422, msg:  "Position not found"});
+    testGetPositionError("1234", {err: 404, msg:  "Position not found"});
 });
 
 
@@ -170,4 +170,3 @@ function comparePosition(position, expectedPosition){
     expect(position.getOccupiedVolume()).toStrictEqual(expectedPosition.getOccupiedVolume());
     expect(position.getAssignedSKU()).toStrictEqual(expectedPosition.getAssignedSKU());
 };
-;

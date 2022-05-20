@@ -51,7 +51,7 @@ describe("Test add SKU", () => {
 });
 
 
-describe("test get all SKU", () => {
+describe("Test get all SKU", () => {
     
     let skuList = [];
     skuList.push(new SKU(1, "description 1", 30, 20, "notes 1", 10.99, 40, null));
@@ -158,7 +158,7 @@ describe("Test modify SKU", () => {
             expect(positionDAO.updatePosition).not.toHaveBeenCalled();
         })
 
-        test('Modify position after modify SKU', async () => {
+        test('Modify SKU with Position', async () => {
             const occupiedWeight = 500;
             const occupiedVolume = 750;
             let res = await wh.modifySKU(2, "description", 10, 15, "notes 1", 100.99, 50);

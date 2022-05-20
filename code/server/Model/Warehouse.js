@@ -269,8 +269,10 @@ class Warehouse{
     /*************** functions for managing Position ****************/
     addPosition = async (positionID, aisle, row, col, maxWeight, maxVolume) => {
         try{
+            if(!Number(positionID) || positionID.length != 12 || aisle.length != 4 || row.length != 4 || col.length != 4)
+                throw {err: 422, msg: "Invalid Position data"};
             if(positionID !== aisle.concat(row).concat(col) || maxWeight <= 0 || maxVolume <= 0)
-                throw {err: 422, msg:  "Invalid Position data"};
+                throw {err: 422, msg: "Invalid Position data"};
             const res = await this.positionDAO.newPosition(positionID, aisle, row, col, maxWeight, maxVolume, 0, 0, null);
             return res;
         }
@@ -282,12 +284,6 @@ class Warehouse{
     getPositions = async () => {
         try{
             const positionList = await this.positionDAO.getAllPosition();
-            for(const pos of positionList){
-                if(pos.getAssignedSKU() !== undefined){
-                    const sku = await this.skuDAO.getSKU(pos.getAssignedSKU());
-                    pos.setAssignedSKU(sku);
-                }
-            }
             return positionList;
         }
         catch(err){
@@ -299,8 +295,11 @@ class Warehouse{
     modifyPosition = async (positionID, aisle, row, col, maxWeight, maxVolume, occupiedWeight, occupiedVolume) => {
         try{
             const pos = await this.positionDAO.getPosition(positionID);     // get position to check if exists
-            if(maxWeight <= 0 || maxVolume <= 0 || occupiedWeight <= 0 || occupiedVolume <= 0 || occupiedVolume > maxVolume || occupiedWeight > maxWeight)
-                throw {err: 422, msg:  "Invalid Position data"};
+            if(maxWeight <= 0 || maxVolume <= 0 || occupiedWeight < 0 || occupiedVolume < 0 || occupiedVolume > maxVolume || occupiedWeight > maxWeight)
+                throw {err: 422, msg: "Invalid Position data"};
+
+            if(!Number(aisle) || !Number(row) || !Number(col) || aisle.length != 4 || row.length != 4 || col.length != 4)
+                throw {err: 422, msg: "Invalid Position data"};
 
             const newPositionID = aisle.concat(row).concat(col);
 
@@ -323,7 +322,7 @@ class Warehouse{
     modifyPositionID = async (oldPositionID, newPositionID) => {
         try{
             const pos = await this.positionDAO.getPosition(oldPositionID);     // get position to check if exists
-            if(!Number(newPositionID))
+            if(!Number(newPositionID) || newPositionID.length != 12 )
                 throw {err: 422, msg:  "Invalid Position data"};
             
             const newAisle = newPositionID.slice(0, 4);     // take first 4 digits
@@ -350,7 +349,7 @@ class Warehouse{
         try{
             const pos = await this.positionDAO.getPosition(positionID);
             if(pos.getAssignedSKU() !== undefined)
-                throw {err: 422, msg:  "Cannot delete: Position assigned to SKU"};
+                throw {err: 422, msg: "Cannot delete: Position assigned to SKU"};
             const res = await this.positionDAO.deletePosition(positionID);
             return res;
         }
