@@ -38,7 +38,7 @@ router.post('/newUser',
 // GET USER INFO
 router.get('/userinfo', async (req, res) => {
     try{
-        return res.status(200).json(result);
+        return res.status(200).json();
     } catch(err){
         console.log(err);
         return res.status(500).end();
