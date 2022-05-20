@@ -672,10 +672,10 @@ class Warehouse{
         }
     }
 
-    addItem = async (description, price, SKUId, supplierId) => {
+    addItem = async (id, description, price, SKUId, supplierId) => {
         try{
             const sku = await this.skuDAO.getSKU(SKUId);
-            const res = await this.itemDAO.newItem(description, price, SKUId, supplierId);
+            const res = await this.itemDAO.newItem(id, description, price, SKUId, supplierId);
             return res;
         }
         catch(err){

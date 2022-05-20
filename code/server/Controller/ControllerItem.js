@@ -52,7 +52,7 @@ check("supplierId").exists().isInt({ min: 0 })],
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            await warehouse.addItem(req.body.description, req.body.price, req.body.SKUId, req.body.supplierId);
+            await warehouse.addItem(req.body.id, req.body.description, req.body.price, req.body.SKUId, req.body.supplierId);
             return res.status(201).end();
         } catch (err) {
             console.log(err);
