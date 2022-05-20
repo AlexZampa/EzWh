@@ -62,6 +62,8 @@ Version:
 |||||||
 |||||||
 
+-----------------------------------------------------------------------------------------------------
+## **Class *UserDAO***
 
 ### **Class *UserDAO* - method *newUser***
 
@@ -231,6 +233,115 @@ Version:
 | No  | Invalid | T2() -> 0 | Test Delete User- testDeleteUser |
 
 
+-----------------------------------------------------------------------------------------------------
+## **Class *SkuDAO***
+
+### **Class *SkuDAO* - method *getAllSKU***
+
+**Criteria for method *getAllSKU*:**
+	
+ - There are SKUs in the DB
+
+**Predicates for method *getAllSKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are SKUs in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are SKUs in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All SKU - testGetAllSKU |
+| No | Valid| T2() -> list | - |
+
+
+### **Class *SkuDAO* - method *getSKU***
+
+**Criteria for method *getSKU*:**
+	
+ - SKU is in the DB
+
+**Predicates for method *getSKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKU is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKU is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validSKUid) -> SKU | Test Create and Get SKU - testGetSKU |
+| No | Invalid| T2(invalidSKUid) -> error | Test throw err on get SKU - testGetSKUerror |
+
+
+### **Class *SkuDAO* - method *updateSKU***
+
+**Criteria for method *updateSKU*:**
+	
+ - SKU is in the DB
+
+**Predicates for method *updateSKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKU is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKU is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validSKUid) -> 1 | Test Update SKU - testUpdateSKU |
+| No | Invalid| T2(invalidSKUid) -> 0 | Test Update SKU - testUpdateSKU |
+
+
+### **Class *SkuDAO* - method *deleteSKU***
+
+**Criteria for method *deleteSKU*:**
+	
+ - SKU is in the DB
+
+**Predicates for method *deleteSKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKU is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKU is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validSKUid) -> 1 | Test Delete SKU - testDeleteSKU |
+| No | Invalid| T2(invalidSKUid) -> 0 | Test Delete SKU - testDeleteSKU |
 
 # White Box Unit Tests
 
