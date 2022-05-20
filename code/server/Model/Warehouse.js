@@ -153,20 +153,10 @@ class Warehouse{
     deleteSKU = async (skuID) => {
         try{
             const sku = await this.skuDAO.getSKU(skuID);        // check if SKU exists
-            const roList = await this.restockOrderDAO.getAllRestockOrders();       // check if RestockOrderProducts has SKU
-            for(const ro of roList){
-                if(ro.getProducts().find(p => p.SKUId === skuID))
-                    throw {err: 422, msg:  "Cannot delete SKU"};
-            }
-            
             const skuItemList = await this.skuItemDAO.getAllSKUItems();         // check if SKUItem has SKU
             if(skuItemList.find(s => s.getSKU() === skuID))
                 throw {err: 422, msg:  "Cannot delete SKU"};
-            
-            const tests = await this.testDescriptorDAO.getAllTestDescriptor();  // check if SKU has TestDescriptor
-            if(tests.some(t => t.getSKUid() === skuID))
-                throw {err: 422, msg:  "Cannot delete SKU"};
-
+           
             const res = await this.skuDAO.deleteSKU(skuID);     // delete SKU
             if(sku.getPosition() !== undefined){                // if SKU has a Position assigned
                 const pos = await this.positionDAO.getPosition(sku.getPosition());
@@ -641,11 +631,6 @@ class Warehouse{
             const user = await this.userDAO.getUser(username, type);
             if(type === "manager" || type === "administrator")
                 throw {err : 422, msg : "Attempt to delete manager/administrator" };
-            if(type === "supplier"){
-                const roList = await this.restockOrderDAO.getAllRestockOrders();
-                if(roList.find(ro => ro.getSupplier() === user.getUserID()))
-                    throw {err : 422, msg : "Cannot delete supplier: Restock Order assigned to the user" };
-            }
             const result = await this.userDAO.deleteUser(username, type);
             return result;
         } catch (err) {

@@ -66,8 +66,8 @@ describe('Test Update User', () => {
     });
     
     const expectedUser = new User(1, "John", "Smith", "manager1@ezwh.com", "customer");
-    const expectedChanges = 1;
-    testUpdateUser("manager1@ezwh.com","manager", "customer", expectedChanges);
+    testUpdateUser("manager1@ezwh.com","manager", "customer", 1);
+    testUpdateUser("user1@ezwh.com","customer", "supplier", 0);
     testGetUser("manager1@ezwh.com", "customer", expectedUser);
 });
 
@@ -83,9 +83,9 @@ describe('Test Delete User', () => {
     const userList = [];
     userList.push(new User(1, "John", "Smith", "manager1@ezwh.com", "manager"));
     userList.push(new User(3, "Frank", "White", "qualityEmployee1@ezwh.com", "qualityEmployee"));
-    let expectedChanges = 1;
-    testDeleteUser("user1@ezwh.com", "customer", expectedChanges);
+    testDeleteUser("user1@ezwh.com", "customer", 1);
     testGetAllUsers(userList);
+    testDeleteUser("user1@ezwh.com", "customer", 0);
 });
 
 
@@ -98,16 +98,16 @@ describe('Test login User', () => {
     const expectedUser = new User(1, "John", "Smith", "manager1@ezwh.com", "manager");
     testLoginUser("manager1@ezwh.com", "testpassword", "manager", expectedUser);
 
-    test('throw 401 for invalid password', async () => {
+    test('throw error on invalid password', async () => {
         async function loginInvalid(){
             await userDAO.loginUser("manager1@ezwh.com", "invalidPassword", "manager");
         };
         await expect(loginInvalid).rejects.toEqual({err : 401, msg : "Invalid password" });
     });
 
-    test('throw 401 for user not found', async () => {
+    test('throw error on user not found', async () => {
         async function userInvalid(){
-            await userDAO.loginUser("manager1@ezwh.com", "testpassword", "qualityEmployee");
+            await userDAO.loginUser("user1@ezwh.com", "testpassword", "manager");
         };
         await expect(userInvalid).rejects.toEqual({err : 401, msg : "User not found" });
     });

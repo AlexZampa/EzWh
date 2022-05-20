@@ -92,8 +92,6 @@ class UserDAO{
         try {
             const sql = "DELETE FROM User WHERE email = ? AND type = ?";
             const res = await this.connectionDB.DBexecuteQuery(sql, [username, type]);
-            if(res.changes === 0)
-                throw {err : 404, msg : "User not found" };
             return res.changes;
         } catch (err) {
             throw err;

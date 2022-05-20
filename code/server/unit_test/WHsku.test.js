@@ -263,94 +263,52 @@ describe("Test modify SKU position", () => {
 });
 
 
-
 describe("Test delete SKU", () => {
-    let testList = [];
-    const test1 = new TestDescriptor(1, "test 1", "procedure 1", 2);
-    const test2 = new TestDescriptor(2, "test 2", "procedure 2", 2);
-    testList.push(test1);
-    testList.push(test2);
-
     const sku1 = new SKU(1, "description 1", 30, 20, "notes 1", 10.99, 40, null);
     const sku2 = new SKU(2, "description 2", 20, 50, "notes 2", 20.99, 50, "123456789900");
     const pos = new Position("123456789900", "1234", "5678", "9900", 1000, 1200, 100, 150, 2);
 
-    describe('Test delete', () => {
-        beforeAll(() => {
-            skuDAO.getSKU.mockReset();
-            skuDAO.getSKU.mockReturnValueOnce(sku1).mockReturnValue(sku2);
-                
-            restockOrderDAO.getAllRestockOrders.mockReset();
-            restockOrderDAO.getAllRestockOrders.mockReturnValue([]);
-    
-            skuItemDAO.getAllSKUItems.mockReset();
-            skuItemDAO.getAllSKUItems.mockReturnValue([]);
-    
-            testDescriptorDAO.getAllTestDescriptor.mockReset();
-            testDescriptorDAO.getAllTestDescriptor.mockReturnValue([]);
-    
-            skuDAO.deleteSKU.mockReset();
-            skuDAO.deleteSKU.mockReturnValue(1);
-            
-            positionDAO.getPosition.mockReset();
-            positionDAO.getPosition.mockReturnValue(pos);
-            
-            positionDAO.updatePosition.mockReset();
-            positionDAO.updatePosition.mockReturnValue(1);
-        });
+    beforeAll(() => {
+        skuDAO.getSKU.mockReset();
+        skuDAO.getSKU.mockReturnValueOnce(sku1).mockReturnValueOnce(sku2).mockRejectedValueOnce({err: 404, msg:  "SKU not found"});          
 
-        let skuID = 1;
-        let expectedResult = 1;
-        test('Delete SKU without position', async () => {
-            let result = await wh.deleteSKU(skuID);
-            expect(result).toBe(expectedResult);
-            expect(positionDAO.updatePosition).not.toHaveBeenCalled();
+        skuItemDAO.getAllSKUItems.mockReset();
+        skuItemDAO.getAllSKUItems.mockReturnValue([]);
+
+        skuDAO.deleteSKU.mockReset();
+        skuDAO.deleteSKU.mockReturnValue(1);
+        
+        positionDAO.getPosition.mockReset();
+        positionDAO.getPosition.mockReturnValue(pos);
+        
+        positionDAO.updatePosition.mockReset();
+        positionDAO.updatePosition.mockReturnValue(1);
+    });
+
+    let skuID = 1;
+    let expectedResult = 1;
+    test('Delete SKU without position', async () => {
+        let result = await wh.deleteSKU(skuID);
+        expect(result).toBe(expectedResult);
+        expect(positionDAO.updatePosition).not.toHaveBeenCalled();
+    })
+
+    skuID = 2;
+    test('Update position after delete SKU', async () => {
+        let res = await wh.deleteSKU(skuID);
+        expect(positionDAO.updatePosition).toHaveBeenCalledWith("123456789900", "123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null);
+    });
+
+    testDeleteSKUError("throw error on SKU not found", 5, {err: 404, msg:  "SKU not found"});
+
+    function testDeleteSKUError(testMessage, skuID, expectedError){
+        test(testMessage, async () => {
+            async function invalidDelete(){
+                await wh.deleteSKU(skuID);
+            };
+            await expect(invalidDelete).rejects.toEqual(expectedError);
         })
-
-        skuID = 2;
-        test('Update position after delete SKU', async () => {
-            let res = await wh.deleteSKU(skuID);
-            expect(positionDAO.updatePosition).toHaveBeenCalledWith("123456789900", "123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null);
-        });
-    });
-
-    
-    describe("Test Errors", () => {
-        beforeAll(() => {
-            skuDAO.getSKU.mockReset();
-            skuDAO.getSKU.mockReturnValueOnce(sku2).mockRejectedValueOnce({err: 404, msg:  "SKU not found"});
-                
-            restockOrderDAO.getAllRestockOrders.mockReset();
-            restockOrderDAO.getAllRestockOrders.mockReturnValue([]);
-    
-            skuItemDAO.getAllSKUItems.mockReset();
-            skuItemDAO.getAllSKUItems.mockReturnValue([]);
-    
-            testDescriptorDAO.getAllTestDescriptor.mockReset();
-            testDescriptorDAO.getAllTestDescriptor.mockReturnValue(testList);
-    
-            skuDAO.deleteSKU.mockReset();
-            skuDAO.deleteSKU.mockReturnValue(1);
-            
-            positionDAO.getPosition.mockReset();
-            positionDAO.getPosition.mockReturnValue(pos);
-            
-            positionDAO.updatePosition.mockReset();
-            positionDAO.updatePosition.mockReturnValue(1);
-        });    
-
-        testDeleteSKUError("throw error on TestDescriptor assigned to SKU", 2, {err: 422, msg:  "Cannot delete SKU"});
-        testDeleteSKUError("throw error on SKU not found", 5, {err: 404, msg:  "SKU not found"});
-
-        function testDeleteSKUError(testMessage, skuID, expectedError){
-            test(testMessage, async () => {
-                async function invalidDelete(){
-                    await wh.deleteSKU(skuID);
-                };
-                await expect(invalidDelete).rejects.toEqual(expectedError);
-            })
-        }
-    });
+    }
 });
 
 

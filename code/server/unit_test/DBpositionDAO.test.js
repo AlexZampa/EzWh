@@ -83,9 +83,9 @@ describe('Test Delete Position', () => {
     const positionList = [];
     positionList.push(new Position("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null));
     positionList.push(new Position("102938475656", "1029", "3847", "5656", 800, 800, 10, 10, null));
-    let expectedChanges = 1;
-    testDeletePosition("112233445566", expectedChanges);
+    testDeletePosition("112233445566", 1);
     testGetAllPosition(positionList);
+    testDeletePosition("112233445566", 0);
 });
 
 

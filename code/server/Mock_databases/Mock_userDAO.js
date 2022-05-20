@@ -1,4 +1,3 @@
-"use strict";
 exports.newUser = jest.fn();
 exports.getAllUsers = jest.fn();
 exports.getAllUsersByType = jest.fn();

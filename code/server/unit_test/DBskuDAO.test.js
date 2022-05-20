@@ -57,9 +57,9 @@ describe('Test Update SKU', () => {
         await skuDAO.newSKU("description 1", 30, 20, "notes 1", 10.99, 40, null);
     });
     const expectedSKU = new SKU(1, "description 2", 40, 20, "notes 2", 10.99, 50, null);
-    const expectedChanges = 1;
-    testUpdateSKU(1, "description 2", 40, 20, "notes 2", 10.99, 50, null, expectedChanges);
+    testUpdateSKU(1, "description 2", 40, 20, "notes 2", 10.99, 50, null, 1);
     testGetSKU(1, expectedSKU);
+    testUpdateSKU(2, "description 2", 40, 20, "notes 2", 10.99, 50, null, 0);
 });
 
 
@@ -74,9 +74,9 @@ describe('Test Delete SKU', () => {
     const skuList = [];
     skuList.push(new SKU(1, "description 1", 30, 20, "notes 1", 10.99, 40, null));
     skuList.push(new SKU(3, "description 3", 40, 40, "notes 3", 15.99, 20, null));
-    let expectedChanges = 1
-    testDeleteSKU(2, expectedChanges);
+    testDeleteSKU(2, 1);
     testGetAllSKU(skuList);
+    testDeleteSKU(2, 0);
 });
 
 

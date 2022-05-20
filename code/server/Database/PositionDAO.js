@@ -74,8 +74,6 @@ class PositionDAO{
         try{
             const sql = "DELETE FROM Position WHERE positionID = ?";
             const res = await this.connectionDB.DBexecuteQuery(sql, [positionID]);
-            if(res.changes === 0)      // positionID not found
-                throw {err: 422, msg:  "Position not found"};
             return res.changes;
         }
         catch(err){
