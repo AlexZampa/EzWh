@@ -89,7 +89,7 @@ Version:
 | User with unique username and type in the DB | Valid / Invalid | Description of the test case | Jest test case |
 |-------|-------|-------|-------|-------|-------|
 | Yes | Valid | T1(validUser) -> rowID | Test Create and Get User - testCreateUser |
-| No | Invalid| T2(invalidUser) -> error 409 | Test throw err on new User - testCreateUserError |
+| No | Invalid| T2(invalidUser) -> error | Test throw err on new User - testCreateUserError |
 
 
 ### **Class *UserDAO* - method *getAllUsers***
@@ -174,9 +174,9 @@ Version:
 | pair username and type is in the DB | password is correct | Valid / Invalid | Description of the test case | Jest test case |
 |-------|-------|-------|-------|-------|-------|
 | Yes | Yes | Valid  | T1(validData) -> userData | Test login User - testLoginUser |
-| Yes | No  | Invalid | T2(invalidPassword) -> error 401 | Test login User - throw error on invalid password |
-| No  | Yes | Invalid | T1(invalidUsername) -> error 401 | Test login User - throw error on user not found |
-| No  | No  | Invalid | T2(invalidUser) -> error 401 | - |
+| Yes | No  | Invalid | T2(invalidPassword) -> error | Test login User - throw error on invalid password |
+| No  | Yes | Invalid | T1(invalidUsername) -> error | Test login User - throw error on user not found |
+| No  | No  | Invalid | T2(invalidUser) -> error | - |
 
 
 ### **Class *UserDAO* - method *updateUser***
@@ -342,6 +342,145 @@ Version:
 |-------|-------|-------|-------|-------|-------|
 | Yes | Valid | T1(validSKUid) -> 1 | Test Delete SKU - testDeleteSKU |
 | No | Invalid| T2(invalidSKUid) -> 0 | Test Delete SKU - testDeleteSKU |
+
+
+-----------------------------------------------------------------------------------------------------
+## **Class *PositionDAO***
+
+### **Class *PositionDAO* - method *newPosition***
+
+**Criteria for method *newPosition*:**
+	
+ - positionID is unique in the DB
+
+**Predicates for method *newPosition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| positionID is unique in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| positionID is unique in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validPositionID) -> rowID | Test Create and Get Position - testCreatePosition |
+| No | invalid| T2(invalidPositionID) -> error | Test throw err on get and new Position - testCreatePositionError |
+
+
+### **Class *PositionDAO* - method *getAllPosition***
+
+**Criteria for method *getAllPosition*:**
+	
+ - There are Position in the DB
+
+**Predicates for method *getAllPosition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are Position in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are Position in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All Position - testGetAllPosition |
+| No | Valid| T2() -> list | - |
+
+
+### **Class *PositionDAO* - method *getPosition***
+
+**Criteria for method *getPosition*:**
+	
+ - Position is in the DB
+
+**Predicates for method *getPosition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Position is in the DB| Yes |
+|                      | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Position is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validPositionID) -> Position | Test Create and Get Position - testGetPosition |
+| No | Invalid| T2(invalidPositionID) -> error | Test throw err on get and new Position - testGetPositionError |
+
+
+### **Class *PositionDAO* - method *updatePosition***
+
+**Criteria for method *updatePosition*:**
+	
+ - newPositionID does not exist in the DB
+
+**Predicates for method *updatePosition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| newPositionID does not exist in the DB | Yes |
+|                                        | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| newPositionID does not exist in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validNewPositionID) -> 1 | Test Update Position - testUpdatePosition |
+| No | Invalid| T2(invalidNewPositionID) -> error | Test Update Position - testUpdatePositionError |
+
+
+### **Class *PositionDAO* - method *deletePosition***
+
+**Criteria for method *deletePosition*:**
+	
+ - Position is in the DB
+
+**Predicates for method *deletePosition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Position is in the DB | Yes |
+|                       | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Position is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validPositionID) -> 1 | Test Delete Position - testDeletePosition |
+| No | Invalid| T2(invalidPositionID) -> 0 | Test Delete Position - testDeletePosition |
+
 
 # White Box Unit Tests
 
