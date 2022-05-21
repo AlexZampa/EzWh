@@ -141,9 +141,20 @@ function testDeleteRestockOrder(restockOrderID, expectedChanges) {
 function compareRestockOrder(restockOrder, expectedRestockOrder) {
     expect(restockOrder.getID()).toStrictEqual(expectedRestockOrder.getID());
     expect(restockOrder.getIssueDate()).toStrictEqual(expectedRestockOrder.getIssueDate());
-    expect(restockOrder.getProducts()).toStrictEqual(expectedRestockOrder.getProducts());
+    compareProducts(restockOrder.getProducts(), expectedRestockOrder.getProducts());
     expect(restockOrder.getState()).toStrictEqual(expectedRestockOrder.getState());
     expect(restockOrder.getTransportNote()).toStrictEqual(expectedRestockOrder.getTransportNote());
     expect(restockOrder.getSKUItems()).toStrictEqual(expectedRestockOrder.getSKUItems());
     expect(restockOrder.getSupplier()).toStrictEqual(expectedRestockOrder.getSupplier());
 };
+
+
+function compareProducts(productList, expectedProductList) {
+    expect(productList.length).toStrictEqual(expectedProductList.length);
+    for (var i = 0; i < productList.length; i++) {
+        expect(productList[i].SKUId).toStrictEqual(expectedProductList[i].SKUId);
+        expect(productList[i].description).toStrictEqual(expectedProductList[i].description);
+        expect(productList[i].price).toStrictEqual(expectedProductList[i].price);
+        expect(productList[i].qty).toStrictEqual(expectedProductList[i].qty);
+    }
+}

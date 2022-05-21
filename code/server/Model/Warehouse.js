@@ -175,10 +175,9 @@ class Warehouse{
     addSKUItem = async (rfid, skuID, dateOfStock) => {
         try{
             if(dateOfStock !== undefined && dateOfStock !== null){
-                if(!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
+                if(!(dayjs(dateOfStock, 'YYYY-MM-DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY-MM-DD', true).isValid()))
                     throw {err : 422, msg : "Invalid Date"};
             }
-            const sku = await this.getSKU(skuID);       // get SKU
             const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock ? dateOfStock : null, null);
             return res;
         }
@@ -229,7 +228,7 @@ class Warehouse{
     modifySKUItem = async (rfid, newRFID, newAvailable, newDate) => {
         try {
             if(newDate !== undefined && newDate !== null){
-                if(!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid()))
+                if(!(dayjs(newDate, 'YYYY-MM-DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY-MM-DD', true).isValid()))
                     throw {err : 422, msg : "Invalid Date"};
             }
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
@@ -351,7 +350,7 @@ class Warehouse{
 
     /********* functions for managing Restock Order ***********/
     addRestockOrder = async (products, supplierID, issueDate) => {
-        if(!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
+        if(!(dayjs(issueDate, 'YYYY-MM-DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY-MM-DD', true).isValid()))
             throw {err : 422, msg : "Invalid Date"};
         for(const prod of products){
             await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
@@ -430,12 +429,12 @@ class Warehouse{
 
     restockOrderAddTransportNote = async (restockOrderID, date) => {
         try{
-            if(!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
+            if (!(dayjs(date, 'YYYY-MM-DD HH:mm', true).isValid() || dayjs(date, 'YYYY-MM-DD', true).isValid()))
                 throw {err : 422, msg : "Invalid date"};
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
             if( dayjs(date).isBefore( dayjs(restockOrder.getIssueDate())) )
                 throw {err: 422, msg: "Invalid date: deliveryDate is before issueDate"};
-            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY/MM/DD HH:mm'));
+            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY-MM-DD'));
             return res;
         } catch(err){
             throw err;
