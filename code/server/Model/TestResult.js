@@ -12,6 +12,17 @@ class TestResult{
         this.result = result;
     };
 
+    getID = () => this.id;
+    getRFID = () => this.rfid;
+    getIdTestDescriptor = () => this.idTestDescriptor;
+    getDate = () => this.date;
+    getResult = () => this.result;
+
+    setRFID = (RFID) => { this.RFID = RFID; };
+    setIdTestDescriptor = (idTestDescriptor) => {this.idTestDescriptor = idTestDescriptor};
+    setDate = (date) => { this.date = dayjs(date); };
+    setResult = (result) => {this.result = result};
+
     modifyTestResultdata = async (newIdTestDescriptor, newDate, newResult, TestResultDAO) => {
         try{
             const res = await TestResultDAO.updateTestResult(this.id, this.rfid, newIdTestDescriptor, newDate, newResult);

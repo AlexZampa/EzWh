@@ -80,9 +80,9 @@ describe('Test Delete Item', () => {
 
 
 
-function testCreateItem(itemId, description, price, associateditem, supplier, expectedID) {
+function testCreateItem(itemId, description, price, associatedSKU, supplier, expectedID) {
     test('create new Item', async () => {
-        let id = await itemDAO.newItem(itemId, description, price, associateditem, supplier);
+        let id = await itemDAO.newItem(itemId, description, price, associatedSKU, supplier);
         expect(id).toStrictEqual(expectedID);
     });
 }
@@ -114,9 +114,9 @@ function testGetAllItem(expectedList) {
 }
 
 
-function testUpdateItem(id, newDescription, newPrice, newAssociateditem, newSupplier, expectedChanges) {
+function testUpdateItem(id, newDescription, newPrice, newAssociatedSKU, newSupplier, expectedChanges) {
     test('update Item', async () => {
-        let res = await itemDAO.updateItem(id, newDescription, newPrice, newAssociateditem, newSupplier);
+        let res = await itemDAO.updateItem(id, newDescription, newPrice, newAssociatedSKU, newSupplier);
         expect(res).toStrictEqual(expectedChanges);
     });
 }

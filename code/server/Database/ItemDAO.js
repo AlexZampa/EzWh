@@ -41,7 +41,7 @@ class ItemDAO {
             let res = await this.connectionDB.DBget(sql, [id]);
             if (res.num != 0)
                 throw { err: 422, msg: "id not unique" };
-            sql = "SELECT COUNT(*) AS num FROM Item WHERE associatedSKU = ? AND supplier = ?";        // check if exists
+            sql = "SELECT COUNT(*) AS num FROM Item WHERE associatedSKU = ? AND supplier = ?";
             res = await this.connectionDB.DBget(sql, [SKUId, supplierId]);
             if (res.num != 0)
                 throw { err: 422, msg: "this supplier already sells an item with the same SKUId" };

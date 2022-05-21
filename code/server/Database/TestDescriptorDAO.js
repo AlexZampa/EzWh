@@ -68,6 +68,15 @@ class TestDescriptorDAO{
             throw err;
         }
     }
+
+    resetTable = async () => {
+        try {
+            let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS TestDescriptor');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "TestDescriptor" ("id" INTEGER NOT NULL UNIQUE, "name" TEXT NOT NULL, "procedureDescription" TEXT NOT NULL, "idSKU" INTEGER NOT NULL, PRIMARY KEY("id"));');
+        } catch (err) {
+            throw err;    
+        }
+    };
 }
 
 module.exports = TestDescriptorDAO;
