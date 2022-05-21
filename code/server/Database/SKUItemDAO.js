@@ -25,9 +25,7 @@ class SKUItemDAO {
             let sql = "SELECT * FROM SKUItem WHERE rfid = ?";
             const res = await this.connectionDB.DBget(sql, [rfid]);
             if (res === undefined) {
-                const error = new Error("404: SKUItem not found");
-                error.status = 404;
-                throw error;
+                throw { err: 404, msg: "SKUItem not found" };
             }
             const skuItem = new SKUItem(res.rfid, res.SKUid, res.available, res.dateOfStock ? res.dateOfStock : undefined, res.restockOrderID ? res.restockOrderID : undefined );
             return skuItem;

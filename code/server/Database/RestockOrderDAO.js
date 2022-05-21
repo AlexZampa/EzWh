@@ -16,7 +16,7 @@ class RestockOrderDAO {
     }
 
     newRestockOrder = async (products, state, supplierID, issueDate, transportNote) => {
-        try{
+        try {
             let sql = 'INSERT INTO RestockOrder(supplierID, state, issueDate, transportNote) VALUES(?, ?, ?, ?)';
             const result = await this.connectionDB.DBexecuteQuery(sql, [supplierID, state, issueDate, transportNote]);
             sql = "INSERT INTO RestockOrderProduct(RestockOrderID, skuID, description, price, quantity) VALUES(?, ?, ?, ?, ?)";
@@ -36,7 +36,7 @@ class RestockOrderDAO {
             let sql = "SELECT * FROM RestockOrder WHERE id = ?";
             const res = await this.connectionDB.DBget(sql, [restockOrderID]);
             if(res === undefined)
-                throw {err : 404, msg : "Restock Order not found"};
+                throw {err : 404, msg : "RestockOrder not found"};
             const restockOrder = new RestockOrder(res.id, res.issueDate, res.supplierID, res.state, res.transportNote ? res.transportNote : undefined);
             sql = "SELECT * FROM RestockOrderProduct WHERE restockOrderID = ?";
             const products = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
@@ -88,6 +88,17 @@ class RestockOrderDAO {
             return res.changes;
         }
         catch (err) {
+            throw err;
+        }
+    };
+
+    resetTable = async () => {
+        try {
+            let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrder');
+            res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrderProduct');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "skuID" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","skuID"));');
+        } catch (err) {
             throw err;
         }
     };
