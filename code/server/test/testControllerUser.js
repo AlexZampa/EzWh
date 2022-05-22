@@ -64,17 +64,17 @@ function newUser(expectedHTTPStatus, username, name, surname, password, type) {
         if (username !== undefined) {
             let user = { username: username, name: name, surname: surname, password: password, type: type }
             agent.post('/api/newUser')
-                .send(user)
-                .then(function (res) {
-                    res.should.have.status(expectedHTTPStatus);
-                    done();
-                });
+            .send(user)
+            .then(function (res) {
+                res.should.have.status(expectedHTTPStatus);
+                done();
+            });
         } else {
             agent.post('/api/newUser') //we are not sending any data
-                .then(function (res) {
-                    res.should.have.status(expectedHTTPStatus);
-                    done();
-                });
+            .then(function (res) {
+                res.should.have.status(expectedHTTPStatus);
+                done();
+            });
         }
     });
 }
@@ -194,7 +194,7 @@ function modifyUserRights(expectedHTTPStatus, originalUsername, oldType, usernam
 
 
 function deleteUser(expectedHTTPStatus, originalUsername, originalType, username, type) {
-    it('adding existent user', function (done) {
+    it('deleting user', function (done) {
         let user =  { username: originalUsername, name: "Mary", surname: "Red", password: "testpassword", type: originalType };
         agent.post('/api/newUser')
         .send(user)
@@ -237,7 +237,7 @@ function customerSessions(expectedHTTPStatus, originalUsername, originalPassword
 
 
 function supplierSessions(expectedHTTPStatus, originalUsername, originalPassword, username, password) {
-    it('login customer', function (done) {
+    it('login supplier', function (done) {
         let user = { username: originalUsername, name: "Mary", surname: "Red", password: originalPassword, type: "supplier" };
         let data = { username: username, password: password };
         let expectedResult = {id: 1, username: originalUsername, name: "Mary" }; 
@@ -263,7 +263,7 @@ function supplierSessions(expectedHTTPStatus, originalUsername, originalPassword
 
 
 function clerkSessions(expectedHTTPStatus, originalUsername, originalPassword, username, password) {
-    it('login customer', function (done) {
+    it('login clerk', function (done) {
         let user = { username: originalUsername, name: "Mary", surname: "Red", password: originalPassword, type: "clerk" };
         let data = { username: username, password: password };
         let expectedResult = {id: 1, username: originalUsername, name: "Mary" }; 
@@ -289,7 +289,7 @@ function clerkSessions(expectedHTTPStatus, originalUsername, originalPassword, u
 
 
 function qualityEmployeeSessions(expectedHTTPStatus, originalUsername, originalPassword, username, password) {
-    it('login customer', function (done) {
+    it('login qualityEmployee', function (done) {
         let user = { username: originalUsername, name: "Mary", surname: "Red", password: originalPassword, type: "qualityEmployee" };
         let data = { username: username, password: password };
         let expectedResult = {id: 1, username: originalUsername, name: "Mary" }; 
@@ -315,7 +315,7 @@ function qualityEmployeeSessions(expectedHTTPStatus, originalUsername, originalP
 
 
 function deliveryEmployeeSessions(expectedHTTPStatus, originalUsername, originalPassword, username, password) {
-    it('login customer', function (done) {
+    it('login deliveryEmployee', function (done) {
         let user = { username: originalUsername, name: "Mary", surname: "Red", password: originalPassword, type: "deliveryEmployee" };
         let data = { username: username, password: password };
         let expectedResult = {id: 1, username: originalUsername, name: "Mary" }; 

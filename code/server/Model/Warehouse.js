@@ -170,6 +170,16 @@ class Warehouse{
         }
     };
 
+    testDeleteAllSKU = async () => {
+        try {
+            await this.skuDAO.resetTable();
+            await this.testDescriptorDAO.resetTable();
+            await this.positionDAO.resetTable();
+            await this.skuItemDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    }
 
     /**************** functions for managing SKUItem ***************/
     addSKUItem = async (rfid, skuID, dateOfStock) => {

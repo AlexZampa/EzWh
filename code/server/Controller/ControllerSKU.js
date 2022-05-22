@@ -11,10 +11,10 @@ const warehouse = new Warehouse();
 
 // CREATE NEW SKU
 router.post('/sku', 
-    [check("description").exists().trim().isAscii(),
+    [check("description").exists().isString().trim(),
      check("weight").exists().isNumeric(),
      check("volume").exists().isNumeric(),
-     check("notes").exists().trim().isAscii(), 
+     check("notes").exists().isString().trim(), 
      check("price").exists().isNumeric(),
      check("availableQuantity").exists().isInt({ min: 0})],
     async (req, res) => {
@@ -80,10 +80,10 @@ router.get('/skus/:id', [check("id").isInt({ min: 1})],
 // MODIFY SKU 
 router.put('/sku/:id', 
     [check("id").isInt({ min: 1}),
-     check("newDescription").exists().trim().isAscii(),
+     check("newDescription").exists().isString().trim(),
      check("newWeight").exists().isNumeric(),
      check("newVolume").exists().isNumeric(),
-     check("newNotes").exists().trim().isAscii(), 
+     check("newNotes").exists().isString().trim(), 
      check("newPrice").exists().isNumeric(),
      check("newAvailableQuantity").exists().isInt({ min: 0})],
     async (req, res) => {
@@ -134,8 +134,14 @@ router.put('/sku/:id/position',
 
 
 // DELETE SKU
-router.delete('/skus/:id', async (req, res) => {
+router.delete('/skus/:id', [check("id").isNumeric()],
+    async (req, res) => {
         try{
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                console.log({ errors: errors.array() });
+                return res.status(422).end();
+            }
             const result = await warehouse.deleteSKU(Number(req.params.id));
             return res.status(204).end();
             // check if user authorized otherwise: return res.status(401).json({});
@@ -148,6 +154,19 @@ router.delete('/skus/:id', async (req, res) => {
             }
         }
 });
+
+
+// TEST - DELETE ALL SKU
+router.delete('/test/skus', async (req, res) => {
+    try{
+        const result = await warehouse.testDeleteAllSKU();
+        return res.status(204).end();
+    } catch(err){
+        console.log(err);
+        return res.status(503).end();
+    }
+});
+
 
 
    
