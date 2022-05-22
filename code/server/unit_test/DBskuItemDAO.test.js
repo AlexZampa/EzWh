@@ -39,7 +39,7 @@ describe('Test throw err on get SKUItem', () => {
         await skuItemDAO.resetTable();
         await skuItemDAO.newSKUItem("1", sku.getID(), 1, null, undefined);
     });
-    testGetSKUItemerror("3", "404");
+    testGetSKUItemerror("3", { err: 404, msg: "SKUItem not found" });
 });
 
 
@@ -64,10 +64,10 @@ describe('Test Update SKUItem', () => {
         await skuItemDAO.resetTable();
         await skuItemDAO.newSKUItem("1", sku.getID(), 1, null, undefined);
     });
-    const expectedSKU = new SKUItem("1", sku.getID(), 0, dayjs('2022-05-29'), undefined);
+    const expectedSKUItem = new SKUItem("1", sku.getID(), 0, dayjs('2022-05-29'), undefined);
     const expectedChanges = 1;
     testUpdateSKUItem("1", "1", 0, dayjs('2022-05-29'), undefined, expectedChanges);
-    testGetSKUItem("1", expectedSKU);
+    testGetSKUItem("1", expectedSKUItem);
 });
 
 
@@ -106,7 +106,7 @@ function testGetSKUItemerror(skuItemRFID, expectedError) {
         async function getNonExistentSKUItem() {
             await skuItemDAO.getSKUItem(skuItemRFID);
         };
-        await expect(getNonExistentSKUItem).rejects.toThrowError(expectedError);
+        await expect(getNonExistentSKUItem).rejects.toEqual(expectedError);
     });
 }
 
