@@ -170,6 +170,16 @@ class Warehouse{
         }
     };
 
+    testDeleteAllSKU = async () => {
+        try {
+            await this.skuDAO.resetTable();
+            await this.testDescriptorDAO.resetTable();
+            await this.positionDAO.resetTable();
+            await this.skuItemDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    }
 
     /**************** functions for managing SKUItem ***************/
     addSKUItem = async (rfid, skuID, dateOfStock) => {
@@ -178,7 +188,6 @@ class Warehouse{
                 if(!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
                     throw {err : 422, msg : "Invalid Date"};
             }
-            const sku = await this.getSKU(skuID);       // get SKU
             const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock ? dateOfStock : null, null);
             return res;
         }
@@ -347,6 +356,15 @@ class Warehouse{
             throw err;
         }
     };
+    
+    testDeleteAllPosition = async () => {
+        try {
+            await this.skuDAO.resetTable();
+            await this.positionDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    };
 
 
     /********* functions for managing Restock Order ***********/
@@ -367,7 +385,8 @@ class Warehouse{
         try{
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
-            restockOrder.setSKUItems(skuItemList.filter(s => s.getRestockOrder() === restockOrder.getID()));
+            const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === restockOrderID);
+            restockOrder.setSKUItems(skuItemsOfRO);
             return restockOrder;
         } catch(err){
             throw err;
@@ -411,7 +430,7 @@ class Warehouse{
                 throw {err: 422, msg: "Restock Order not in DELIVERED state"};
             const allSKUItems = await this.skuItemDAO.getAllSKUItems();
             const skuItemList = [];
-            for(const s of SKUItemIdList){
+            for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
                 // if SKUItem not found or skuID passed as params is different from the real SKUid or SKUItem has already a restockOrder
                 if(!skuItem || s.skuID !== skuItem.getSKU() || skuItem.getRestockOrder() !== undefined)
@@ -430,12 +449,12 @@ class Warehouse{
 
     restockOrderAddTransportNote = async (restockOrderID, date) => {
         try{
-            if(!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
+            if (!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
                 throw {err : 422, msg : "Invalid date"};
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
             if( dayjs(date).isBefore( dayjs(restockOrder.getIssueDate())) )
                 throw {err: 422, msg: "Invalid date: deliveryDate is before issueDate"};
-            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY/MM/DD HH:mm'));
+            const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY-MM-DD'));
             return res;
         } catch(err){
             throw err;
@@ -461,7 +480,7 @@ class Warehouse{
                 throw {err : 422, msg : "Restock Order not in COMPLETEDRETURN state"};
             const skuItems = restockOrder.getSKUItems();
             const returnItems = [];
-            for (s of skuItems) {
+            for (const s of skuItems) {
                 const testResults = this.testResultDAO.getAllTestResult(s.getRFID());
                 for (r of testResults) {
                     if (r.result === false) {
@@ -481,10 +500,10 @@ class Warehouse{
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
             const skuItemList = await this.skuItemDAO.getAllSKUItems();             // get SKUItems
             for(const skuItem of skuItemList){
-                if(skuItem.getRestockOrder() === restockOrderID)                    // check SKUItems
+                if (skuItem.getRestockOrder() === restockOrder.getID())                    // check SKUItems
                     throw { err: 422, msg: "Cannot delete Restock Order" };
             }
-            const res = await this.restockOrderDAO.deleteRestockOrder(restockOrderID);      // delete RestockOrder
+            const res = await this.restockOrderDAO.deleteRestockOrder(restockOrder.getID());      // delete RestockOrder
             return res;
         } catch (err) {
             throw err;
@@ -558,9 +577,15 @@ class Warehouse{
         if(io == undefined)
             return false;
 
-        deliveredProducts = products.map(p => getSKUItem(p.RFID));
-        io.setStatus(status, deliveredProducts, internalOrderDAO);
-        return true;
+        let res = 0;
+        if(status === "COMPLETED") {
+            res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
+        }
+        if(res) return res; //if res has a value, it is an error
+
+        res = this.internalOrderDAO.setStatus(ID, status);
+
+        return res;
     }
 
     deleteInternalOrder = async (ID) => {
@@ -637,6 +662,17 @@ class Warehouse{
             throw err;
         }
     };
+
+
+    
+    testDeleteAllUser = async () => {
+        try {
+            await this.userDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    };
+
 
     /********* functions for managing Item ***********/
     getItems = async () => {

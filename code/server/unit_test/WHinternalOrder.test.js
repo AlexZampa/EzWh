@@ -267,6 +267,48 @@ describe("Delete internal order test", () => {
     }
 });
 
+describe("Update Internal Order status test", () => {
+
+    const deliveredProducts = [
+        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016"},
+        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038"}
+    ];
+
+    beforeEach(() => {
+        internalOrderDAO.addDeliveredProducts.mockReset();
+        internalOrderDAO.setStatus.mockReset();
+        internalOrderDAO.addDeliveredProducts.mockReturnValue(undefined);
+        internalOrderDAO.setStatus.mockReturnValue(undefined);
+    });
+
+    testUpdateInternalOrderStatus(1, "COMPLETED", deliveredProducts, undefined);
+    testUpdateInternalOrderStatus(2, "CANCELED", undefined, undefined);
+
+    function testUpdateInternalOrderStatus(id, status, products, expectedResult) {
+        test('set Internal Order Status', async () => {
+            let result = await wh.setIOStatus(id, status, products)
+            expect(result).toBe(expectedResult);
+        })
+    }
+});
+
+describe("Delete internal order test", () => {
+
+    beforeEach(() => {
+        internalOrderDAO.deleteInternalOrder.mockReset();
+        internalOrderDAO.deleteInternalOrder.mockReturnValue(0);
+    });
+
+    testDeleteInternalOrder(1, 0);
+
+    function testDeleteInternalOrder(id, expectedResult) {
+        test('Delete one Internal Order by id', async () => {
+            let result = await wh.deleteInternalOrder(id);
+            expect(result).toBe(expectedResult);
+        })
+    }
+});
+
 
 
 

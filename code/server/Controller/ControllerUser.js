@@ -13,7 +13,7 @@ router.post('/newUser',
     [check("username").exists().isEmail(),
      check("name").exists().isAlpha(),
      check("surname").exists().isAlpha(),
-     check("password").exists().isAscii(),
+     check("password").exists().isString(),
      check("type").exists().isAlpha()],
     async (req, res) => {
         try{
@@ -269,6 +269,19 @@ router.delete('/users/:username/:type',
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
+        }
+});
+
+
+
+// TEST - DELETE ALL USER
+router.delete('/test/users', async (req, res) => {
+        try{
+            const result = await warehouse.testDeleteAllUser();
+            return res.status(204).end();
+        } catch(err){
+            console.log(err);
+            return res.status(503).end();
         }
 });
 
