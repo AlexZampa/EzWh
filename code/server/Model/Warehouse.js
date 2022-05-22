@@ -637,6 +637,17 @@ class Warehouse{
         }
     };
 
+
+    
+    testDeleteAllUser = async () => {
+        try {
+            await this.userDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    };
+
+
     /********* functions for managing Item ***********/
     getItems = async () => {
         try{
