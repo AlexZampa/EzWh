@@ -659,6 +659,8 @@ class Warehouse{
 
     addItem = async (id, description, price, SKUId, supplierId) => {
         try{
+            if(price <= 0)
+                throw {err: 422, msg: "Invalid data"};
             const sku = await this.skuDAO.getSKU(SKUId);
             const res = await this.itemDAO.newItem(id, description, price, SKUId, supplierId);
             return res;
@@ -670,6 +672,8 @@ class Warehouse{
 
     modifyItem = async (id, newDescription, newPrice) => {
         try {
+            if(newPrice <= 0)
+                throw {err: 422, msg: "Invalid data"};
             const item = await this.itemDAO.getItem(id);
             const result = await item.modifyItemData(newDescription, newPrice, this.itemDAO);
             return result;
@@ -680,6 +684,7 @@ class Warehouse{
 
     deleteItem = async (id) => {
         try{
+            const item = await this.itemDAO.getItem(id);
             const res = await this.itemDAO.deleteItem(id);
             return res;
         }
@@ -709,7 +714,7 @@ class Warehouse{
 
     addTestDescriptor = async (name, procedureDescription, idSKU) => {
         try{
-            const skuId = await this.skuDAO.getSKU(idSKU);
+            const sku = await this.skuDAO.getSKU(idSKU);
             const res = await this.testDescriptorDAO.newTestDescriptor(name, procedureDescription, idSKU);
             return res;
         }
@@ -789,6 +794,7 @@ class Warehouse{
 
     deleteTestResult = async (id, rfid) => {
         try{
+            const tr = await this.testResultDAO.getTestResult(rfid, id);
             const res = await this.testResultDAO.deleteTestResult(id, rfid);
             return res;
         }

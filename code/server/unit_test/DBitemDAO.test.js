@@ -25,6 +25,24 @@ describe('Test Create and Get Item', () => {
     testGetItem(2, expectedItem2);
 });
 
+describe('Test throw err on create item(id already exists)', () => {
+    beforeAll(async () => {
+        await itemDAO.resetTable();
+        await itemDAO.newItem(1, "description 1", 30.5, 1, 4);
+    });
+
+    testCreateItemError(1, "description 3", 30, 1, 4, { err: 422, msg: "id not unique" });
+});
+
+describe('Test throw err on create item(same skuid for same supplier)', () => {
+    beforeAll(async () => {
+        await itemDAO.resetTable();
+        await itemDAO.newItem(1, "description 1", 30.5, 1, 4);
+    });
+
+    testCreateItemError(3, "description 3", 30, 1, 4, { err: 422, msg: "this supplier already sells an item with the same SKUId" });
+});
+
 describe('Test throw err on get Item', () => {
     beforeAll(async () => {
         await itemDAO.resetTable();
@@ -87,6 +105,15 @@ function testCreateItem(itemId, description, price, associatedSKU, supplier, exp
     });
 }
 
+function testCreateItemError(itemId, description, price, associatedSKU, supplier, expectedError) {
+    test('throw on create Item', async () => {
+        async function getAlreadyExistentItem(){
+            await itemDAO.newItem(itemId, description, price, associatedSKU, supplier); 
+        };
+        await expect(getAlreadyExistentItem).rejects.toEqual(expectedError);
+    });
+}
+
 function testGetItem(id, expectedItem) {
     test('get Item', async () => {
         let res = await itemDAO.getItem(id);
@@ -112,7 +139,6 @@ function testGetAllItem(expectedList) {
         }
     });
 }
-
 
 function testUpdateItem(id, newDescription, newPrice, newAssociatedSKU, newSupplier, expectedChanges) {
     test('update Item', async () => {
