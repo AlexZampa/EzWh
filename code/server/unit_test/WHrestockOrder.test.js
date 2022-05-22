@@ -16,6 +16,7 @@ const internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
 const itemDAO = require('../Mock_databases/Mock_itemDAO');
 const testDescriptorDAO = require('../Mock_databases/Mock_testDescriptorDAO');
 const testResultDAO = require('../Mock_databases/Mock_testResultDAO');
+const TestResult = require('../Model/TestResult');
 
 const wh = new Warehouse(userDAO, skuDAO, skuItemDAO, positionDAO, restockOrderDAO, returnOrderDAO, internalOrderDAO, itemDAO, testDescriptorDAO, testResultDAO);
 
@@ -277,8 +278,61 @@ describe("Test modify RestockOrder", () => {
 
 });
 
-/* TODO returnItemsFromRestockOrder */
+describe("Test return Items From RestockOrder", () => {
 
+    const user1 = new User(1, "Mary", "Red", "user1@ezwh.com", "supplier");
+    const user2 = new User(2, "Mary", "Red", "user1@ezwh.com", "supplier");
+
+    const restockOrderList = [];
+    restockOrderList.push(new RestockOrder(1, '2022/05/18', 2, "COMPLETEDRETURN", undefined));
+    restockOrderList.push(new RestockOrder(2, '2022/02/18', 1, "DELIVERED", new TransportNote('2022/02/20')));
+
+    restockOrderList[0].addProduct(12, "object", 20, 30);
+    restockOrderList[0].addProduct(15, "object 2", 2, 550);
+
+    const test1 = new TestResult(1, "1", 1, '2022/05/19', false);
+    const test2 = new TestResult(2, "2", 2, '2022/05/19', true);
+
+    const skuItem1 = new SKUItem("1", 12, 1, null, undefined);
+    const skuItem2 = new SKUItem("2", 15, 1, '2022/05/18', undefined);
+
+    skuItem1.addTestResult(test1);
+    skuItem2.addTestResult(test2);
+
+    restockOrderList[0].addSKUItems([skuItem1, skuItem2]);
+
+    beforeAll(() => {
+        restockOrderDAO.getRestockOrder.mockReset();
+        restockOrderDAO.getRestockOrder.mockReturnValueOnce(restockOrderList[0]).mockReturnValueOnce(restockOrderList[1]);
+        userDAO.getAllUsers.mockReset();
+        userDAO.getAllUsers.mockReturnValue([user1, user2]);
+        testResultDAO.getAllTestResult.mockReset();
+        testResultDAO.getAllTestResult.mockRejectedValue([test1, test2]);
+    });
+
+    testReturnItemsFromRestockOrder(1, [skuItem1, skuItem2]);
+
+    testReturnItemsFromRestockOrderError("throw error on invalid state", 2, { err: 422, msg: "Restock Order not in COMPLETEDRETURN state" });
+
+    function testReturnItemsFromRestockOrder(restockOrderID, expectedResult) {
+        test('Get items to Return', async () => {
+            let result = await wh.returnItemsFromRestockOrder(restockOrderID);
+            for (let i = 0; i < result.length; i++) {
+                compareSKUItem(result[i], expectedResult[i]);
+            }
+        })
+    }
+
+    function testReturnItemsFromRestockOrderError(testMessage, restockOrderID, expectedError) {
+        test(testMessage, async () => {
+            async function invalidModify() {
+                await wh.returnItemsFromRestockOrder(restockOrderID);
+            }
+            await expect(invalidModify).rejects.toEqual(expectedError);
+        })
+    }
+
+});
 
 describe("Test delete RestockOrder", () => {
 
@@ -350,3 +404,12 @@ function compareProducts(productList, expectedProductList) {
         expect(productList[i].qty).toStrictEqual(expectedProductList[i].qty);
     }
 }
+
+function compareSKUItem(skuItem, expectedSKUItem) {
+    expect(skuItem.getRFID()).toStrictEqual(expectedSKUItem.getRFID());
+    expect(skuItem.getSKU()).toStrictEqual(expectedSKUItem.getSKU());
+    expect(skuItem.getAvailable()).toStrictEqual(expectedSKUItem.getAvailable());
+    expect(skuItem.getDateOfStock()).toStrictEqual(expectedSKUItem.getDateOfStock());
+    expect(skuItem.getRestockOrder()).toStrictEqual(expectedSKUItem.getRestockOrder());
+    expect(skuItem.getTestResults()).toStrictEqual(expectedSKUItem.getTestResults());
+};

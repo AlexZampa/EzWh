@@ -22,7 +22,7 @@ class RestockOrder {
         const transportNote = this.transportNote ? this.transportNote.getShipmentDate() : undefined
         return transportNote;
     };
-    getSKUItems = () => { return this.SKUItems; };
+    getSKUItems = () => { return this.skuItems; };
     getSupplier = () => { return this.supplier; };
 
     setSKUItems = (skuItems) => { this.skuItems = skuItems };
@@ -33,7 +33,9 @@ class RestockOrder {
     }
 
     addSKUItems = (skuitems) => {
-        this.skuItems = [...this.skuItems, ...skuitems];
+        for (const s in this.skuItems) {
+            this.skuItems.push(s);
+        }
     }
     
     setState = (newState) => {

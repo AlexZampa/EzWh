@@ -480,7 +480,7 @@ class Warehouse{
                 throw {err : 422, msg : "Restock Order not in COMPLETEDRETURN state"};
             const skuItems = restockOrder.getSKUItems();
             const returnItems = [];
-            for (s of skuItems) {
+            for (const s of skuItems) {
                 const testResults = this.testResultDAO.getAllTestResult(s.getRFID());
                 for (r of testResults) {
                     if (r.result === false) {
