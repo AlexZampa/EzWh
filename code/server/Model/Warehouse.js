@@ -185,7 +185,7 @@ class Warehouse{
     addSKUItem = async (rfid, skuID, dateOfStock) => {
         try{
             if(dateOfStock !== undefined && dateOfStock !== null){
-                if(!(dayjs(dateOfStock, 'YYYY-MM-DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY-MM-DD', true).isValid()))
+                if(!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
                     throw {err : 422, msg : "Invalid Date"};
             }
             const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock ? dateOfStock : null, null);
@@ -238,7 +238,7 @@ class Warehouse{
     modifySKUItem = async (rfid, newRFID, newAvailable, newDate) => {
         try {
             if(newDate !== undefined && newDate !== null){
-                if(!(dayjs(newDate, 'YYYY-MM-DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY-MM-DD', true).isValid()))
+                if(!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid()))
                     throw {err : 422, msg : "Invalid Date"};
             }
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
@@ -369,7 +369,7 @@ class Warehouse{
 
     /********* functions for managing Restock Order ***********/
     addRestockOrder = async (products, supplierID, issueDate) => {
-        if(!(dayjs(issueDate, 'YYYY-MM-DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY-MM-DD', true).isValid()))
+        if(!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
             throw {err : 422, msg : "Invalid Date"};
         for(const prod of products){
             await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
@@ -385,7 +385,8 @@ class Warehouse{
         try{
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
-            restockOrder.setSKUItems(skuItemList.filter(s => s.getRestockOrder() === restockOrder.getID()));
+            const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === restockOrderID);
+            restockOrder.setSKUItems(skuItemsOfRO);
             return restockOrder;
         } catch(err){
             throw err;
@@ -396,10 +397,10 @@ class Warehouse{
         try{
             const restockOrderList = await this.restockOrderDAO.getAllRestockOrders();
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
-            restockOrderList.forEach(ro => {
+            for(const ro in restockOrderList) {
                 const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === ro.getID());
                 ro.setSKUItems(skuItemsOfRO);
-            });
+            }
             return restockOrderList;
         } catch(err){
             throw err;
@@ -429,7 +430,7 @@ class Warehouse{
                 throw {err: 422, msg: "Restock Order not in DELIVERED state"};
             const allSKUItems = await this.skuItemDAO.getAllSKUItems();
             const skuItemList = [];
-            for(const s of SKUItemIdList){
+            for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
                 // if SKUItem not found or skuID passed as params is different from the real SKUid or SKUItem has already a restockOrder
                 if(!skuItem || s.skuID !== skuItem.getSKU() || skuItem.getRestockOrder() !== undefined)
@@ -448,7 +449,7 @@ class Warehouse{
 
     restockOrderAddTransportNote = async (restockOrderID, date) => {
         try{
-            if (!(dayjs(date, 'YYYY-MM-DD HH:mm', true).isValid() || dayjs(date, 'YYYY-MM-DD', true).isValid()))
+            if (!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
                 throw {err : 422, msg : "Invalid date"};
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
             if( dayjs(date).isBefore( dayjs(restockOrder.getIssueDate())) )
@@ -499,10 +500,10 @@ class Warehouse{
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
             const skuItemList = await this.skuItemDAO.getAllSKUItems();             // get SKUItems
             for(const skuItem of skuItemList){
-                if(skuItem.getRestockOrder() === restockOrderID)                    // check SKUItems
+                if (skuItem.getRestockOrder() === restockOrder.getID())                    // check SKUItems
                     throw { err: 422, msg: "Cannot delete Restock Order" };
             }
-            const res = await this.restockOrderDAO.deleteRestockOrder(restockOrderID);      // delete RestockOrder
+            const res = await this.restockOrderDAO.deleteRestockOrder(restockOrder.getID());      // delete RestockOrder
             return res;
         } catch (err) {
             throw err;
