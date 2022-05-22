@@ -397,10 +397,10 @@ class Warehouse{
         try{
             const restockOrderList = await this.restockOrderDAO.getAllRestockOrders();
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
-            for(const ro in restockOrderList) {
+            restockOrderList.forEach(ro => {
                 const skuItemsOfRO = skuItemList.filter(s => s.getRestockOrder() === ro.getID());
                 ro.setSKUItems(skuItemsOfRO);
-            }
+            });
             return restockOrderList;
         } catch(err){
             throw err;

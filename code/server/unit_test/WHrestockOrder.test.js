@@ -82,7 +82,7 @@ describe("Test get all RestockOrders", () => {
 
     beforeAll(() => {
         restockOrderDAO.getAllRestockOrders.mockReset();
-        restockOrderDAO.getAllRestockOrders.mockReturnValue([restockOrderList[0], restockOrderList[1], restockOrderList[2]]);
+        restockOrderDAO.getAllRestockOrders.mockReturnValue(restockOrderList);
         userDAO.getAllUsers.mockReset();
         userDAO.getAllUsers.mockReturnValue([user1, user2]);
         skuItemDAO.getAllSKUItems.mockReset();
@@ -123,19 +123,21 @@ describe("Test get RestockOrders Issued", () => {
 
     beforeAll(() => {
         restockOrderDAO.getAllRestockOrders.mockReset();
-        restockOrderDAO.getAllRestockOrders.mockReturnValue([restockOrderList[0], restockOrderList[1]]);
+        restockOrderDAO.getAllRestockOrders.mockReturnValue(restockOrderList);
         userDAO.getAllUsers.mockReset();
         userDAO.getAllUsers.mockReturnValue([user1, user2]);
         skuItemDAO.getAllSKUItems.mockReset();
         skuItemDAO.getAllSKUItems.mockReturnValue([skuItem1, skuItem2]);
     });
 
-    testGetAllRestockOrders(restockOrderList[0]);
+    testGetRestockOrdersIssued([restockOrderList[0]]);
 
-    function testGetAllRestockOrders(expectedResult) {
+    function testGetRestockOrdersIssued(expectedResult) {
         test('Get RestockOrders Issued', async () => {
             let result = await wh.getRestockOrdersIssued();
-            compareRestockOrder(result, expectedResult);
+            for (const i in result) {
+                compareRestockOrder(result[i], expectedResult[i]);
+            }
         })
     }
 });
@@ -170,10 +172,10 @@ describe("Test get RestockOrder", () => {
         skuItemDAO.getAllSKUItems.mockReturnValue([skuItem1, skuItem2]);
     });
 
-    testGetSKU(1, restockOrderList[0]);
-    testGetSKU(2, restockOrderList[1]);
+    testGetRestockOrder(1, restockOrderList[0]);
+    testGetRestockOrder(2, restockOrderList[1]);
 
-    function testGetSKU(restockOrderID, expectedResult) {
+    function testGetRestockOrder(restockOrderID, expectedResult) {
         test('Get RestockOrder', async () => {
             let result = await wh.getRestockOrder(restockOrderID);
             compareRestockOrder(result, expectedResult);
