@@ -29,6 +29,7 @@ describe('test SKU apis', () => {
     newSKU(422, "description", 20, 30, "notes", 10.99, 10.9);
 
     getSKUs(200);
+    
     getSKU(200, 1);
     getSKU(404, 100);
     getSKU(422, "id");
