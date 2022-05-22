@@ -356,6 +356,15 @@ class Warehouse{
             throw err;
         }
     };
+    
+    testDeleteAllPosition = async () => {
+        try {
+            await this.skuDAO.resetTable();
+            await this.positionDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    };
 
 
     /********* functions for managing Restock Order ***********/
