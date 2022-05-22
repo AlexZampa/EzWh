@@ -567,9 +567,15 @@ class Warehouse{
         if(io == undefined)
             return false;
 
-        deliveredProducts = products.map(p => getSKUItem(p.RFID));
-        io.setStatus(status, deliveredProducts, internalOrderDAO);
-        return true;
+        let res = 0;
+        if(status === "COMPLETED") {
+            res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
+        }
+        if(res) return res; //if res has a value, it is an error
+
+        res = this.internalOrderDAO.setStatus(ID, status);
+
+        return res;
     }
 
     deleteInternalOrder = async (ID) => {
