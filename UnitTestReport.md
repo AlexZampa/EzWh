@@ -1083,9 +1083,14 @@ Version:
 
 | Unit name | Jest test case |
 |--|--|
-|||
-|||
-||||
+| UserDAO | DBuserDAO.test.js |
+| SKUDAO  | DBskuDAO.test.js  |
+| PositionDAO | DBpositionDAO.test.js |
+| | |
+| Warehosue - User | WHuser.test.js |
+| Warehosue - SKU | WHsku.test.js |
+| Warehosue - Position | WHposition.test.js |
+| | |
 
 ### Code coverage report
 

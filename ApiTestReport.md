@@ -30,32 +30,43 @@ Version:
     <Some steps may  correspond to unit testing (ex step1 in ex above), presented in other document UnitTestReport.md>
     <One step will  correspond to API testing>
     
+The integration approach used is Bottom Up.
 
+- **Step 1**:  Unit test of all the DAO classes, using the real DB
+- **Step 2**:  Unit test of all the functions of the Warehouse class, using the mock implementation for all the DAO functions
+- **Step 3**:  API test of all the Controller classes
 
 #  Integration Tests
 
    <define below a table for each integration step. For each integration step report the group of classes under test, and the names of
      Jest test cases applied to them, and the mock ups used, if any> Jest test cases should be here code/server/unit_test
 
-## Step 1
+## Step 1 - Unit test of DAO classes
 | Classes  | mock up used |Jest test cases |
 |--|--|--|
-||||
+| UserDAO | None | DBuserDAO.test.js |
+| SkuDAO | None | DBskuDAO.test.js |
+| PositionDAO | None | DBpositionDAO.test.js |
+|    |    |
 
 
-## Step 2
+## Step 2 - Unit test of Warehouse class
 | Classes  | mock up used |Jest test cases |
 |--|--|--|
-||||
+| Warehosue - User | UserDAO | WHuser.test.js |
+| Warehosue - SKU | SkuDAO - TestDescriptorDAO - PositionDAO | WHsku.test.js |
+| Warehosue - Position | PositionDAO - SkuDAO  | WHposition.test.js |
+|    |    |
 
 
-## Step n 
+## Step 3 - API test of Controller classes ( + Warehouse class + DAO classes) 
 
-   
-| Classes  | mock up used |Jest test cases |
+| Classes  | mock up used | Jest test cases |
 |--|--|--|
-||||
-
+| ControllerUser | None | testControllerUser.js |
+| ControllerSKu  | None | testControllerSKU.js |
+| ControllerPosition | None | testControllerPosition.js |
+|    |    |
 
 
 
@@ -64,17 +75,6 @@ Version:
 
 <If needed, define here additional scenarios for the application. Scenarios should be named
  referring the UC in the OfficialRequirements that they detail>
-
-## Scenario UCx.y
-
-| Scenario |  name |
-| ------------- |:-------------:| 
-|  Precondition     |  |
-|  Post condition     |   |
-| Step#        | Description  |
-|  1     |  ... |  
-|  2     |  ... |
-
 
 
 # Coverage of Scenarios and FR
@@ -88,11 +88,17 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 | Scenario ID | Functional Requirements covered | Mocha  Test(s) | 
 | ----------- | ------------------------------- | ----------- | 
-|  ..         | FRx                             |             |             
-|  ..         | FRy                             |             |             
-| ...         |                                 |             |             
-| ...         |                                 |             |             
-| ...         |                                 |             |             
+|  1.1        | FR2.1                           | testControllerSKU.js - newSKU |             
+|  1.2        | FR2.1                           | testControllerSKU.js - modifySKUposition |             
+|  1.3        | FR2.1                           | testControllerSKU.js - modifySKU        |             
+|  2.1        | FR3.1.1                         | testControllerPosition.js - newPosition |             
+|  2.2        | FR3.1.1                         | testControllerPosition.js - modifyPositionID | 
+|  2.3        | FR3.1.4                         | testControllerPosition.js - modifyPosition | 
+|  2.4        | FR3.1.1                         | testControllerPosition.js - modifyPosition |             
+|  2.5        | FR3.1.2                         | testControllerPosition.js - deletePosition | 
+|  4.1        | FR1.1                           | testControllerUser.js - newUser         |
+|  4.1        | FR1.1                           | testControllerUser.js - modifyUserRights  |
+|  4.3        | FR1.2                           | testControllerUser.js - deleteUser    |
 | ...         |                                 |             |             
 
 
@@ -107,5 +113,7 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 
 | Non Functional Requirement | Test name |
 | -------------------------- | --------- |
-|                            |           |
+| NFR4                       | testControllerPosition.js - newPosition - modifyPositionID - modifyPosition |
+| NFR6                       | |
+| NFR9                       |  |
 
