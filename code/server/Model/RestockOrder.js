@@ -56,8 +56,9 @@ class RestockOrder {
     }
 
     convertToObj = () => {
+        
         const obj = { "id": this.id, "issueDate": this.issueDate.format('YYYY/MM/DD HH:mm'), "state": this.state, 
-            "products": this.products.map(p => p.convertToObj()), 
+            "products": this.products.map(p => { return { "SKUId": p.SKUId, "description": p.description, "price": p.price, "qty": p.qty }}),
             "supplierId": this.supplier, "transportNote": this.transportNote ? this.transportNote.convertToObj() : "", 
             "skuItems": this.skuItems.map(s => { return {"SKUId" : s.getSKU(), "rfid" : s.getRFID()}; })
         }

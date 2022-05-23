@@ -125,7 +125,6 @@ function getSKUItemByID(expectedHTTPStatus, id) {
                                 res.should.have.status(200);
                                 agent.get('/api/skuitems/sku/' + id)
                                     .then(function (res) {
-                                        console.log(res.body);
                                         res.should.have.status(expectedHTTPStatus);
                                         if (expectedHTTPStatus == 200)
                                             res.body.should.be.deep.equal(expectedResult);

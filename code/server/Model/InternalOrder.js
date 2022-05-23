@@ -19,8 +19,6 @@ class InternalOrder{
     
     getProducts = () => { return this.products; }
     
-    getDeliveredProducts = () => { return this.deliveredProducts; }
-    
     getState = () => { return this.state; }
 
     addProduct = (skuId, price, description, qty, rfid) => {
@@ -59,9 +57,6 @@ class InternalOrder{
            "customerId" : this.internalCustomer.getId()
        }
     }
-
-
-    //riflettere modifiche su DB
 }
 
 module.exports = InternalOrder;

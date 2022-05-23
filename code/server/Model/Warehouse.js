@@ -379,7 +379,7 @@ class Warehouse{
     addRestockOrder = async (products, supplierID, issueDate) => {
         if(!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
             throw {err : 422, msg : "Invalid Date"};
-        for(const prod of products){
+        for (const prod of products) {
             await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
         }
         const users = await this.userDAO.getAllUsers();
@@ -513,6 +513,14 @@ class Warehouse{
             }
             const res = await this.restockOrderDAO.deleteRestockOrder(restockOrder.getID());      // delete RestockOrder
             return res;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    testDeleteAllRestockOrders = async () => {
+        try {
+            await this.restockOrderDAO.resetTable();
         } catch (err) {
             throw err;
         }
