@@ -1,8 +1,10 @@
 {
   "dependencies": {
+    "api-test": "^4.1.0",
     "dayjs": "^1.11.2",
     "express": "^4.17.3",
     "express-validator": "^6.14.0",
+    "sinon": "^14.0.0",
     "sqlite3": "^5.0.6"
   },
   "devDependencies": {
@@ -13,7 +15,7 @@
     "mocha": "^9.2.2"
   },
   "scripts": {
-    "apiTest": "./node_modules/.bin/mocha test --exit",
+    "apiTest": "mocha test --exit",
     "test": "jest"
   }
 }

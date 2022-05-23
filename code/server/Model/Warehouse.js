@@ -265,6 +265,14 @@ class Warehouse{
         }
     };
 
+    testDeleteAllSKUItems = async () => {
+        try {
+            await this.skuItemDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    }
+
     /*************** functions for managing Position ****************/
     addPosition = async (positionID, aisle, row, col, maxWeight, maxVolume) => {
         try{
