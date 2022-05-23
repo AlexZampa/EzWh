@@ -482,6 +482,7 @@ Version:
 | No | Invalid| T2(invalidPositionID) -> 0 | Test Delete Position - testDeletePosition |
 
 
+----------------------------------------------------------------------------------------------------------------------------
 ## **Class *Warehouse***
 
 ### **Class *Warehouse* - method *addSKU***
@@ -869,6 +870,205 @@ Version:
 |-------|-------|-------|-------|-------|-------|-------|-------|-------|
 | Yes | Valid   | T1(validPositionID) -> changes | Test delete Position |
 | No  | Invalid | T2(invalidPositionID) -> error | Test delete Position - testDeletePositionError|
+
+
+### **Class *Warehouse* - method *addUser***
+
+**Criteria for method *addUser*:**
+	
+- username is an email 
+- password length is > 8 characters
+- type exists
+- type is different from manager/administrator
+
+
+**Predicates for method *addUser*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| username is an email  | Yes |
+|                      | No  |
+| password length is > 8 characters | Yes |
+|                      | No  |
+| type exists   | Yes |
+|               | No  |
+| type is different from manager/administrator |Yes |
+|                      | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| username is an email | password length is > 8 characters | type exists | type is different from manager/administrator | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes | Yes | Valid   | T1(validData) -> rowID | Test add User - testAddUser |
+| Yes | Yes | Yes | No  | Invalid | T2(AdminType) -> error | Test add User - testAddUserError |
+| Yes | Yes | No  | Yes | Invalid | T3(invalidType) -> error | Test add User - testAddUserError |
+| Yes | No  | Yes | Yes | Invalid | T4(invalidPwd) -> error | Test add User - testAddUserError |
+| No  | Yes | Yes | Yes | Invalid | T5(invalidUsername) -> error | Test add User - testAddUserError |
+
+
+
+### **Class *Warehouse* - method *getUsers***
+
+**Criteria for method *getUsers*:**
+	
+- a manager exists
+
+
+**Predicates for method *getUsers*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| a manager exists  | Yes |
+|                   | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| a manager exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|
+| Yes | Valid   | T1() -> list | Test get all Users except managers - Get all Users |
+| No  | Valid   | T2() -> list | - |
+
+
+### **Class *Warehouse* - method *getSuppliers***
+
+**Criteria for method *getSuppliers*:**
+	
+- There are suppliers
+
+
+**Predicates for method *getSuppliers*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are suppliers  | Yes |
+|                   | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are suppliers | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|
+| Yes | Valid   | T1() -> list | Test get all Suppliers - Get all suppliers |
+| No  | Valid   | T2() -> list | - |
+
+
+### **Class *Warehouse* - method *login***
+
+**Criteria for method *login*:**
+	
+- pair username and type exists
+- password is correct
+
+**Predicates for method *login*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| pair username and type exists  | Yes |
+|                                | No  |
+| password is correct | Yes |
+|                   | No  |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| pair username and type exists  | password is correct | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1() -> user  | Test login User - valid login |
+| Yes | Yes | Valid   | T2() -> error | Test login User - throw error on invalid password |
+| No  | Yes | Valid   | T3() -> error | - |
+
+
+
+### **Class *Warehouse* - method *modifyUserRights***
+
+**Criteria for method *modifyUserRights*:**
+	
+- pair username and type exists
+- type exists
+- type is different from manager/administrator
+
+**Predicates for method *modifyUserRights*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| pair username and type exists  | Yes |
+|                                | No  |
+| type exists | Yes |
+|                   | No  |
+| type is different from manager/administrator | Yes |
+|                   | No  |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| pair username and type exists  | type exists | type is different from manager/administrator | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes | Valid   | T1() -> changes | Test modify User rights - Test modify rights - testModifyUserRights |
+| Yes | Yes | No  | Invalid | T2() -> error   | Test modify User rights - Test Errors - testModifyUserRightsError |
+| Yes | No  | Yes | Invalid | T3() -> error   | Test modify User rights - Test Errors - testModifyUserRightsError |
+| No  | Yes | No  | Invalid | T4() -> error   | Test modify User rights - Test Errors - testModifyUserRightsError |
+
+
+### **Class *Warehouse* - method *deleteUser***
+
+**Criteria for method *deleteUser*:**
+	
+- pair username and type exists
+- type is different from manager/administrator
+
+**Predicates for method *deleteUser*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| pair username and type exists  | Yes |
+|                                | No  |
+| type is different from manager/administrator | Yes |
+|                   | No  |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| pair username and type exists | type is different from manager/administrator | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1() -> changes  | Test delete User - delete user |
+| Yes | No  | Invalid | T2() -> error    | Test delete User - testDeleteUserError |
+| No  | Yes | Invalid | T3() -> error    | Test delete User - testDeleteUserError |
+
 
 
 
