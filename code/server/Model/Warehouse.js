@@ -521,11 +521,12 @@ class Warehouse{
 
     /********* functions for managing Return Orders **********/
     addReturnOrder = async (SKUItemList, restockOrderId, returnDate) => {
-        const res = await this.returnOrderDao.newReturnOrder(SKUItemList, restockOrderId, returnDate);
+        const res = await this.returnOrderDAO.newReturnOrder(SKUItemList, restockOrderId, returnDate);
         const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
         if(res !== undefined && restockOrder !== undefined){
-            this.sendNotificationRO(restockOrder.supplierID, res.lastId);
+            this.sendNotificationRO(restockOrder.getSupplier().getUserID(), res.lastId);
         }
+        return res;
     }
 
     getReturnOrders = async () => {
@@ -540,6 +541,7 @@ class Warehouse{
 
     deleteReturnOrder = async (id) => {
         const res = await this.returnOrderDAO.deleteReturnOrder();
+        return res;
     }
     
     sendNotificationRO = async (userID, returnOrderID)=> {
@@ -548,8 +550,8 @@ class Warehouse{
             
             console.log("*** RETURN ORDER NOTIFICATION ***");
             console.log(`To SUPPLIER: ${userID}`);
-            console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId}`);
-            console.log(`For products: ${ro.getProducts}`);
+            console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId()}`);
+            console.log(`For products: ${ro.getProducts()}`);
         }
     }
     
@@ -703,6 +705,8 @@ class Warehouse{
 
     addItem = async (id, description, price, SKUId, supplierId) => {
         try{
+            if(price <= 0)
+                throw {err: 422, msg: "Invalid data"};
             const sku = await this.skuDAO.getSKU(SKUId);
             const res = await this.itemDAO.newItem(id, description, price, SKUId, supplierId);
             return res;
@@ -714,6 +718,8 @@ class Warehouse{
 
     modifyItem = async (id, newDescription, newPrice) => {
         try {
+            if(newPrice <= 0)
+                throw {err: 422, msg: "Invalid data"};
             const item = await this.itemDAO.getItem(id);
             const result = await item.modifyItemData(newDescription, newPrice, this.itemDAO);
             return result;
@@ -724,6 +730,7 @@ class Warehouse{
 
     deleteItem = async (id) => {
         try{
+            const item = await this.itemDAO.getItem(id);
             const res = await this.itemDAO.deleteItem(id);
             return res;
         }
@@ -753,7 +760,7 @@ class Warehouse{
 
     addTestDescriptor = async (name, procedureDescription, idSKU) => {
         try{
-            const skuId = await this.skuDAO.getSKU(idSKU);
+            const sku = await this.skuDAO.getSKU(idSKU);
             const res = await this.testDescriptorDAO.newTestDescriptor(name, procedureDescription, idSKU);
             return res;
         }
@@ -823,6 +830,7 @@ class Warehouse{
     modifyTestResult = async (rfid, id, newIdTestDescriptor, newDate, newResult) => {
         try {
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(newIdTestDescriptor);
             const tr = await this.testResultDAO.getTestResult(rfid, id);
             const result = await tr.modifyTestResultdata(newIdTestDescriptor, newDate, newResult, this.testResultDAO);
             return result;
@@ -833,6 +841,7 @@ class Warehouse{
 
     deleteTestResult = async (id, rfid) => {
         try{
+            const tr = await this.testResultDAO.getTestResult(rfid, id);
             const res = await this.testResultDAO.deleteTestResult(id, rfid);
             return res;
         }

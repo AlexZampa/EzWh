@@ -88,6 +88,7 @@ describe('Test Get All Internal Orders Accepted', () => {
     testGetAllAcceptedIO(expectedList);
 });
 
+
 describe('Test add delivered products to a completed Internal Order', () => {
 
     const date = new dayjs()
@@ -95,12 +96,14 @@ describe('Test add delivered products to a completed Internal Order', () => {
 
     beforeAll(async () => {
         await internalOrderDAO.resetTable();
-        await internalOrderDAO.newInternalOrder(date, [product], 1, "ISSUED");
+        await internalOrderDAO.newInternalOrder(date, [product], 1, "COMPLETED");
     });
 
-    const deliveredProducts = [{SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016"},
-        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038"}];
-    testAddDeliveredProducts(1, deliveredProducts);
+    const deliveredProducts = [
+        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016"},
+        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038"}
+    ];
+    testAddDeliveredProducts(1, deliveredProducts, deliveredProducts);
 });
 
 describe('Test update Internal Order state', () => {
@@ -214,7 +217,7 @@ function testDeleteIO(ID, expectedChanges) {
 }
 
 function compareIO(io, expectedIO){
-    expect(io.getID()).toStrictEqual(expectedIO.getId());
-    expect(io.getIssueDate()).toStrictEqual(expectedIO.getIssueDate());
+    expect(io.getId()).toStrictEqual(expectedIO.getId());
+    expect(io.getIssueDate().format("YYYY/MM/DD HH:MM")).toStrictEqual(expectedIO.getIssueDate().format("YYYY/MM/DD HH:MM"));
     expect(io.getState()).toStrictEqual(expectedIO.getState());
 };
