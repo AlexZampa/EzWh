@@ -89,9 +89,9 @@ router.delete('/returnOrder/:id',
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).json();
-                case 422: return res.status(422).json();
-                default: return res.status(503).json();
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
             }
         }
     }

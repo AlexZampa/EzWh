@@ -4,7 +4,7 @@
 class ReturnOrder {
     constructor(id, restockOrder, returnDate, products) {
         this.id = id;
-        this.restockOrder = restockOrder;
+        this.restockOrderId = restockOrder;
         this.returnDate = returnDate;
         this.products = products;
     }
@@ -12,5 +12,7 @@ class ReturnOrder {
     getId = () => { return this.id; };
     getReturnDate = () => { return this.returnDate; };
     getProducts = () => { return this.products; };
-    getRestickOrderId = () => { return this.restockOrder.getId };
+    getRestockOrderId = () => { return this.restockOrderId };
 }
+
+module.exports = ReturnOrder;
