@@ -39,7 +39,9 @@ router.get('/restockOrders', async (req, res) => {
         try{
             const restockOrderList = await warehouse.getRestockOrders();
             const result = [];
-            restockOrderList.forEach(restockOrder => { result.push(restockOrder.convertToObj()); });
+            for (const ro of restockOrderList) {
+                result.push(ro.convertToObj());
+            }
             return res.status(200).json(result);
             // check if user authorized otherwise: return res.status(401).end();
         } catch(err){
@@ -88,8 +90,6 @@ router.get('/restockOrders/:id', [check("id").isInt({min: 1})],
         }
 });
 
-
-/****************  TODO *********************************************/
 // GET RESTOCK ORDER RETURN ITEMS
 router.get('/restockOrders/:id/returnItems',
     [check("id").isInt({min: 1})],
@@ -144,7 +144,7 @@ router.put('/restockOrder/:id/skuItems',
     [check("id").isInt({min: 1}),
      check("skuItems").exists().isArray()],
     async (req, res) => {
-        try{
+        try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 console.log({ errors: errors.array() });
@@ -221,5 +221,14 @@ router.delete('/restockOrder/:id',
         }
 });
 
+router.delete('/test/restockOrders', async (req, res) => {
+    try {
+        const result = await warehouse.testDeleteAllRestockOrders();
+        return res.status(204).end();
+    } catch (err) {
+        console.log(err);
+        return res.status(503).end();
+    }
+});
 
 module.exports = router;
