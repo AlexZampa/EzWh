@@ -15,6 +15,8 @@ describe('test RestockOrder apis', () => {
         await agent.delete('/api/test/restockOrders');
         await agent.delete('/api/test/skuitems');
         await agent.delete('/api/test/skus');
+        await agent.delete('/api/test/testResults');
+        await agent.delete('/api/test/testDescriptors');
     })
 
     let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
@@ -29,17 +31,20 @@ describe('test RestockOrder apis', () => {
     getRestockOrder(200, 1);
     getRestockOrder(404, 3);
 
+    getSKUItemToReturnFromRestockOrder(200, 1);
+
     addSKUItemToRestockOrder(200, 2, "1", 1);
     addSKUItemToRestockOrder(404, 3, "1", 1);
     addSKUItemToRestockOrder(422, 2, "3", 3);
 
     addTransportNoteToRestockOrder(200, 1, "2022/03/05");
 
+    changeStateRestockOrder(200, 1, "DELIVERED");
+
     deleteRestockOrder(204, 2);
     deleteRestockOrder(422, 4);
 
 });
-
 
 function newRestockOrder(expectedHTTPStatus, products, supplierID, issueDate) {
     it('adding a new RestockOrder', function (done) {
@@ -259,6 +264,92 @@ function getRestockOrdersIssued(expectedHTTPStatus) {
 
 }
 
+function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) {
+    it('get SKUItem to return from Restock Order', function (done) {
+
+        let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }, { SKUId: 2, description: "Another product", price: 10, qty: 10 }];
+
+        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem2 = { RFID: "2", SKUId: 1, DateOfStock: "2022/01/01" };
+        const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
+
+        const restockOrder = { issueDate: "2022/03/03", products: products, supplierId: 1 };
+        const restockOrder2 = { issueDate: "2022/04/05", products: products, supplierId: 1 };
+
+        const changeState = { newState: "COMPLETEDRETURN" };
+
+        const testDescriptor = { name: "test", procedureDescription: "Description", idSKU: 1 };
+
+        const testResult = { rfid: "1", idTestDescriptor: 1, Date: "2022/02/02", Result: 0 };
+        const testResult2 = { rfid: "2", idTestDescriptor: 1, Date: "2022/02/02", Result: 1 };
+
+        let expectedResult = [
+            { "RFID": "1", "SKUId": 1 }
+        ];
+
+        let user = { username: "user1@ezwh.com", name: "name", surname: "surname", password: "password12345", type: "supplier" }
+        agent.post('/api/newUser')
+            .send(user)
+            .then(function (res) {
+                res.should.have.status(201);
+                agent.post('/api/sku')
+                    .send(sku)
+                    .then(function (res) {
+                        res.should.have.status(201);
+                        agent.post('/api/skuitem')
+                            .send(skuItem)
+                            .then(function (res) {
+                                res.should.have.status(201);
+                                agent.post('/api/skuitem')
+                                    .send(skuItem2)
+                                    .then(function (res) {
+                                        res.should.have.status(201);
+                                        agent.post('/api/testDescriptor')
+                                            .send(testDescriptor)
+                                            .then(function (res) {
+                                                console.log(res.status);
+                                                res.should.have.status(201);
+                                                agent.post('/api/skuitems/testResult')
+                                                    .send(testResult)
+                                                    .then(function (res) {
+                                                        console.log(res.status);
+                                                        res.should.have.status(201);
+                                                        agent.post('/api/skuitems/testResult')
+                                                            .send(testResult2)
+                                                            .then(function (res) {
+                                                                res.should.have.status(201);
+                                                                agent.post('/api/restockOrder')
+                                                                    .send(restockOrder)
+                                                                    .then(function (res) {
+                                                                        res.should.have.status(201);
+                                                                        agent.post('/api/restockOrder')
+                                                                            .send(restockOrder2)
+                                                                            .then(function (res) {
+                                                                                res.should.have.status(201);
+                                                                                agent.put('/api/restockOrder/' + 1)
+                                                                                    .send(changeState)
+                                                                                    .then(function (res) {
+                                                                                        res.should.have.status(200);
+                                                                                        agent.get('/restockOrders/' + restockOrderID + '/returnItems')
+                                                                                            .then(function (r) {
+                                                                                                r.should.have.status(expectedHTTPStatus);
+                                                                                                if (expectedHTTPStatus == 200)
+                                                                                                    r.body.should.be.deep.equal(expectedResult);
+                                                                                                done();
+                                                                                            });
+                                                                                    });
+                                                                            });
+                                                                    });
+                                                            });
+                                                    });
+                                            });
+                                    });
+                            });
+                    });
+            });
+    });
+}
+
 function addSKUItemToRestockOrder(expectedHTTPStatus, restockOrderID, rfid, SKUId) {
     it('Add skuitem to Restock Order', function (done) {
 
@@ -305,6 +396,50 @@ function addSKUItemToRestockOrder(expectedHTTPStatus, restockOrderID, rfid, SKUI
                                                                 done();
                                                             });
                                                     });
+                                            });
+                                    });
+                            });
+                    });
+            });
+    });
+
+}
+
+function changeStateRestockOrder(expectedHTTPStatus, restockOrderID, newState) {
+    it('Change State of Restock Order', function (done) {
+
+        let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
+
+        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+
+        const changeState = { newState: newState };
+
+        const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
+
+        const restockOrder = { issueDate: "2022/03/03", products: products, supplierId: 1 };
+
+        let user = { username: "user1@ezwh.com", name: "name", surname: "surname", password: "password12345", type: "supplier" }
+        agent.post('/api/newUser')
+            .send(user)
+            .then(function (res) {
+                res.should.have.status(201);
+                agent.post('/api/sku')
+                    .send(sku)
+                    .then(function (res) {
+                        res.should.have.status(201);
+                        agent.post('/api/skuitem')
+                            .send(skuItem)
+                            .then(function (res) {
+                                res.should.have.status(201);
+                                agent.post('/api/restockOrder')
+                                    .send(restockOrder)
+                                    .then(function (res) {
+                                        res.should.have.status(201);
+                                        agent.put('/api/restockOrder/' + restockOrderID)
+                                            .send(changeState)
+                                            .then(function (res) {
+                                                res.should.have.status(expectedHTTPStatus);
+                                                done();
                                             });
                                     });
                             });

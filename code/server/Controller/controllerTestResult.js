@@ -54,7 +54,7 @@ router.get('/skuitems/:rfid/testResults/:id', [check("rfid").exists().isNumeric(
 
 //create testResult
 router.post('/skuitems/testResult',
-    [check("rfid").exists().isNumeric(), check("idTestDescriptor").exists().isInt(), check("Date").exists(), check("Result").exists()],
+    [check("rfid").exists().isString(), check("idTestDescriptor").exists().isInt(), check("Date").exists(), check("Result").exists()],
     async (req, res) => {
         try {
             const errors = validationResult(req);

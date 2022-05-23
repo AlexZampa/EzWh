@@ -8,7 +8,18 @@ Version:
 
 - [Dependency graph](#dependency graph)
 
-- [Integration approach](#integration)
+- [Integration and API Test Report](#integration-and-api-test-report)
+- [Contents](#contents)
+- [Dependency graph](#dependency-graph)
+- [Integration approach](#integration-approach)
+- [Integration Tests](#integration-tests)
+  - [Step 1 - Unit test of DAO classes](#step-1---unit-test-of-dao-classes)
+  - [Step 2 - Unit test of Warehouse class](#step-2---unit-test-of-warehouse-class)
+  - [Step 3 - API test of Controller classes ( + Warehouse class + DAO classes)](#step-3---api-test-of-controller-classes---warehouse-class--dao-classes)
+- [API testing - Scenarios](#api-testing---scenarios)
+- [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
+- [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
+    - [](#)
 
 - [Tests](#tests)
 
@@ -47,7 +58,8 @@ The integration approach used is Bottom Up.
 | UserDAO | None | DBuserDAO.test.js |
 | SkuDAO | None | DBskuDAO.test.js |
 | PositionDAO | None | DBpositionDAO.test.js |
-|    |    |
+| SKUItemDAO   | None   | DBSKUItemDAO.test.js|
+| RestockOrderDAO | None | DBRestockOrderDAO.test.js |
 
 
 ## Step 2 - Unit test of Warehouse class
@@ -56,7 +68,8 @@ The integration approach used is Bottom Up.
 | Warehosue - User | UserDAO | WHuser.test.js |
 | Warehosue - SKU | SkuDAO - TestDescriptorDAO - PositionDAO | WHsku.test.js |
 | Warehosue - Position | PositionDAO - SkuDAO  | WHposition.test.js |
-|    |    |
+|  Warehouse - SKUItem  | SKUItemDAO   | WHskuItem.test.js |
+| Warehouse - RestockOrder | UserDAO - RestockOrderDAO - testResultDAO - SkuDAO - SkuItemDAO | WHrestockOrder.test.js |
 
 
 ## Step 3 - API test of Controller classes ( + Warehouse class + DAO classes) 
@@ -66,7 +79,8 @@ The integration approach used is Bottom Up.
 | ControllerUser | None | testControllerUser.js |
 | ControllerSKu  | None | testControllerSKU.js |
 | ControllerPosition | None | testControllerPosition.js |
-|    |    |
+| ControllerSKUItem   | None   | testControllerSKUItem.js |
+|ControllerRestockOrder |  None | testControllerRestockOrder.js |
 
 
 
@@ -99,6 +113,15 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 |  4.1        | FR1.1                           | testControllerUser.js - newUser         |
 |  4.1        | FR1.1                           | testControllerUser.js - modifyUserRights  |
 |  4.3        | FR1.2                           | testControllerUser.js - deleteUser    |
+| 5.1         | FR5.1    | testRestockOrder.js - newRestockOrder |
+| 5.2         | FR5.2    | testRestockOrder.js - addSKUItemToRestockOrder |
+| 5.3         | FR5.3    | testRestockOrder.js - addSKUItemToRestockOrder |
+| 5.5         | FR5.5    | testRestockOrder.js - newRestockOrder |
+| 5.6         | FR5.6    | testRestockOrder.js - newRestockOrder |
+| 5.7         | FR5.7    | testRestockOrder.js - changeStateRestockOrder |
+| 5.8         | FR5.8    | testRestockOrder.js - changeStateRestockOrder - addSKUItemToRestockOrder - addTransportNoteToRestockOrder |
+| 5.10        | FR5.10   | testRestockOrder.js -  |
+| 
 | ...         |                                 |             |             
 
 
