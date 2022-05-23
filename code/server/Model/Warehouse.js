@@ -822,6 +822,7 @@ class Warehouse{
     modifyTestResult = async (rfid, id, newIdTestDescriptor, newDate, newResult) => {
         try {
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(newIdTestDescriptor);
             const tr = await this.testResultDAO.getTestResult(rfid, id);
             const result = await tr.modifyTestResultdata(newIdTestDescriptor, newDate, newResult, this.testResultDAO);
             return result;
