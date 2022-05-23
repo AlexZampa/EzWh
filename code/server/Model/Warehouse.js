@@ -739,6 +739,16 @@ class Warehouse{
         }
     }
 
+    testDeleteAllItem = async () => {
+        try {
+            await this.skuDAO.resetTable();
+            await this.userDAO.resetTable();
+            await this.itemDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    }
+
     /********* functions for managing Test Descriptor ***********/
     getTestDescriptors = async () => {
         try{

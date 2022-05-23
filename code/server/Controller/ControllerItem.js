@@ -43,8 +43,8 @@ router.get('/items/:id', [check("id").isInt({ min: 1 })],
     });
 
 //create item
-router.post('/item', [check("id").exists().isInt({ min: 0 }), check("description").exists().trim().isAscii(), check("price").exists().isNumeric(), check("SKUId").exists().isInt({ min: 0 }),
-check("supplierId").exists().isInt({ min: 0 })],
+router.post('/item', [check("id").isInt({ min: 1 }), check("description").exists().isString().trim(), check("price").exists().isNumeric(), check("SKUId").exists().isInt({ min: 1 }),
+check("supplierId").exists().isInt({ min: 1 })],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -58,7 +58,7 @@ check("supplierId").exists().isInt({ min: 0 })],
             console.log(err);
             switch (err.err) {
                 case 404: return res.status(404).end();
-                case 422: return res.status(422).end();//da controllare
+                case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
         }
@@ -66,7 +66,7 @@ check("supplierId").exists().isInt({ min: 0 })],
 );
 
 //modify item
-router.put('/item/:id', [check("id").exists().isInt({ min: 0 }), check("newDescription").exists().trim().isAscii(), check("newPrice").exists().isNumeric()],
+router.put('/item/:id', [check("id").exists().isInt({ min: 1 }), check("newDescription").exists().isString().trim(), check("newPrice").exists().isNumeric()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -80,6 +80,7 @@ router.put('/item/:id', [check("id").exists().isInt({ min: 0 }), check("newDescr
             console.log(err);
             switch (err.err) {
                 case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
         }
@@ -87,7 +88,7 @@ router.put('/item/:id', [check("id").exists().isInt({ min: 0 }), check("newDescr
 );
 
 //delete item
-router.delete('/items/:id', [check("id").exists().isInt({ min: 0 })],
+router.delete('/items/:id', [check("id").exists().isInt({ min: 1 })],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -99,8 +100,22 @@ router.delete('/items/:id', [check("id").exists().isInt({ min: 0 })],
             return res.status(204).end();
         } catch (err) {
             console.log(err);
-            return res.status(503).end();
+            switch (err.err) {
+                case 404: return res.status(422).end();      // should be 404 but API require only 422
+                default: return res.status(503).end();
+            }
         }
-    });
+    }
+);
+
+router.delete('/test/items', async (req, res) => {
+    try {
+        const result = await warehouse.testDeleteAllItem();
+        return res.status(204).end();
+    } catch (err) {
+        console.log(err);
+        return res.status(503).end();
+    }
+});
 
 module.exports = router;
