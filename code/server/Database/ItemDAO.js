@@ -23,7 +23,7 @@ class ItemDAO {
 
     getItem = async (id) => {
         try {
-            let sql = "SELECT * FROM ITEM WHERE id = ?";
+            let sql = "SELECT * FROM Item WHERE id = ?";
             const res = await this.connectionDB.DBget(sql, [id]);
             if (res === undefined)
                 throw { err: 404, msg: "Item not found" };

@@ -29,6 +29,7 @@ describe('test SKU apis', () => {
     newSKU(422, "description", 20, 30, "notes", 10.99, 10.9);
 
     getSKUs(200);
+    
     getSKU(200, 1);
     getSKU(404, 100);
     getSKU(422, "id");
@@ -47,6 +48,14 @@ describe('test SKU apis', () => {
     modifySKU(422, 1, "description", 100, 100, "notes", 10.99, "quantity");
     modifySKU(422, 1, "description", 100, 100, "notes", -10.99, -20);
     modifySKU(422, 1, "description", 100, 100, "notes", -10.99, 20.99);
+
+    modifySKUposition(200, 1, "111122223333", 100, 100, 10, "111122223333", 1000, 1000);
+    modifySKUposition(404, 10, "111122223333", 100, 100, 10, "111122223333", 1000, 1000);
+    modifySKUposition(404, 1, "999988887777", 100, 100, 10, "111122223333", 1000, 1000);
+    modifySKUposition(422, "id", "111122223333", 100, 100, 10, "111122223333", 1000, 1000);
+    modifySKUposition(422, 1, "positionID", 100, 100, 10, "111122223333", 1000, 1000);
+    modifySKUposition(422, 1, "111122223333", 1000, 100, 10, "111122223333", 1000, 1000);
+    modifySKUposition(422, 1, "111122223333", 100, 1000, 10, "111122223333", 1000, 1000);
 
     deleteSKU(204, 1);
     deleteSKU(422, "id");
@@ -154,22 +163,28 @@ function modifySKU(expectedHTTPStatus, id, description, weight, volume, notes, p
 }
 
 
-// /api/sku/:id/position
-//TODO
-function modifySKUposition(expectedHTTPStatus, id, description, weight, volume, notes, price, availableQuantity) {
+function modifySKUposition(expectedHTTPStatus, id, position, skuWeight, skuVolume, skuQty, originalPosition, posWeight, posVolume) {
     it('modifing SKU position', function (done) {
-        const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
-        let data = { "newDescription" : description, "newWeight" : weight, "newVolume" : volume, "newNotes" : notes,
-            "newPrice": price,"newAvailableQuantity" : availableQuantity };
+        const aisle = originalPosition.slice(0, 4);     
+        const row = originalPosition.slice(4, 8);       
+        const col = originalPosition.slice(8); 
+        const sku = { description: "description 1", weight: skuWeight, volume: skuVolume, notes: "notes 1", price: 10.99, availableQuantity: skuQty };
+        const pos = {"positionID": originalPosition,"aisleID": aisle,"row": row,"col": col,"maxWeight": posWeight,"maxVolume": posVolume };
+        let data = { "position": position };
         agent.post('/api/sku')
         .send(sku)
         .then(function (res) {
             res.should.have.status(201);
-            agent.put('/api/sku/' + id)
-            .send(data)
+            agent.post('/api/position')
+            .send(pos)
             .then(function (res) {
-                res.should.have.status(expectedHTTPStatus); 
-                done();
+                res.should.have.status(201);
+                agent.put(`/api/sku/${id}/position`)
+                .send(data)
+                .then(function (res) {
+                    res.should.have.status(expectedHTTPStatus); 
+                    done();
+                });
             });
         });
     });
@@ -190,4 +205,3 @@ function deleteSKU(expectedHTTPStatus, id) {
         });
     });
 }
-

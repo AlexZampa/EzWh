@@ -131,4 +131,19 @@ router.delete('/position/:positionID',
     }  
 );
 
+
+// TEST - DELETE ALL POSITION
+router.delete('/test/positions', async (req, res) => {
+    try{
+        const result = await warehouse.testDeleteAllPosition();
+        return res.status(204).end();
+    } catch(err){
+        console.log(err);
+        return res.status(503).end();
+    }
+});
+
+
+
+
 module.exports = router;
