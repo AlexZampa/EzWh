@@ -513,11 +513,12 @@ class Warehouse{
 
     /********* functions for managing Return Orders **********/
     addReturnOrder = async (SKUItemList, restockOrderId, returnDate) => {
-        const res = await this.returnOrderDao.newReturnOrder(SKUItemList, restockOrderId, returnDate);
+        const res = await this.returnOrderDAO.newReturnOrder(SKUItemList, restockOrderId, returnDate);
         const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
         if(res !== undefined && restockOrder !== undefined){
-            this.sendNotificationRO(restockOrder.supplierID, res.lastId);
+            this.sendNotificationRO(restockOrder.getSupplier().getUserID(), res.lastId);
         }
+        return res;
     }
 
     getReturnOrders = async () => {
@@ -532,6 +533,7 @@ class Warehouse{
 
     deleteReturnOrder = async (id) => {
         const res = await this.returnOrderDAO.deleteReturnOrder();
+        return res;
     }
     
     sendNotificationRO = async (userID, returnOrderID)=> {
@@ -540,8 +542,8 @@ class Warehouse{
             
             console.log("*** RETURN ORDER NOTIFICATION ***");
             console.log(`To SUPPLIER: ${userID}`);
-            console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId}`);
-            console.log(`For products: ${ro.getProducts}`);
+            console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId()}`);
+            console.log(`For products: ${ro.getProducts()}`);
         }
     }
     
