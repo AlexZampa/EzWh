@@ -726,6 +726,152 @@ Version:
 | No  | Yes | Invalid | T3(invalidSKUid) -> error | Test modify SKU position - testDeleteSKUError |
 
 
+### **Class *Warehouse* - method *addPosition***
+
+**Criteria for method *addPosition*:**
+	
+- positionID is valid
+- maxWeight is positive
+- maxVolume is positive
+
+**Predicates for method *addPosition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| positionID is valid | Yes |
+|                    | No |
+| maxWeight is positive | Yes |
+|                    | No |
+| maxVolume is positive | Yes |
+|                    | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| positionID is valid | maxWeight is positive | maxVolume is positive | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes | Valid   | T1(validData) -> rowID | Test add Position - testAddPosition |
+| Yes | No  | Yes | Invalid | T2(invalidWeight) -> error | Test add Position - testAddPositionError |
+| Yes | Yes | No  | Invalid | T3(invalidVolume) -> error | Test add Position - testAddSKUError |
+| No  | Yes | Yes | Invalid | T4(invalidPositionID) -> error | Test add Position - testAddSKUError |
+
+
+
+### **Class *Warehouse* - method *modifyPosition***
+
+**Criteria for method *modifyPosition*:**
+	
+- Position exists
+- aisle length is 4
+- row length is 4
+- col length is 4
+- maxWeight is positive
+- maxVolume is positive
+
+**Predicates for method *modifyPosition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Position exists   | Yes |
+|                   | No  |
+| aisle length is 4 | Yes |
+|                   | No  |
+| row length is 4   | Yes |
+|                   | No  |
+| col length is 4   | Yes |
+|                   | No  |
+| maxWeight is positive | Yes |
+|                   | No  |
+| maxVolume is positive | Yes |
+|                   | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Position exists | aisle length is 4 | row length is 4 | col length is 4 | maxWeight is positive |  maxVolume is positive | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes | Yes | Yes | Yes | Valid   | T1() -> changes | Test modify Position - Test modify |
+| Yes | No  | Yes | Yes | Yes | Yes | Invalid | T2() -> error   | Test modify Position - Test Errors - testModifyPositionError |
+| Yes | Yes | No  | Yes | Yes | Yes | Invalid | T3() -> error   | Test modify Position - Test Errors - testModifyPositionError |
+| Yes | Yes | Yes | No  | Yes | Yes | Invalid | T4() -> error   | Test modify Position - Test Errors - testModifyPositionError |
+| Yes | Yes | Yes | Yes | No  | Yes | Invalid | T5() -> error   | Test modify Position - Test Errors - testModifyPositionError |
+| Yes | Yes | Yes | Yes | Yes | No  | Invalid | T6() -> error   | Test modify Position - Test Errors - testModifyPositionError |
+
+
+### **Class *Warehouse* - method *modifyPositionID***
+
+**Criteria for method *modifyPositionID*:**
+	
+- Position exists
+- newPositionID is valid
+- newPositionID is unique
+
+**Predicates for method *modifyPositionID*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Position exists   | Yes |
+|                   | No  |
+| newPositionID is valid | Yes |
+|                   | No  |
+| newPositionID is unique | Yes |
+|                   | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Position exists | newPositionID is valid | newPositionID is unique | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes | Valid   | T1() -> changes | "Test modify positionID of Position - Test modify |
+| Yes | No  | Yes | Invalid | T2() -> error   | "Test modify positionID of Position - Test Errors - testModifyPositionIDError |
+| Yes | Yes | No  | Invalid | T3() -> error   | "Test modify positionID of Position - Test Errors - testModifyPositionIDError |
+| No  | Yes | Yes | Invalid | T4() -> error   | "Test modify positionID of Position - Test Errors - testModifyPositionIDError |
+
+
+### **Class *Warehouse* - method *deletePosition***
+
+**Criteria for method *deletePosition*:**
+	
+- Position exists
+
+
+**Predicates for method *deletePosition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Position exists   | Yes |
+|                   | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Position exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid   | T1(validPositionID) -> changes | Test delete Position |
+| No  | Invalid | T2(invalidPositionID) -> error | Test delete Position - testDeletePositionError|
+
+
+
 # White Box Unit Tests
 
 ### Test cases definition
