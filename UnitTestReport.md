@@ -482,6 +482,250 @@ Version:
 | No | Invalid| T2(invalidPositionID) -> 0 | Test Delete Position - testDeletePosition |
 
 
+## **Class *Warehouse***
+
+### **Class *Warehouse* - method *addSKU***
+
+**Criteria for method *addSKU*:**
+	
+- weight is positive
+- volume is positive
+- price is positive
+- availableQuantity is positive
+
+**Predicates for method *addSKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| weight is positive | Yes |
+|                    | No |
+| volume is positive | Yes |
+|                    | No |
+| price is positive | Yes |
+|                    | No |
+| availableQuantity is positive | Yes |
+|                               | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| weight is positive | volume is positive | price is positive | availableQuantity is positive | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes | Yes | Valid   | T1(validData) -> rowID | Test add SKU - testAddSKU |
+| No  | Yes | Yes | Yes | Invalid | T2(invalidWeight) -> error | Test add SKU - testAddSKUError |
+| Yes | No  | Yes | Yes | Invalid | T3(invalidVolume) -> error | Test add SKU - testAddSKUError |
+| Yes | Yes | No  | Yes | Invalid | T4(invalidPrice) -> error | Test add SKU - testAddSKUError |
+| Yes | Yes | Yes | No  | Invalid | T5(invalidQty) -> error | Test add SKU - testAddSKUError |
+
+
+### **Class *Warehouse* - method *getSKUs***
+
+**Criteria for method *getSKUs*:**
+
+- There are SKUs with TestDescriptors
+
+**Predicates for method *getSKUs*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are SKUs with TestDescriptors | Yes |
+|                                     | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are SKUs with TestDescriptors | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test get all SKU - testGetAllSKU |
+| No | Valid | T2() -> list | - |
+
+
+### **Class *Warehouse* - method *getSKU***
+
+**Criteria for method *getSKU*:**
+	
+- weight is positive
+- volume is positive
+- price is positive
+- availableQuantity is positive
+
+**Predicates for method *getSKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are SKU with TestDescriptors | Yes |
+|                                     | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are SKU with TestDescriptors | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> SKU | Test get SKU - testGetSKU |
+| No | Valid | T2() -> SKU  | Test get SKU - testGetSKU |
+
+
+### **Class *Warehouse* - method *modifySKU***
+
+**Criteria for method *modifySKU*:**
+	
+- sku exists
+- sku has position
+- weight is positive
+- volume is positive
+- price is positive
+- availableQuantity is positive
+- position can store SKU
+
+**Predicates for method *modifySKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| sku exists | Yes |
+|             | No |
+| sku has position | Yes |
+|             | No |
+| weight is positive | Yes |
+|             | No |
+| volume is positive | Yes |
+|             | No |
+| price is positive | Yes |
+|             | No |
+| availableQuantity is positive | Yes |
+|             | No |
+| position can store SKU | Yes |
+|             | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| sku exists | sku has position | weight is positive | volume is positive | price is positive | availableQuantity is positive | position can store SKU | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes |  Yes | Yes | Yes | Yes | Valid   | T1(validData) -> changes | Test modify SKU - Test modify - Modify SKU with Position |
+| Yes | No  | Yes |  Yes | Yes | Yes | Yes | Valid   | T2(validData) -> changes | Test modify SKU - Test modify - Modify SKU without position |
+| No  | Yes | Yes |  Yes | Yes | Yes | Yes | Invalid | T3(invalidSKUid) -> error | Test modify SKU - Test Errors - testModifySKUError |
+| Yes | Yes | No  |  Yes | Yes | Yes | Yes | Invalid | T4(invalidWeight) -> error | Test modify SKU - Test Errors - testModifySKUError |
+| Yes | Yes | Yes |  No  | Yes | Yes | Yes | Invalid | T5(invalidVolume) -> error | Test modify SKU - Test Errors - testModifySKUError |
+| Yes | Yes | Yes |  Yes | No  | Yes | Yes | Invalid | T6(invalidPrice) -> error | Test modify SKU - Test Errors - testModifySKUError |
+| Yes | Yes | Yes |  Yes | Yes | No  | Yes | Invalid | T1(invalidQuantity) -> error | Test modify SKU - Test Errors - testModifySKUError |
+| Yes | Yes | Yes |  Yes | Yes | Yes | No  | Invalid | T1(invalidData) -> error | Test modify SKU - Test Errors - testModifySKUError|
+
+
+### **Class *Warehouse* - method *modifySKUposition***
+
+**Criteria for method *modifySKUposition*:**
+	
+- SKU has already a position
+- position can store SKU
+
+**Predicates for method *modifySKUposition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKU has already a position | Yes |
+|                            | No  |
+| position can store SKU     | Yes |
+|                            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKU has already a position | position can store SKU | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1() -> changes | Test modify SKU position - Test modify SKU with position - Modify position of SKU |
+| Yes | No  | Invalid | T2() -> error   | Test modify SKU position - Test modify SKU with position - Modify position of SKU |
+| No  | Yes | Valid   | T3() -> changes | Test modify SKU position - Test modify SKU without position - Modify position of SKU |
+| No  | No  | Invalid | T4() -> error   | Test modify SKU position - Test modify SKU without position - Modify position of SKU |
+
+
+### **Class *Warehouse* - method *modifySKUposition***
+
+**Criteria for method *modifySKUposition*:**
+	
+- SKU has already a position
+- position can store SKU
+
+**Predicates for method *modifySKUposition*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKU has already a position | Yes |
+|                            | No  |
+| position can store SKU     | Yes |
+|                            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKU has already a position | position can store SKU | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1() -> changes | Test modify SKU position - Test modify SKU with position - Modify position of SKU |
+| Yes | No  | Invalid | T2() -> error   | Test modify SKU position - Test modify SKU with position - Modify position of SKU |
+| No  | Yes | Valid   | T3() -> changes | Test modify SKU position - Test modify SKU without position - Modify position of SKU |
+| No  | No  | Invalid | T4() -> error   | Test modify SKU position - Test modify SKU without position - Modify position of SKU |
+
+
+### **Class *Warehouse* - method *deleteSKU***
+
+**Criteria for method *deleteSKU*:**
+	
+- SKU exists
+- SKU has position
+
+**Predicates for method *deleteSKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKU exists | Yes |
+|            | No  |
+| SKU has position | Yes |
+|                   | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKU exists | SKU has position | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1(validSKUid) -> changes | Test delete SKU - Update position after delete SKU |
+| Yes | No  | Invalid | T2(validSKUid) -> error   | Test modify SKU position - Delete SKU without position |
+| No  | Yes | Invalid | T3(invalidSKUid) -> error | Test modify SKU position - testDeleteSKUError |
+
+
 # White Box Unit Tests
 
 ### Test cases definition
