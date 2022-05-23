@@ -2,12 +2,13 @@
 const sqlite = require('sqlite3');
 const ConnectionDB = require('./ConnectionDB');
 const InternalOrder = require('../Model/InternalOrder');
+const dayjs = require('dayjs');
 
 const buildInternalOrder = async (io, connectionDB) => {
     let sql = "SELECT SKU, description, price, qty FROM InternalOrderProduct WHERE internalOrder=?";
 
     if (io.state !== "COMPLETED") {
-        const productList = connectionDB.DBgetAll(sql, io.getId());
+        const productList = await connectionDB.DBgetAll(sql, io.getId());
         for (const p of productList) {
             io.addProduct(p.SKU, p.price, p.description, p.qty);
         }
@@ -15,7 +16,7 @@ const buildInternalOrder = async (io, connectionDB) => {
         sql = "SELECT SKUId, description, price, rfid FROM InternalOrderSKUItems WHERE internalOrder=?";
         const productList = await connectionDB.DBgetAll(sql, io.getId());
         for (const p of productList) {
-            io.addProduct(p.SKU, p.price, p.description, undefined, p.rfid);
+            io.addProduct(p.SKUId, p.price, p.description, undefined, p.rfid);
         }
     }
     return io;
@@ -52,9 +53,9 @@ class InternalOrderDAO {
         try {
             let sql = "SELECT * FROM InternalOrder";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, r.issueDate, r.state));
+            let internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
 
-            for (const io of internalOrders) {
+            for (let io of internalOrders) {
                 io = buildInternalOrder(io, this.connectionDB);
             }
 
@@ -70,9 +71,9 @@ class InternalOrderDAO {
         try {
             let sql = "SELECT * FROM InternalOrder WHERE state='ISSUED'";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, r.issueDate));
+            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
 
-            for (const io of internalOrders) {
+            for (let io of internalOrders) {
                 io = buildInternalOrder(io, this.connectionDB);
             }
 
@@ -87,11 +88,11 @@ class InternalOrderDAO {
     getAllAccepted = async () => {
 
         try {
-            let sql = "SELECT * FROM InternalOrder WHERE state='ACCEPTED";
+            let sql = "SELECT * FROM InternalOrder WHERE state='ACCEPTED'";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, r.issueDate));
+            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
 
-            for (const io of internalOrders) {
+            for (let io of internalOrders) {
                 io = buildInternalOrder(io, this.connectionDB);
             }
 
@@ -110,7 +111,7 @@ class InternalOrderDAO {
                 throw { err: 404, msg: "not found" };
             }
 
-            const io = new InternalOrder(result.id, result.customerId, result.issueDate);
+            let io = new InternalOrder(result.id, result.customerId, dayjs(result.issueDate), result.state);
             io = buildInternalOrder(io, this.connectionDB);
 
             return io;
@@ -136,8 +137,9 @@ class InternalOrderDAO {
     setStatus = async (ID, newState) => {
 
         try {
-            const sql = "UPDATE TABLE InternalOrder SET state=? WHERE id=?";
-            this.connectionDB.DBexecuteQuery(sql, [newState, ID]);
+            const sql = "UPDATE InternalOrder SET state=? WHERE id=?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [newState, ID]);
+            return res.changes;
         }
         catch (err) {
             throw err;
@@ -147,11 +149,11 @@ class InternalOrderDAO {
     deleteInternalOrder = async (ID) => {
         try {
             let sql = "DELETE FROM InternalOrderSKUItems WHERE internalOrder=?";
-            let res = this.connectionDB.DBexecuteQuery(sql, [ID]);
+            let res = await this.connectionDB.DBexecuteQuery(sql, [ID]);
             sql = "DELETE FROM InternalOrderProduct WHERE internalOrder=?";
-            res = this.connectionDB.DBexecuteQuery(sql, [ID]);
+            res = await this.connectionDB.DBexecuteQuery(sql, [ID]);
             sql = "DELETE FROM InternalOrder WHERE id=?";
-            res = this.connectionDB.DBexecuteQuery(sql, [ID]);
+            res = await this.connectionDB.DBexecuteQuery(sql, [ID]);
             return res.changes;
         }
         catch (err) {

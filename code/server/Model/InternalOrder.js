@@ -25,9 +25,9 @@ class InternalOrder{
 
     addProduct = (skuId, price, description, qty, rfid) => {
         if(rfid && this.state === "COMPLETED"){
-            this.products.push({skuId:skuId, description:description, price:price, rfid:rfid});
+            this.products.push({SKUId:skuId, description:description, price:price, RFID:rfid});
         }
-        else this.products.push({skuId:skuId, description:description, price:price, qty:qty});
+        else this.products.push({SKUId:skuId, description:description, price:price, qty:qty});
     }
     
     convertToObj = () => {
