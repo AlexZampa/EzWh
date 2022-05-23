@@ -12,6 +12,7 @@ describe('test SKUItem apis', () => {
 
     beforeEach(async () => {
         await agent.delete('/api/test/skuitems');
+        await agent.delete('/api/test/skus');
     })
 
     newSKUItem(201, "1f", 1, "2022/02/22");
@@ -23,6 +24,10 @@ describe('test SKUItem apis', () => {
     getSKUItemByRFID(200, "1");
     getSKUItemByRFID(404, "1f");
     getSKUItemByID(200, 1);
+
+    modifySKUItem(200, "1", "1f", 1, "2022/09/18");
+    modifySKUItem(404, "2", "2f", 0, "2022/02/18");
+    modifySKUItem(422, "1", "1f", 1, "2022-02-22");
 
     deleteSKUItem(204, "1");
     deleteSKUItem(422, "id");
@@ -66,8 +71,8 @@ function getSKUItems(expectedHTTPStatus) {
         const skuItem3 = { RFID: "3", SKUId: 1, DateOfStock: "2022/05/12" };
 
         let expectedResult = [{ "RFID": "1", "SKUId": 1, "Available": 0, "DateOfStock": "2022/02/02" },
-            { "RFID": "2", "SKUId": 1, "Available": 0, "DateOfStock": "2022/04/30" },
-            { "RFID": "3", "SKUId": 1, "Available": 0, "DateOfStock": "2022/05/12" }];
+        { "RFID": "2", "SKUId": 1, "Available": 0, "DateOfStock": "2022/04/30" },
+        { "RFID": "3", "SKUId": 1, "Available": 0, "DateOfStock": "2022/05/12" }];
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
         agent.post('/api/sku')
             .send(sku)
@@ -103,22 +108,29 @@ function getSKUItems(expectedHTTPStatus) {
 function getSKUItemByID(expectedHTTPStatus, id) {
     it('getting single SKUItem by ID', function (done) {
         const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/02/02" };
-        const expectedResult = { "RFID": "1", "SKUId": 1, "Available": 0, "DateOfStock": "2022/02/02" };
+        const data = { "newRFID": "1", "newAvailable": 1, "newDateOfStock": "2022/02/03" };
+        const expectedResult = [{ "RFID": "1", "SKUId": 1, "DateOfStock": "2022/02/03" }];
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
         agent.post('/api/sku')
             .send(sku)
             .then(function (res) {
                 res.should.have.status(201);
                 agent.post('/api/skuitem')
-                    .send(sku)
+                    .send(skuItem)
                     .then(function (res) {
                         res.should.have.status(201);
-                        agent.get('/api/skuitems/' + id)
+                        agent.put('/api/skuitems/' + "1")
+                            .send(data)
                             .then(function (res) {
-                                res.should.have.status(expectedHTTPStatus);
-                                if (expectedHTTPStatus == 200)
-                                    res.body.should.be.deep.equal(expectedResult);
-                                done();
+                                res.should.have.status(200);
+                                agent.get('/api/skuitems/sku/' + id)
+                                    .then(function (res) {
+                                        console.log(res.body);
+                                        res.should.have.status(expectedHTTPStatus);
+                                        if (expectedHTTPStatus == 200)
+                                            res.body.should.be.deep.equal(expectedResult);
+                                        done();
+                                    });
                             });
                     });
             });
@@ -138,11 +150,35 @@ function getSKUItemByRFID(expectedHTTPStatus, rfid) {
                     .send(skuItem)
                     .then(function (res) {
                         res.should.have.status(201);
-                        agent.get('/api/skuitem/' + rfid)
+                        agent.get('/api/skuitems/' + rfid)
                             .then(function (res) {
                                 res.should.have.status(expectedHTTPStatus);
                                 if (expectedHTTPStatus == 200)
                                     res.body.should.be.deep.equal(expectedResult);
+                                done();
+                            });
+                    });
+            });
+    });
+}
+
+function modifySKUItem(expectedHTTPStatus, RFID, newRFID, newAvailable, newDate) {
+    it('modifing SKUItem', function (done) {
+        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/02/02" };
+        const data = { "newRFID": newRFID, "newAvailable": newAvailable, "newDateOfStock": newDate };
+        const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
+        agent.post('/api/sku')
+            .send(sku)
+            .then(function (res) {
+                res.should.have.status(201);
+                agent.post('/api/skuitem')
+                    .send(skuItem)
+                    .then(function (res) {
+                        res.should.have.status(201);
+                        agent.put('/api/skuitems/' + RFID)
+                            .send(data)
+                            .then(function (res) {
+                                res.should.have.status(expectedHTTPStatus);
                                 done();
                             });
                     });
@@ -162,7 +198,7 @@ function deleteSKUItem(expectedHTTPStatus, rfid) {
                     .send(skuItem)
                     .then(function (res) {
                         res.should.have.status(201);
-                        agent.delete('/api/skuitem/' + rfid)
+                        agent.delete('/api/skuitems/' + rfid)
                             .then(function (res) {
                                 res.should.have.status(expectedHTTPStatus);
                                 done();

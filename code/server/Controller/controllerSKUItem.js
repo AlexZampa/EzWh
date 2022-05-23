@@ -86,7 +86,7 @@ router.get('/skuitems/:rfid',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const skuItem = await warehouse.getSKUItem(req.params.rfid);
+            const skuItem = await warehouse.getSKUItem(String(req.params.rfid));
             const result = skuItem.convertToObj();
             return res.status(200).json(result);
         } catch (err) {
