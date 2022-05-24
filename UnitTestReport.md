@@ -756,6 +756,380 @@ Version:
 | No | Invalid| T2(invalidRestockOrderid) -> list | Test Delete RestockOrder - testDeleteRestockOrder |
 
 ----------------------------------------------------------------------------------------------------------------------------
+### **Class *InternalOrderDAO* - method *newInternalOrder***
+
+
+
+**Criteria for method *newInternalOrder*:**
+	
+ - *issueDate* properly formatted
+
+
+**Predicates for method *newInternalOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|  *issueDate* properly formatted        | yes          |
+|          | no          |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1(validDate) -> ok | Test Create and Get Internal Order|
+| no | invalid | T2(invalidDate) -> 422 | Test Create and Get Internal Order|
+
+----------------------------------------------------------------------------------------------------------------------------
+### **Class *InternalOrderDAO* - method *getAllInternalOrders***
+
+
+
+**Criteria for method *getAllInternalOrders*:**
+	
+ - Some internalOrders are in the DB
+
+
+**Predicates for method *getAllInternalOrders*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1() -> ok | Test Create and Get Internal Order - Test Get all Internal Orders|
+
+----------------------------------------------------------------------------------------------------------------------------
+### **Class *InternalOrderDAO* - method *getAllIssued***
+
+
+
+**Criteria for method *getAllIssued*:**
+	
+ - Some internalOrder issued are in the DB
+
+
+**Predicates for method *getAllIssued*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1() -> ok | Test Get All Internal Order Issued|
+
+-----------------------------------------------------------------------------------------------------
+### **Class *InternalOrderDAO* - method *getAllAccepted***
+
+
+
+**Criteria for method *getAllAccepted*:**
+	
+ - Some internalOrder accepted are in the DB
+
+
+**Predicates for method *getAllAccepted*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1() -> ok | Test Get All Internal Order Accepted|
+
+-----------------------------------------------------------------------------------------------------
+### **Class *InternalOrderDAO* - method *getInternalOrder***
+
+
+
+**Criteria for method *getInternalOrder*:**
+	
+ - ID is a positive number
+ - An internalOrder with ID is stored in the db
+
+
+**Predicates for method *getInternalOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| ID is a positive number | ID is a positive number |
+| | ID is a negative number |
+| | ID is not a number |
+| An internalOrder with ID is stored in the db | yes |
+| | no |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Criteria 2 | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| ID is a positive number | any | valid | validity checked by ControllerInternalOrder | - |
+| - | yes | valid | T1(ID) -> internalOrder | Test Create and Get Internal Order |
+| - | no | valid | T2(ID) -> 404 | Test throw err on get Internal Order |
+
+-----------------------------------------------------------------------------------------------------
+### **Class *InternalOrderDAO* - method *addDeliveredProducts***
+
+
+
+**Criteria for method *addDeliveredProducts*:**
+	
+ - An internalOrder with ID is stored in the db
+ - For each delivered product, the internalOrder already contains a product with the same SKUId 
+
+
+**Predicates for method *addDeliveredProducts*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| For each delivered product, the internalOrder already contains a product with the same SKUId | yes |
+| | no |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1(ID, SKUItemList) -> OK | Test add delivered products to a completed Internal Order |
+| no | invalid | T2(ID, SKUItemList) -> err | Test add delivered products to a completed Internal Order |
+
+-----------------------------------------------------------------------------------------------------
+### **Class *InternalOrderDAO* - method *setStatus***
+
+
+
+**Criteria for method *setStatus*:**
+	
+ - newState is among the valid states
+
+
+**Predicates for method *setStatus*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| newState is among the valid states | yes |
+| | no |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1(ID, newState) -> OK | Test update Internal Order state |
+| no | invalid | T2(ID, newState) -> 422 | Test update Internal Order state |
+
+-----------------------------------------------------------------------------------------------------
+### **Class *InternalOrderDAO* - method *deleteInternalOrder***
+
+
+
+**Criteria for method *deleteInternalOrder*:**
+	
+ - An internalOrder with ID is stored in the db
+
+
+**Predicates for method *deleteInternalOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| An internalOrder with ID is stored in the db | yes |
+| | no |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1(ID) -> OK | Test Delete Internal Order |
+| no | invalid | T2(ID) -> 404 | Test Delete Internal Order |
+
+-----------------------------------------------------------------------------------------------------
+### **Class *ReturnOrderDAO* - method *newReturnOrder***
+
+
+
+**Criteria for method *newReturnOrder*:**
+	
+ - A restockOrder with id=restockOrderId exists in the db
+
+
+**Predicates for method *newReturnOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| A restockOrder with id=restockOrderId exists in the db | yes |
+| | no |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+| no | invalid | T2(ID) -> 404 | Test Create and Get Return Order |
+
+-----------------------------------------------------------------------------------------------------
+### **Class *ReturnOrderDAO* - method *getReturnOrderById***
+
+
+
+**Criteria for method *getReturnOrderById*:**
+	
+ - A returnOrder with ID is stored in the db
+
+
+**Predicates for method *getReturnOrderById*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| A returnOrder with ID is stored in the db | yes |
+| | no |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+| no | valid | T2(ID) -> 404 | Test throw err on get Return Order |
+
+-----------------------------------------------------------------------------------------------------
+### **Class *ReturnOrderDAO* - method *getAllReturnOrders***
+
+
+
+**Criteria for method *getAllReturnOrders*:**
+	
+ - Some returnOrder stored in the db
+
+
+**Predicates for method *getAllReturnOrders*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Some returnOrder stored in the db | yes |
+| | no |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1() -> list | Test Get All Return Orders |
+| no | valid | T2() -> emptyList | Test Get All Return Orders |
+
+-----------------------------------------------------------------------------------------------------
+### **Class *ReturnOrderDAO* - method *deleteReturnOrder***
+
+
+
+**Criteria for method *deleteReturnOrder*:**
+	
+ - A returnOrder with ID is stored in the db
+
+
+**Predicates for method *deleteReturnOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| A returnOrder with ID is stored in the db | yes |
+| | no |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+
+| Criteria | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| yes | valid | T1(ID) -> OK | Test Delete Return Order |
+| no | valid | T2(ID) -> 404 | Test Delete Return Order |
+
+-----------------------------------------------------------------------------------------------------
 ## **Class *Warehouse***
 
 ### **Class *Warehouse* - method *addSKU***
@@ -1744,6 +2118,272 @@ Version:
 | Yes | Yes | Valid   | T1(validRestockOrderID) -> ok | Test Delete RestockOrder - Delete RestockOrder |
 | No | Yes | Invalid | T2(invalidRestockOrderID) -> error   | Delete RestockOrder - testDeleteRestockOrderError |
 | Yes | No | Invalid | T2(validRestockOrderID) -> error   | Delete RestockOrder - testDeleteRestockOrderError |
+
+### **Class *Warehouse* - method *addReturnOrder***
+
+**Criteria for method *addReturnOrder*:**
+	
+- RestockOrder with id=restockOrderId exists
+
+**Predicates for method *addReturnOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrder with id=restockOrderId exists | yes |
+| | no |
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| RestockOrder with id=restockOrderId exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| Yes | Valid  | T1() -> ok | Add return order test |
+| No | Valid | T2() -> error   | Add return order test |
+
+### **Class *Warehouse* - method *getReturnOrders***
+
+**Criteria for method *getReturnOrders*:**
+
+- returnOrders exist
+	
+**Predicates for method *getReturnOrders*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| returnOrders exist | yes |
+| | no |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| returnOrders exist | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| Yes | Valid  | T1() -> ok | Get all return orders test |
+| No | Valid | T2() -> error   | Get all return orders test |
+
+### **Class *Warehouse* - method *getReturnOrderById***
+
+**Criteria for method *getReturnOrderById*:**
+
+- returnOrders with id=ID exists
+	
+**Predicates for method *getReturnOrderById*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| returnOrders with id=ID exists | yes |
+| | no |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| returnOrders with id=ID exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| Yes | Valid  | T1() -> ok | Get return order test |
+| No | Valid | T2() -> error   | Get return order test |
+
+### **Class *Warehouse* - method *deleteReturnOrder***
+
+**Criteria for method *deleteReturnOrder*:**
+
+- returnOrders with id=ID exists
+	
+**Predicates for method *deleteReturnOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| returnOrders with id=ID exists | yes |
+| | no |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| returnOrders with id=ID exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| Yes | Valid  | T1() -> ok | Delete return order test |
+| No | Valid | T2() -> error   | Delete return order test |
+
+### **Class *Warehouse* - method *addInternalOrder***
+
+**Criteria for method *addInternalOrder*:**
+
+- none (other units are in charge to verify constraints)
+	
+**Predicates for method *addInternalOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| - | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+|  | Valid  | T1() -> ok | Add internal order test |
+
+### **Class *Warehouse* - method *getInternalOrders***
+
+**Criteria for method *getInternalOrders*:**
+
+- none (other units are in charge to verify constraints)
+	
+**Predicates for method *getInternalOrders*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| - | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+|  | Valid  | T1() -> ok | Get all internal orders test |
+
+### **Class *Warehouse* - method *getInternalOrderIssued***
+
+**Criteria for method *getInternalOrderIssued*:**
+
+- none (other units are in charge to verify constraints)
+	
+**Predicates for method *getInternalOrderIssued*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| - | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+|  | Valid  | T1() -> ok | Get all issued internal orders test |
+
+### **Class *Warehouse* - method *getAcceptedInternalOrders***
+
+**Criteria for method *getAcceptedInternalOrders*:**
+
+- none (other units are in charge to verify constraints)
+	
+**Predicates for method *getAcceptedInternalOrders*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| - | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+|  | Valid  | T1() -> ok | Get all accepted internal orders test |
+
+### **Class *Warehouse* - method *getInternalOrder***
+
+**Criteria for method *getInternalOrder*:**
+
+- none (other units are in charge to verify constraints)
+	
+**Predicates for method *getInternalOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| - | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+|  | Valid  | T1() -> ok | Get internal order test |
+
+### **Class *Warehouse* - method *setIOStatus***
+
+**Criteria for method *setIOStatus*:**
+
+- newStatus = "COMPLETED"
+	
+**Predicates for method *setIOStatus*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| newStatus = "COMPLETED" | yes |
+| | no |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| newStatus = "COMPLETED" | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| yes | Valid  | T1() -> ok | Update Internal Order status test |
+| no | Valid  | T2() -> ok | Update Internal Order status test |
+
+### **Class *Warehouse* - method *deleteInternalOrder***
+
+**Criteria for method *deleteInternalOrder*:**
+
+- internalOrder with id=ID exists
+	
+**Predicates for method *deleteInternalOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| internalOrder with id=ID exists | yes |
+| | no |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+| internalOrder with id=ID exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| yes | Valid  | T1() -> ok | Delete internal order test |
+| no | Valid  | T2() -> err | Delete internal order test |
+
+
+-----------------------------------------------------------------------------------------------------
 
 # White Box Unit Tests
 
