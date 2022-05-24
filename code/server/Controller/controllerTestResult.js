@@ -7,7 +7,7 @@ const router = express.Router();
 const warehouse = new Warehouse();
 
 //get testResults
-router.get('/skuitems/:rfid/testResults', [check("rfid").exists().isString().trim()], async (req, res) => {
+router.get('/skuitems/:rfid/testResults', [check("rfid").exists().isString().trim().isNumeric()], async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -31,7 +31,7 @@ router.get('/skuitems/:rfid/testResults', [check("rfid").exists().isString().tri
 });
 
 //get testResult
-router.get('/skuitems/:rfid/testResults/:id', [check("rfid").exists().isString().trim(), check("id").exists().isInt({ min: 1 })], async (req, res) => {
+router.get('/skuitems/:rfid/testResults/:id', [check("rfid").exists().isString().trim().isNumeric(), check("id").exists().isInt({ min: 1 })], async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -54,7 +54,7 @@ router.get('/skuitems/:rfid/testResults/:id', [check("rfid").exists().isString()
 
 //create testResult
 router.post('/skuitems/testResult',
-    [check("rfid").exists().isString().trim(), check("idTestDescriptor").exists().isInt({min: 1}), check("Date").exists().isString().trim(), check("Result").exists().isString().trim()],
+    [check("rfid").exists().isString().trim().isNumeric(), check("idTestDescriptor").exists().isInt({min: 1}), check("Date").exists().isString().trim(), check("Result").exists().isString().trim()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -76,7 +76,7 @@ router.post('/skuitems/testResult',
 
 //modify testResult
 router.put('/skuitems/:rfid/testResult/:id',
-    [check("rfid").exists().isString().trim(), check("id").exists().isInt({min: 1}),
+    [check("rfid").exists().isString().trim().isNumeric(), check("id").exists().isInt({min: 1}),
     check("newIdTestDescriptor").exists().isInt({min: 1}),
     check("newDate").exists().isString().trim(),
     check("newResult").exists().isString().trim()],
@@ -101,7 +101,7 @@ router.put('/skuitems/:rfid/testResult/:id',
 );
 
 //delete testResult
-router.delete('/skuitems/:rfid/testResult/:id', [check("rfid").exists().isString().trim(), check("id").exists().isInt({min: 1})],
+router.delete('/skuitems/:rfid/testResult/:id', [check("rfid").exists().isString().trim().isNumeric(), check("id").exists().isInt({min: 1})],
     async (req, res) => {
         try {
             const errors = validationResult(req);

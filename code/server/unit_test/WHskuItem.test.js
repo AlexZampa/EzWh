@@ -149,7 +149,7 @@ describe("Test delete SKUItem", () => {
 
     beforeAll(() => {
         skuItemDAO.getSKUItem.mockReset();
-        skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem1).mockReturnValueOnce(skuItem2).mockRejectedValueOnce({ err: 404, msg: "SKUItem not found" });
+        skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem1).mockRejectedValueOnce({ err: 404, msg: "SKUItem not found" });
 
         skuItemDAO.deleteSKUItem.mockReset();
         skuItemDAO.deleteSKUItem.mockReturnValue(1);

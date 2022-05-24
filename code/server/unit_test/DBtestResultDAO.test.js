@@ -23,20 +23,20 @@ describe('Test Create and Get TestResult', () => {
         await testResultDAO.resetTable();
     });
     
-    const expectedTestResult1 = new TestResult(1, 1234, 1, "2022/03/12", "true");
-    const expectedTestResult2 = new TestResult(2, 1234, 2, "2022/03/14", "false");
+    const expectedTestResult1 = new TestResult(1, "1234", 1, "2022/03/12", "true");
+    const expectedTestResult2 = new TestResult(2, "1234", 2, "2022/03/14", "false");
 
-    testCreateTestResult(1234, 1, "2022/03/12", "true", 1);
-    testGetTestResult(1, 1234, expectedTestResult1);
+    testCreateTestResult("1234", 1, "2022/03/12", "true", 1);
+    testGetTestResult(1, "1234", expectedTestResult1);
 
-    testCreateTestResult(1234, 2, "2022/03/14", "false", 2);
-    testGetTestResult(2, 1234, expectedTestResult2);
+    testCreateTestResult("1234", 2, "2022/03/14", "false", 2);
+    testGetTestResult(2, "1234", expectedTestResult2);
 });
 
 describe('Test throw err on get TestResult', () => {
     beforeAll(async () => {
         await testResultDAO.resetTable();
-        await testResultDAO.newTestResult(1, 1234, 1, "2022/03/12", "true");
+        await testResultDAO.newTestResult(1, "1234", 1, "2022/03/12", "true");
     });
     testGetTestResultError(3, {err: 404, msg:  "Test result not found"});
 });
@@ -44,14 +44,14 @@ describe('Test throw err on get TestResult', () => {
 describe('Test Get All TestResult', () => {
     beforeAll(async () => {
         await testResultDAO.resetTable();
-        await testResultDAO.newTestResult(1234, 1, "2022/03/12", "true");
-        await testResultDAO.newTestResult(1234, 2, "2022/03/14", "false");
-        await testResultDAO.newTestResult(5678, 3, "2022/03/14", "false");
+        await testResultDAO.newTestResult("1234", 1, "2022/03/12", "true");
+        await testResultDAO.newTestResult("1234", 2, "2022/03/14", "false");
+        await testResultDAO.newTestResult("5678", 3, "2022/03/14", "false");
     });
 
     const testResultList = [];
-    testResultList.push(new TestResult(1, 1234, 1, "2022/03/12", "true"));
-    testResultList.push(new TestResult(2, 1234, 2, "2022/03/14", "false"));
+    testResultList.push(new TestResult(1, "1234", 1, "2022/03/12", "true"));
+    testResultList.push(new TestResult(2, "1234", 2, "2022/03/14", "false"));
     testGetAllTestResult(testResultList);
 });
 
@@ -59,25 +59,25 @@ describe('Test Get All TestResult', () => {
 describe('Test Update TestResult', () => {
     beforeAll(async () => {
         await testResultDAO.resetTable();
-        await testResultDAO.newTestResult(1234, 1, "2022/03/12", "true");
+        await testResultDAO.newTestResult("1234", 1, "2022/03/12", "true");
     });
-    const expectedTestResult = new TestResult(1, 1234, 2, "2022/03/14", "false");
+    const expectedTestResult = new TestResult(1, "1234", 2, "2022/03/14", "false");
     const expectedChanges = 1;
-    testUpdateTestResult(1, 1234, 2, "2022/03/14", "false", expectedChanges);
-    testGetTestResult(1, 1234, expectedTestResult);
+    testUpdateTestResult(1, "1234", 2, "2022/03/14", "false", expectedChanges);
+    testGetTestResult(1, "1234", expectedTestResult);
 });
 
 
 describe('Test Delete TestResult', () => {
     beforeAll(async () => {
         await testResultDAO.resetTable();
-        await testResultDAO.newTestResult(1234, 1, "2022/03/12", "true");
-        await testResultDAO.newTestResult(1234, 2, "2022/03/14", "false");
-        await testResultDAO.newTestResult(5678, 3, "2022/03/14", "false");
+        await testResultDAO.newTestResult("1234", 1, "2022/03/12", "true");
+        await testResultDAO.newTestResult("1234", 2, "2022/03/14", "false");
+        await testResultDAO.newTestResult("5678", 3, "2022/03/14", "false");
     });
 
     const testResultList = [];
-    testResultList.push(new TestResult(1, 1234, 1, "2022/03/12", "true"));
+    testResultList.push(new TestResult(1, "1234", 1, "2022/03/12", "true"));
     let expectedChanges = 1
     testDeleteTestResult(2, expectedChanges);
     testGetAllTestResult(testResultList);
@@ -103,7 +103,7 @@ function testGetTestResult(id, rfid, expectedTestResult) {
 function testGetTestResultError(id, expectedError){
     test('throw on get TestResult', async () => {
         async function getNonExistentTestResult(){
-            await testResultDAO.getTestResult(1234, id); 
+            await testResultDAO.getTestResult("1234", id); 
         };
         await expect(getNonExistentTestResult).rejects.toEqual(expectedError);
     });
@@ -111,7 +111,7 @@ function testGetTestResultError(id, expectedError){
 
 function testGetAllTestResult(expectedList) {
     test('get All TestResult', async () => {
-        let res = await testResultDAO.getAllTestResult(1234);
+        let res = await testResultDAO.getAllTestResult("1234");
         expect(res.length).toStrictEqual(expectedList.length);
         for(const i in res){
             compareTestResult(res[i], expectedList[i]);
@@ -130,7 +130,7 @@ function testUpdateTestResult(id, rfid, newIdTestDescriptor, newDate, newResult,
 
 function testDeleteTestResult(id, expectedChanges) {
     test('delete TestResult', async () => {
-        let res = await testResultDAO.deleteTestResult(id, 1234);
+        let res = await testResultDAO.deleteTestResult(id, "1234");
         expect(res).toStrictEqual(expectedChanges);
     });
 }

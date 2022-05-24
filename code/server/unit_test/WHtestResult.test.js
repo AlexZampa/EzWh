@@ -21,8 +21,8 @@ const wh = new Warehouse(userDAO, skuDAO, skuItemDAO, positionDAO, restockOrderD
 
 describe("Test add Test result", () => {
 
-    const skuItem1 = new SKUitem(1234, 1, 3, "2022/02/25");
-    const skuItem2 = new SKUitem(2345, 2, 2, "2022/02/25");
+    const skuItem1 = new SKUitem("1234", 1, 3, "2022/02/25");
+    const skuItem2 = new SKUitem("2345", 2, 2, "2022/02/25");
 
     const testDescriptor1 = new TestDescriptor(1, "name1", "description1", 1);
 
@@ -37,10 +37,10 @@ describe("Test add Test result", () => {
         testDescriptorDAO.getTestDescriptor.mockReturnValueOnce(testDescriptor1).mockReturnValueOnce(testDescriptor1).mockRejectedValueOnce();
     });
 
-    testAddTestResult(1234, 1, "2022/03/10", "false", 1);
-    testAddTestResult(2345, 1, "2022/03/11", "true", 2);
-    testAddTestResultError('throw error on non existing sku', 3546, 1, "2022/03/10", "false", {err: 404, msg: "SKU not found"});
-    testAddTestResultError('throw err on non existing test descriptor', 1234, 2, "2022/03/10", "false", {err: 404, msg: "Test descriptor not found"});
+    testAddTestResult("1234", 1, "2022/03/10", "false", 1);
+    testAddTestResult("2345", 1, "2022/03/11", "true", 2);
+    testAddTestResultError('throw error on non existing sku', "3546", 1, "2022/03/10", "false", {err: 404, msg: "SKU not found"});
+    testAddTestResultError('throw err on non existing test descriptor', "1234", 2, "2022/03/10", "false", {err: 404, msg: "Test descriptor not found"});
 
     function testAddTestResult(rfid, idTestDescriptor, date, res, expectedResult) {
         test('Add Test result', async () => {
@@ -62,30 +62,30 @@ describe("Test add Test result", () => {
 
 describe("Test get all Test result", () => {
 
-    const skuItem2 = new SKUitem(2345, 2, 2, "2022/02/25");
+    const skuItem2 = new SKUitem("2345", 2, 2, "2022/02/25");
     
     let testResultList = [];
-    testResultList.push(new TestResult(1, 1234, 1, "2022/03/10", "false"));
-    testResultList.push(new TestResult(2, 2345, 1, "2022/03/11", "true"));
-    testResultList.push(new TestResult(3, 2345, 2, "2022/03/13", "false"));
+    testResultList.push(new TestResult(1, "1234", 1, "2022/03/10", "false"));
+    testResultList.push(new TestResult(2, "2345", 1, "2022/03/11", "true"));
+    testResultList.push(new TestResult(3, "2345", 2, "2022/03/13", "false"));
     
     let expectedList = [];
-    const testresult2 = new TestResult(2, 2345, 1, "2022/03/11", "true");
-    const testresult3 = new TestResult(3, 2345, 2, "2022/03/13", "false");
+    const testresult2 = new TestResult(2, "2345", 1, "2022/03/11", "true");
+    const testresult3 = new TestResult(3, "2345", 2, "2022/03/13", "false");
     expectedList.push(testresult2);
     expectedList.push(testresult3);
    
 
     beforeAll(() => {
         testResultDAO.getAllTestResult.mockReset();
-        testResultDAO.getAllTestResult.mockReturnValue(testResultList.filter(()=>this.rfid===2345));
+        testResultDAO.getAllTestResult.mockReturnValue(testResultList.filter(()=>this.rfid==="2345"));
 
         skuItemDAO.getSKUItem.mockReset();
         skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem2).mockRejectedValueOnce({ err: 404, msg: "SKUItem not found" });
     });
 
-    testgetAllTestResult(2345, expectedList);
-    testgetAllTestResultError(4567, { err: 404, msg: "SKUItem not found" });
+    testgetAllTestResult("2345", expectedList);
+    testgetAllTestResultError("4567", { err: 404, msg: "SKUItem not found" });
 
     function testgetAllTestResult(rfid, expectedResult) {
         test('Get all Test result', async () => {
@@ -109,26 +109,32 @@ describe("Test get all Test result", () => {
 
 describe("Test get Test result", () => {
 
-    const skuItem2 = new SKUitem(2345, 2, 2, "2022/02/25");
+    const skuItem2 = new SKUitem("2345", 2, 2, "2022/02/25");
+
+    const testDescriptor1 = new TestDescriptor(1, "name", "desciption", 1);
+    const testDescriptor2 = new TestDescriptor(2, "name", "desciption", 3);
     
     let testResultList = [];
-    testResultList.push(new TestResult(2, 2345, 1, "2022/03/11", "true"));
-    testResultList.push(new TestResult(3, 2345, 2, "2022/03/13", "false"));
+    testResultList.push(new TestResult(2, "2345", 1, "2022/03/11", "true"));
+    testResultList.push(new TestResult(3, "2345", 2, "2022/03/13", "false"));
     
-    const testResult1 = new TestResult(2, 2345, 1, "2022/03/11", "true");
-    const testResult2 = new TestResult(3, 2345, 2, "2022/03/13", "false");
+    const testResult1 = new TestResult(2, "2345", 1, "2022/03/11", "true");
+    const testResult2 = new TestResult(3, "2345", 2, "2022/03/13", "false");
 
     beforeAll(() => {
         testResultDAO.getTestResult.mockReset();
         testResultDAO.getTestResult.mockReturnValueOnce(testResult1).mockReturnValue(testResult2);
 
+        testDescriptorDAO.getTestDescriptor.mockReset();
+        testDescriptorDAO.getTestDescriptor.mockReturnValueOnce(testDescriptor1).mockReturnValueOnce(testDescriptor2);
+
         skuItemDAO.getSKUItem.mockReset();
         skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem2).mockReturnValueOnce(skuItem2).mockRejectedValueOnce({ err: 404, msg: "SKUItem not found" });
     });
 
-    testGetTestResult(2, 2345, testResult1);
-    testGetTestResult(3, 2345, testResult2);
-    testgetTestResultError(2, 1234, { err: 404, msg: "SKUItem not found" });
+    testGetTestResult(2, "2345", testResult1);
+    testGetTestResult(3, "2345", testResult2);
+    testgetTestResultError(2, "1234", { err: 404, msg: "SKUItem not found" });
 
     function testGetTestResult(id, rfid, expectedResult) {
         test('Get Test Result by id', async () => {
@@ -150,12 +156,12 @@ describe("Test get Test result", () => {
 
 describe("Test modify Test result", () => {
 
-    const skuItem2 = new SKUitem(2345, 2, 2, "2022/02/25");
+    const skuItem2 = new SKUitem("2345", 2, 2, "2022/02/25");
 
     const testDescriptor1 = new TestDescriptor(1, "name2", "description1", 2);
 
-    const testResult1 = new TestResult(2, 2345, 1, "2022/03/11", "true");
-    const testResult2 = new TestResult(3, 2345, 2, "2022/03/13", "false");
+    const testResult1 = new TestResult(2, "2345", 1, "2022/03/11", "true");
+    const testResult2 = new TestResult(3, "2345", 2, "2022/03/13", "false");
 
     describe('Test modify', () => {
         beforeAll(() => {
@@ -174,7 +180,7 @@ describe("Test modify Test result", () => {
 
         let expectedResult = 1;
         test('Modify Test result', async () => {
-            let result = await wh.modifyTestResult(2345, 2, 1, "2022/03/27", "true");
+            let result = await wh.modifyTestResult("2345", 2, 1, "2022/03/27", "true");
             expect(result).toBe(expectedResult);
         })
     });
@@ -191,9 +197,9 @@ describe("Test modify Test result", () => {
             testDescriptorDAO.getTestDescriptor.mockRejectedValueOnce({err: 404, msg: "Test descriptor not found"}).mockReturnValueOnce(testDescriptor1);
         });    
 
-        testModifyTestResultError("throw error no rfid found", 1234, 2, 1, "2022/03/11", "true", {err: 404, msg: "SKUitem not found"});
-        testModifyTestResultError("throw error no test descriptor found", 2345, 2, 7, "2022/03/11", "true", {err: 404, msg: "Test descriptor not found"});
-        testModifyTestResultError("throw error no test result found", 2345, 5, 1, "2022/03/11", "true", {err: 404, msg: "Test result not found"});
+        testModifyTestResultError("throw error no rfid found", "1234", 2, 1, "2022/03/11", "true", {err: 404, msg: "SKUitem not found"});
+        testModifyTestResultError("throw error no test descriptor found", "2345", 2, 7, "2022/03/11", "true", {err: 404, msg: "Test descriptor not found"});
+        testModifyTestResultError("throw error no test result found", "2345", 5, 1, "2022/03/11", "true", {err: 404, msg: "Test result not found"});
 
         function testModifyTestResultError(testMessage, rfid, id, newIdTestDescriptor, newDate, newResult, expectedError){
             test(testMessage, async () => {
@@ -208,8 +214,8 @@ describe("Test modify Test result", () => {
 
 
 describe("Test delete Test result", () => {
-    const testResult1 = new TestResult(1, 2345, 1, "2022/03/11", "true");
-    const testResult2 = new TestResult(2, 2345, 2, "2022/03/13", "false");
+    const testResult1 = new TestResult(1, "2345", 1, "2022/03/11", "true");
+    const testResult2 = new TestResult(2, "2345", 2, "2022/03/13", "false");
 
     beforeAll(() => {
         testResultDAO.getTestResult.mockReset();

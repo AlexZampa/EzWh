@@ -26,17 +26,17 @@ describe('test Test result apis', () => {
 
     getTestResults('getting all test result1', 200, "5678");
     getTestResults('getting all test result2', 404, "3456");
-    //getTestResults('getting all test result3', 422, 1234); non si può verificare
+    getTestResults('getting all test result3', 422, "aaaa");
 
     getTestResult('getting single tr1', 200, "1234", 1);
     getTestResult('getting single tr2', 404, "5678", 1);
-    //getTestResult('getting single tr', 422, 1234, 1); non si può verificare
+    getTestResult('getting single tr', 422, "aaaa", 1);
     getTestResult('getting single tr3', 404, "1234", 100);
     getTestResult('getting single tr4', 422, "1234", "id");
     getTestResult('getting single tr5', 422, "1234", -1);
 
     modifyTestResult('modifing tr data1', 200, "1234", 1, 1, "2022/04/12", "true");
-    //modifyTestResult('modifing tr data2', 404, 1234, 1, 1, "2022/04/12", "true"); non si può verificare
+    modifyTestResult('modifing tr data2', 422, "aaaa", 1, 1, "2022/04/12", "true");
     modifyTestResult('modifing tr data3', 404, "5678", 1, 1, "2022/04/12", "true");
     modifyTestResult('modifing tr data4', 404, "1234", 100, 1, "2022/04/12", "true");
     modifyTestResult('modifing tr data5', 422, "1234", "id", 1, "2022/04/12", "true");
@@ -49,7 +49,7 @@ describe('test Test result apis', () => {
 
     deleteTestResult('deleting tr1', 204, "1234", 1);
     deleteTestResult('deleting tr2', 422, "5678", 1);
-    //deleteTestResult('deleting tr3', 422, 1234, 1); non si può verificare
+    deleteTestResult('deleting tr3', 422, "aaaa", 1);
     deleteTestResult('deleting tr4', 422, "1234", 100);
     deleteTestResult('deleting tr5', 422, "1234", "id");
     deleteTestResult('deleting tr6', 422, "1234", -1);
