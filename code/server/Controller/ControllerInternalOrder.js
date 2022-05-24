@@ -1,5 +1,6 @@
 "use strict";
 
+const dayjs = require('dayjs');
 const express = require('express');
 const { expressValidator, check, validationResult } = require('express-validator');
 const Warehouse = require('../Model/Warehouse');
@@ -14,11 +15,11 @@ router.get('/internalOrders',
         // check if user authorized: return res.status(401).json({});
 
         try {
-            ioList = warehouse.getInternalOrders();
+            const ioList = await warehouse.getInternalOrders();
             if (ioList === undefined)
                 return res.status(500).end();
-
-            jsonResult = ioList.map(io => io.convertToObj());
+            
+            const jsonResult = ioList.map(io => io.convertToObj());
             if (jsonResult === undefined)
                 return res.status(500).end();
             return res.status(200).json(jsonResult);
@@ -36,11 +37,11 @@ router.get('/internalOrdersIssued',
         // check if user authorized: return res.status(401).json({});
 
         try {
-            issuedList = warehouse.getInternalOrderIssued();
+            const issuedList = await warehouse.getInternalOrderIssued();
             if (issuedList === undefined)
                 return res.status(500).end();
 
-            jsonResult = issuedList.map(io => io.convertToObj());
+            const jsonResult = issuedList.map(io => io.convertToObj());
             if (jsonResult === undefined)
                 return res.status(500).end();
             return res.status(200).json(jsonResult);
@@ -58,11 +59,11 @@ router.get('/internalOrdersAccepted',
         // check if user authorized: return res.status(401).json({});
 
         try {
-            acceptedList = warehouse.getAcceptedInternalOrders();
+            const acceptedList = await warehouse.getAcceptedInternalOrders();
             if (acceptedList === undefined)
                 return res.status(500).end();
 
-            jsonResult = acceptedList.map(io => io.convertToObj());
+            const jsonResult = acceptedList.map(io => io.convertToObj());
             if (jsonResult === undefined)
                 return res.status(500).end();
             return res.status(200).json(jsonResult);
@@ -75,32 +76,51 @@ router.get('/internalOrdersAccepted',
 
 //GET INTERNAL ORDER BY ID
 router.get('/internalOrders/:id',
+    [
+        check("id").exists().isInt({min: 1})
+    ],
     async (req, res) => {
 
         // check if user authorized: return res.status(401).json({});
 
-        if (req.params.id === undefined)
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            console.log({ errors: errors.array() });
             return res.status(422).end();
+        }
+
+        if (req.params.id === undefined){
+            return res.status(422).end();
+        }
 
         try {
-            io = warehouse.getInternalOrder(req.params.id);
-            if (io === undefined)
+            const io = await warehouse.getInternalOrder(req.params.id);
+            if (io === undefined) {
                 return res.status(404).end();
+            }
 
-            jsonResult = io.convertToObj();
+            const jsonResult = io.convertToObj();
             if (jsonResult === undefined)
                 return res.status(500).end();
             return res.status(200).json(jsonResult);
         }
         catch (err) {
             console.log(err);
-            return res.status(500).end();
+            switch (err.err) {
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(500).end();
+            }
         }
     });
 
 //CREATE NEW INTERNAL ORDER
 router.post('/internalOrders',
-    [check("issueDate").exists().isDate("YYYY/MM/DD hh:mm"), check("products").exists(), check("customerId").exists().isNumeric()],
+    [
+        check("issueDate").exists().isString(), 
+        check("products").exists().isArray(), 
+        check("customerId").exists().isInt({min: 1})
+    ],
     async (req, res) => {
 
         // check if user authorized: return res.status(401).end();
@@ -111,14 +131,30 @@ router.post('/internalOrders',
             return res.status(422).end();
         }
 
+        req.body.products.forEach( p => {
+            if(p.SKUId === undefined || p.description === undefined || p.price === undefined || p.qty === undefined){
+                console.log("Products not correctly defined");
+                return res.status(422).end();
+            }
+        })
+
+        //console.log(req.body.issueDate);
+        //console.log(dayjs(req.body.issueDate).format('YYYY/MM/DD HH:mm'));
+            
+        if(req.body.issueDate !== dayjs(req.body.issueDate).format('YYYY/MM/DD HH:mm')){
+            console.log("IssueDate not properly formatted");
+            return res.status(422).end();
+        }
+        
+
         try {
             await warehouse.addInternalOrder(req.body.products, req.body.customerId, req.body.issueDate);
-            return res.status(201).json();
+            return res.status(201).end();
         }
         catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(404).end();
+                case 404: return res.status(503).end();
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
@@ -127,7 +163,7 @@ router.post('/internalOrders',
 
 //SET INTERNAL ORDER STATUS
 router.put('/internalOrders/:id',
-    [check("newState").exists().isString()],
+    [check("newState").exists().isString(), check("id").exists().isInt({min: 1})],
     async (req, res) => {
 
         // check if user authorized: return res.status(401).json({});
@@ -139,19 +175,19 @@ router.put('/internalOrders/:id',
         }
 
         if (req.body.newState !== "ISSUED"
-            || req.body.newState !== "ACCEPTED"
-            || req.body.newState !== "REFUSED" 
-            || req.body.newState !== "CANCELED"
-            || req.body.newState !== "COMPLETED") {
+            && req.body.newState !== "ACCEPTED"
+            && req.body.newState !== "REFUSED" 
+            && req.body.newState !== "CANCELED"
+            && req.body.newState !== "COMPLETED") {
             return res.status(422).end();
         }
 
         try {
-            const result = undefined;
+            let result = undefined;
             if(req.body.newState === "COMPLETED") {
-            result = warehouse.setIOStatus(req.params.id, req.newState, req.products);
+            result = await warehouse.setIOStatus(req.params.id, req.body.newState, req.body.products);
             } else {
-                result = warehouse.setIOStatus(req.params.id, req.newState, undefined);
+                result = await warehouse.setIOStatus(req.params.id, req.body.newState, undefined);
             }
             if (result === false)
                 return res.status(404).end();
@@ -159,22 +195,33 @@ router.put('/internalOrders/:id',
         }
         catch (err) {
             console.log(err);
-            return res.status(503).end();
+            switch (err.err) {
+                case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
+                default: return res.status(503).end();
+            }
         }
     });
 
 //DELETE INTERNAL ORDER
 // app.delete('/api/internalOrders/:id', controllerInternalOrder.deleteInternalOrder);
 router.delete('/internalOrders/:id',
+    [check("id").exists().isInt({min: 1})],
     async (req, res) => {
         
         // check if user authorized: return res.status(401).json({});
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            console.log({ errors: errors.array() });
+            return res.status(422).end();
+        }
 
         if (req.params.id === undefined)
             return res.status(422).end();
 
         try {
-            result = warehouse.deleteInternalOrder(req.params.id)
+            const result = await warehouse.deleteInternalOrder(req.params.id)
             if (result === false)
                 return res.status(422).end();
             return res.status(204).end();
@@ -188,5 +235,16 @@ router.delete('/internalOrders/:id',
             }
         }
     });
+
+// TEST - DELETE ALL SKU
+router.delete('/test/internalOrders', async (req, res) => {
+    try{
+        const result = await warehouse.testDeleteAllInternalOrders();
+        return res.status(204).end();
+    } catch(err){
+        console.log(err);
+        return res.status(503).end();
+    }
+});
 
 module.exports = router;

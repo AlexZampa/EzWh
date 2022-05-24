@@ -53,11 +53,13 @@ class InternalOrderDAO {
         try {
             let sql = "SELECT * FROM InternalOrder";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            let internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
+            let internalOrders = result.map(r => new InternalOrder(r.id, r.internalCustomer, dayjs(r.issueDate), r.state));
 
             for (let io of internalOrders) {
-                io = buildInternalOrder(io, this.connectionDB);
+                io = await buildInternalOrder(io, this.connectionDB);
             }
+
+            //console.log(internalOrders);
 
             return internalOrders;
         }
@@ -71,10 +73,10 @@ class InternalOrderDAO {
         try {
             let sql = "SELECT * FROM InternalOrder WHERE state='ISSUED'";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
+            const internalOrders = result.map(r => new InternalOrder(r.id, r.internalCustomer, dayjs(r.issueDate), r.state));
 
             for (let io of internalOrders) {
-                io = buildInternalOrder(io, this.connectionDB);
+                io = await buildInternalOrder(io, this.connectionDB);
             }
 
             return internalOrders;
@@ -90,10 +92,10 @@ class InternalOrderDAO {
         try {
             let sql = "SELECT * FROM InternalOrder WHERE state='ACCEPTED'";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
+            const internalOrders = result.map(r => new InternalOrder(r.id, r.internalCustomer, dayjs(r.issueDate), r.state));
 
             for (let io of internalOrders) {
-                io = buildInternalOrder(io, this.connectionDB);
+                io = await buildInternalOrder(io, this.connectionDB);
             }
 
             return internalOrders;
@@ -111,8 +113,8 @@ class InternalOrderDAO {
                 throw { err: 404, msg: "not found" };
             }
 
-            let io = new InternalOrder(result.id, result.customerId, dayjs(result.issueDate), result.state);
-            io = buildInternalOrder(io, this.connectionDB);
+            let io = new InternalOrder(result.id, result.internalCustomer, dayjs(result.issueDate), result.state);
+            io = await buildInternalOrder(io, this.connectionDB);
 
             return io;
         }

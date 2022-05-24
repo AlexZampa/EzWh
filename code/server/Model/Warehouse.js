@@ -591,25 +591,40 @@ class Warehouse{
     }
 
     setIOStatus = async (ID, status, products) => {
-        const io = this.getInternalOrder(ID);
+        const io = await this.getInternalOrder(ID);
         if(io == undefined)
-            return false;
+            return 0;
 
         let res = 0;
+
+        res = await this.internalOrderDAO.setStatus(ID, status);
+        console.log(res);
+
         if(status === "COMPLETED") {
             res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
         }
         if(res) return res; //if res has a value, it is an error
 
-        res = this.internalOrderDAO.setStatus(ID, status);
 
         return res;
     }
 
     deleteInternalOrder = async (ID) => {
+        const io = await this.getInternalOrder(ID);
+        if(io == undefined)
+            return 0;
+        
         const res = await this.internalOrderDAO.deleteInternalOrder(ID);
         return res;
     };
+
+    testDeleteAllInternalOrders = async () => {
+        try {
+            await this.internalOrderDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    }
 
 
      /********* functions for managing Users **********/
