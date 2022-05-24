@@ -882,6 +882,8 @@ class Warehouse {
 
     addTestResult = async (rfid, idTestDescriptor, date, result) => {
         try {
+            if(result !== 'true' && result !== 'false')
+                throw {err : 422, msg : "Invalid format"};
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(idTestDescriptor);
             const res = await this.testResultDAO.newTestResult(rfid, idTestDescriptor, date, result);
@@ -894,6 +896,8 @@ class Warehouse {
 
     modifyTestResult = async (rfid, id, newIdTestDescriptor, newDate, newResult) => {
         try {
+            if(newResult !== 'true' && newResult !== 'false')
+                throw {err : 422, msg : "Invalid format"};
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(newIdTestDescriptor);
             const tr = await this.testResultDAO.getTestResult(rfid, id);

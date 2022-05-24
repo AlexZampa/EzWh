@@ -14,14 +14,14 @@ describe('test Test result apis', () => {
         await agent.delete('/api/test/skuitems/testResults');
     })
 
-    newTestResult('adding a new tr1', 201, "1234", 1, "2022/04/12", "true");
+    newTestResult('adding a new tr1', 201, "1234", 1, "2022/04/12", true);
     newTestResult('adding a new tr2', 422);
-    newTestResult('adding a new tr3', 422, 1234, 1, "2022/04/12", "true");
-    newTestResult('adding a new tr4', 404, "3456", 1, "2022/04/12", "true");
-    newTestResult('adding a new tr5', 422, "1234", "idTestDescriptor", "2022/04/12", "true");
-    newTestResult('adding a new tr6', 404, "1234", 100, "2022/04/12", "true");
-    newTestResult('adding a new tr7', 422, "1234", 0, "2022/04/12", "true");
-    newTestResult('adding a new tr8', 422, "1234", 1, 2022, "true");
+    newTestResult('adding a new tr3', 422, 1234, 1, "2022/04/12", true);
+    newTestResult('adding a new tr4', 404, "3456", 1, "2022/04/12", true);
+    newTestResult('adding a new tr5', 422, "1234", "idTestDescriptor", "2022/04/12", true);
+    newTestResult('adding a new tr6', 404, "1234", 100, "2022/04/12", true);
+    newTestResult('adding a new tr7', 422, "1234", 0, "2022/04/12", true);
+    newTestResult('adding a new tr8', 422, "1234", 1, 2022, true);
     newTestResult('adding a new tr9', 422, "1234", 1, "2022/04/12", 1);
 
     getTestResults('getting all test result1', 200, "5678");
@@ -35,16 +35,16 @@ describe('test Test result apis', () => {
     getTestResult('getting single tr4', 422, "1234", "id");
     getTestResult('getting single tr5', 422, "1234", -1);
 
-    modifyTestResult('modifing tr data1', 200, "1234", 1, 1, "2022/04/12", "true");
-    modifyTestResult('modifing tr data2', 422, "aaaa", 1, 1, "2022/04/12", "true");
-    modifyTestResult('modifing tr data3', 404, "5678", 1, 1, "2022/04/12", "true");
-    modifyTestResult('modifing tr data4', 404, "1234", 100, 1, "2022/04/12", "true");
-    modifyTestResult('modifing tr data5', 422, "1234", "id", 1, "2022/04/12", "true");
-    modifyTestResult('modifing tr data6', 422, "1234", -1, 1, "2022/04/12", "true");
-    modifyTestResult('modifing tr data6', 404, "1234", 1, 100, "2022/04/12", "true");
-    modifyTestResult('modifing tr data7', 422, "1234", 1, "idTestDesc", "2022/04/12", "true");
-    modifyTestResult('modifing tr data8', 422, "1234", 1, -1, "2022/04/12", "true");
-    modifyTestResult('modifing tr data9', 422, "1234", 1, 1, 2022, "true");
+    modifyTestResult('modifing tr data1', 200, "1234", 1, 1, "2022/04/12", true);
+    modifyTestResult('modifing tr data2', 422, "aaaa", 1, 1, "2022/04/12", true);
+    modifyTestResult('modifing tr data3', 404, "5678", 1, 1, "2022/04/12", true);
+    modifyTestResult('modifing tr data4', 404, "1234", 100, 1, "2022/04/12", true);
+    modifyTestResult('modifing tr data5', 422, "1234", "id", 1, "2022/04/12", true);
+    modifyTestResult('modifing tr data6', 422, "1234", -1, 1, "2022/04/12", true);
+    modifyTestResult('modifing tr data6', 404, "1234", 1, 100, "2022/04/12", true);
+    modifyTestResult('modifing tr data7', 422, "1234", 1, "idTestDesc", "2022/04/12", true);
+    modifyTestResult('modifing tr data8', 422, "1234", 1, -1, "2022/04/12", true);
+    modifyTestResult('modifing tr data9', 422, "1234", 1, 1, 2022, true);
     modifyTestResult('modifing tr data10', 422, "1234", 1, 1, "2022/04/12", 1);
 
     deleteTestResult('deleting tr1', 204, "1234", 1);
@@ -99,12 +99,12 @@ function newTestResult(testName, expectedHTTPStatus, rfid, idTestDescriptor, dat
 function getTestResults(testName, expectedHTTPStatus, rfid) {
     it(testName, function (done) {
 
-        const testResult1 = { rfid: "1234", idTestDescriptor: 1, Date: "2022/03/09", Result: "false" };
-        const testResult2 = { rfid: "5678", idTestDescriptor: 2, Date: "2022/03/10", Result: "true" };
-        const testResult3 = { rfid: "5678", idTestDescriptor: 1, Date: "2022/03/09", Result: "true" };
+        const testResult1 = { rfid: "1234", idTestDescriptor: 1, Date: "2022/03/09", Result: false };
+        const testResult2 = { rfid: "5678", idTestDescriptor: 2, Date: "2022/03/10", Result: true };
+        const testResult3 = { rfid: "5678", idTestDescriptor: 1, Date: "2022/03/09", Result: true };
 
-        let expectedResult = [{ "id": 2, "idTestDescriptor": 2, "Date": "2022/03/10", "Result": "true" },
-        { "id": 3, "idTestDescriptor": 1, "Date": "2022/03/09", "Result": "true" }];
+        let expectedResult = [{ "id": 2, "idTestDescriptor": 2, "Date": "2022/03/10", "Result": true },
+        { "id": 3, "idTestDescriptor": 1, "Date": "2022/03/09", "Result": true }];
 
         let testDescriptor1 = { name: "name1", procedureDescription: "description1", idSKU: 1 };
         let testDescriptor2 = { name: "name2", procedureDescription: "description2", idSKU: 1 };
@@ -167,9 +167,9 @@ function getTestResults(testName, expectedHTTPStatus, rfid) {
 
 function getTestResult(testName, expectedHTTPStatus, rfid, id) {
     it(testName, function (done) {
-        const testResult = { rfid: "1234", idTestDescriptor: 1, Date: "2022/03/09", Result: "false" };
+        const testResult = { rfid: "1234", idTestDescriptor: 1, Date: "2022/03/09", Result: false };
 
-        let expectedResult = { "id": 1, "idTestDescriptor": 1, "Date": "2022/03/09", "Result": "false" };
+        let expectedResult = { "id": 1, "idTestDescriptor": 1, "Date": "2022/03/09", "Result": false };
 
         let sku = { description: "description", weight: 2, volume: 2, notes: "notes", price: 2, availableQuantity: 4 };
         let testDescriptor = { name: "name1", procedureDescription: "description1", idSKU: 1 };
@@ -209,7 +209,7 @@ function getTestResult(testName, expectedHTTPStatus, rfid, id) {
 
 function modifyTestResult(testName, expectedHTTPStatus, rfid, id, newIdTestDescriptor, newDate, newResult) {
     it(testName, function (done) {
-        const testResult = { rfid: "1234", idTestDescriptor: 1, Date: "2022/03/09", Result: "false" };
+        const testResult = { rfid: "1234", idTestDescriptor: 1, Date: "2022/03/09", Result: false };
 
         let sku = { description: "description", weight: 2, volume: 2, notes: "notes", price: 2, availableQuantity: 4 };
         let testDescriptor = { name: "name1", procedureDescription: "description1", idSKU: 1 };
@@ -250,7 +250,7 @@ function modifyTestResult(testName, expectedHTTPStatus, rfid, id, newIdTestDescr
 
 function deleteTestResult(testName, expectedHTTPStatus, rfid, id) {
     it(testName, function (done) {
-        const testResult = { rfid: "1234", idTestDescriptor: 1, Date: "2022/03/09", Result: "false" };
+        const testResult = { rfid: "1234", idTestDescriptor: 1, Date: "2022/03/09", Result: false };
 
         let sku = { description: "description", weight: 2, volume: 2, notes: "notes", price: 2, availableQuantity: 4 };
         let testDescriptor = { name: "name1", procedureDescription: "description1", idSKU: 1 };
