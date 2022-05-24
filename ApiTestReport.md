@@ -120,7 +120,7 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 5.6         | FR5.6    | testRestockOrder.js - newRestockOrder |
 | 5.7         | FR5.7    | testRestockOrder.js - changeStateRestockOrder |
 | 5.8         | FR5.8    | testRestockOrder.js - changeStateRestockOrder - addSKUItemToRestockOrder - addTransportNoteToRestockOrder |
-| 5.10        | FR5.10   | testRestockOrder.js -  |
+| 5.10        | FR5.10   | testRestockOrder.js - getSKUItemToReturnFromRestockOrder|
 | 
 | ...         |                                 |             |             
 

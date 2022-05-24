@@ -15,7 +15,7 @@ describe('test RestockOrder apis', () => {
         await agent.delete('/api/test/restockOrders');
         await agent.delete('/api/test/skuitems');
         await agent.delete('/api/test/skus');
-        await agent.delete('/api/test/testResults');
+        await agent.delete('/api/test/skuitems/testResults');
         await agent.delete('/api/test/testDescriptors');
     })
 
@@ -32,6 +32,7 @@ describe('test RestockOrder apis', () => {
     getRestockOrder(404, 3);
 
     getSKUItemToReturnFromRestockOrder(200, 1);
+    getSKUItemToReturnFromRestockOrder(422, 2);
 
     addSKUItemToRestockOrder(200, 2, "1", 1);
     addSKUItemToRestockOrder(404, 3, "1", 1);
@@ -267,21 +268,25 @@ function getRestockOrdersIssued(expectedHTTPStatus) {
 function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) {
     it('get SKUItem to return from Restock Order', function (done) {
 
-        let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }, { SKUId: 2, description: "Another product", price: 10, qty: 10 }];
+        let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
         const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
         const skuItem2 = { RFID: "2", SKUId: 1, DateOfStock: "2022/01/01" };
+
+        const skuToRO = { "skuItems": [{ rfid: "1", SKUId: 1 }] };
+
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
 
         const restockOrder = { issueDate: "2022/03/03", products: products, supplierId: 1 };
         const restockOrder2 = { issueDate: "2022/04/05", products: products, supplierId: 1 };
 
-        const changeState = { newState: "COMPLETEDRETURN" };
+        const changeState = { newState: "DELIVERED" };
+        const changeState2 = { newState: "COMPLETEDRETURN" };
 
         const testDescriptor = { name: "test", procedureDescription: "Description", idSKU: 1 };
 
-        const testResult = { rfid: "1", idTestDescriptor: 1, Date: "2022/02/02", Result: 0 };
-        const testResult2 = { rfid: "2", idTestDescriptor: 1, Date: "2022/02/02", Result: 1 };
+        const testResult = { rfid: "1", idTestDescriptor: 1, Date: "2022/02/02", Result: false };
+        const testResult2 = { rfid: "2", idTestDescriptor: 1, Date: "2022/02/02", Result: true };
 
         let expectedResult = [
             { "RFID": "1", "SKUId": 1 }
@@ -307,12 +312,10 @@ function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) 
                                         agent.post('/api/testDescriptor')
                                             .send(testDescriptor)
                                             .then(function (res) {
-                                                console.log(res.status);
                                                 res.should.have.status(201);
                                                 agent.post('/api/skuitems/testResult')
                                                     .send(testResult)
                                                     .then(function (res) {
-                                                        console.log(res.status);
                                                         res.should.have.status(201);
                                                         agent.post('/api/skuitems/testResult')
                                                             .send(testResult2)
@@ -330,12 +333,22 @@ function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) 
                                                                                     .send(changeState)
                                                                                     .then(function (res) {
                                                                                         res.should.have.status(200);
-                                                                                        agent.get('/restockOrders/' + restockOrderID + '/returnItems')
-                                                                                            .then(function (r) {
-                                                                                                r.should.have.status(expectedHTTPStatus);
-                                                                                                if (expectedHTTPStatus == 200)
-                                                                                                    r.body.should.be.deep.equal(expectedResult);
-                                                                                                done();
+                                                                                        agent.put('/api/restockOrder/' + 1 + '/skuItems')
+                                                                                            .send(skuToRO)
+                                                                                            .then(function (res) {
+                                                                                                res.should.have.status(200);
+                                                                                                agent.put('/api/restockOrder/' + 1)
+                                                                                                    .send(changeState2)
+                                                                                                    .then(function (res) {
+                                                                                                        res.should.have.status(200);
+                                                                                                        agent.get('/api/restockOrders/' + restockOrderID + '/returnItems')
+                                                                                                            .then(function (r) {
+                                                                                                                r.should.have.status(expectedHTTPStatus);
+                                                                                                                if (expectedHTTPStatus == 200)
+                                                                                                                    r.body.should.be.deep.equal(expectedResult);
+                                                                                                                done();
+                                                                                                            });
+                                                                                                    });
                                                                                             });
                                                                                     });
                                                                             });

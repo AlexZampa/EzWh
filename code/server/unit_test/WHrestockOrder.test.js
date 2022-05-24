@@ -245,7 +245,7 @@ describe("Test modify RestockOrder", () => {
         testAddTransportNoteError("throw error on wrong date format", 1, '2022-02-20', { err: 422, msg: "Invalid date" });
         testAddTransportNoteError("throw error on date before actual", 1, '2022/02/20', { err: 422, msg: "Invalid date: deliveryDate is before issueDate" });
         testrestockOrderAddSKUItemsError("throw error on not delivered state", 2, [{ "skuID": 12, "rfid": "1" }, { "skuID": 15, "rfid": "2" }], { err: 422, msg: "Restock Order not in DELIVERED state" });
-        testrestockOrderAddSKUItemsError("throw error on not Invalid SKUItem", 2, [{ "skuID": 13, "rfid": "1" }, { "skuID": 15, "rfid": "2" }], { err: 422, msg: "Invalid SKUItem" });
+        testrestockOrderAddSKUItemsError("throw error on Invalid SKUItem", 2, [{ "skuID": 13, "rfid": "1" }, { "skuID": 15, "rfid": "2" }], { err: 422, msg: "Invalid SKUItem" });
 
         function testModifyRestockOrderError(testMessage, restockOrderID, newState, expectedError) {
             test(testMessage, async () => {

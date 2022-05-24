@@ -37,7 +37,7 @@ class SKUItem {
     convertToObjSimple = () => {
         return (
             {
-                "RFID": this.RFID, "SKUId": this.sku.getID()
+                "RFID": this.RFID, "SKUId": this.sku
             });
     }
 
