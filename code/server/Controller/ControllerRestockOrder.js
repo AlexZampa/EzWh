@@ -101,7 +101,7 @@ router.get('/restockOrders/:id/returnItems',
                 return res.status(422).end();
             }
             const skuItems = await warehouse.returnItemsFromRestockOrder(Number(req.params.id));
-            const result = skuItems.convertToObjSimple();
+            const result = skuItems.map(s => s.convertToObjSimple());
             return res.status(200).json(result);
             // check if user authorized otherwise: return res.status(401).end();
         } catch(err){

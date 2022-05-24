@@ -482,6 +482,279 @@ Version:
 | No | Invalid| T2(invalidPositionID) -> 0 | Test Delete Position - testDeletePosition |
 
 
+-----------------------------------------------------------------------------------------------------
+## **Class *SkuItemDAO***
+
+### **Class *SkuItemDAO* - method *newSKUItem***
+
+**Criteria for method *newSKUItem*:**
+	
+ - There are no SKUItems in the DB
+
+**Predicates for method *newSKUItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are no SKUItems in the DB with the same id | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are no SKUItems in the DB with the same id | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Create and Get SKUItem - testCreateSKUItem |
+| No | Invalid| T2() -> list | Test Create and Get SKUItem - testCreateSKUItem |
+
+### **Class *SkuItemDAO* - method *getAllSKUItems***
+
+**Criteria for method *getAllSKUItems*:**
+	
+ - There are SKUItems in the DB
+
+**Predicates for method *getAllSKUItems*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are SKUItems in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are SKUItems in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All SKUItems - testGetAllSKUItem |
+| No | Valid| T2() -> list | - |
+
+
+### **Class *SkuItemDAO* - method *getSKUItem***
+
+**Criteria for method *getSKUItem*:**
+	
+ - SKUItem is in the DB
+
+**Predicates for method *getSKU*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKUItem is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKUItem is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validSKUItemid) -> SKU | Test Create and Get SKUItem - testGetSKUItem |
+| No | Invalid| T2(invalidSKUItemid) -> error | Test throw err on get SKUItem - testGetSKUItemerror |
+
+
+### **Class *SkuItemDAO* - method *updateSKUItem***
+
+**Criteria for method *updateSKUItem*:**
+	
+ - SKUItem is in the DB
+
+**Predicates for method *updateSKUItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKUItem is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKUItem is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validSKUItemid) -> 1 | Test Update SKUItem - testUpdateSKUItem |
+| No | Invalid| T2(invalidSKUItemid) -> 0 | Test Update SKUItem - testUpdateSKUItem |
+
+
+### **Class *SkuItemDAO* - method *deleteSKUItem***
+
+**Criteria for method *deleteSKUItem*:**
+	
+ - SKUItem is in the DB
+
+**Predicates for method *deleteSKUItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKUItem is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKUItem is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validSKUItemid) -> 1 | Test Delete SKUItem - testDeleteSKUItem |
+| No | Invalid| T2(invalidSKUItemid) -> 0 | Test Delete SKUItem - testDeleteSKUItem |
+
+
+-----------------------------------------------------------------------------------------------------
+## **Class *RestockOrderDAO***
+
+### **Class *RestockOrderDAO* - method *newRestockOrder***
+
+**Criteria for method *newRestockOrder*:**
+	
+ - There are SKUs in the DB
+
+**Predicates for method *newRestockOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|  | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are SKUs in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Create and Get RestockOrder - testCreateRestockOrder |
+| No | Invalid| T2() -> list | Test Create and Get RestockOrder - testCreateRestockOrder |
+
+
+
+### **Class *RestockOrderDAO* - method *getRestockOrder***
+
+**Criteria for method *getRestockOrder*:**
+	
+ - There is a RestockOrder with the same id in the DB
+
+**Predicates for method *getRestockOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There is a RestockOrder with the same id in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There is a RestockOrder with the same id in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validRestockOrderid) -> list | Test Create and Get RestockOrder - testGetRestockOrder |
+| No | Invalid| T2(invalidRestockOrderid) -> list | Test throw err on get RestockOrder - testGetRestockOrdererror |
+
+
+### **Class *RestockOrderDAO* - method *getAllRestockOrders***
+
+**Criteria for method *getAllRestockOrders*:**
+	
+ - There are RestockOrder in the DB
+
+**Predicates for method *getAllRestockOrders*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are RestockOrder in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are RestockOrder in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All RestockOrder - testGetAllRestockOrder |
+| No | Invalid| T2() -> list | Test Get All RestockOrder - testGetAllRestockOrder |
+
+### **Class *RestockOrderDAO* - method *updateRestockOrder***
+
+**Criteria for method *updateRestockOrder*:**
+	
+ - There is a RestockOrder in the DB with the same id
+
+**Predicates for method *updateRestockOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There is a RestockOrder in the DB with the same id | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There is a RestockOrder in the DB with the same id | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validRestockOrderid) -> list | Test Update RestockOrder - testGetAllRestockOrder |
+| No | Invalid| T2(invalidRestockOrderid) -> list | Test Update RestockOrder - testGetAllRestockOrder |
+
+### **Class *RestockOrderDAO* - method *deleteRestockOrder***
+
+**Criteria for method *deleteRestockOrder*:**
+	
+ - There is a RestockOrder in the DB with the same id
+
+**Predicates for method *deleteRestockOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There is a RestockOrder in the DB with the same id | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There is a RestockOrder in the DB with the same id | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validRestockOrderid) -> list |Test Delete RestockOrder - testDeleteRestockOrder |
+| No | Invalid| T2(invalidRestockOrderid) -> list | Test Delete RestockOrder - testDeleteRestockOrder |
+
 ----------------------------------------------------------------------------------------------------------------------------
 ## **Class *Warehouse***
 
@@ -1069,8 +1342,408 @@ Version:
 | Yes | No  | Invalid | T2() -> error    | Test delete User - testDeleteUserError |
 | No  | Yes | Invalid | T3() -> error    | Test delete User - testDeleteUserError |
 
+### **Class *Warehouse* - method *addSKUItem***
+
+**Criteria for method *addSKUItem*:**
+	
+- date is valid
+
+**Predicates for method *addSKUItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| date is valid | Yes |
+|                    | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
 
 
+**Combination of predicates**:
+
+| date is valid | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid   | T1(validData) -> rowID | Test add SKUItem - testAddSKU |
+| No  |  Invalid | T2(invalidDate) -> error | Test add SKU - testAddSKUItemError |
+
+
+### **Class *Warehouse* - method *getSKUItems***
+
+**Criteria for method *getSKUItems*:**
+
+- There are SKUItems
+
+**Predicates for method *getSKUItems*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are SKUItems | Yes |
+|                                     | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are SKUItems | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test get all SKUItem - testGetAllSKUItem |
+| No | Valid | T2() -> list | - |
+
+
+### **Class *Warehouse* - method *getSKUItem***
+
+**Criteria for method *getSKUItem*:**
+	
+- There is a SKUItem with valid ID
+
+**Predicates for method *getSKUItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There is a SKUItem with valid ID | Yes |
+|                                     | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There is a SKUItem with valid ID | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> SKUItem | Test get SKUItem - testGetSKUItem |
+| No | Valid | T2() -> SKUItem  | Test get SKUItem - testGetSKUItem |
+
+
+### **Class *Warehouse* - method *modifySKUItem***
+
+**Criteria for method *modifySKUItem*:**
+	
+- skuitem exists
+- newDate is valid
+
+**Predicates for method *modifySKUItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| skuitem exists | Yes |
+|             | No |
+| newDate is valid | Yes |
+|             | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| skuitem exists | newDate is valid | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1(validDate) -> changes | Test modify SKUItem - Test modify - Modify SKU with valid Date |
+| Yes | No  | Valid   | T2(validDate) -> changes | Test modify SKUItem - Test modify - Modify SKU with invalid Date |
+
+
+### **Class *Warehouse* - method *deleteSKUItem***
+
+**Criteria for method *deleteSKUItem*:**
+	
+- SKUitem exists
+
+**Predicates for method *deleteSKUItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| SKUitem exists | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| SKU exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Valid   | T1(validSKUItemid) -> changes | Test delete SKU |
+| No | Invalid | T2(InvalidSKUItemid) -> error   | Test delete SKU - throw error on SKUItem not found |
+
+### **Class *Warehouse* - method *newRestockOrder***
+
+**Criteria for method *newRestockOrder*:**
+	
+- Supplier exists
+- Date is valid
+
+**Predicates for method *newRestockOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Supplier exists | Yes |
+|            | No  |
+| Date is valid | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Supplier exists | Date is valid | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1() -> RestockOrder | Test add RestockOrder - testAddRestockOrder |
+| No | Yes | Invalid | T2() -> error   | Test add RestockOrder - testAddRestockOrderError |
+| Yes | No | Invalid | T2() -> error   | Test add RestockOrder - testAddRestockOrderError |
+
+### **Class *Warehouse* - method *getAllRestockOrders***
+
+**Criteria for method *getAllRestockOrders*:**
+	
+- RestockOrders exist
+
+**Predicates for method *getAllRestockOrders*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrders exist | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Supplier exists |  Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Valid   | T1() -> RestockOrders | Test get all RestockOrders - testGetAllRestockOrders |
+| No | Invalid | T2() -> error   |  |
+
+### **Class *Warehouse* - method *getRestockOrdersIssued***
+
+**Criteria for method *getRestockOrdersIssued*:**
+	
+- RestockOrders exist
+
+**Predicates for method *getRestockOrdersIssued*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrders exist | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Supplier exists |  Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Valid   | T1() -> RestockOrders | Test get all RestockOrders Issued - testGetRestockOrdersIssued |
+| No | Invalid | T2() -> error   |  |
+
+### **Class *Warehouse* - method *getRestockOrder***
+
+**Criteria for method *getRestockOrder*:**
+	
+- RestockOrder with same id exists
+
+**Predicates for method *getRestockOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrder with same id exists | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| RestockOrder with same id exists | Date is valid | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Valid   | T1(validRestockOrderID) -> RestockOrder | Test get RestockOrder - testGetRestockOrder |
+| No | Invalid | T2() -> error   |  |
+
+### **Class *Warehouse* - method *modifyRestockOrderState***
+
+**Criteria for method *modifyRestockOrderState*:**
+	
+- RestockOrder with same id exists
+- newState is valid
+
+**Predicates for method *modifyRestockOrderState*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrder with same id exists | Yes |
+|            | No  |
+| newState is valid | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| RestockOrder with same id exists | newState is valid | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1(validRestockOrderID) -> ok | Test Modify RestockOrder - Modify RestockOrder |
+| No | Yes | Invalid | T2() -> error   |  |
+| Yes | No | Invalid | T2(validRestockOrderID) -> error   | Test Modify RestockOrder - testModifyRestockOrderError |
+
+### **Class *Warehouse* - method *restockOrderAddTransportNote***
+
+**Criteria for method *restockOrderAddTransportNote*:**
+	
+- RestockOrder with same id exists
+- Date is right format
+- Shipping date is after RestockOrder Date
+
+**Predicates for method *restockOrderAddTransportNote*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrder with same id exists | Yes |
+|            | No  |
+| Date is right format | Yes |
+|            | No  |
+| Shipping date is after RestockOrder Date | Yes |
+|           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| RestockOrder with same id exists | Date is right format | Shipping date is after RestockOrder Date | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| Yes | Yes | Yes | Valid   | T1(validRestockOrderID) -> ok | Test Modify RestockOrder - Add TransportNote to RestockOrder |
+| No | Yes | Yes | Invalid | T2() -> error   |  |
+| Yes | No | Yes | Invalid | T2(validRestockOrderID) -> error   | Test Modify RestockOrder - testAddTransportNoteError |
+| Yes | Yes | No | Invalid | T2(validRestockOrderID) -> error   | Test Modify RestockOrder - testAddTransportNoteError |
+
+### **Class *Warehouse* - method *restockOrderAddSKUItems***
+
+**Criteria for method *restockOrderAddSKUItems*:**
+	
+- RestockOrder with same id exists
+- RestockOrder State is delivered
+- SKUItem is valid
+
+**Predicates for method *restockOrderAddSKUItems*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrder with same id exists | Yes |
+|            | No  |
+| RestockOrder State is delivered | Yes |
+|            | No  |
+| SKUItem is valid | Yes |
+|           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| RestockOrder with same id exists | RestockOrder State is delivered | SKUItem is valid | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| Yes | Yes | Yes | Valid   | T1(validRestockOrderID) -> ok | Test Modify RestockOrder - Add SKUItems to RestockOrder |
+| No | Yes | Yes | Invalid | T2() -> error   |  |
+| Yes | No | Yes | Invalid | T2(validRestockOrderID) -> error   | Test Modify RestockOrder - testrestockOrderAddSKUItemsError |
+| Yes | Yes | No | Invalid | T2(validRestockOrderID) -> error   | Test Modify RestockOrder - testrestockOrderAddSKUItemsError |
+
+### **Class *Warehouse* - method *returnItemsFromRestockOrder***
+
+**Criteria for method *returnItemsFromRestockOrder*:**
+	
+- RestockOrder with same id exists
+- RestockOrder State is COMPLETEDRETURN
+
+**Predicates for method *returnItemsFromRestockOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrder with same id exists | Yes |
+|            | No  |
+| RestockOrder State is COMPLETEDRETURN | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| RestockOrder with same id exists | RestockOrder State is COMPLETEDRETURN | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1(validRestockOrderID) -> ok | Test return Items From RestockOrder - testReturnItemsFromRestockOrder |
+| No | Yes | Invalid | T2() -> error   |  |
+| Yes | No | Invalid | T2(validRestockOrderID) -> error   | Test return Items From RestockOrder - testReturnItemsFromRestockOrderError |
+
+### **Class *Warehouse* - method *deleteRestockOrder***
+
+**Criteria for method *deleteRestockOrder*:**
+	
+- RestockOrder with same id exists
+- RestockOrder is not present in a SKUitem
+
+**Predicates for method *deleteRestockOrder*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| RestockOrder with same id exists | Yes |
+|            | No  |
+| RestockOrder is not present in a SKUitem | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| RestockOrder with same id exists | RestockOrder is not present in a SKUitem | Valid / Invalid | Description of the test case | Jest test case |
+|-------|---|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1(validRestockOrderID) -> ok | Test Delete RestockOrder - Delete RestockOrder |
+| No | Yes | Invalid | T2(invalidRestockOrderID) -> error   | Delete RestockOrder - testDeleteRestockOrderError |
+| Yes | No | Invalid | T2(validRestockOrderID) -> error   | Delete RestockOrder - testDeleteRestockOrderError |
 
 # White Box Unit Tests
 
@@ -1086,10 +1759,14 @@ Version:
 | UserDAO | DBuserDAO.test.js |
 | SKUDAO  | DBskuDAO.test.js  |
 | PositionDAO | DBpositionDAO.test.js |
+| SKUItemDAO  | DBskuItemDAO.test.js  |
+| RestockOrderDAO  | DBrestockOrderDAO.test.js  |
 | | |
 | Warehosue - User | WHuser.test.js |
 | Warehosue - SKU | WHsku.test.js |
 | Warehosue - Position | WHposition.test.js |
+| Warehouse - SKUItem | WHskuItem.test.js |
+| Warehouse - RestockOrder | WHrestockOrder.test.js |
 | | |
 
 ### Code coverage report

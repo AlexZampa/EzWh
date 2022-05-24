@@ -122,4 +122,14 @@ router.delete('/skuitems/:rfid/testResult/:id', [check("rfid").exists().isNumeri
 
 );
 
+router.delete('/test/skuitems/testResults', async (req, res) => {
+    try {
+        const result = await warehouse.testDeleteAllTestResults();
+        return res.status(204).end();
+    } catch (err) {
+        console.log(err);
+        return res.status(503).end();
+    }
+});
+
 module.exports = router;

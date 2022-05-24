@@ -2,7 +2,7 @@
 
 const dayjs = require("dayjs");
 const RestockOrderDAO = require('../Database/RestockOrderDAO');
-const { RestockOrder, TransportNote, Product } = require('../Model/RestockOrder');
+const { RestockOrder } = require('../Model/RestockOrder');
 
 const restockOrderDAO = new RestockOrderDAO();
 
@@ -19,26 +19,24 @@ describe('Test Create and Get RestockOrder', () => {
     const expectedRestockOrder1 = new RestockOrder(1, '2022/05/18', 2, "ISSUED", undefined);
     expectedRestockOrder1.addProduct(12, "object", 20, 30);
     expectedRestockOrder1.addProduct(15, "object 2", 2, 550)
-    const expectedRestockOrder2 = new RestockOrder(2, '2022/02/19', 2, "DELIVERED", new TransportNote('2022/02/20'));
+    const expectedRestockOrder2 = new RestockOrder(2, '2022/02/19', 2, "DELIVERED", '2022/02/20');
 
     let arrayProducts = [];
-    arrayProducts.push(new Product(12, "object", 20, 30));
-    arrayProducts.push(new Product(15, "object 2", 2, 550));
+    arrayProducts.push({SKUId: 12, description: "object", price: 20, qty: 30});
+    arrayProducts.push({SKUId: 15, description: "object 2", price: 2, qty: 550});
 
-    testCreateRestockOrder(arrayProducts, '2022/05/18', 2, "ISSUED", undefined,  1);
+    testCreateRestockOrder(arrayProducts, '2022/05/18', 2, "ISSUED", null,  1);
     testGetRestockOrder(1, expectedRestockOrder1);
 
-    testCreateRestockOrder([], '2022/02/19', 2, "DELIVERED", new TransportNote('2022/02/20'), 2);
+    testCreateRestockOrder([], '2022/02/19', 2, "DELIVERED", '2022/02/20', 2);
     testGetRestockOrder(2, expectedRestockOrder2);
-
-
 });
 
 
 describe('Test throw err on get RestockOrder', () => {
     beforeAll(async () => {
         await restockOrderDAO.resetTable();
-        await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', undefined);
+        await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', null);
     });
     testGetRestockOrdererror(3, { err: 404, msg: "RestockOrder not found" });
 });
@@ -47,15 +45,15 @@ describe('Test throw err on get RestockOrder', () => {
 describe('Test Get All RestockOrder', () => {
     beforeAll(async () => {
         await restockOrderDAO.resetTable();
-        await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', undefined);
-        await restockOrderDAO.newRestockOrder([], "DELIVERED", 2, '2022/02/18', new TransportNote('2022/02/20'));
-        await restockOrderDAO.newRestockOrder([], "COMPLETED", 2, '2022/03/19', new TransportNote('2022/04/20'));
+        await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', null);
+        await restockOrderDAO.newRestockOrder([], "DELIVERED", 2, '2022/02/18','2022/02/20');
+        await restockOrderDAO.newRestockOrder([], "COMPLETED", 2, '2022/03/19', '2022/04/20');
     });
 
     const restockOrderList = [];
     restockOrderList.push(new RestockOrder(1, '2022/05/18', 2, "ISSUED", undefined));
-    restockOrderList.push(new RestockOrder(2, '2022/02/18', 2, "DELIVERED", new TransportNote('2022/02/20')));
-    restockOrderList.push(new RestockOrder(3, '2022/03/19', 2, "COMPLETED", new TransportNote('2022/04/20')));
+    restockOrderList.push(new RestockOrder(2, '2022/02/18', 2, "DELIVERED", '2022/02/20'));
+    restockOrderList.push(new RestockOrder(3, '2022/03/19', 2, "COMPLETED", '2022/04/20'));
     testGetAllRestockOrder(restockOrderList);
 });
 
@@ -63,11 +61,11 @@ describe('Test Get All RestockOrder', () => {
 describe('Test Update RestockOrder', () => {
     beforeAll(async () => {
         await restockOrderDAO.resetTable();
-        await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', undefined);
+        await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', null);
     });
-    const expectedRestockOrder = new RestockOrder(1, '2022/05/18', 2, "DELIVERED", new TransportNote('2022/02/20'));
+    const expectedRestockOrder = new RestockOrder(1, '2022/05/18', 2, "DELIVERED", '2022/02/20');
     const expectedChanges = true;
-    testUpdateRestockOrder(1, "DELIVERED", new TransportNote('2022/02/20'), expectedChanges);
+    testUpdateRestockOrder(1, "DELIVERED", '2022/02/20', expectedChanges);
     testGetRestockOrder(1, expectedRestockOrder);
 });
 
@@ -75,14 +73,14 @@ describe('Test Update RestockOrder', () => {
 describe('Test Delete RestockOrder', () => {
     beforeAll(async () => {
         await restockOrderDAO.resetTable();
-        await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', undefined);
-        await restockOrderDAO.newRestockOrder([], "DELIVERED", 2, '2022/02/18', new TransportNote('2022/02/20'));
-        await restockOrderDAO.newRestockOrder([], "COMPLETED", 2, '2022/03/19', new TransportNote('2022/04/20'));
+        await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', null);
+        await restockOrderDAO.newRestockOrder([], "DELIVERED", 2, '2022/02/18', '2022/02/20');
+        await restockOrderDAO.newRestockOrder([], "COMPLETED", 2, '2022/03/19', '2022/04/20');
     });
 
     const restockOrderList = [];
     restockOrderList.push(new RestockOrder(1, '2022/05/18', 2, "ISSUED", undefined));
-    restockOrderList.push(new RestockOrder(3, '2022/03/19', 2, "COMPLETED", new TransportNote('2022/04/20')));
+    restockOrderList.push(new RestockOrder(3, '2022/03/19', 2, "COMPLETED", '2022/04/20'));
     let expectedChanges = 1;
     testDeleteRestockOrder(2, expectedChanges);
     testGetAllRestockOrder(restockOrderList);
@@ -91,7 +89,7 @@ describe('Test Delete RestockOrder', () => {
 function testCreateRestockOrder(products, issueDate, supplierID, state,  transportNote, expectedID) {
     test('create new RestockOrder', async () => {
         let res = await restockOrderDAO.newRestockOrder(products, state, supplierID, issueDate, transportNote);
-        expect(res.lastID).toStrictEqual(expectedID);
+        expect(res).toStrictEqual(expectedID);
     });
 }
 

@@ -19,12 +19,12 @@ class RestockOrderDAO {
         try {
             let sql = 'INSERT INTO RestockOrder(supplierID, state, issueDate, transportNote) VALUES(?, ?, ?, ?)';
             let result = await this.connectionDB.DBexecuteQuery(sql, [supplierID, state, issueDate, transportNote]);
-            sql = "INSERT INTO RestockOrderProduct(RestockOrderID, SKUId, description, price, quantity) VALUES(?, ?, ?, ?, ?)";
+            sql = "INSERT INTO RestockOrderProduct(restockOrderID, SKUId, description, price, quantity) VALUES(?, ?, ?, ?, ?)";
             for(const prod of products) {
                 // result.lastID = RestockOrderID
-                result = this.connectionDB.DBexecuteQuery(sql, [result.lastID, prod.SKUId, prod.description, prod.price, prod.qty]);
+                let res = this.connectionDB.DBexecuteQuery(sql, [result.lastID, prod.SKUId, prod.description, prod.price, prod.qty]);
             }
-            return result;
+            return result.lastID;
         } catch(err){
             throw err;
         }
