@@ -15,10 +15,14 @@ const buildInternalOrder = async (io, connectionDB) => {
     } else {
         sql = "SELECT SKUId, description, price, rfid FROM InternalOrderSKUItems WHERE internalOrder=?";
         const productList = await connectionDB.DBgetAll(sql, io.getId());
+        console.log(io.getId());
         for (const p of productList) {
             io.addProduct(p.SKUId, p.price, p.description, undefined, p.rfid);
+            console.log(p);
         }
     }
+
+    console.log(io);
     return io;
 }
 
@@ -39,7 +43,7 @@ class InternalOrderDAO {
 
             sql = "INSERT INTO InternalOrderProduct(internalOrder, SKU, description, price, qty) VALUES(?, ?, ?, ?, ?)"
             for (const prod of products) {
-                this.connectionDB.DBexecuteQuery(sql, [res.lastID, prod.SKUId, prod.description, prod.price, prod.qty]);
+                await this.connectionDB.DBexecuteQuery(sql, [res.lastID, prod.SKUId, prod.description, prod.price, prod.qty]);
             }
             return res.lastID;
         }
@@ -126,13 +130,16 @@ class InternalOrderDAO {
     addDeliveredProducts = async (ID, SKUItemList) => {
 
         try {
-            let sql = "SELECT * FROM InternalOrderProduct WHERE internalOrder = ? AND SKU = ?"
-            let res = await this.connectionDB.DBexecuteQuery(sql, [ID, SKUItemList.SkuID]);
-            if (res === undefined) {
-                throw { err: 404, msg: "not found" };
-            }
-            sql = "INSERT INTO InternalOrderSKUItems(internalOrder, SKUId, description, price, rfid) VALUES(?, ?, ?, ?, ?) ";
             for (const i of SKUItemList) {
+                let sql = "SELECT * FROM InternalOrderProduct WHERE internalOrder = ? AND SKU = ?"
+
+                let res = await this.connectionDB.DBget(sql, [ID, i.SkuID]);
+                
+                if (res === undefined) {
+                    throw { err: 404, msg: "not found" };
+                }
+
+                sql = "INSERT INTO InternalOrderSKUItems(internalOrder, SKUId, description, price, rfid) VALUES(?, ?, ?, ?, ?) ";
                 await this.connectionDB.DBexecuteQuery(sql, [ID, i.SkuID, res.description, res.price, i.RFID]);
             }
         }

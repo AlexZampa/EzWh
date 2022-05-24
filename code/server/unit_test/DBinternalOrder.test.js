@@ -88,7 +88,6 @@ describe('Test Get All Internal Orders Accepted', () => {
     testGetAllAcceptedIO(expectedList);
 });
 
-
 describe('Test add delivered products to a completed Internal Order', () => {
 
     const date = new dayjs()
@@ -96,14 +95,20 @@ describe('Test add delivered products to a completed Internal Order', () => {
 
     beforeAll(async () => {
         await internalOrderDAO.resetTable();
-        await internalOrderDAO.newInternalOrder(date, [product], 1, "COMPLETED");
+        await internalOrderDAO.newInternalOrder(date, [product], 1, "ISSUED");
+        await internalOrderDAO.setStatus(1, "COMPLETED");
     });
 
     const deliveredProducts = [
-        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016"},
-        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038"}
+        {SkuID:2, RFID:"12345678901234567890123456789016"},
+        {SkuID:2, RFID:"12345678901234567890123456789038"}
     ];
-    testAddDeliveredProducts(1, deliveredProducts, deliveredProducts);
+
+    const expectedProducts = [
+        {SKUId:2, RFID:"12345678901234567890123456789016", description:"abc", price:2.99},
+        {SKUId:2, RFID:"12345678901234567890123456789038", description:"abc", price:2.99}
+    ];
+    testAddDeliveredProducts(1, deliveredProducts, expectedProducts);
 });
 
 describe('Test update Internal Order state', () => {
