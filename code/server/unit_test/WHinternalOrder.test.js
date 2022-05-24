@@ -250,23 +250,6 @@ describe("Get internal order test", () => {
     }
 });
 
-describe("Delete internal order test", () => {
-
-    beforeEach(() => {
-        internalOrderDAO.deleteInternalOrder.mockReset();
-        internalOrderDAO.deleteInternalOrder.mockReturnValue(0);
-    });
-
-    testDeleteInternalOrder(1, 0);
-
-    function testDeleteInternalOrder(id, expectedResult) {
-        test('Delete one Internal Order by id', async () => {
-            let result = await wh.deleteInternalOrder(id);
-            expect(result).toBe(expectedResult);
-        })
-    }
-});
-
 describe("Update Internal Order status test", () => {
 
     const deliveredProducts = [

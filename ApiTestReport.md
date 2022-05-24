@@ -124,9 +124,13 @@ The integration approach used is Bottom Up.
 | UserDAO | None | DBuserDAO.test.js |
 | SkuDAO | None | DBskuDAO.test.js |
 | PositionDAO | None | DBpositionDAO.test.js |
-| SKUItemDAO   | None   | DBSKUItemDAO.test.js|
-| RestockOrderDAO | None | DBRestockOrderDAO.test.js |
-
+| SKUItemDAO   | None   | DBskuItemDAO.test.js|
+| RestockOrderDAO | None | DBrestockOrderDAO.test.js |
+| InternalOrderDAO | None | DBinternalOrder.test.js |
+| ItemDAO | None | DBitemDAO.test.js |
+| ReturnOrderDAO | None | DBreturnOrder.test.js |
+| TestDescriptorDAO | None | DBtestDescriptorDAO.test.js |
+| TestResultDAO | None | DBtestResultDAO.test.js |
 
 ## Step 2 - Unit test of Warehouse class
 | Classes  | mock up used |Jest test cases |
@@ -136,6 +140,11 @@ The integration approach used is Bottom Up.
 | Warehosue - Position | PositionDAO - SkuDAO  | WHposition.test.js |
 |  Warehouse - SKUItem  | SKUItemDAO   | WHskuItem.test.js |
 | Warehouse - RestockOrder | UserDAO - RestockOrderDAO - testResultDAO - SkuDAO - SkuItemDAO | WHrestockOrder.test.js |
+| Warehouse - InternalOrder | InternalOrderDAO | WHinternalOrder.test.js |
+| Warehouse - returnOrder | ReturnOrderDAO - RestockOrderDAO | WHreturnOrder.test.js |
+| Warehouse - Item | ItemDAO - SkuDAO | WHitem.test.js |
+| Warehouse - TestDescriptor | TestDescriptorDAO - SkuDAO | WHtestDescriptor.test.js |
+| Warehouse - TestResult | TestResultDAO - SkuItemDAO - TestDescriptorDAO | WHtestResult.test.js |
 
 
 ## Step 3 - API test of Controller classes ( + Warehouse class + DAO classes) 
@@ -143,10 +152,15 @@ The integration approach used is Bottom Up.
 | Classes  | mock up used | Jest test cases |
 |--|--|--|
 | ControllerUser | None | testControllerUser.js |
-| ControllerSKu  | None | testControllerSKU.js |
+| ControllerSKU  | None | testControllerSKU.js |
 | ControllerPosition | None | testControllerPosition.js |
 | ControllerSKUItem   | None   | testControllerSKUItem.js |
-|ControllerRestockOrder |  None | testControllerRestockOrder.js |
+| ControllerRestockOrder |  None | testControllerRestockOrder.js |
+| ControllerReturnOrder | None | testControllerReturnOrder.js |
+| ControllerInternalOrder | None | testControllerInternalOrder.js |
+| ControllerItem | None | testControllerItem.js |
+| ControllerTestDescriptor | None | testControllerTestDescriptor.js |
+| ControllerTestResult | None | testControllerTestResult.js | 
 
 
 
