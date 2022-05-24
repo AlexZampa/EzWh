@@ -2,7 +2,6 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { body } = require('express-validator');
 chai.use(chaiHttp);
 chai.should();
 

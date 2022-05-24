@@ -491,7 +491,7 @@ class Warehouse {
             allSkuItems.forEach(s => {
                 if (s.getRestockOrder() === restockOrderID) {
                     skuItems.push(s);
-            }
+                }
             });
             const returnItems = [];
             for (const s of skuItems) {
@@ -535,12 +535,21 @@ class Warehouse {
 
     /********* functions for managing Return Orders **********/
     addReturnOrder = async (SKUItemList, restockOrderId, returnDate) => {
-        const res = await this.returnOrderDAO.newReturnOrder(SKUItemList, restockOrderId, returnDate);
-        const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
-        if (res !== undefined && restockOrder !== undefined) {
-            this.sendNotificationRO(restockOrder.getSupplier().getUserID(), res.lastId);
+        try {
+            let restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
+            if(!restockOrder) return;
+            //if(!restockOrder) restockOrder = new RestockOrder(1, returnDate, 1, "DELIVERED", undefined);
+            //console.log(restockOrder);
+
+            const res = await this.returnOrderDAO.newReturnOrder(SKUItemList, restockOrderId, returnDate);
+
+            if (res !== undefined && restockOrder !== undefined) {
+                this.sendNotificationRO(restockOrder.getSupplier()/*.getUserID()*/, res.lastId);
+            }
+            return res;
+        } catch (err) {
+            throw err;
         }
-        return res;
     }
 
     getReturnOrders = async () => {
@@ -554,7 +563,7 @@ class Warehouse {
     }
 
     deleteReturnOrder = async (id) => {
-        const res = await this.returnOrderDAO.deleteReturnOrder();
+        const res = await this.returnOrderDAO.deleteReturnOrder(id);
         return res;
     }
 
@@ -566,6 +575,14 @@ class Warehouse {
             console.log(`To SUPPLIER: ${userID}`);
             console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId()}`);
             console.log(`For products: ${ro.getProducts()}`);
+        }
+    }
+
+    testDeleteAllReturnOrders = async () => {
+        try {
+            await this.returnOrderDAO.resetTable();
+        } catch (err) {
+            throw err;
         }
     }
 
@@ -598,14 +615,14 @@ class Warehouse {
 
     setIOStatus = async (ID, status, products) => {
         const io = await this.getInternalOrder(ID);
-        if(io == undefined)
+        if (io == undefined)
             return 0;
 
         let res = 0;
 
         res = await this.internalOrderDAO.setStatus(ID, status);
 
-        if(status === "COMPLETED") {
+        if (status === "COMPLETED") {
             res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
         }
         if (res) return res; //if res has a value, it is an error
@@ -616,9 +633,9 @@ class Warehouse {
 
     deleteInternalOrder = async (ID) => {
         const io = await this.getInternalOrder(ID);
-        if(io == undefined)
+        if (io == undefined)
             return 0;
-        
+
         const res = await this.internalOrderDAO.deleteInternalOrder(ID);
         return res;
     };
