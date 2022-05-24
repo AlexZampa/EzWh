@@ -597,7 +597,6 @@ class Warehouse {
     }
 
     setIOStatus = async (ID, status, products) => {
-<<<<<<< HEAD
         const io = await this.getInternalOrder(ID);
         if(io == undefined)
             return 0;
@@ -605,17 +604,8 @@ class Warehouse {
         let res = 0;
 
         res = await this.internalOrderDAO.setStatus(ID, status);
-        console.log(res);
 
         if(status === "COMPLETED") {
-=======
-        const io = this.getInternalOrder(ID);
-        if (io == undefined)
-            return false;
-
-        let res = 0;
-        if (status === "COMPLETED") {
->>>>>>> 4c054e37e603ce751da647de6d6b22e30c502f47
             res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
         }
         if (res) return res; //if res has a value, it is an error

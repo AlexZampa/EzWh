@@ -136,7 +136,7 @@ router.post('/internalOrders',
                 console.log("Products not correctly defined");
                 return res.status(422).end();
             }
-        })
+        });
 
         //console.log(req.body.issueDate);
         //console.log(dayjs(req.body.issueDate).format('YYYY/MM/DD HH:mm'));
@@ -185,7 +185,16 @@ router.put('/internalOrders/:id',
         try {
             let result = undefined;
             if(req.body.newState === "COMPLETED") {
-            result = await warehouse.setIOStatus(req.params.id, req.body.newState, req.body.products);
+                if(req.body.products === undefined) {
+                    return res.status(422).end();
+                }
+                req.body.products.forEach( p => {
+                    if(p.SkuID === undefined || p.RFID === undefined){
+                        console.log("Products not correctly defined");
+                        return res.status(422).end();
+                    }
+                });
+                result = await warehouse.setIOStatus(req.params.id, req.body.newState, req.body.products);
             } else {
                 result = await warehouse.setIOStatus(req.params.id, req.body.newState, undefined);
             }

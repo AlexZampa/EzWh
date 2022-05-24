@@ -52,7 +52,7 @@ router.get('/returnOrders/:id',
 
 // CREATE NEW RETURN ORDER
 router.post('/returnOrder',
-    [check("returnDate").exists().isDate("YYYY/MM/DD hh:mm"), check("products").exists(), check("restockOrderId").exists().isNumeric()],
+    [check("returnDate").exists().isString(), check("products").exists(), check("restockOrderId").exists().isNumeric()],
     async (req, res) => {
         
         // check if user authorized otherwise: return res.status(401).json({});
@@ -60,6 +60,11 @@ router.post('/returnOrder',
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             console.log({ errors: errors.array() });
+            return res.status(422).end();
+        }
+
+        if(req.body.returnDate !== dayjs(req.body.returnDate).format('YYYY/MM/DD HH:mm')){
+            console.log("returnDate not properly formatted");
             return res.status(422).end();
         }
 

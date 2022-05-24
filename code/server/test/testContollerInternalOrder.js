@@ -216,7 +216,7 @@ function deleteInternalOrder(testName, expectedHTTPStatus, id) {
         const io = {
             issueDate:"2021/11/29 09:33",
             products: [
-                {SKUId:12, description:"a product", price:10.99, qty:3},
+                {SKUId:1, description:"a product", price:10.99, qty:3},
                 {SKUId:180, description:"another product", price:11.99, qty:3}
             ],
             "customerId" : 1
