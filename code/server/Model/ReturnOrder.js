@@ -16,7 +16,7 @@ class ReturnOrder {
     convertToObj = () => {
         return {
             "id": this.id,
-            "returnDate": this.returnDate.format("YYYY/MM/DD HH:MM"),
+            "returnDate": this.returnDate.format("YYYY/MM/DD HH:mm"),
             "products": this.products,
             "restockOrderId" : this.restockOrderId
         }

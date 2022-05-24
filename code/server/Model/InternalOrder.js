@@ -43,18 +43,18 @@ class InternalOrder{
         if(this.state === "COMPLETED") 
             return {
                 "id" : this.id,
-                "issueDate" : this.issueDate.format("YYYY/MM/DD HH:MM"),
+                "issueDate" : this.issueDate.format("YYYY/MM/DD HH:mm"),
                 "state" : this.state,
-                "products" : this.products.map(p => {return { "SKUid":p.skuId, "description":p.description, "price":p.price, "RFID":p.rfid  }}),
-                "customerId" : this.internalCustomer.getId()
+                "products" : this.products.map(p => {return { "SKUId":p.SKUId, "description":p.description, "price":p.price, "RFID":p.rfid  }}),
+                "customerId" : this.internalCustomer
             }
         
         return {
            "id" : this.id,
-           "issueDate" : this.issueDate.format("YYYY/MM/DD HH:MM"),
+           "issueDate" : this.issueDate.format("YYYY/MM/DD HH:mm"),
            "state" : this.state,
-           "products" : this.products.map(p => {return { "SKUid":p.sku.id, "description":p.sku.description, "price":p.sku.price, "qty":p.qty  }}),
-           "customerId" : this.internalCustomer.getId()
+           "products" : this.products.map(p => {return { "SKUId":p.SKUId, "description":p.description, "price":p.price, "qty":p.qty  }}),
+           "customerId" : this.internalCustomer
        }
     }
 }

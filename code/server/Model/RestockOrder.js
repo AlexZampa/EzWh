@@ -33,7 +33,7 @@ class RestockOrder {
     }
 
     addSKUItems = (skuitems) => {
-        for (const s in this.skuItems) {
+        for (const s in skuitems) {
             this.skuItems.push(s);
         }
     }

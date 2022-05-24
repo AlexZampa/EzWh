@@ -108,7 +108,7 @@ router.delete('/testDescriptor/:id', [check("id").exists().isInt({ min: 1 })], a
 
 router.delete('/test/testDescriptors', async (req, res) => {
     try {
-        const result = await warehouse.testDeleteAllTestDescriptor();
+        const result = await warehouse.testDeleteAllTestDescriptors();
         return res.status(204).end();
     } catch (err) {
         console.log(err);

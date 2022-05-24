@@ -28,7 +28,7 @@ class InternalOrderDAO {
         this.connectionDB = new ConnectionDB();
         this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrder" ("id" INTEGER PRIMARY KEY, "issueDate" DATETIME NOT NULL, "internalCustomer" INTEGER, "state" VARCHAR(20) NOT NULL); ', []);
         this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderProduct" ( "internalOrder" INTEGER NOT NULL, "SKU" INTEGER NOT NULL, "description" VARCHAR(100), "price" NUMERIC, "qty" INTEGER, PRIMARY KEY ("internalOrder", "SKU"));', []);
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderSKUItems" ( "internalOrder" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" NUMERIC, "rfid" TEXT, PRIMARY KEY ("internalOrder", "SKUId"));', []);
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderSKUItems" ( "internalOrder" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" NUMERIC, "rfid" TEXT, PRIMARY KEY ("internalOrder", "rfid"));', []);
     }
 
     newInternalOrder = async (issueDate, products, customerId, state) => {
@@ -53,11 +53,13 @@ class InternalOrderDAO {
         try {
             let sql = "SELECT * FROM InternalOrder";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            let internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
+            let internalOrders = result.map(r => new InternalOrder(r.id, r.internalCustomer, dayjs(r.issueDate), r.state));
 
             for (let io of internalOrders) {
-                io = buildInternalOrder(io, this.connectionDB);
+                io = await buildInternalOrder(io, this.connectionDB);
             }
+
+            //console.log(internalOrders);
 
             return internalOrders;
         }
@@ -71,10 +73,10 @@ class InternalOrderDAO {
         try {
             let sql = "SELECT * FROM InternalOrder WHERE state='ISSUED'";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
+            const internalOrders = result.map(r => new InternalOrder(r.id, r.internalCustomer, dayjs(r.issueDate), r.state));
 
             for (let io of internalOrders) {
-                io = buildInternalOrder(io, this.connectionDB);
+                io = await buildInternalOrder(io, this.connectionDB);
             }
 
             return internalOrders;
@@ -90,10 +92,10 @@ class InternalOrderDAO {
         try {
             let sql = "SELECT * FROM InternalOrder WHERE state='ACCEPTED'";
             const result = await this.connectionDB.DBgetAll(sql, []);
-            const internalOrders = result.map(r => new InternalOrder(r.id, r.customerId, dayjs(r.issueDate), r.state));
+            const internalOrders = result.map(r => new InternalOrder(r.id, r.internalCustomer, dayjs(r.issueDate), r.state));
 
             for (let io of internalOrders) {
-                io = buildInternalOrder(io, this.connectionDB);
+                io = await buildInternalOrder(io, this.connectionDB);
             }
 
             return internalOrders;
@@ -111,8 +113,8 @@ class InternalOrderDAO {
                 throw { err: 404, msg: "not found" };
             }
 
-            let io = new InternalOrder(result.id, result.customerId, dayjs(result.issueDate), result.state);
-            io = buildInternalOrder(io, this.connectionDB);
+            let io = new InternalOrder(result.id, result.internalCustomer, dayjs(result.issueDate), result.state);
+            io = await buildInternalOrder(io, this.connectionDB);
 
             return io;
         }
@@ -124,9 +126,14 @@ class InternalOrderDAO {
     addDeliveredProducts = async (ID, SKUItemList) => {
 
         try {
-            const sql = "INSERT INTO InternalOrderSKUItems(internalOrder, SKUId, description, price, rfid) VALUES(?, ?, ?, ?, ?) ";
+            let sql = "SELECT * FROM InternalOrderProduct WHERE internalOrder = ? AND SKU = ?"
+            let res = await this.connectionDB.DBexecuteQuery(sql, [ID, SKUItemList.SkuID]);
+            if (res === undefined) {
+                throw { err: 404, msg: "not found" };
+            }
+            sql = "INSERT INTO InternalOrderSKUItems(internalOrder, SKUId, description, price, rfid) VALUES(?, ?, ?, ?, ?) ";
             for (const i of SKUItemList) {
-                this.connectionDB.DBexecuteQuery(sql, [ID, i.SKUId, i.description, i.price, i.RFID]);
+                await this.connectionDB.DBexecuteQuery(sql, [ID, i.SkuID, res.description, res.price, i.RFID]);
             }
         }
         catch (err) {
@@ -168,7 +175,7 @@ class InternalOrderDAO {
             res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS InternalOrderSKUItems');
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrder" ("id" INTEGER PRIMARY KEY, "issueDate" DATETIME NOT NULL, "internalCustomer" INTEGER, "state" VARCHAR(20) NOT NULL); ', []);
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderProduct" ( "internalOrder" INTEGER NOT NULL, "SKU" INTEGER NOT NULL, "description" VARCHAR(100), "price" NUMERIC, "qty" INTEGER, PRIMARY KEY ("internalOrder", "SKU"));', []);
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderSKUItems" ( "internalOrder" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" NUMERIC, "rfid" TEXT, PRIMARY KEY ("internalOrder", "SKUId"));', []);
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "InternalOrderSKUItems" ( "internalOrder" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" NUMERIC, "rfid" TEXT, PRIMARY KEY ("internalOrder", "rfid"));', []);
         } catch (err) {
             throw err;
         }

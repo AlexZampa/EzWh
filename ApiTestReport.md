@@ -33,7 +33,73 @@ Version:
 # Dependency graph 
 
      <report the here the dependency graph of the classes in EzWH, using plantuml or other tool>
-     
+
+```plantuml
+top to bottom direction
+class Server
+
+class ControllerInternalOrder
+class ControllerItem
+class ControllerPosition
+class ControllerRestockOrder
+class ControllerReturnOrder
+class ControllerSKU
+class ControllerSKUItem
+class ControllerTestDescriptor
+class ControllerTestResult
+class ControllerUser
+
+class Warehouse
+
+class InternalOrderDAO
+class ItemDAO
+class PositionDAO
+class RestockOrderDAO
+class ReturnOrderDAO
+class SkuDAO
+class SKUItemDAO
+class TestDescriptorDAO
+class TestResultDAO
+class UserDAO
+
+
+Server --> ControllerInternalOrder
+Server --> ControllerItem
+Server --> ControllerPosition
+Server --> ControllerRestockOrder
+Server --> ControllerReturnOrder
+Server --> ControllerSKU
+Server --> ControllerSKUItem
+Server --> ControllerTestDescriptor
+Server --> ControllerTestResult
+Server --> ControllerUser
+
+ControllerInternalOrder --> Warehouse
+ControllerItem --> Warehouse
+ControllerPosition --> Warehouse
+ControllerRestockOrder --> Warehouse
+ControllerReturnOrder --> Warehouse
+ControllerSKU --> Warehouse
+ControllerSKUItem --> Warehouse
+ControllerTestDescriptor --> Warehouse
+ControllerTestResult --> Warehouse
+ControllerUser --> Warehouse
+
+Warehouse --> InternalOrderDAO
+Warehouse --> ItemDAO
+Warehouse --> PositionDAO
+Warehouse --> RestockOrderDAO
+Warehouse --> ReturnOrderDAO
+Warehouse --> SkuDAO
+Warehouse --> SKUItemDAO
+Warehouse --> TestDescriptorDAO
+Warehouse --> TestResultDAO
+Warehouse --> UserDAO
+
+
+```  
+
+
 # Integration approach
 
     <Write here the integration sequence you adopted, in general terms (top down, bottom up, mixed) and as sequence
@@ -120,7 +186,7 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 5.6         | FR5.6    | testRestockOrder.js - newRestockOrder |
 | 5.7         | FR5.7    | testRestockOrder.js - changeStateRestockOrder |
 | 5.8         | FR5.8    | testRestockOrder.js - changeStateRestockOrder - addSKUItemToRestockOrder - addTransportNoteToRestockOrder |
-| 5.10        | FR5.10   | testRestockOrder.js -  |
+| 5.10        | FR5.10   | testRestockOrder.js - getSKUItemToReturnFromRestockOrder|
 | 
 | ...         |                                 |             |             
 

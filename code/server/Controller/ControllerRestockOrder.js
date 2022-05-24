@@ -20,6 +20,12 @@ router.post('/restockOrder',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
+
+            if(req.body.issueDate !== dayjs(req.body.issueDate).format('YYYY/MM/DD HH:mm')){
+                console.log("IssueDate not properly formatted");
+                return res.status(422).end();
+            }
+            
             const result = await warehouse.addRestockOrder(req.body.products, req.body.supplierId, req.body.issueDate);
             return res.status(201).end();
             // check if user authorized otherwise: return res.status(401).end();
@@ -101,7 +107,7 @@ router.get('/restockOrders/:id/returnItems',
                 return res.status(422).end();
             }
             const skuItems = await warehouse.returnItemsFromRestockOrder(Number(req.params.id));
-            const result = skuItems.convertToObjSimple();
+            const result = skuItems.map(s => s.convertToObjSimple());
             return res.status(200).json(result);
             // check if user authorized otherwise: return res.status(401).end();
         } catch(err){

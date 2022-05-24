@@ -123,9 +123,9 @@ router.delete('/skuitems/:rfid/testResult/:id', [check("rfid").exists().isString
 
 );
 
-router.delete('/test/testResults', async (req, res) => {
+router.delete('/test/skuitems/testResults', async (req, res) => {
     try {
-        const result = await warehouse.testDeleteAllTestResult();
+        const result = await warehouse.testDeleteAllTestResults();
         return res.status(204).end();
     } catch (err) {
         console.log(err);
