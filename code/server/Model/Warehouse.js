@@ -918,18 +918,10 @@ class Warehouse {
     testDeleteAllTestResults = async () => {
         try {
             await this.testResultDAO.resetTable();
-        }
-        catch (err) {
-            throw err;
-        }
-    }
-
-    testDeleteAllTestResult = async () => {
-        try {
-            await this.testResultDAO.resetTable();
             await this.skuItemDAO.resetTable();
             await this.testDescriptorDAO.resetTable();
-        } catch (err) {
+        }
+        catch (err) {
             throw err;
         }
     }
