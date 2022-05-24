@@ -34,7 +34,7 @@ class TestDescriptor {
 
     convertToObj = () => {
         return (
-            {"id" : this.id, "name" : this.name, "procedureDescription" : this.procedureDescription, "SKUid" : this.SKUid});
+            {"id" : this.id, "name" : this.name, "procedureDescription" : this.procedureDescription, "idSKU" : this.SKUid});
     };
 };
 

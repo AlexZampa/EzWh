@@ -7,8 +7,7 @@ class TestResultDAO{
 
     constructor(db){
         this.connectionDB = new ConnectionDB();
-        // aggiunger CREATE TABLE IF NOT EXISTS: testare se campo Result come BOOL (non so se funziona) o INTEGER
-        // this.connectionDB.DBexecuteQuery('');
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "TestResult" ("rfid" TEXT NOT NULL, "id" INTEGER NOT NULL UNIQUE, "idTestDescriptor" INTEGER NOT NULL, "Date" TEXT NOT NULL, "Result" TEXT NOT NULL, PRIMARY KEY("id"));');
     }
 
     getAllTestResult = async (rfid) => {

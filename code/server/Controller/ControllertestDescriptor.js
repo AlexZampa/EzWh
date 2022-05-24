@@ -43,7 +43,7 @@ router.get('/testDescriptors/:id', [check("id").isInt({ min: 1 })],
     });
 
 //create testDescriptor
-router.post('/testDescriptor', [check("name").exists().trim().isAscii(), check("procedureDescription").exists().trim().isAscii(), check("idSKU").exists().isInt({ min: 0 })],
+router.post('/testDescriptor', [check("name").exists().isString().trim(), check("procedureDescription").exists().isString().trim(), check("idSKU").exists().isInt({ min: 1 })],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -64,8 +64,8 @@ router.post('/testDescriptor', [check("name").exists().trim().isAscii(), check("
 );
 
 //modify testDescriptor
-router.put('/testDescriptor/:id', [check("id").exists().isInt({ min: 1 }), check("newName").exists().trim().isAscii(),
-check("newProcedureDescription").exists().trim().isAscii(), check("newIdSKU").exists().isInt({ min: 0 })],
+router.put('/testDescriptor/:id', [check("id").exists().isInt({ min: 1 }), check("newName").exists().isString().trim(),
+check("newProcedureDescription").exists().isString().trim(), check("newIdSKU").exists().isInt({ min: 1 })],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -99,9 +99,20 @@ router.delete('/testDescriptor/:id', [check("id").exists().isInt({ min: 1 })], a
     } catch (err) {
         console.log(err);
         switch (err.err) {
+            case 404: return res.status(422).end();
             case 422: return res.status(422).end();
             default: return res.status(503).end();
         }
+    }
+});
+
+router.delete('/test/testDescriptors', async (req, res) => {
+    try {
+        const result = await warehouse.testDeleteAllTestDescriptor();
+        return res.status(204).end();
+    } catch (err) {
+        console.log(err);
+        return res.status(503).end();
     }
 });
 

@@ -809,6 +809,15 @@ class Warehouse{
         }
     }
 
+    testDeleteAllTestDescriptor = async () => {
+        try {
+            await this.skuDAO.resetTable();
+            await this.testDescriptorDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
+    }
+
 
     /********* functions for managing Test Result ***********/
     getTestResults = async (rfid) => {
@@ -825,6 +834,7 @@ class Warehouse{
     getTestResult = async (rfid, id) => {
         try{
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
+            const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(id);
             const testResult = await this.testResultDAO.getTestResult(rfid, id);
             return testResult;
         }
@@ -864,6 +874,16 @@ class Warehouse{
             return res;
         }
         catch(err){
+            throw err;
+        }
+    }
+
+    testDeleteAllTestResult = async () => {
+        try {
+            await this.testResultDAO.resetTable();
+            await this.skuItemDAO.resetTable();
+            await this.testDescriptorDAO.resetTable();
+        } catch (err) {
             throw err;
         }
     }
