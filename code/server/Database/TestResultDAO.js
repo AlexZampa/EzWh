@@ -72,7 +72,7 @@ class TestResultDAO{
     resetTable = async () => {
         try {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS TestResult');
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "TestResult" ("id" INTEGER NOT NULL UNIQUE, "rfid" INTEGER NOT NULL, "idTestDescriptor" INTEGER NOT NULL, "Date" TEXT NOT NULL, "Result" TEXT NOT NULL, PRIMARY KEY("id"));');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "TestResult" ("id" INTEGER NOT NULL UNIQUE, "rfid" TEXT NOT NULL, "idTestDescriptor" INTEGER NOT NULL, "Date" TEXT NOT NULL, "Result" TEXT NOT NULL, PRIMARY KEY("id"));');
         } catch (err) {
             throw err;    
         }
