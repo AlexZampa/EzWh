@@ -344,7 +344,7 @@ function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) 
                                                                                                         agent.get('/api/restockOrders/' + restockOrderID + '/returnItems')
                                                                                                             .then(function (r) {
                                                                                                                 r.should.have.status(expectedHTTPStatus);
-                                                                                                                if (expectedHTTPStatus == 200)
+                                                                                                                if (expectedHTTPStatus === 200)
                                                                                                                     r.body.should.be.deep.equal(expectedResult);
                                                                                                                 done();
                                                                                                             });
@@ -362,6 +362,7 @@ function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) 
             });
     });
 }
+
 
 function addSKUItemToRestockOrder(expectedHTTPStatus, restockOrderID, rfid, SKUId) {
     it('Add skuitem to Restock Order', function (done) {

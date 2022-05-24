@@ -15,14 +15,14 @@ const buildInternalOrder = async (io, connectionDB) => {
     } else {
         sql = "SELECT SKUId, description, price, rfid FROM InternalOrderSKUItems WHERE internalOrder=?";
         const productList = await connectionDB.DBgetAll(sql, io.getId());
-        console.log(io.getId());
+        // console.log(io.getId());
         for (const p of productList) {
             io.addProduct(p.SKUId, p.price, p.description, undefined, p.rfid);
-            console.log(p);
+            // console.log(p);
         }
     }
 
-    console.log(io);
+    // console.log(io);
     return io;
 }
 
@@ -62,9 +62,6 @@ class InternalOrderDAO {
             for (let io of internalOrders) {
                 io = await buildInternalOrder(io, this.connectionDB);
             }
-
-            //console.log(internalOrders);
-
             return internalOrders;
         }
         catch (err) {
