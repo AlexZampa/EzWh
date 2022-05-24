@@ -193,15 +193,20 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 |  4.1        | FR1.1                           | testControllerUser.js - newUser         |
 |  4.1        | FR1.1                           | testControllerUser.js - modifyUserRights  |
 |  4.3        | FR1.2                           | testControllerUser.js - deleteUser    |
-| 5.1         | FR5.1    | testRestockOrder.js - newRestockOrder |
-| 5.2         | FR5.2    | testRestockOrder.js - addSKUItemToRestockOrder |
-| 5.3         | FR5.3    | testRestockOrder.js - addSKUItemToRestockOrder |
-| 5.5         | FR5.5    | testRestockOrder.js - newRestockOrder |
-| 5.6         | FR5.6    | testRestockOrder.js - newRestockOrder |
-| 5.7         | FR5.7    | testRestockOrder.js - changeStateRestockOrder |
-| 5.8         | FR5.8    | testRestockOrder.js - changeStateRestockOrder - addSKUItemToRestockOrder - addTransportNoteToRestockOrder |
-| 5.10        | FR5.10   | testRestockOrder.js - getSKUItemToReturnFromRestockOrder|
-| 
+| 5.1         | FR5.1    | testControllerRestockOtder.js - newRestockOrder |
+| 5.2         | FR5.2    | testControllerRestockOtder.js - addSKUItemToRestockOrder |
+| 5.3         | FR5.3    | testControllerRestockOtder.js - addSKUItemToRestockOrder |
+| 5.5         | FR5.5    | testControllerRestockOtder.js - newRestockOrder |
+| 5.6         | FR5.6    | testControllerRestockOtder.js - newRestockOrder |
+| 5.7         | FR5.7    | testControllerRestockOtder.js - changeStateRestockOrder |
+| 5.8         | FR5.8    | testControllerRestockOtder.js - changeStateRestockOrder - addSKUItemToRestockOrder - addTransportNoteToRestockOrder |
+| 5.10        | FR5.10   | testControllerRestockOtder.js - getSKUItemToReturnFromRestockOrder|
+| 6.1         | FR5.11   | testControllerReturnOrder.js - newReturnOrder |
+| 6.2         | FR5.12      | testControllerReturnOrder.js - newReturnOrder |
+| 9.1         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
+| 9.2         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
+| 9.3         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
+| 10.1        | FR6      | FR?      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | ...         |                                 |             |             
 
 
