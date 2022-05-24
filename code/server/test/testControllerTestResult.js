@@ -11,7 +11,7 @@ var agent = chai.request.agent(app);
 describe('test Test result apis', () => {
 
     beforeEach(async () => {
-        await agent.delete('/api/test/testResults');
+        await agent.delete('/api/test/skuitems/testResults');
     })
 
     newTestResult('adding a new tr1', 201, "1234", 1, "2022/04/12", "true");
