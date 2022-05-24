@@ -24,7 +24,7 @@ class RestockOrderDAO {
                 // result.lastID = RestockOrderID
                 let res = this.connectionDB.DBexecuteQuery(sql, [result.lastID, prod.SKUId, prod.description, prod.price, prod.qty]);
             }
-            return result;
+            return result.lastID;
         } catch(err){
             throw err;
         }
