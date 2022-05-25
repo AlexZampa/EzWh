@@ -1130,6 +1130,423 @@ Version:
 | no | valid | T2(ID) -> 404 | Test Delete Return Order |
 
 -----------------------------------------------------------------------------------------------------
+
+## **Class *ItemDAO***
+
+### **Class *ItemDAO* - method *newItem***
+
+**Criteria for method *newItem*:**
+	
+ - Item with corresponding sku in the db, with different id for same supplier and different idSKU for same supplier
+
+**Predicates for method *newItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Item with corresponding sku in the db, with different id for same supplier and different idSKU for same supplier | Yes |
+|                                              | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Item with corresponding sku in the db, with different id for same supplier and different idSKU for same supplier | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validItem) -> rowID | Test Create and Get Item - testCreateItem |
+| No | Invalid| T2(invalidItem) -> error | Test throw err on new Item - testCreateItemError |
+
+
+### **Class *ItemDAO* - method *getAllItems***
+
+**Criteria for method *getAllItems*:**
+	
+ - There are Items in the DB
+
+**Predicates for method *getAllItems*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are Items in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are Items in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All Item - testGetAllItems |
+| No  | Valid | T2() -> list | - |
+
+
+### **Class *ItemDAO* - method *getItem***
+
+**Criteria for method *getItem*:**
+	
+ - Item is in the DB
+
+**Predicates for method *getItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Item is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validItemId) -> Item | Test Create and Get Item - testGetItem |
+| No | Invalid| T2(invalidItemId) -> error | Test throw err on get Item - testGetItemerror |
+
+
+### **Class *ItemDAO* - method *updateItem***
+
+**Criteria for method *updateItem*:**
+	
+ - Item is in the DB
+
+**Predicates for method *updateItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Item is in the DB | Yes |
+|                   | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid  | T1(item) -> 1 | Test Update Item - testUpdateItem |
+| No  | Invalid | T2() -> 0 | Test Update Item - testUpdateItem |
+
+
+### **Class *ItemDAO* - method *deleteItem***
+
+**Criteria for method *deleteItem*:**
+	
+ - Item is in the DB
+
+**Predicates for method *deleteItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Item is in the DB | Yes |
+|                   | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid  | T1(item) -> 1 | Test Delete Item - testDeleteItem |
+| No  | Invalid | T2() -> 0 | Test Delete Item- testDeleteItem |
+
+
+-----------------------------------------------------------------------------------------------------
+
+
+## **Class *TestDescriptorDAO***
+
+### **Class *TestDescriptorDAO* - method *newTestDescriptor***
+
+**Criteria for method *newTestDescriptor*:**
+	
+ - TestDescriptor with corresponding sku in the db
+
+**Predicates for method *newTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestDescriptor with corresponding sku in the db | Yes |
+|                                              | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestDescriptor with corresponding sku in the db | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validTestDescriptor) -> rowID | Test Create and Get TestDescriptor - testCreateTestDescriptor |
+| No | Invalid| T2(invalidTestDescriptor) -> error | Test throw err on new TestDescriptor - testCreateTestDescriptorError |
+
+### **Class *TestDescriptorDAO* - method *getAllTestDescriptor***
+
+**Criteria for method *getAllTestDescriptor*:**
+	
+ - There are TestDescriptors in the DB
+
+**Predicates for method *getAllTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are TestDescriptors in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are TestDescriptors in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All TestDescriptor - testGetAllTestDescriptor |
+| No | Valid| T2() -> list | - |
+
+
+### **Class *TestDescriptorDAO* - method *getTestDescriptor***
+
+**Criteria for method *getTestDescriptor*:**
+	
+ - TestDescriptor is in the DB
+
+**Predicates for method *getTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestDescriptor is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validTestDescriptorid) -> TestDescriptor | Test Create and Get TestDescriptor - testGetTestDescriptor |
+| No | Invalid| T2(invalidTestDescriptorid) -> error | Test throw err on get TestDescriptor - testGetTestDescriptorError |
+
+
+### **Class *TestDescriptorDAO* - method *updateTestDescriptor***
+
+**Criteria for method *updateTestDescriptor*:**
+	
+ - TestDescriptor is in the DB and sku associated to newSKUid
+
+**Predicates for method *updateTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestDescriptor is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validTestDescriptorid) -> 1 | Test Update TestDescriptor - testUpdateTestDescriptor |
+| No | Invalid| T2(invalidTestDescriptorid) -> 0 | Test Update TestDescriptor - testUpdateTestDescriptor |
+
+
+### **Class *TestDescriptorDAO* - method *deleteTestDescriptor***
+
+**Criteria for method *deleteTestDescriptor*:**
+	
+ - TestDescriptor is in the DB
+
+**Predicates for method *deleteTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestDescriptor is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validTestDescriptorid) -> 1 | Test Delete TestDescriptor - testDeleteTestDescriptor |
+| No | Invalid| T2(invalidTestDescriptorid) -> 0 | Test Delete TestDescriptor - testDeleteTestDescriptor |
+
+
+-----------------------------------------------------------------------------------------------------
+
+
+## **Class *TestResultDAO***
+
+### **Class *TestResultDAO* - method *newTestResult***
+
+**Criteria for method *newTestResult*:**
+	
+ - TestResult with corresponding skuItem rfid in the db and with corresponding idTestDescriptor int he db
+
+**Predicates for method *newTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestResult with corresponding skuItem rfid in the db and with corresponding idTestDescriptor int he db | Yes |
+|                                              | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestResult with corresponding skuItem rfid in the db and with corresponding idTestDescriptor int he db | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validTestResult) -> rowID | Test Create and Get TestResult - testCreateTestResult |
+| No | Invalid| T2(invalidTestResult) -> error | Test throw err on new TestResult - testCreateTestResultError |
+
+### **Class *TestResultDAO* - method *getAllTestResult***
+
+**Criteria for method *getAllTestResult*:**
+	
+ - There are TestResults in the DB
+
+**Predicates for method *getAllTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are TestResultvs in the DB | Yes |
+|                           | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are TestResults in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All TestResult - testGetAllTestResult |
+| No | Valid| T2() -> list | - |
+
+
+### **Class *TestResultDAO* - method *getTestResult***
+
+**Criteria for method *getTestResult*:**
+	
+ - TestResult is in the DB
+
+**Predicates for method *getTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestResult is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestResult is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validTestResultid) -> TestResult | Test Create and Get TestResult - testGetTestResult |
+| No | Invalid| T2(invalidTestResultid) -> error | Test throw err on get TestResult - testGetTestResultError |
+
+
+### **Class *TestResultDAO* - method *updateTestResult***
+
+**Criteria for method *updateTestResult*:**
+	
+ - TestResult is in the DB and skuItem associated to rfid in the db and testDescriptor associated to newIdTestDescriptor in the db
+
+**Predicates for method *updateTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestResult is in the DB and skuItem associated to rfid in the db and testDescriptor associated to newIdTestDescriptor in the db | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestResult is in the DB and skuItem associated to rfid in the db and testDescriptor associated to newIdTestDescriptor in the db | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validTestResultid) -> 1 | Test Update TestResult - testUpdateTestResult |
+| No | Invalid| T2(invalidTestResultid) -> 0 | Test Update TestResult - testUpdateTestResult |
+
+
+### **Class *TestResultDAO* - method *deleteTestResult***
+
+**Criteria for method *deleteTestResult*:**
+	
+ - TestResult is in the DB
+
+**Predicates for method *deleteTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestResult is in the DB | Yes |
+|                  | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestResult is in the DB | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1(validTestResultid) -> 1 | Test Delete TestResult - testDeleteTestResult |
+| No | Invalid| T2(invalidTestResultid) -> 0 | Test Delete TestResult - testDeleteTestResult |
+
+
+-----------------------------------------------------------------------------------------------------
 ## **Class *Warehouse***
 
 ### **Class *Warehouse* - method *addSKU***
@@ -2383,6 +2800,443 @@ Version:
 | no | Valid  | T2() -> err | Delete internal order test |
 
 
+### **Class *Warehouse* - method *addItem***
+
+**Criteria for method *addItem*:**
+	
+- price is positive
+- sku exists
+
+**Predicates for method *addItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| price is positive  | Yes |
+|                    | No |
+| sku exists         | Yes |
+|                    | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| price is positive | sku exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1(validData) -> rowID | Test add Item - testAddItem |
+| No  | Yes | Invalid | T2(invalidWeight) -> error | Test add Item - testAddItemError |
+| Yes | No  | Invalid | T3(invalidVolume) -> error | Test add Item - testAddItemError |
+
+
+### **Class *Warehouse* - method *getItems***
+
+**Criteria for method *getItems*:**
+
+- There are Items
+
+**Predicates for method *getItems*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are Items | Yes |
+|                 | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are Items | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test get all Item - testGetAllItem |
+| No | Valid | T2() -> list | - |
+
+
+### **Class *Warehouse* - method *getItem***
+
+**Criteria for method *getItem*:**
+	
+- There are Items
+
+**Predicates for method *getItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are Items | Yes |
+|                 | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are Items | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> Item | Test get Item - testGetItem |
+| No | Valid | T2() ->   | Test get Item - testGetItem |
+
+
+### **Class *Warehouse* - method *modifyItem***
+
+**Criteria for method *modifyItem*:**
+	
+- price is positive
+- There are Items
+
+**Predicates for method *modifyItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| price is positive | Yes |
+|             | No |
+| There are Items | Yes |
+|             | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| newPrice is positive | There are Items | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1(invalidData) -> error | Test modify Item - Test errors - Modify Item with Position |
+| Yes | No  | Invalid   | T2(validData) ->  | Test modify Item - Test modify - testModifyItemError |
+| No  | Yes | Invalid | T3(invalidPrice) -> error | Test modify Item - Test Errors - testModifyItemError |
+
+
+### **Class *Warehouse* - method *deleteItem***
+
+**Criteria for method *deleteItem*:**
+	
+- Item exists
+
+**Predicates for method *deleteItem*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| Item exists | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| Item exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|
+| Yes | Valid   | T1(validItemid) -> changes | Test delete Item - Delete Item|
+| No  | Invalid | T3(invalidItemid) -> error | Test delete Item - testDeleteItemError |
+
+
+### **Class *Warehouse* - method *addTestDescriptor***
+
+**Criteria for method *addTestDescriptor*:**
+	
+- sku exists
+
+**Predicates for method *addTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| sku exists         | Yes |
+|                    | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| sku exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|
+| Yes | Valid   | T1(validData) -> rowID | Test add TestDescriptor - testAddTestDescriptor |
+| No  | Invalid | T3(invalidData) -> error | Test add TestDescriptor - testAddTestDescriptorError |
+
+
+### **Class *Warehouse* - method *getTestDescriptors***
+
+**Criteria for method *getTestDescriptors*:**
+
+- There are TestDescriptors
+
+**Predicates for method *getTestDescriptors*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are TestDescriptors | Yes |
+|                 | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are TestDescriptors | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test get all TestDescriptor - testGetAllTestDescriptor |
+| No | Valid | T2() -> list | - |
+
+
+### **Class *Warehouse* - method *getTestDescriptor***
+
+**Criteria for method *getTestDescriptor*:**
+	
+- There are TestDescriptors
+
+**Predicates for method *getTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are TestDescriptors | Yes |
+|                 | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are TestDescriptors | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> TestDescriptor | Test get TestDescriptor - testGetTestDescriptor |
+| No | Valid | T2() ->   | Test get TestDescriptor - testGetTestDescriptor |
+
+
+### **Class *Warehouse* - method *modifyTestDescriptor***
+
+**Criteria for method *modifyTestDescriptor*:**
+	
+- there are testDescriptors
+- sku exists
+
+**Predicates for method *modifyTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are TestDescriptors | Yes |
+|             | No |
+| sku exists | Yes |
+|             | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are TestDescriptors | sku exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Valid   | T1(invalidData) -> error | Test modify TestDescriptor - Test errors - Modify TestDescriptor with Position |
+| Yes | No  | Invalid   | T2(invalidData) ->  error | Test modify TestDescriptor - Test modify - testModifyTestDescriptorError |
+| No  | Yes | Invalid | T3(invalidData) -> error | Test modify TestDescriptor - Test Errors - testModifyTestDescriptorError |
+
+
+### **Class *Warehouse* - method *deleteTestDescriptor***
+
+**Criteria for method *deleteTestDescriptor*:**
+	
+- TestDescriptor exists
+
+**Predicates for method *deleteTestDescriptor*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestDescriptor exists | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestDescriptor exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|
+| Yes | Valid   | T1(validTestDescriptorid) -> changes | Test delete TestDescriptor - Delete TestDescriptor|
+| No  | Invalid | T3(invalidTestDescriptorid) -> error | Test delete TestDescriptor - testDeleteTestDescriptorError |
+
+
+### **Class *Warehouse* - method *addTestResult***
+
+**Criteria for method *addTestResult*:**
+	
+- skuItem exists
+- testDescriptor exists
+- result is a string
+
+**Predicates for method *addTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| skuItem exists         | Yes |
+|                    | No |
+| testDescriptor exist   | Yes |
+|                    | No |
+| result is a string     | Yes |
+|                    | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| skuItem exists | testDescriptor exist | result is a string | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes | Valid   | T1(validData) -> rowID | Test add TestResult - testAddTestResult |
+| No  | Yes | Yes | Invalid | T3(invalidData) -> error | Test add TestResult - testAddTestResultError |
+| Yes  | No | Yes | Invalid | T3(invalidData) -> error | Test add TestResult - testAddTestResultError |
+| Yes  | Yes | No | Invalid | T3(invalidData) -> error | Test add TestResult - testAddTestResultError |
+
+
+### **Class *Warehouse* - method *getTestResults***
+
+**Criteria for method *getTestResults*:**
+
+- There are TestResults corresponding to a given rfid
+
+**Predicates for method *getTestResults*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are TestResults corresponding to a given rfid | Yes |
+|                 | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are TestResults corresponding to a given rfid| Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test get all TestResult - testGetAllTestResult |
+| No | Invalid | T2() -> error | testgetAllTestResultError |
+
+
+### **Class *Warehouse* - method *getTestResult***
+
+**Criteria for method *getTestResult*:**
+	
+- There is TestResult corresponding to a given rfid and id
+
+**Predicates for method *getTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are TestResults corresponding to a given rfid and id | Yes |
+|                 | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are TestResults corresponding to a given rfid and id | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Valid | T1() -> TestResult | Test get TestResult - testGetTestResult |
+| No | Valid | T2() -> error  | Test get TestResult - testGetTestResultError |
+
+
+### **Class *Warehouse* - method *modifyTestResult***
+
+**Criteria for method *modifyTestResult*:**
+	
+- there are testResults
+- newTestResult is a string
+- rfid exists
+- newIdTestDescriptor exists
+
+**Predicates for method *modifyTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| There are TestResults | Yes |
+|             | No |
+| newTestResult is a string | Yes |
+|             | No |
+| rfid exists | Yes |
+|             | No |
+| newIdTestDescriptor exists | Yes |
+|             | No |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| There are TestResults | newTestResult is a string | rfid exists | newIdTestDescriptor exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|-------|-------|-------|-------|
+| Yes | Yes | Yes | Yes | Valid   | T1(invalidData) -> error | Test modify TestResult - Test errors - Modify TestResult with Position |
+| Yes | No  | Yes | Yes | Invalid   | T2(invalidData) ->  error | Test modify TestResult - Test modify - testModifyTestResultError |
+| No  | Yes | Yes | Yes | Invalid | T3(invalidData) -> error | Test modify TestResult - Test Errors - testModifyTestResultError |
+| Yes  | Yes | No | Yes | Invalid | T3(invalidData) -> error | Test modify TestResult - Test Errors - testModifyTestResultError |
+| Yes  | Yes | Yes | No | Invalid | T3(invalidData) -> error | Test modify TestResult - Test Errors - testModifyTestResultError |
+
+
+### **Class *Warehouse* - method *deleteTestResult***
+
+**Criteria for method *deleteTestResult*:**
+	
+- TestResult exists
+
+**Predicates for method *deleteTestResult*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+| TestResult exists | Yes |
+|            | No  |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+**Combination of predicates**:
+
+| TestResult exists | Valid / Invalid | Description of the test case | Jest test case |
+|-------|-------|-------|-------|
+| Yes | Valid   | T1(validTestResultid) -> changes | Test delete TestResult - Delete TestResult|
+| No  | Invalid | T3(invalidTestResultid) -> error | Test delete TestResult - testDeleteTestResultError |
+
+
 -----------------------------------------------------------------------------------------------------
 
 # White Box Unit Tests
@@ -2401,12 +3255,18 @@ Version:
 | PositionDAO | DBpositionDAO.test.js |
 | SKUItemDAO  | DBskuItemDAO.test.js  |
 | RestockOrderDAO  | DBrestockOrderDAO.test.js  |
+| ItemDAO | DBitemDAO.test.js |
+| TestDescriptorDAO | DBtestDescriptorDAO.test.js |
+| TestResultDAO | DBtestResultDAO.test.js |
 | | |
 | Warehosue - User | WHuser.test.js |
 | Warehosue - SKU | WHsku.test.js |
 | Warehosue - Position | WHposition.test.js |
 | Warehouse - SKUItem | WHskuItem.test.js |
 | Warehouse - RestockOrder | WHrestockOrder.test.js |
+| Warehouse - Item | WHitem.test.js |
+| Warehouse - TestDescriptor | WHtestDescriptor.test.js |
+| warehouse - TestResult | WHtestResult.test.js |
 | | |
 
 ### Code coverage report
