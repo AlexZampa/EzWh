@@ -182,7 +182,7 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 |  2.4        | FR3.1.1                         | testControllerPosition.js - modifyPosition |             
 |  2.5        | FR3.1.2                         | testControllerPosition.js - deletePosition | 
 |  4.1        | FR1.1                           | testControllerUser.js - newUser         |
-|  4.1        | FR1.1                           | testControllerUser.js - modifyUserRights  |
+|  4.2        | FR1.1                           | testControllerUser.js - modifyUserRights  |
 |  4.3        | FR1.2                           | testControllerUser.js - deleteUser    |
 | 5.1         | FR5.1    | testControllerRestockOtder.js - newRestockOrder |
 | 5.2         | FR5.2    | testControllerRestockOtder.js - addSKUItemToRestockOrder |
