@@ -198,16 +198,12 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 9.1         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | 9.2         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | 9.3         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
-<<<<<<< HEAD
-| 10.1        | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus      |
-=======
-| 10.1        | FR6      | FR?      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
+| 10.1        | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | 11.1        | FR7      | testControllerItem.js - newItem |
 | 11.2        | FR7      | testControllerItem.js - modifyItem |
 | 12.1        | FR3.2.1                         | testControllerTestDescriptor.js - newTestDescriptor |
 | 12.2        | FR3.2.2                         | testControllerTestDescriptor.js - modifyTestDescriptor            |
 | 12.3        | FR3.2.3                         | testControllerTestDescriptor.js - deleteTestDescriptor            |             
->>>>>>> 0408efd5c850fd9fd4c1c5aee9593b3e95bbee80
 
 
 
