@@ -879,6 +879,8 @@ class Warehouse {
 
     addTestResult = async (rfid, idTestDescriptor, date, result) => {
         try {
+            if (!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
+                throw { err: 422, msg: "Invalid Date" };
             if(result !== 'true' && result !== 'false')
                 throw {err : 422, msg : "Invalid format"};
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
@@ -893,6 +895,8 @@ class Warehouse {
 
     modifyTestResult = async (rfid, id, newIdTestDescriptor, newDate, newResult) => {
         try {
+            if (!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid()))
+                throw { err: 422, msg: "Invalid Date" };
             if(newResult !== 'true' && newResult !== 'false')
                 throw {err : 422, msg : "Invalid format"};
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
