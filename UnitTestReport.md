@@ -2242,7 +2242,7 @@ Version: 1.0
 
 **Combination of predicates**:
 
-| Supplier exists | Date is valid | Valid / Invalid | Description of the test case | Jest test case |
+| Supplier exists |  Date is valid | Valid / Invalid | Description of the test case | Jest test case |
 |-------|-------|-------|-------|-------|
 | Yes | Yes | Valid   | T1() -> RestockOrder | Test add RestockOrder - testAddRestockOrder |
 | No | Yes | Invalid | T2() -> error   | Test add RestockOrder - testAddRestockOrderError |
