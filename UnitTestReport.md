@@ -805,8 +805,8 @@ Version: 1.0
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|
-| yes | valid | T1() -> ok  | Test Get All Internal Order Issued|
+|-------|-------|-------|----|
+| yes  | valid | T1() -> ok  | Test Get All Internal Order Issued|
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *getAllAccepted***
@@ -832,7 +832,7 @@ Version: 1.0
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|
+|-------|-------|-------|----|
 | yes | valid | T1() -> ok | Test Get All Internal Order Accepted |
 
 -----------------------------------------------------------------------------------------------------
@@ -865,7 +865,7 @@ Version: 1.0
 **Combination of predicates**:
 
 
-| Criteria 1 | Criteria 2 | Valid / Invalid | Description of the test case | Jest test case |
+| Criteria 1 | Criteria 2 | Valid / Invalid | Description of the test case | Jest test case  |
 |-------|-------|-------|-------|----|
 | ID is a positive number | any | valid | validity checked by ControllerInternalOrder | / |
 | / | yes | valid | T1(ID) -> internalOrder  | Test Create and Get Internal Order |
