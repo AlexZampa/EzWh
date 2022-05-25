@@ -181,28 +181,33 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 |  2.3        | FR3.1.4                         | testControllerPosition.js - modifyPosition | 
 |  2.4        | FR3.1.1                         | testControllerPosition.js - modifyPosition |             
 |  2.5        | FR3.1.2                         | testControllerPosition.js - deletePosition | 
+| 3.1         | FR5.6    | testControllerRestockOrder.js - newRestockOrder |
 |  4.1        | FR1.1                           | testControllerUser.js - newUser         |
 |  4.2        | FR1.1                           | testControllerUser.js - modifyUserRights  |
 |  4.3        | FR1.2                           | testControllerUser.js - deleteUser    |
-| 5.1         | FR5.1    | testControllerRestockOtder.js - newRestockOrder |
-| 5.2         | FR5.2    | testControllerRestockOtder.js - addSKUItemToRestockOrder |
-| 5.3         | FR5.3    | testControllerRestockOtder.js - addSKUItemToRestockOrder |
-| 5.5         | FR5.5    | testControllerRestockOtder.js - newRestockOrder |
-| 5.6         | FR5.6    | testControllerRestockOtder.js - newRestockOrder |
-| 5.7         | FR5.7    | testControllerRestockOtder.js - changeStateRestockOrder |
-| 5.8         | FR5.8    | testControllerRestockOtder.js - changeStateRestockOrder - addSKUItemToRestockOrder - addTransportNoteToRestockOrder |
-| 5.10        | FR5.10   | testControllerRestockOtder.js - getSKUItemToReturnFromRestockOrder|
+| 5.1         | FR5.1    | testControllerRestockOrder.js - newRestockOrder |
+| 5.2         | FR5.2    | testControllerRestockOrder.js - addSKUItemToRestockOrder |
+| 5.3         | FR5.3    | testControllerRestockOrder.js - addSKUItemToRestockOrder |
+| 5.5         | FR5.5    | testControllerRestockOrder.js - newRestockOrder |
+| 5.6         | FR5.6    | testControllerRestockOrder.js - newRestockOrder |
+| 5.7         | FR5.7    | testControllerRestockOrder.js - changeStateRestockOrder |
+| 5.8         | FR5.8    | testControllerRestockOrder.js - changeStateRestockOrder - addSKUItemToRestockOrder - addTransportNoteToRestockOrder |
+| 5.10        | FR5.10   | testControllerRestockOrder.js - getSKUItemToReturnFromRestockOrder|
 | 6.1         | FR5.11   | testControllerReturnOrder.js - newReturnOrder |
 | 6.2         | FR5.12      | testControllerReturnOrder.js - newReturnOrder |
 | 9.1         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | 9.2         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | 9.3         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
+<<<<<<< HEAD
+| 10.1        | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus      |
+=======
 | 10.1        | FR6      | FR?      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | 11.1        | FR7      | testControllerItem.js - newItem |
 | 11.2        | FR7      | testControllerItem.js - modifyItem |
 | 12.1        | FR3.2.1                         | testControllerTestDescriptor.js - newTestDescriptor |
 | 12.2        | FR3.2.2                         | testControllerTestDescriptor.js - modifyTestDescriptor            |
 | 12.3        | FR3.2.3                         | testControllerTestDescriptor.js - deleteTestDescriptor            |             
+>>>>>>> 0408efd5c850fd9fd4c1c5aee9593b3e95bbee80
 
 
 
@@ -217,6 +222,6 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | Non Functional Requirement | Test name |
 | -------------------------- | --------- |
 | NFR4                       | testControllerPosition.js - newPosition - modifyPositionID - modifyPosition |
-| NFR6                       | |
-| NFR9                       |  |
+| NFR6                       | testControllerSKUItem.js - addSKUItem|
+| NFR9                       | testControllerRestockOrder.s - testControllerReturnOrder.js - testControllerInternalOrder.js - testControllerTestResult.js |
 
