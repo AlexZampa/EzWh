@@ -487,22 +487,19 @@ class Warehouse {
             if (restockOrder.getState() !== "COMPLETEDRETURN")
                 throw { err: 422, msg: "Restock Order not in COMPLETEDRETURN state" };
             const allSkuItems = await this.skuItemDAO.getAllSKUItems();
-            let skuItems = [];
-            allSkuItems.forEach(s => {
-                if (s.getRestockOrder() === restockOrderID) {
-                    skuItems.push(s);
-                }
-            });
             const returnItems = [];
-            for (const s of skuItems) {
-                const testResults = await this.testResultDAO.getAllTestResult(s.getRFID());
-                for (const r of testResults) {
-                    if (r.result === '0') {
-                        returnItems.push(s);
-                        break;
+            for(const s of allSkuItems){
+                if (s.getRestockOrder() === restockOrderID) {
+                    const testResults = await this.testResultDAO.getAllTestResult(s.getRFID());
+                    for (const r of testResults) {
+                        if (r.result === 'false') {
+                            returnItems.push(s);
+                            break;
+                        }
                     }
                 }
             }
+
             return returnItems;
         } catch (err) {
             throw err;
