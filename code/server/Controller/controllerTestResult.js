@@ -54,7 +54,7 @@ router.get('/skuitems/:rfid/testResults/:id', [check("rfid").exists().isString()
 
 //create testResult
 router.post('/skuitems/testResult',
-    [check("rfid").exists().isString().trim().isNumeric(), check("idTestDescriptor").exists().isInt({min: 1}), check("Date").exists().isString().trim(), check("Result").exists().isString().trim()],
+    [check("rfid").exists().isString().trim().isNumeric(), check("idTestDescriptor").exists().isInt({min: 1}), check("Date").exists().isString().trim(), check("Result").exists().isBoolean()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -62,12 +62,13 @@ router.post('/skuitems/testResult',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            await warehouse.addTestResult(req.body.rfid, req.body.idTestDescriptor, req.body.Date, req.body.Result);
+            await warehouse.addTestResult(req.body.rfid, req.body.idTestDescriptor, req.body.Date, req.body.Result.toString());
             return res.status(201).end();
         } catch (err) {
             console.log(err);
             switch (err.err) {
                 case 404: return res.status(404).end();
+                case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
         }
@@ -79,7 +80,7 @@ router.put('/skuitems/:rfid/testResult/:id',
     [check("rfid").exists().isString().trim().isNumeric(), check("id").exists().isInt({min: 1}),
     check("newIdTestDescriptor").exists().isInt({min: 1}),
     check("newDate").exists().isString().trim(),
-    check("newResult").exists().isString().trim()],
+    check("newResult").exists().isBoolean()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -87,7 +88,7 @@ router.put('/skuitems/:rfid/testResult/:id',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const result = await warehouse.modifyTestResult(req.params.rfid, req.params.id, req.body.newIdTestDescriptor, req.body.newDate, req.body.newResult);
+            const result = await warehouse.modifyTestResult(req.params.rfid, req.params.id, req.body.newIdTestDescriptor, req.body.newDate, req.body.newResult.toString());
             return res.status(200).end();
         } catch (err) {
             console.log(err);

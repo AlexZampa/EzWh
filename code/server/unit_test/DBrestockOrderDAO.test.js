@@ -57,6 +57,34 @@ describe('Test Get All RestockOrder', () => {
     testGetAllRestockOrder(restockOrderList);
 });
 
+describe('Test Loop Coverage Restock Order', () => {
+    beforeAll(async () => {
+        await restockOrderDAO.resetTable();
+    });
+
+
+    const restockOrderList0 = [];
+    const restockOrderList1 = [];
+    restockOrderList1.push(new RestockOrder(1, '2022/05/18', 2, "ISSUED", undefined));
+    const restockOrderList2 = [];
+    restockOrderList2.push(new RestockOrder(1, '2022/05/18', 2, "ISSUED", undefined));
+    restockOrderList2.push(new RestockOrder(2, '2022/02/18', 2, "DELIVERED", '2022/02/20'));
+    const restockOrderList3 = [];
+    restockOrderList3.push(new RestockOrder(1, '2022/05/18', 2, "ISSUED", undefined));
+    restockOrderList3.push(new RestockOrder(2, '2022/02/18', 2, "DELIVERED", '2022/02/20'));
+    restockOrderList3.push(new RestockOrder(3, '2022/03/19', 2, "COMPLETED", '2022/04/20'));
+    
+
+    testGetAllRestockOrder(restockOrderList0);
+    testCreateRestockOrder([], '2022/05/18', 2, "ISSUED", null, 1);
+    testGetAllRestockOrder(restockOrderList1);
+    testCreateRestockOrder([], '2022/02/18', 2, "DELIVERED", '2022/02/20', 2);
+    testGetAllRestockOrder(restockOrderList2);
+    testCreateRestockOrder([], '2022/03/19', 2, "COMPLETED", '2022/04/20', 3);
+    testGetAllRestockOrder(restockOrderList3);
+
+});
+
 
 describe('Test Update RestockOrder', () => {
     beforeAll(async () => {

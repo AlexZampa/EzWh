@@ -38,7 +38,7 @@ class TestResult{
     convertToObj = () => {
         return(
             {
-                "id" : this.id, "idTestDescriptor" : this.idTestDescriptor, "Date" : this.date ? this.date.format('YYYY/MM/DD') : "", "Result" : this.result
+                "id" : this.id, "idTestDescriptor" : this.idTestDescriptor, "Date" : this.date ? this.date.format('YYYY/MM/DD') : "", "Result" : (this.result === 'true')
             }
         )
     }

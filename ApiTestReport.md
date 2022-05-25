@@ -1,8 +1,8 @@
 # Integration and API Test Report
 
-Date:
+Date: 25/05/2022
 
-Version:
+Version: 1.0
 
 # Contents
 
@@ -19,15 +19,6 @@ Version:
 - [API testing - Scenarios](#api-testing---scenarios)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
-    - [](#)
-
-- [Tests](#tests)
-
-- [Scenarios](#scenarios)
-
-- [Coverage of scenarios and FR](#scenario-coverage)
-- [Coverage of non-functional requirements](#nfr-coverage)
-
 
 
 # Dependency graph 
@@ -192,7 +183,7 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 |  2.5        | FR3.1.2                         | testControllerPosition.js - deletePosition | 
 | 3.1         | FR5.6    | testControllerRestockOrder.js - newRestockOrder |
 |  4.1        | FR1.1                           | testControllerUser.js - newUser         |
-|  4.1        | FR1.1                           | testControllerUser.js - modifyUserRights  |
+|  4.2        | FR1.1                           | testControllerUser.js - modifyUserRights  |
 |  4.3        | FR1.2                           | testControllerUser.js - deleteUser    |
 | 5.1         | FR5.1    | testControllerRestockOrder.js - newRestockOrder |
 | 5.2         | FR5.2    | testControllerRestockOrder.js - addSKUItemToRestockOrder |
@@ -207,7 +198,16 @@ Report also for each of the scenarios the (one or more) API Mocha tests that cov
 | 9.1         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | 9.2         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
 | 9.3         | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
+<<<<<<< HEAD
 | 10.1        | FR6      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus      |
+=======
+| 10.1        | FR6      | FR?      | testControllerInternalOrder.js - newInternalOrder - modifyInternalOrderStatus |
+| 11.1        | FR7      | testControllerItem.js - newItem |
+| 11.2        | FR7      | testControllerItem.js - modifyItem |
+| 12.1        | FR3.2.1                         | testControllerTestDescriptor.js - newTestDescriptor |
+| 12.2        | FR3.2.2                         | testControllerTestDescriptor.js - modifyTestDescriptor            |
+| 12.3        | FR3.2.3                         | testControllerTestDescriptor.js - deleteTestDescriptor            |             
+>>>>>>> 0408efd5c850fd9fd4c1c5aee9593b3e95bbee80
 
 
 

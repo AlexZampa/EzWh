@@ -684,7 +684,7 @@ package "Database" #DDDDDD {
 
 For each functional requirement from the requirement document, this table shows which classes concur to implement it.
 
-| FR / Class |  ControllerSKU | ControllerSKUItem | ControllerPosition | ControllerTestDescriptor | ControllerTestResult | ControllerUser | ControllerRestockOrder | ControllerReturnOrder | ControllerInternalOrder | ControllerItem | Warehouse | SKU | SKUItem | Position | TestDescriptor | TestResult | User | RestockOrder | ReturnOrder | InternalOrder | Item |
+| FR / Class |  ControllerSKU | ControllerSKUItem | ControllerPosition | ControllerTestDescriptor | ControllerTestResult | ControllerUser | ControllerRestockOrder | ControllerReturnOrder | ControllerInternalOrder | ControllerItem | Warehouse | SkuDAO | SKUItemDAO | PositionDAO | TestDescriptorDAO | TestResultDAO | UserDAO | RestockOrderDAO | ReturnOrderDAO | InternalOrderDAO | ItemDAO |
 | :--------- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | FR1 | | | | | | X | | | | | X | | | | | | X | | | | |
 | FR2 | X | | | | | | | | | | X | X | | | | | | | | | |
@@ -699,27 +699,6 @@ For each functional requirement from the requirement document, this table shows 
 
 # Verification sequence diagrams
 
-### Scenario 1.1
-```plantuml
-mainframe **Create SKU**
-actor Manager
-participant GUI
-participant ControllerSKU
-participant Warehouse
-participant SKU
-
-autonumber
-Manager -> GUI : inserts data
-GUI -> ControllerSKU : POST/api/sku -> createSKU
-ControllerSKU -> Warehouse : addSKU
-Warehouse -> SKU : SKU
-Warehouse <-> SKU : return success
-ControllerSKU <-- Warehouse : return success
-GUI <-- ControllerSKU : 201 created
-
-@enduml
-```
-
 ### Scenario 1.2
 ```plantuml
 mainframe **Modify SKU location**
@@ -728,164 +707,43 @@ participant GUI
 participant ControllerSKU
 participant ControllerPosition
 participant Warehouse
-participant SKU
+participant SkuDAO
+participant PositionDAO
 
 autonumber
 Manager -> GUI : inserts SKU ID
-GUI -> ControllerSKU :  GET/api/skus/:id -> getSKUbyID
+GUI -> ControllerSKU :  GET/api/skus/:id
 ControllerSKU -> Warehouse : getSKU
+Warehouse --> SkuDAO : getSKU
+Warehouse <-- SkuDAO : return SKU
 ControllerSKU <-- Warehouse : return SKU
 GUI <-- ControllerSKU : 200 ok
 
-Manager -> GUI : selects SKU record
-GUI -> ControllerPosition : GET/api/positions -> getPositions
-ControllerPosition -> Warehouse : getPositions
-ControllerPosition <-- Warehouse : return Position list
-GUI <-- ControllerPosition : 200 ok
-
-Manager -> GUI : selects SKU position
-GUI -> ControllerSKU : PUT/api/sku/:id/position -> modifySKUposition
-ControllerSKU -> Warehouse : modifySKUposition
-Warehouse -> Warehouse : getSKU
-Warehouse -> Warehouse : getPosition
-Warehouse -> SKU : setPosition
-Warehouse <-- SKU : return success
-Warehouse -> Position : addSKU
-Position -> Position : update volume, weight
-Warehouse <-- Position : return success
-ControllerSKU <-- Warehouse : return success
-GUI <-- ControllerSKU : 200 ok
-
-@enduml
-```
-
-### Scenario 1.3
-```plantuml
-mainframe **Modify SKU weight and volume**
-actor Manager
-participant GUI
-participant ControllerSKU
-participant Warehouse
-participant SKU
-
-autonumber
-Manager -> GUI : inserts SKU ID
-GUI -> ControllerSKU :  GET/api/skus/:id -> getSKUbyID
-ControllerSKU -> Warehouse : getSKU
-ControllerSKU <-- Warehouse : return SKU
-GUI <-- ControllerSKU : 200 ok
-
-Manager -> GUI : inserts data
-GUI -> ControllerSKU : PUT/api/sku/:id -> modifySKU
-  ControllerSKU -> Warehouse : modifySKU
-  Warehouse -> Warehouse : getSKU
-  Warehouse -> SKU : set<Field>
-  Warehouse <-- SKU : return success
-  Warehouse -> SKU : getPosition
-  alt position exists
-    Warehouse -> Warehouse : getPosition
-    Warehouse -> Position : addSKU
-    Position -> Position : update volume, weight
-    Warehouse <-- SKU : return success
-  end alt  
-ControllerSKU <-- Warehouse : return success
-GUI <-- ControllerSKU : 200 ok
-
-@enduml
-```
-
-### Scenario 2.1
-```plantuml
-mainframe **Create Position**
-actor Manager
-participant GUI
-participant ControllerPosition
-participant Warehouse
-participant Position
-
-autonumber
-Manager -> GUI : inserts data
-GUI -> ControllerPosition : POST/api/position -> createPosition
-ControllerPosition -> Warehouse : addPosition
-Warehouse -> Position : Position
-Warehouse <-- Position : return success
-ControllerPosition <-- Warehouse : return success
-GUI <-- ControllerPosition : 201 created
-
-@enduml
-```
-
-### Scenario 2.2
-```plantuml
-mainframe **Modify positionID**
-actor Manager
-participant GUI
-participant ControllerPosition
-participant Warehouse
-participant Position
-
-autonumber
 Manager -> GUI : show list of positions
-GUI -> ControllerPosition : GET/api/positions -> getPositions
+GUI -> ControllerPosition : GET/api/positions
 ControllerPosition -> Warehouse : getPositions
+Warehouse --> PositionDAO : getAllPosition
+Warehouse <-- PositionDAO : return Position list
 ControllerPosition <-- Warehouse : return Position list
 GUI <-- ControllerPosition : 200 ok
 
-Manager -> GUI : inserts new PositionID
-GUI -> ControllerPosition : PUT/api/position/:positionID/changeID -> modifyPositionID
-ControllerPosition -> Warehouse : modifyPositionID
-Warehouse -> Warehouse : getPosition
-Warehouse -> Position : setPositionID
-Position -> Position : update Aisle Row Col
-Warehouse <-- Position : return success
-ControllerPosition <-- Warehouse : return success
-GUI <-- ControllerPosition : 200 ok
+Manager --> GUI : selects SKU position
+GUI --> ControllerSKU : PUT/api/sku/:id/position
+ControllerSKU --> Warehouse : modifySKUposition
+Warehouse --> SkuDAO : getSKU
+Warehouse <-- SkuDAO : return SKU
+Warehouse --> PositionDAO : getPosition
+Warehouse <-- PositionDAO : return Position
+Warehouse --> SkuDAO : updateSKU
+Warehouse <-- SkuDAO : return success
+Warehouse --> PositionDAO : updatePosition
+Warehouse <-- PositionDAO : return success
+ControllerSKU <-- Warehouse : return success
+GUI <-- ControllerSKU : 200 ok
 
 @enduml
 ```
 
-### Scenario 2.(3-4)
-```plantuml
-mainframe **Modify weight and volume or aisle ID, row and column of Position**
-actor Manager
-participant GUI
-participant ControllerPosition
-participant Warehouse
-participant Position
-
-autonumber
-Manager -> GUI : selects position and inserts data
-GUI -> ControllerPosition : PUT/api/position/:positionID-> modifyPosition
-ControllerPosition -> Warehouse : modifyPosition
-Warehouse -> Warehouse : getPosition
-Warehouse -> Position : setPositionAisleRowCol
-Position -> Position : update positionID
-Warehouse <-- Position : return success
-Warehouse -> Position : set<Field>
-Warehouse <-- Position : return succes
-ControllerPosition <-- Warehouse : return success
-GUI <-- ControllerPosition : 200 ok
-
-@enduml
-```
-
-### Scenario 2.5
-```plantuml
-mainframe **Delete Position**
-actor Manager
-participant GUI
-participant ControllerPosition
-participant Warehouse
-
-autonumber
-Manager -> GUI : delete positions selected
-GUI -> ControllerPosition : DELETE/api/position/:positionID -> deletePosition
-ControllerPosition -> Warehouse : deletePosition
-ControllerPosition <-- Warehouse : return success
-GUI <-- ControllerPosition : 204 No Content
-
-@enduml
-```
 
 ### Scenario 3.2
 ```plantuml
@@ -893,56 +751,49 @@ mainframe **Restock Order of SKU S issued by supplier**
 actor Manager
 participant GUI
 participant ControllerUser
+participant ControllerItem
 participant ControllerRestockOrder
 participant Warehouse
-participant RestockOrder
+participant RestockOrderDAO
+participant ItemDAO
+participant UserDAO
 
 autonumber
-Manager -> GUI :  show list of Supplier
-GUI -> ControllerUser : GET/api/suppliers -> getAllSuppliers
-ControllerUser -> Warehouse : getSuppliers
-ControllerUser <-- Warehouse : return Supplier list
+Manager --> GUI :  show list of Supplier
+GUI --> ControllerUser : GET/api/suppliers
+ControllerUser --> Warehouse : getSuppliers
+Warehouse --> UserDAO : getAllUsersByType
+Warehouse <-- UserDAO : return supplier list
+ControllerUser <-- Warehouse : return supplier list
 GUI <-- ControllerUser : 200 ok
 
-Manager -> GUI : select Items
-GUI -> ControllerRestockOrder : GET/api/items -> getItems
-ControllerRestockOrder -> Warehouse : getItems
-ControllerRestockOrder <-- Warehouse : return Item list
-GUI <-- ControllerRestockOrder : return 200 ok
-GUI -> ControllerRestockOrder : GET/api/items/:id -> getItemById
-ControllerRestockOrder -> Warehouse : getItem
-ControllerRestockOrder <-- Warehouse : return Item
-GUI <-- ControllerRestockOrder : return 200 ok
+Manager --> GUI : select Items
+GUI --> ControllerItem : GET/api/items
+ControllerItem --> Warehouse : getItems
+Warehouse --> ItemDAO : getAllItem
+Warehouse <-- ItemDAO : return Item list
+ControllerItem <-- Warehouse : return Item list
+GUI <-- ControllerItem : return 200 ok
+
+Manager --> GUI : select single Item
+GUI -> ControllerItem : GET/api/items/:id
+ControllerItem -> Warehouse : getItem
+Warehouse --> ItemDAO : getItem
+Warehouse <-- ItemDAO : return Item
+ControllerItem <-- Warehouse : return Item
+GUI <-- ControllerItem : return 200 ok
 
 Manager -> GUI : inserts data
-GUI -> ControllerRestockOrder : POST/api/restockOrder -> createRestockOrder
+GUI -> ControllerRestockOrder : POST/api/restockOrder
 ControllerRestockOrder -> Warehouse : addRestockOrder
-Warehouse -> RestockOrder : RestockOrder
-Warehouse <-- RestockOrder : return success
+Warehouse -> RestockOrderDAO : newRestockOrder
+Warehouse <-- RestockOrderDAO : return success
 ControllerRestockOrder <-- Warehouse : return success
 GUI <-- ControllerRestockOrder : 201 Created
 
 @enduml
 ```
 
-### Scenario 4.0
-```plantuml
-@startuml
-mainframe **Get User list**
-actor Admin
-participant GUI
-participant ControllerUser
-participant Warehouse
-
-autonumber
-Admin -> GUI : requires user list (no managers) 
-GUI -> ControllerUser : GET/api/users -> getUsers
-ControllerUser -> Warehouse : getUsers
-ControllerUser <-- Warehouse : return user list
-GUI <-- ControllerUser : 200 ok
-
-@enduml
-```
 
 ### Scenario 4.1
 ```plantuml
@@ -952,61 +803,59 @@ actor Admin
 participant GUI
 participant ControllerUser
 participant Warehouse
-participant User
+participant UserDAO
 
 autonumber
-Admin -> GUI : defines credentials of the new account 
-GUI -> ControllerUser : POST/api/newUser -> createUser
-ControllerUser -> Warehouse : addUser
-Warehouse -> User : User
-Warehouse <-- User : return success
+Admin --> GUI : defines credentials of the new account 
+GUI --> ControllerUser : POST/api/newUser
+ControllerUser --> Warehouse : addUser
+Warehouse --> UserDAO : newUser
+UserDAO --> UserDAO : generateSecurePassword
+Warehouse <-- UserDAO : return success
 ControllerUser <-- Warehouse : return success
 GUI <-- ControllerUser : 201 created
 
 @enduml
 ```
 
-### Scenario 4.2
+
+
+### Scenario 7.1
 ```plantuml
 @startuml
-mainframe **Modify User rights**
-actor Admin
+mainframe **LogIn**
+actor User
 participant GUI
 participant ControllerUser
 participant Warehouse
-participant User
+participant UserDAO
 
 autonumber
-Admin -> GUI : selects the access rights for user 
-GUI -> ControllerUser : PUT/api/users/:username -> modifyUserRights
-ControllerUser -> Warehouse : modifyUserRights
-Warehouse -> Warehouse : getUser
-Warehouse -> User : setType
-Warehouse <-- User : return success
-ControllerUser <-- Warehouse : return success
-GUI <-- ControllerUser : 200 ok
-
+User --> GUI : insert Username and Password
+User --> GUI : click Login
+GUI --> ControllerUser : POST/api/userSessions
+ControllerUser --> Warehouse : login
+Warehouse --> UserDAO : loginUser
+UserDAO --> UserDAO : verifyPassword
+alt Credentials are Ok
+  Warehouse <-- UserDAO : return User
+  ControllerUser <- Warehouse : return User
+  GUI <-- ControllerUser : return 200 Ok
+  User <-- GUI : display homepage
+else Credentials are wrong
+  Warehouse <-- UserDAO : return error
+  ControllerUser <- Warehouse : return error
+  GUI <-- ControllerUser : return 401 Unauthorized
+  User <-- GUI : display Error Message
+end
 @enduml
 ```
 
-### Scenario 4.3
-```plantuml
-@startuml
-mainframe **Delete User**
-actor Admin
-participant GUI
-participant ControllerUser
-participant Warehouse
 
-autonumber
-Admin -> GUI : selects account to delete
-GUI -> ControllerUser : DELETE/api/users/:username/:type -> deleteUser
-ControllerUser -> Warehouse : deleteUser
-ControllerUser <-- Warehouse : return success
-GUI <-- ControllerUser : 204 no content
+<!-- ########################################################################################################### -->
 
-@enduml
-```
+
+
 ### Scenario 5.1.1
 ```plantuml
 @startuml
@@ -1195,111 +1044,6 @@ controllerReturnOrder --> GUI : return 201 Created
 GUI --> Manager : Display Created message
 @enduml
 
-```
-
-<!-- da cancellare -->
-### Scenario 6.2
-```plantuml
-@startuml
-mainframe **Return Order of any SKU items**
-actor Manager 
-participant GUI
-participant controllerRestockOrder
-participant controllerReturnOrder
-participant Warehouse
-participant RestockOrder
-participant ReturnOrder
-participant SKUItem
-participant SKU
-participant TestResult
-participant Position
-actor Supplier
-
-autonumber
-Manager -> GUI : insert ID of RestockOrder
-GUI -> controllerRestockOrder : GET/api/restockOrders/:id/returnItems -> getReturnItems
-controllerRestockOrder -> Warehouse : returnItemsFromRO(notPassed = 0)
-Warehouse -> Warehouse : getRestockOrder
-Warehouse -> RestockOrder : getSKUItemsFailedTest
-loop for each SKUItem
-  RestockOrder -> SKUItem : getNotPassed
-  SKUItem -> TestResult : getResult
-  SKUItem <-- TestResult : return result
-  alt return false
-    RestockOrder <-- SKUItem : return RFID
-  else 
-      SKUItem -> SKUItem : checkIfReturn
-        alt return true
-          RestockOrder <-- SKUItem : return RFID
-        end alt
-  end alt
-end loop
-
-RestockOrder --> controllerRestockOrder : return listSKUs
-controllerRestockOrder --> GUI : return RFID of SKUs
-
-Manager -> GUI : Add item to REO and confirm
-GUI -> controllerReturnOrder : POST/api/returnOrder -> createReturnOrder
-controllerReturnOrder -> Warehouse : addReturnOrder
-Warehouse -> ReturnOrder : ReturnOrder
-Warehouse <-- ReturnOrder : Return success  
-Warehouse -> ReturnOrder : addSKUItems 
-loop for each RFID of item with not passed test in RO
-  ReturnOrder -> SKUItem : setNotAvailable
-  ReturnOrder <-- SKUItem : return ok
-end loop
-Warehouse <-- ReturnOrder : return success
-Warehouse -> GUISupplier : sendNotification
-Warehouse --> controllerReturnOrder : return ok
-controllerReturnOrder --> GUI : return 201 Created
-GUI --> Manager : Display Created message
-@enduml
-
-```
-
-### Scenario 7.1
-```plantuml
-@startuml
-mainframe **LogIn**
-actor User
-participant GUI
-participant controllerUser
-participant Warehouse
-
-autonumber
-User -> GUI : insert Username and Password
-User -> GUI : click Login
-GUI -> controllerUser : POST/api/userSessions -> logIn
-controllerUser -> Warehouse : logIn
-alt Credentials are Ok
-  controllerUser <- Warehouse : return true
-  GUI <-- controllerUser : return 200 Ok
-  User <-- GUI : display homepage
-else Credentials are wrong
-  controllerUser <- Warehouse : return false
-  GUI <-- controllerUser : return 401 Unauthorized
-  User <-- GUI : display Error Message
-end
-@enduml
-```
-
-### Scenario 7.2
-```plantuml
-@startuml
-mainframe **LogOut**
-actor User
-participant GUI
-participant controllerUser
-participant Warehouse
-
-autonumber
-User -> GUI : click on Logout
-GUI -> controllerUser : POST/api/logout -> logOut
-controllerUser -> Warehouse : logOut
-controllerUser <-- Warehouse : return ok
-GUI <-- controllerUser : return 200 Ok
-User <-- GUI : display Login page
-@enduml
 ```
 
 ### Scenario 9.1

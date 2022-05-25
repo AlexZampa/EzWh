@@ -487,22 +487,19 @@ class Warehouse {
             if (restockOrder.getState() !== "COMPLETEDRETURN")
                 throw { err: 422, msg: "Restock Order not in COMPLETEDRETURN state" };
             const allSkuItems = await this.skuItemDAO.getAllSKUItems();
-            let skuItems = [];
-            allSkuItems.forEach(s => {
-                if (s.getRestockOrder() === restockOrderID) {
-                    skuItems.push(s);
-                }
-            });
             const returnItems = [];
-            for (const s of skuItems) {
-                const testResults = await this.testResultDAO.getAllTestResult(s.getRFID());
-                for (const r of testResults) {
-                    if (r.result === '0') {
-                        returnItems.push(s);
-                        break;
+            for(const s of allSkuItems){
+                if (s.getRestockOrder() === restockOrderID) {
+                    const testResults = await this.testResultDAO.getAllTestResult(s.getRFID());
+                    for (const r of testResults) {
+                        if (r.result === 'false') {
+                            returnItems.push(s);
+                            break;
+                        }
                     }
                 }
             }
+
             return returnItems;
         } catch (err) {
             throw err;
@@ -882,6 +879,8 @@ class Warehouse {
 
     addTestResult = async (rfid, idTestDescriptor, date, result) => {
         try {
+            if(result !== 'true' && result !== 'false')
+                throw {err : 422, msg : "Invalid format"};
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(idTestDescriptor);
             const res = await this.testResultDAO.newTestResult(rfid, idTestDescriptor, date, result);
@@ -894,6 +893,8 @@ class Warehouse {
 
     modifyTestResult = async (rfid, id, newIdTestDescriptor, newDate, newResult) => {
         try {
+            if(newResult !== 'true' && newResult !== 'false')
+                throw {err : 422, msg : "Invalid format"};
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(newIdTestDescriptor);
             const tr = await this.testResultDAO.getTestResult(rfid, id);

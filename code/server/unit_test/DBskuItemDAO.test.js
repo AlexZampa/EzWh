@@ -30,6 +30,8 @@ describe('Test Create and Get SKUItem', () => {
     testCreateSKUItem("2", sku2.getID(), 1, dayjs('2022-05-18'), undefined, 2);
     testGetSKUItem("2", expectedSKUItem2);
 
+    testCreateSKUItemerror("2", sku2.getID(), 1, dayjs('2022-05-18'), undefined, { err: 422, msg: "SKUItem not unique" });
+
 
 });
 
@@ -63,11 +65,13 @@ describe('Test Update SKUItem', () => {
     beforeAll(async () => {
         await skuItemDAO.resetTable();
         await skuItemDAO.newSKUItem("1", sku.getID(), 1, null, undefined);
+        await skuItemDAO.newSKUItem("2", sku2.getID(), 1, dayjs('2022-05-18'), undefined);
     });
     const expectedSKUItem = new SKUItem("1", sku.getID(), 0, dayjs('2022-05-29'), undefined);
     const expectedChanges = 1;
     testUpdateSKUItem("1", "1", 0, dayjs('2022-05-29'), undefined, expectedChanges);
     testGetSKUItem("1", expectedSKUItem);
+    testUpdateSKUItemerror("1", "2", 0, dayjs('2022-05-29'), undefined, { err: 422, msg: "RFID not unique" });
 });
 
 
@@ -85,12 +89,22 @@ describe('Test Delete SKUItem', () => {
     let expectedChanges = 1
     testDeleteSKUItem("2", expectedChanges);
     testGetAllSKUItem(skuItemList);
+    testDeleteSKUItemError("4", { err: 404, msg: "SKUItem not found" });
 });
 
 function testCreateSKUItem(RFID, sku, available, dateOfStock, restockOrder, expectedID) {
     test('create new SKUItem', async () => {
         let id = await skuItemDAO.newSKUItem(RFID, sku, available, dateOfStock, restockOrder);
         expect(id).toStrictEqual(expectedID);
+    });
+}
+
+function testCreateSKUItemerror(RFID, sku, available, dateOfStock, restockOrder, expectedError) {
+    test('throw on create SKUItem', async () => {
+        async function createNonExistentSKUItem() {
+            await skuItemDAO.newSKUItem(RFID, sku, available, dateOfStock, restockOrder);
+        };
+        await expect(createNonExistentSKUItem).rejects.toEqual(expectedError);
     });
 }
 
@@ -128,6 +142,15 @@ function testUpdateSKUItem(oldRFID, newRFID, available, dateOfStock, restockOrde
     });
 }
 
+function testUpdateSKUItemerror(oldRFID, newRFID, available, dateOfStock, restockOrder, expectedError) {
+    test('throw on update SKUItem', async () => {
+        async function updateNonExistentSKUItem() {
+            await await skuItemDAO.updateSKUItem(oldRFID, newRFID, available, dateOfStock, restockOrder);
+        };
+        await expect(updateNonExistentSKUItem).rejects.toEqual(expectedError);
+    });
+}
+
 
 function testDeleteSKUItem(skuItemRFID, expectedChanges) {
     test('delete SKUItem', async () => {
@@ -136,6 +159,14 @@ function testDeleteSKUItem(skuItemRFID, expectedChanges) {
     });
 }
 
+function testDeleteSKUItemError(skuItemRFID, expectedError) {
+    test('throw on delete SKUItem', async () => {
+        async function deleteNonExistentSKUItem() {
+            await await skuItemDAO.deleteSKUItem(skuItemRFID);
+        };
+        await expect(deleteNonExistentSKUItem).rejects.toEqual(expectedError);
+    });
+}
 
 function compareSKUItem(skuItem, expectedSKUItem) {
     expect(skuItem.getRFID()).toStrictEqual(expectedSKUItem.getRFID());
