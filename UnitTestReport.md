@@ -1155,7 +1155,7 @@ Version:
 **Combination of predicates**:
 
 | Item with corresponding sku in the db, with different id for same supplier and different idSKU for same supplier | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validItem) -> rowID | Test Create and Get Item - testCreateItem |
 | No | Invalid| T2(invalidItem) -> error | Test throw err on new Item - testCreateItemError |
 
@@ -1182,7 +1182,7 @@ Version:
 **Combination of predicates**:
 
 | There are Items in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All Item - testGetAllItems |
 | No  | Valid | T2() -> list | - |
 
@@ -1209,7 +1209,7 @@ Version:
 **Combination of predicates**:
 
 | Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validItemId) -> Item | Test Create and Get Item - testGetItem |
 | No | Invalid| T2(invalidItemId) -> error | Test throw err on get Item - testGetItemerror |
 
@@ -1236,7 +1236,7 @@ Version:
 **Combination of predicates**:
 
 | Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid  | T1(item) -> 1 | Test Update Item - testUpdateItem |
 | No  | Invalid | T2() -> 0 | Test Update Item - testUpdateItem |
 
@@ -1263,7 +1263,7 @@ Version:
 **Combination of predicates**:
 
 | Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid  | T1(item) -> 1 | Test Delete Item - testDeleteItem |
 | No  | Invalid | T2() -> 0 | Test Delete Item- testDeleteItem |
 
@@ -1295,7 +1295,7 @@ Version:
 **Combination of predicates**:
 
 | TestDescriptor with corresponding sku in the db | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validTestDescriptor) -> rowID | Test Create and Get TestDescriptor - testCreateTestDescriptor |
 | No | Invalid| T2(invalidTestDescriptor) -> error | Test throw err on new TestDescriptor - testCreateTestDescriptorError |
 
@@ -1321,7 +1321,7 @@ Version:
 **Combination of predicates**:
 
 | There are TestDescriptors in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All TestDescriptor - testGetAllTestDescriptor |
 | No | Valid| T2() -> list | - |
 
@@ -1348,7 +1348,7 @@ Version:
 **Combination of predicates**:
 
 | TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validTestDescriptorid) -> TestDescriptor | Test Create and Get TestDescriptor - testGetTestDescriptor |
 | No | Invalid| T2(invalidTestDescriptorid) -> error | Test throw err on get TestDescriptor - testGetTestDescriptorError |
 
@@ -1375,7 +1375,7 @@ Version:
 **Combination of predicates**:
 
 | TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validTestDescriptorid) -> 1 | Test Update TestDescriptor - testUpdateTestDescriptor |
 | No | Invalid| T2(invalidTestDescriptorid) -> 0 | Test Update TestDescriptor - testUpdateTestDescriptor |
 
@@ -1402,7 +1402,7 @@ Version:
 **Combination of predicates**:
 
 | TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validTestDescriptorid) -> 1 | Test Delete TestDescriptor - testDeleteTestDescriptor |
 | No | Invalid| T2(invalidTestDescriptorid) -> 0 | Test Delete TestDescriptor - testDeleteTestDescriptor |
 
@@ -1434,7 +1434,7 @@ Version:
 **Combination of predicates**:
 
 | TestResult with corresponding skuItem rfid in the db and with corresponding idTestDescriptor int he db | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validTestResult) -> rowID | Test Create and Get TestResult - testCreateTestResult |
 | No | Invalid| T2(invalidTestResult) -> error | Test throw err on new TestResult - testCreateTestResultError |
 
@@ -1460,7 +1460,7 @@ Version:
 **Combination of predicates**:
 
 | There are TestResults in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All TestResult - testGetAllTestResult |
 | No | Valid| T2() -> list | - |
 
@@ -1487,7 +1487,7 @@ Version:
 **Combination of predicates**:
 
 | TestResult is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validTestResultid) -> TestResult | Test Create and Get TestResult - testGetTestResult |
 | No | Invalid| T2(invalidTestResultid) -> error | Test throw err on get TestResult - testGetTestResultError |
 
@@ -1514,7 +1514,7 @@ Version:
 **Combination of predicates**:
 
 | TestResult is in the DB and skuItem associated to rfid in the db and testDescriptor associated to newIdTestDescriptor in the db | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validTestResultid) -> 1 | Test Update TestResult - testUpdateTestResult |
 | No | Invalid| T2(invalidTestResultid) -> 0 | Test Update TestResult - testUpdateTestResult |
 
@@ -1541,7 +1541,7 @@ Version:
 **Combination of predicates**:
 
 | TestResult is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validTestResultid) -> 1 | Test Delete TestResult - testDeleteTestResult |
 | No | Invalid| T2(invalidTestResultid) -> 0 | Test Delete TestResult - testDeleteTestResult |
 
@@ -2853,7 +2853,7 @@ Version:
 **Combination of predicates**:
 
 | There are Items | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test get all Item - testGetAllItem |
 | No | Valid | T2() -> list | - |
 
@@ -2880,7 +2880,7 @@ Version:
 **Combination of predicates**:
 
 | There are Items | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> Item | Test get Item - testGetItem |
 | No | Valid | T2() ->   | Test get Item - testGetItem |
 
@@ -2910,7 +2910,7 @@ Version:
 **Combination of predicates**:
 
 | newPrice is positive | There are Items | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|-------|
 | Yes | Yes | Valid   | T1(invalidData) -> error | Test modify Item - Test errors - Modify Item with Position |
 | Yes | No  | Invalid   | T2(validData) ->  | Test modify Item - Test modify - testModifyItemError |
 | No  | Yes | Invalid | T3(invalidPrice) -> error | Test modify Item - Test Errors - testModifyItemError |
@@ -2965,7 +2965,7 @@ Version:
 **Combination of predicates**:
 
 | sku exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid   | T1(validData) -> rowID | Test add TestDescriptor - testAddTestDescriptor |
 | No  | Invalid | T3(invalidData) -> error | Test add TestDescriptor - testAddTestDescriptorError |
 
@@ -2992,7 +2992,7 @@ Version:
 **Combination of predicates**:
 
 | There are TestDescriptors | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test get all TestDescriptor - testGetAllTestDescriptor |
 | No | Valid | T2() -> list | - |
 
@@ -3019,7 +3019,7 @@ Version:
 **Combination of predicates**:
 
 | There are TestDescriptors | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> TestDescriptor | Test get TestDescriptor - testGetTestDescriptor |
 | No | Valid | T2() ->   | Test get TestDescriptor - testGetTestDescriptor |
 
@@ -3049,7 +3049,7 @@ Version:
 **Combination of predicates**:
 
 | There are TestDescriptors | sku exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|-------|
 | Yes | Yes | Valid   | T1(invalidData) -> error | Test modify TestDescriptor - Test errors - Modify TestDescriptor with Position |
 | Yes | No  | Invalid   | T2(invalidData) ->  error | Test modify TestDescriptor - Test modify - testModifyTestDescriptorError |
 | No  | Yes | Invalid | T3(invalidData) -> error | Test modify TestDescriptor - Test Errors - testModifyTestDescriptorError |
@@ -3110,7 +3110,7 @@ Version:
 **Combination of predicates**:
 
 | skuItem exists | testDescriptor exist | result is a string | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|-------|-------|
 | Yes | Yes | Yes | Valid   | T1(validData) -> rowID | Test add TestResult - testAddTestResult |
 | No  | Yes | Yes | Invalid | T3(invalidData) -> error | Test add TestResult - testAddTestResultError |
 | Yes  | No | Yes | Invalid | T3(invalidData) -> error | Test add TestResult - testAddTestResultError |
@@ -3139,7 +3139,7 @@ Version:
 **Combination of predicates**:
 
 | There are TestResults corresponding to a given rfid| Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test get all TestResult - testGetAllTestResult |
 | No | Invalid | T2() -> error | testgetAllTestResultError |
 
@@ -3166,7 +3166,7 @@ Version:
 **Combination of predicates**:
 
 | There are TestResults corresponding to a given rfid and id | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> TestResult | Test get TestResult - testGetTestResult |
 | No | Valid | T2() -> error  | Test get TestResult - testGetTestResultError |
 
@@ -3202,7 +3202,7 @@ Version:
 **Combination of predicates**:
 
 | There are TestResults | newTestResult is a string | rfid exists | newIdTestDescriptor exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|-------|-------|-------|
 | Yes | Yes | Yes | Yes | Valid   | T1(invalidData) -> error | Test modify TestResult - Test errors - Modify TestResult with Position |
 | Yes | No  | Yes | Yes | Invalid   | T2(invalidData) ->  error | Test modify TestResult - Test modify - testModifyTestResultError |
 | No  | Yes | Yes | Yes | Invalid | T3(invalidData) -> error | Test modify TestResult - Test Errors - testModifyTestResultError |
