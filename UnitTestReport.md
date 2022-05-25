@@ -1,15 +1,23 @@
 # Unit Testing Report
 
-Date:
+Date: 25/05/2022
 
-Version:
+Version: 1.0
 
 # Contents
 
 - [Black Box Unit Tests](#black-box-unit-tests)
-
-
-
+    - [UserDAO](#class-userdao)
+    - [SkuDAO](#class-skudao)
+    - [PositionDAO](#class-positiondao)
+    - [SkuItemDAO](#class-skuitemdao)
+    - [RestockOrderDAO](#class-restockorderdao)
+    - [InternalOrderDAO](#class-internalorderdao)
+    - [ReturnOrderDAO](#class-returnorderdao)
+    - [ItemDAO](#class-itemdao)
+    - [TestDescriptorDAO](#class-testdescriptordao)
+    - [TestResultDAO](#class-testresultdao)
+    - [Warehouse](#class-warehouse)
 
 - [White Box Unit Tests](#white-box-unit-tests)
 
@@ -22,47 +30,7 @@ Version:
     class and method name that contains the test case>
     <Jest tests  must be in code/server/unit_test  >
 
- ### **Class *class_name* - method *name***
 
-
-
-**Criteria for method *name*:**
-	
-
- - 
- - 
-
-
-**Predicates for method *name*:**
-
-| Criteria | Predicate |
-| -------- | --------- |
-|          |           |
-|          |           |
-|          |           |
-|          |           |
-
-
-**Boundaries**:
-
-| Criteria | Boundary values |
-| -------- | --------------- |
-|          |                 |
-|          |                 |
-
-
-**Combination of predicates**:
-
-
-| Criteria 1 | Criteria 2 | ... | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-|||||||
-|||||||
-|||||||
-|||||||
-|||||||
-
------------------------------------------------------------------------------------------------------
 ## **Class *UserDAO***
 
 ### **Class *UserDAO* - method *newUser***
@@ -755,15 +723,14 @@ Version:
 | Yes | Valid | T1(validRestockOrderid) -> list |Test Delete RestockOrder - testDeleteRestockOrder |
 | No | Invalid| T2(invalidRestockOrderid) -> list | Test Delete RestockOrder - testDeleteRestockOrder |
 
+
 ----------------------------------------------------------------------------------------------------------------------------
+## **Class *InternalOrderDAO***
 ### **Class *InternalOrderDAO* - method *newInternalOrder***
-
-
 
 **Criteria for method *newInternalOrder*:**
 	
  - *issueDate* properly formatted
-
 
 **Predicates for method *newInternalOrder*:**
 
@@ -941,11 +908,9 @@ Version:
 ### **Class *InternalOrderDAO* - method *setStatus***
 
 
-
 **Criteria for method *setStatus*:**
 	
  - newState is among the valid states
-
 
 **Predicates for method *setStatus*:**
 
@@ -972,12 +937,9 @@ Version:
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *deleteInternalOrder***
 
-
-
 **Criteria for method *deleteInternalOrder*:**
 	
  - An internalOrder with ID is stored in the db
-
 
 **Predicates for method *deleteInternalOrder*:**
 
@@ -1001,15 +963,15 @@ Version:
 | yes | valid | T1(ID) -> OK | Test Delete Internal Order |
 | no | invalid | T2(ID) -> 404 | Test Delete Internal Order |
 
+
 -----------------------------------------------------------------------------------------------------
+## **Class *ReturnOrderDAO***
+
 ### **Class *ReturnOrderDAO* - method *newReturnOrder***
-
-
 
 **Criteria for method *newReturnOrder*:**
 	
  - A restockOrder with id=restockOrderId exists in the db
-
 
 **Predicates for method *newReturnOrder*:**
 
@@ -1035,8 +997,6 @@ Version:
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *ReturnOrderDAO* - method *getReturnOrderById***
-
-
 
 **Criteria for method *getReturnOrderById*:**
 	
@@ -1068,12 +1028,9 @@ Version:
 -----------------------------------------------------------------------------------------------------
 ### **Class *ReturnOrderDAO* - method *getAllReturnOrders***
 
-
-
 **Criteria for method *getAllReturnOrders*:**
 	
  - Some returnOrder stored in the db
-
 
 **Predicates for method *getAllReturnOrders*:**
 
@@ -1100,12 +1057,9 @@ Version:
 -----------------------------------------------------------------------------------------------------
 ### **Class *ReturnOrderDAO* - method *deleteReturnOrder***
 
-
-
 **Criteria for method *deleteReturnOrder*:**
 	
  - A returnOrder with ID is stored in the db
-
 
 **Predicates for method *deleteReturnOrder*:**
 
@@ -1129,8 +1083,8 @@ Version:
 | yes | valid | T1(ID) -> OK | Test Delete Return Order |
 | no | valid | T2(ID) -> 404 | Test Delete Return Order |
 
------------------------------------------------------------------------------------------------------
 
+-----------------------------------------------------------------------------------------------------
 ## **Class *ItemDAO***
 
 ### **Class *ItemDAO* - method *newItem***
@@ -1269,8 +1223,6 @@ Version:
 
 
 -----------------------------------------------------------------------------------------------------
-
-
 ## **Class *TestDescriptorDAO***
 
 ### **Class *TestDescriptorDAO* - method *newTestDescriptor***
@@ -1408,8 +1360,6 @@ Version:
 
 
 -----------------------------------------------------------------------------------------------------
-
-
 ## **Class *TestResultDAO***
 
 ### **Class *TestResultDAO* - method *newTestResult***
@@ -3238,7 +3188,6 @@ Version:
 
 
 -----------------------------------------------------------------------------------------------------
-
 # White Box Unit Tests
 
 ### Test cases definition
