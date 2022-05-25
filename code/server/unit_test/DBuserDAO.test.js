@@ -4,6 +4,7 @@ const UserDAO = require('../Database/UserDAO');
 const {User} = require('../Model/User');
 
 const userDAO = new UserDAO();
+userDAO.init(false);
 
 describe('Test Create and Get User', () => {
     beforeAll(async () => {

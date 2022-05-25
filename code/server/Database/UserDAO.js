@@ -7,8 +7,13 @@ class UserDAO{
 
     constructor(){
         this.connectionDB = new ConnectionDB();
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "User" ("userID" INTEGER NOT NULL UNIQUE, "name" TEXT NOT NULL, "surname" TEXT NOT NULL, "email" TEXT NOT NULL, "type" TEXT NOT NULL, "password" TEXT NOT NULL, "salt" TEXT NOT NULL, PRIMARY KEY("userID"));');
     };
+
+    init = async (hardcodedusers=true) => {
+        await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "User" ("userID" INTEGER NOT NULL UNIQUE, "name" TEXT NOT NULL, "surname" TEXT NOT NULL, "email" TEXT NOT NULL, "type" TEXT NOT NULL, "password" TEXT NOT NULL, "salt" TEXT NOT NULL, PRIMARY KEY("userID"));');
+        if(hardcodedusers)
+            await createHardcodedUsers(this.connectionDB);
+    }
 
     newUser = async (username, name, surname, password, type) => {
         try{
@@ -109,6 +114,63 @@ class UserDAO{
 
 }
 
+
+async function createHardcodedUsers(db){
+    const hardcodedUsers = async (db) => {
+        try{
+            const sql = "SELECT COUNT(*) AS num FROM User WHERE email = ? AND type = ?";    
+            let res = await db.DBget(sql, ['manager1@ezwh.com', 'manager']);
+            if(res.num === 0){
+                const secPwd = await generateSecurePassword('testpassword');
+                await insertHardcodedUser(db, 'Michael', 'Scott', 'manager1@ezwh.com', 'manager', secPwd.pwd, secPwd.salt )
+            }
+            
+            res = await db.DBget(sql, ['user1@ezwh.com', 'customer']);
+            if(res.num === 0){
+                const secPwd = await generateSecurePassword('testpassword');
+                await insertHardcodedUser(db, 'Mary', 'Red', 'user1@ezwh.com', 'customer', secPwd.pwd, secPwd.salt )
+            }
+            
+            res = await db.DBget(sql, ['qualityEmployee1@ezwh.com', 'qualityEmployee']);
+            if(res.num === 0){
+                const secPwd = await generateSecurePassword('testpassword');
+                await insertHardcodedUser(db, 'Josh', 'Blue', 'qualityEmployee1@ezwh.com', 'qualityEmployee', secPwd.pwd, secPwd.salt )
+            }
+            
+            res = await db.DBget(sql, ['clerk1@ezwh.com', 'clerk']);
+            if(res.num === 0){
+                const secPwd = await generateSecurePassword('testpassword');
+                await insertHardcodedUser(db, 'Frank', 'Green', 'clerk1@ezwh.com', 'clerk', secPwd.pwd, secPwd.salt )
+            }
+
+            res = await db.DBget(sql, ['deliveryEmployee1@ezwh.com', 'deliveryEmployee']);
+            if(res.num === 0){
+                const secPwd = await generateSecurePassword('testpassword');
+                await insertHardcodedUser(db, 'Lucy', 'Black', 'deliveryEmployee1@ezwh.com', 'deliveryEmployee', secPwd.pwd, secPwd.salt )
+            }
+
+            res = await db.DBget(sql, ['supplier1@ezwh.com', 'supplier']);
+            if(res.num === 0){
+                const secPwd = await generateSecurePassword('testpassword');
+                await insertHardcodedUser(db, 'Jim', 'Yellow', 'supplier1@ezwh.com', 'supplier', secPwd.pwd, secPwd.salt )
+            }   
+        } catch(err){
+            console.log(err);
+        }
+    }
+    await hardcodedUsers(db);
+}
+
+
+const insertHardcodedUser = async (db, name, surname, email, type, password, salt) => {
+    try{
+        const sql = "INSERT INTO User(name, surname, email, type, password, salt) VALUES(?, ?, ?, ?, ?, ?)";
+        await db.DBexecuteQuery(sql, [name, surname, email, type, password, salt]);
+        return true;
+    }catch(err){
+        throw err;
+    }
+}
 
 const generateSecurePassword = async (password) => {
     const buf = crypto.randomBytes(128);            // generate random bytes

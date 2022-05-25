@@ -36,6 +36,7 @@ class Warehouse {
 
         Warehouse._instance = this;
         this.userDAO = userDAO ? userDAO : new UserDAO();
+        this.userDAO.init();                                        // to generate table and hardcoded accounts
         this.skuDAO = skuDAO ? skuDAO : new SkuDAO();
         this.skuItemDAO = skuItemDAO ? skuItemDAO : new SKUItemDAO();
         this.positionDAO = positionDAO ? positionDAO : new PositionDAO();

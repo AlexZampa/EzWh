@@ -18,12 +18,6 @@ const ControllerTestResult = require('./Controller/ControllertestResult');
 const app = new express();
 const port = 3001;
 
-/*
- * Alessandro -> SKU, Position, User
- * Michele    -> Internal Order, SKUItem
- * Nicola 	  -> Restock Order, Return Order
- * Nicolò 	  -> Test Descriptor, Test Result, Item
- */
 
 // set Middlewares
 app.use(express.json());
