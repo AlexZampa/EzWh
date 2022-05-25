@@ -805,9 +805,8 @@ Version: 1.0
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-
 |-------|-------|-------|
-| yes | valid | T1() -> ok | Test Get All Internal Order Issued|
+| yes | valid | T1() -> ok  | Test Get All Internal Order Issued|
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *getAllAccepted***
@@ -833,10 +832,8 @@ Version: 1.0
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-
 |-------|-------|-------|
-
-| yes | valid | T1() -> ok | Test Get All Internal Order Accepted|
+| yes | valid | T1() -> ok | Test Get All Internal Order Accepted |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *getInternalOrder***
@@ -869,9 +866,9 @@ Version: 1.0
 
 
 | Criteria 1 | Criteria 2 | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|
-| ID is a positive number | any | valid | validity checked by ControllerInternalOrder | - |
-| / | yes | valid | T1(ID) -> internalOrder | Test Create and Get Internal Order |
+|-------|-------|-------|-------|----|
+| ID is a positive number | any | valid | validity checked by ControllerInternalOrder | / |
+| / | yes | valid | T1(ID) -> internalOrder  | Test Create and Get Internal Order |
 | / | no | valid | T2(ID) -> 404 | Test throw err on get Internal Order |
 
 
@@ -904,7 +901,7 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|
+|-------|-------|-------|----|
 | yes | valid | T1(ID, SKUItemList) -> OK | Test add delivered products to a completed Internal Order |
 | no | invalid | T2(ID, SKUItemList) -> err | Test add delivered products to a completed Internal Order |
 
@@ -934,7 +931,7 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|
+|-------|-------|-------|----|
 | yes | valid | T1(ID, newState) -> OK | Test update Internal Order state |
 | no | invalid | T2(ID, newState) -> 422 | Test update Internal Order state |
 
@@ -962,8 +959,8 @@ Version: 1.0
 **Combination of predicates**:
 
 
-| Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------| 
+| Criteria | Valid / Invalid  | Description of the test case | Jest test case |
+|-------|-------|-------|----|
 | yes | valid | T1(ID) -> OK | Test Delete Internal Order |
 | no | invalid | T2(ID) -> 404 | Test Delete Internal Order |
 
@@ -2325,11 +2322,9 @@ Version: 1.0
 **Combination of predicates**:
 
 | RestockOrder with same id exists | Date is valid | Valid / Invalid | Description of the test case | Jest test case |
-
 |-------|-------|-------|-------|
-
-| Yes | Valid   | T1(validRestockOrderID) -> RestockOrder | Test get RestockOrder - testGetRestockOrder |
-| No | Invalid | T2() -> error   |  |
+| Yes | Valid   | T1(validRestockOrderID) -> RestockOrder | Test get RestockOrder - testGetRestockOrder  |
+| No | Invalid | T2() -> error   | /  |
 
 ### **Class *Warehouse* - method *modifyRestockOrderState***
 
