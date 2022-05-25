@@ -806,7 +806,8 @@ Version: 1.0
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| yes | valid | T1() -> ok | Test Get All Internal Order Issued|
+|-------|-------|-------|
+| yes | valid | T1() -> ok | Test Get All Internal Order Issued|
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *getAllAccepted***
@@ -832,7 +833,9 @@ Version: 1.0
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
+
 |-------|-------|-------|
+
 | yes | valid | T1() -> ok | Test Get All Internal Order Accepted|
 
 -----------------------------------------------------------------------------------------------------
@@ -866,9 +869,13 @@ Version: 1.0
 
 
 | Criteria 1 | Criteria 2 | Valid / Invalid | Description of the test case | Jest test case |
+
 |-------|-------|-------|-------|
+
 | ID is a positive number | any | valid | validity checked by ControllerInternalOrder | - |
+
 | - | yes | valid | T1(ID) -> internalOrder | Test Create and Get Internal Order |
+
 | - | no | valid | T2(ID) -> 404 | Test throw err on get Internal Order |
 
 -----------------------------------------------------------------------------------------------------
@@ -901,7 +908,8 @@ Version: 1.0
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| yes | valid | T1(ID, SKUItemList) -> OK | Test add delivered products to a completed Internal Order |
+|-------|-------|-------|
+| yes | valid | T1(ID, SKUItemList) -> OK | Test add delivered products to a completed Internal Order |
 | no | invalid | T2(ID, SKUItemList) -> err | Test add delivered products to a completed Internal Order |
 
 -----------------------------------------------------------------------------------------------------
@@ -932,6 +940,7 @@ Version: 1.0
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
 
 |-------|-------|-------|| yes | valid | T1(ID, newState) -> OK | Test update Internal Order state |
+
 | no | invalid | T2(ID, newState) -> 422 | Test update Internal Order state |
 
 -----------------------------------------------------------------------------------------------------
@@ -960,7 +969,8 @@ Version: 1.0
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| yes | valid | T1(ID) -> OK | Test Delete Internal Order |
+|-------|-------|-------|
+| yes | valid | T1(ID) -> OK | Test Delete Internal Order |
 | no | invalid | T2(ID) -> 404 | Test Delete Internal Order |
 
 
@@ -992,7 +1002,9 @@ Version: 1.0
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+|-------|-------|-------|
+| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+
 | no | invalid | T2(ID) -> 404 | Test Create and Get Return Order |
 
 -----------------------------------------------------------------------------------------------------
@@ -1022,7 +1034,9 @@ Version: 1.0
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+|-------|-------|-------|
+| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+
 | no | valid | T2(ID) -> 404 | Test throw err on get Return Order |
 
 -----------------------------------------------------------------------------------------------------
@@ -1051,7 +1065,9 @@ Version: 1.0
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| yes | valid | T1() -> list | Test Get All Return Orders |
+|-------|-------|-------|
+| yes | valid | T1() -> list | Test Get All Return Orders |
+
 | no | valid | T2() -> emptyList | Test Get All Return Orders |
 
 -----------------------------------------------------------------------------------------------------
@@ -1080,7 +1096,9 @@ Version: 1.0
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| yes | valid | T1(ID) -> OK | Test Delete Return Order |
+|-------|-------|-------|
+| yes | valid | T1(ID) -> OK | Test Delete Return Order |
+
 | no | valid | T2(ID) -> 404 | Test Delete Return Order |
 
 
@@ -1110,7 +1128,8 @@ Version: 1.0
 
 | Item with corresponding sku in the db, with different id for same supplier and different idSKU for same supplier | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validItem) -> rowID | Test Create and Get Item - testCreateItem |
+|-------|-------|-------|
+| Yes | Valid | T1(validItem) -> rowID | Test Create and Get Item - testCreateItem |
 | No | Invalid| T2(invalidItem) -> error | Test throw err on new Item - testCreateItemError |
 
 
@@ -1137,7 +1156,9 @@ Version: 1.0
 
 | There are Items in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1() -> list | Test Get All Item - testGetAllItems |
+|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All Item - testGetAllItems |
+
 | No  | Valid | T2() -> list | - |
 
 
@@ -1164,7 +1185,9 @@ Version: 1.0
 
 | Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validItemId) -> Item | Test Create and Get Item - testGetItem |
+|-------|-------|-------|
+| Yes | Valid | T1(validItemId) -> Item | Test Create and Get Item - testGetItem |
+
 | No | Invalid| T2(invalidItemId) -> error | Test throw err on get Item - testGetItemerror |
 
 
@@ -1191,7 +1214,9 @@ Version: 1.0
 
 | Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid  | T1(item) -> 1 | Test Update Item - testUpdateItem |
+|-------|-------|-------|
+| Yes | Valid  | T1(item) -> 1 | Test Update Item - testUpdateItem |
+
 | No  | Invalid | T2() -> 0 | Test Update Item - testUpdateItem |
 
 
@@ -1218,7 +1243,9 @@ Version: 1.0
 
 | Item is in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid  | T1(item) -> 1 | Test Delete Item - testDeleteItem |
+|-------|-------|-------|
+| Yes | Valid  | T1(item) -> 1 | Test Delete Item - testDeleteItem |
+
 | No  | Invalid | T2() -> 0 | Test Delete Item- testDeleteItem |
 
 
@@ -1248,7 +1275,9 @@ Version: 1.0
 
 | TestDescriptor with corresponding sku in the db | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validTestDescriptor) -> rowID | Test Create and Get TestDescriptor - testCreateTestDescriptor |
+|-------|-------|-------|
+| Yes | Valid | T1(validTestDescriptor) -> rowID | Test Create and Get TestDescriptor - testCreateTestDescriptor |
+
 | No | Invalid| T2(invalidTestDescriptor) -> error | Test throw err on new TestDescriptor - testCreateTestDescriptorError |
 
 ### **Class *TestDescriptorDAO* - method *getAllTestDescriptor***
@@ -1274,7 +1303,9 @@ Version: 1.0
 
 | There are TestDescriptors in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1() -> list | Test Get All TestDescriptor - testGetAllTestDescriptor |
+|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All TestDescriptor - testGetAllTestDescriptor |
+
 | No | Valid| T2() -> list | - |
 
 
@@ -1301,7 +1332,9 @@ Version: 1.0
 
 | TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validTestDescriptorid) -> TestDescriptor | Test Create and Get TestDescriptor - testGetTestDescriptor |
+|-------|-------|-------|
+| Yes | Valid | T1(validTestDescriptorid) -> TestDescriptor | Test Create and Get TestDescriptor - testGetTestDescriptor |
+
 | No | Invalid| T2(invalidTestDescriptorid) -> error | Test throw err on get TestDescriptor - testGetTestDescriptorError |
 
 
@@ -1328,7 +1361,9 @@ Version: 1.0
 
 | TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validTestDescriptorid) -> 1 | Test Update TestDescriptor - testUpdateTestDescriptor |
+|-------|-------|-------|
+| Yes | Valid | T1(validTestDescriptorid) -> 1 | Test Update TestDescriptor - testUpdateTestDescriptor |
+
 | No | Invalid| T2(invalidTestDescriptorid) -> 0 | Test Update TestDescriptor - testUpdateTestDescriptor |
 
 
@@ -1355,7 +1390,9 @@ Version: 1.0
 
 | TestDescriptor is in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validTestDescriptorid) -> 1 | Test Delete TestDescriptor - testDeleteTestDescriptor |
+|-------|-------|-------|
+| Yes | Valid | T1(validTestDescriptorid) -> 1 | Test Delete TestDescriptor - testDeleteTestDescriptor |
+
 | No | Invalid| T2(invalidTestDescriptorid) -> 0 | Test Delete TestDescriptor - testDeleteTestDescriptor |
 
 
@@ -1385,7 +1422,9 @@ Version: 1.0
 
 | TestResult with corresponding skuItem rfid in the db and with corresponding idTestDescriptor int he db | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validTestResult) -> rowID | Test Create and Get TestResult - testCreateTestResult |
+|-------|-------|-------|
+| Yes | Valid | T1(validTestResult) -> rowID | Test Create and Get TestResult - testCreateTestResult |
+ 
 | No | Invalid| T2(invalidTestResult) -> error | Test throw err on new TestResult - testCreateTestResultError |
 
 ### **Class *TestResultDAO* - method *getAllTestResult***
@@ -1411,7 +1450,9 @@ Version: 1.0
 
 | There are TestResults in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1() -> list | Test Get All TestResult - testGetAllTestResult |
+|-------|-------|-------|
+| Yes | Valid | T1() -> list | Test Get All TestResult - testGetAllTestResult |
+
 | No | Valid| T2() -> list | - |
 
 
@@ -1438,7 +1479,9 @@ Version: 1.0
 
 | TestResult is in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validTestResultid) -> TestResult | Test Create and Get TestResult - testGetTestResult |
+|-------|-------|-------|
+| Yes | Valid | T1(validTestResultid) -> TestResult | Test Create and Get TestResult - testGetTestResult |
+
 | No | Invalid| T2(invalidTestResultid) -> error | Test throw err on get TestResult - testGetTestResultError |
 
 
@@ -1465,7 +1508,9 @@ Version: 1.0
 
 | TestResult is in the DB and skuItem associated to rfid in the db and testDescriptor associated to newIdTestDescriptor in the db | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validTestResultid) -> 1 | Test Update TestResult - testUpdateTestResult |
+|-------|-------|-------|
+| Yes | Valid | T1(validTestResultid) -> 1 | Test Update TestResult - testUpdateTestResult |
+
 | No | Invalid| T2(invalidTestResultid) -> 0 | Test Update TestResult - testUpdateTestResult |
 
 
@@ -1492,7 +1537,9 @@ Version: 1.0
 
 | TestResult is in the DB | Valid / Invalid | Description of the test case | Jest test case |
 
-|-------|-------|-------|| Yes | Valid | T1(validTestResultid) -> 1 | Test Delete TestResult - testDeleteTestResult |
+|-------|-------|-------|
+| Yes | Valid | T1(validTestResultid) -> 1 | Test Delete TestResult - testDeleteTestResult |
+
 | No | Invalid| T2(invalidTestResultid) -> 0 | Test Delete TestResult - testDeleteTestResult |
 
 
@@ -2324,7 +2371,9 @@ Version: 1.0
 **Combination of predicates**:
 
 | RestockOrder with same id exists | Date is valid | Valid / Invalid | Description of the test case | Jest test case |
+
 |-------|-------|-------|-------|
+
 | Yes | Valid   | T1(validRestockOrderID) -> RestockOrder | Test get RestockOrder - testGetRestockOrder |
 | No | Invalid | T2() -> error   |  |
 
