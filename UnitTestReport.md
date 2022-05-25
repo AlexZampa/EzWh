@@ -1,15 +1,23 @@
 # Unit Testing Report
 
-Date:
+Date: 25/05/2022
 
-Version:
+Version: 1.0
 
 # Contents
 
 - [Black Box Unit Tests](#black-box-unit-tests)
-
-
-
+    - [UserDAO](#class-userdao)
+    - [SkuDAO](#class-skudao)
+    - [PositionDAO](#class-positiondao)
+    - [SkuItemDAO](#class-skuitemdao)
+    - [RestockOrderDAO](#class-restockorderdao)
+    - [InternalOrderDAO](#class-internalorderdao)
+    - [ReturnOrderDAO](#class-returnorderdao)
+    - [ItemDAO](#class-itemdao)
+    - [TestDescriptorDAO](#class-testdescriptordao)
+    - [TestResultDAO](#class-testresultdao)
+    - [Warehouse](#class-warehouse)
 
 - [White Box Unit Tests](#white-box-unit-tests)
 
@@ -22,47 +30,7 @@ Version:
     class and method name that contains the test case>
     <Jest tests  must be in code/server/unit_test  >
 
- ### **Class *class_name* - method *name***
 
-
-
-**Criteria for method *name*:**
-	
-
- - 
- - 
-
-
-**Predicates for method *name*:**
-
-| Criteria | Predicate |
-| -------- | --------- |
-|          |           |
-|          |           |
-|          |           |
-|          |           |
-
-
-**Boundaries**:
-
-| Criteria | Boundary values |
-| -------- | --------------- |
-|          |                 |
-|          |                 |
-
-
-**Combination of predicates**:
-
-
-| Criteria 1 | Criteria 2 | ... | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-|||||||
-|||||||
-|||||||
-|||||||
-|||||||
-
------------------------------------------------------------------------------------------------------
 ## **Class *UserDAO***
 
 ### **Class *UserDAO* - method *newUser***
@@ -87,7 +55,7 @@ Version:
 **Combination of predicates**:
 
 | User with unique username and type in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validUser) -> rowID | Test Create and Get User - testCreateUser |
 | No | Invalid| T2(invalidUser) -> error | Test throw err on new User - testCreateUserError |
 
@@ -114,7 +82,7 @@ Version:
 **Combination of predicates**:
 
 | There are Users in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All User - testGetAllUsers |
 | No  | Valid | T2() -> list | - |
 
@@ -141,7 +109,7 @@ Version:
 **Combination of predicates**:
 
 | There are Users of given type in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All User - testGetAllUsersByType |
 | No  | Valid | T2() -> list | - |
 
@@ -172,7 +140,7 @@ Version:
 **Combination of predicates**:
 
 | pair username and type is in the DB | password is correct | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|-------|
 | Yes | Yes | Valid  | T1(validData) -> userData | Test login User - testLoginUser |
 | Yes | No  | Invalid | T2(invalidPassword) -> error | Test login User - throw error on invalid password |
 | No  | Yes | Invalid | T1(invalidUsername) -> error | Test login User - throw error on user not found |
@@ -201,7 +169,7 @@ Version:
 **Combination of predicates**:
 
 | User is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid  | T1(user) -> 1 | Test Update User - testUpdateUser |
 | No  | Invalid | T2() -> 0 | Test Update User - testUpdateUser |
 
@@ -228,7 +196,7 @@ Version:
 **Combination of predicates**:
 
 | User is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid  | T1(user) -> 1 | Test Delete User - testDeleteUser |
 | No  | Invalid | T2() -> 0 | Test Delete User- testDeleteUser |
 
@@ -258,7 +226,7 @@ Version:
 **Combination of predicates**:
 
 | There are SKUs in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All SKU - testGetAllSKU |
 | No | Valid| T2() -> list | - |
 
@@ -285,7 +253,7 @@ Version:
 **Combination of predicates**:
 
 | SKU is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validSKUid) -> SKU | Test Create and Get SKU - testGetSKU |
 | No | Invalid| T2(invalidSKUid) -> error | Test throw err on get SKU - testGetSKUerror |
 
@@ -312,7 +280,7 @@ Version:
 **Combination of predicates**:
 
 | SKU is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validSKUid) -> 1 | Test Update SKU - testUpdateSKU |
 | No | Invalid| T2(invalidSKUid) -> 0 | Test Update SKU - testUpdateSKU |
 
@@ -339,7 +307,7 @@ Version:
 **Combination of predicates**:
 
 | SKU is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validSKUid) -> 1 | Test Delete SKU - testDeleteSKU |
 | No | Invalid| T2(invalidSKUid) -> 0 | Test Delete SKU - testDeleteSKU |
 
@@ -369,7 +337,7 @@ Version:
 **Combination of predicates**:
 
 | positionID is unique in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validPositionID) -> rowID | Test Create and Get Position - testCreatePosition |
 | No | invalid| T2(invalidPositionID) -> error | Test throw err on get and new Position - testCreatePositionError |
 
@@ -396,7 +364,7 @@ Version:
 **Combination of predicates**:
 
 | There are Position in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All Position - testGetAllPosition |
 | No | Valid| T2() -> list | - |
 
@@ -423,7 +391,7 @@ Version:
 **Combination of predicates**:
 
 | Position is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|  
 | Yes | Valid | T1(validPositionID) -> Position | Test Create and Get Position - testGetPosition |
 | No | Invalid| T2(invalidPositionID) -> error | Test throw err on get and new Position - testGetPositionError |
 
@@ -450,7 +418,7 @@ Version:
 **Combination of predicates**:
 
 | newPositionID does not exist in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validNewPositionID) -> 1 | Test Update Position - testUpdatePosition |
 | No | Invalid| T2(invalidNewPositionID) -> error | Test Update Position - testUpdatePositionError |
 
@@ -477,7 +445,7 @@ Version:
 **Combination of predicates**:
 
 | Position is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validPositionID) -> 1 | Test Delete Position - testDeletePosition |
 | No | Invalid| T2(invalidPositionID) -> 0 | Test Delete Position - testDeletePosition |
 
@@ -507,7 +475,7 @@ Version:
 **Combination of predicates**:
 
 | There are no SKUItems in the DB with the same id | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Create and Get SKUItem - testCreateSKUItem |
 | No | Invalid| T2() -> list | Test Create and Get SKUItem - testCreateSKUItem |
 
@@ -533,7 +501,7 @@ Version:
 **Combination of predicates**:
 
 | There are SKUItems in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All SKUItems - testGetAllSKUItem |
 | No | Valid| T2() -> list | - |
 
@@ -560,7 +528,7 @@ Version:
 **Combination of predicates**:
 
 | SKUItem is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validSKUItemid) -> SKU | Test Create and Get SKUItem - testGetSKUItem |
 | No | Invalid| T2(invalidSKUItemid) -> error | Test throw err on get SKUItem - testGetSKUItemerror |
 
@@ -587,7 +555,7 @@ Version:
 **Combination of predicates**:
 
 | SKUItem is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validSKUItemid) -> 1 | Test Update SKUItem - testUpdateSKUItem |
 | No | Invalid| T2(invalidSKUItemid) -> 0 | Test Update SKUItem - testUpdateSKUItem |
 
@@ -614,7 +582,7 @@ Version:
 **Combination of predicates**:
 
 | SKUItem is in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validSKUItemid) -> 1 | Test Delete SKUItem - testDeleteSKUItem |
 | No | Invalid| T2(invalidSKUItemid) -> 0 | Test Delete SKUItem - testDeleteSKUItem |
 
@@ -644,7 +612,7 @@ Version:
 **Combination of predicates**:
 
 | There are SKUs in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Create and Get RestockOrder - testCreateRestockOrder |
 | No | Invalid| T2() -> list | Test Create and Get RestockOrder - testCreateRestockOrder |
 
@@ -672,7 +640,7 @@ Version:
 **Combination of predicates**:
 
 | There is a RestockOrder with the same id in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validRestockOrderid) -> list | Test Create and Get RestockOrder - testGetRestockOrder |
 | No | Invalid| T2(invalidRestockOrderid) -> list | Test throw err on get RestockOrder - testGetRestockOrdererror |
 
@@ -699,7 +667,7 @@ Version:
 **Combination of predicates**:
 
 | There are RestockOrder in the DB | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All RestockOrder - testGetAllRestockOrder |
 | No | Invalid| T2() -> list | Test Get All RestockOrder - testGetAllRestockOrder |
 
@@ -725,7 +693,7 @@ Version:
 **Combination of predicates**:
 
 | There is a RestockOrder in the DB with the same id | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validRestockOrderid) -> list | Test Update RestockOrder - testGetAllRestockOrder |
 | No | Invalid| T2(invalidRestockOrderid) -> list | Test Update RestockOrder - testGetAllRestockOrder |
 
@@ -751,19 +719,18 @@ Version:
 **Combination of predicates**:
 
 | There is a RestockOrder in the DB with the same id | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1(validRestockOrderid) -> list |Test Delete RestockOrder - testDeleteRestockOrder |
 | No | Invalid| T2(invalidRestockOrderid) -> list | Test Delete RestockOrder - testDeleteRestockOrder |
 
+
 ----------------------------------------------------------------------------------------------------------------------------
+## **Class *InternalOrderDAO***
 ### **Class *InternalOrderDAO* - method *newInternalOrder***
-
-
 
 **Criteria for method *newInternalOrder*:**
 	
  - *issueDate* properly formatted
-
 
 **Predicates for method *newInternalOrder*:**
 
@@ -782,7 +749,7 @@ Version:
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | yes | valid | T1(validDate) -> ok | Test Create and Get Internal Order|
 | no | invalid | T2(invalidDate) -> 422 | Test Create and Get Internal Order|
 
@@ -811,7 +778,7 @@ Version:
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | yes | valid | T1() -> ok | Test Create and Get Internal Order - Test Get all Internal Orders|
 
 ----------------------------------------------------------------------------------------------------------------------------
@@ -838,8 +805,8 @@ Version:
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-| yes | valid | T1() -> ok | Test Get All Internal Order Issued|
+
+|-------|-------|-------|| yes | valid | T1() -> ok | Test Get All Internal Order Issued|
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *getAllAccepted***
@@ -865,7 +832,7 @@ Version:
 
 
 | Criteria 1 | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|
 | yes | valid | T1() -> ok | Test Get All Internal Order Accepted|
 
 -----------------------------------------------------------------------------------------------------
@@ -899,7 +866,7 @@ Version:
 
 
 | Criteria 1 | Criteria 2 | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | ID is a positive number | any | valid | validity checked by ControllerInternalOrder | - |
 | - | yes | valid | T1(ID) -> internalOrder | Test Create and Get Internal Order |
 | - | no | valid | T2(ID) -> 404 | Test throw err on get Internal Order |
@@ -933,19 +900,17 @@ Version:
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-| yes | valid | T1(ID, SKUItemList) -> OK | Test add delivered products to a completed Internal Order |
+
+|-------|-------|-------|| yes | valid | T1(ID, SKUItemList) -> OK | Test add delivered products to a completed Internal Order |
 | no | invalid | T2(ID, SKUItemList) -> err | Test add delivered products to a completed Internal Order |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *setStatus***
 
 
-
 **Criteria for method *setStatus*:**
 	
  - newState is among the valid states
-
 
 **Predicates for method *setStatus*:**
 
@@ -965,19 +930,16 @@ Version:
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-| yes | valid | T1(ID, newState) -> OK | Test update Internal Order state |
+
+|-------|-------|-------|| yes | valid | T1(ID, newState) -> OK | Test update Internal Order state |
 | no | invalid | T2(ID, newState) -> 422 | Test update Internal Order state |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *deleteInternalOrder***
 
-
-
 **Criteria for method *deleteInternalOrder*:**
 	
  - An internalOrder with ID is stored in the db
-
 
 **Predicates for method *deleteInternalOrder*:**
 
@@ -997,19 +959,19 @@ Version:
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-| yes | valid | T1(ID) -> OK | Test Delete Internal Order |
+
+|-------|-------|-------|| yes | valid | T1(ID) -> OK | Test Delete Internal Order |
 | no | invalid | T2(ID) -> 404 | Test Delete Internal Order |
 
+
 -----------------------------------------------------------------------------------------------------
+## **Class *ReturnOrderDAO***
+
 ### **Class *ReturnOrderDAO* - method *newReturnOrder***
-
-
 
 **Criteria for method *newReturnOrder*:**
 	
  - A restockOrder with id=restockOrderId exists in the db
-
 
 **Predicates for method *newReturnOrder*:**
 
@@ -1029,14 +991,12 @@ Version:
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+
+|-------|-------|-------|| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
 | no | invalid | T2(ID) -> 404 | Test Create and Get Return Order |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *ReturnOrderDAO* - method *getReturnOrderById***
-
-
 
 **Criteria for method *getReturnOrderById*:**
 	
@@ -1061,19 +1021,16 @@ Version:
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+
+|-------|-------|-------|| yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
 | no | valid | T2(ID) -> 404 | Test throw err on get Return Order |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *ReturnOrderDAO* - method *getAllReturnOrders***
 
-
-
 **Criteria for method *getAllReturnOrders*:**
 	
  - Some returnOrder stored in the db
-
 
 **Predicates for method *getAllReturnOrders*:**
 
@@ -1093,19 +1050,16 @@ Version:
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-| yes | valid | T1() -> list | Test Get All Return Orders |
+
+|-------|-------|-------|| yes | valid | T1() -> list | Test Get All Return Orders |
 | no | valid | T2() -> emptyList | Test Get All Return Orders |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *ReturnOrderDAO* - method *deleteReturnOrder***
 
-
-
 **Criteria for method *deleteReturnOrder*:**
 	
  - A returnOrder with ID is stored in the db
-
 
 **Predicates for method *deleteReturnOrder*:**
 
@@ -1125,12 +1079,12 @@ Version:
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|
-| yes | valid | T1(ID) -> OK | Test Delete Return Order |
+
+|-------|-------|-------|| yes | valid | T1(ID) -> OK | Test Delete Return Order |
 | no | valid | T2(ID) -> 404 | Test Delete Return Order |
 
------------------------------------------------------------------------------------------------------
 
+-----------------------------------------------------------------------------------------------------
 ## **Class *ItemDAO***
 
 ### **Class *ItemDAO* - method *newItem***
@@ -1269,8 +1223,6 @@ Version:
 
 
 -----------------------------------------------------------------------------------------------------
-
-
 ## **Class *TestDescriptorDAO***
 
 ### **Class *TestDescriptorDAO* - method *newTestDescriptor***
@@ -1408,8 +1360,6 @@ Version:
 
 
 -----------------------------------------------------------------------------------------------------
-
-
 ## **Class *TestResultDAO***
 
 ### **Class *TestResultDAO* - method *newTestResult***
@@ -1610,7 +1560,7 @@ Version:
 **Combination of predicates**:
 
 | There are SKUs with TestDescriptors | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test get all SKU - testGetAllSKU |
 | No | Valid | T2() -> list | - |
 
@@ -1640,7 +1590,7 @@ Version:
 **Combination of predicates**:
 
 | There are SKU with TestDescriptors | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> SKU | Test get SKU - testGetSKU |
 | No | Valid | T2() -> SKU  | Test get SKU - testGetSKU |
 
@@ -1931,7 +1881,7 @@ Version:
 **Combination of predicates**:
 
 | Position exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid   | T1(validPositionID) -> changes | Test delete Position |
 | No  | Invalid | T2(invalidPositionID) -> error | Test delete Position - testDeletePositionError|
 
@@ -2155,7 +2105,7 @@ Version:
 **Combination of predicates**:
 
 | date is valid | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid   | T1(validData) -> rowID | Test add SKUItem - testAddSKU |
 | No  |  Invalid | T2(invalidDate) -> error | Test add SKU - testAddSKUItemError |
 
@@ -2182,7 +2132,7 @@ Version:
 **Combination of predicates**:
 
 | There are SKUItems | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test get all SKUItem - testGetAllSKUItem |
 | No | Valid | T2() -> list | - |
 
@@ -2209,7 +2159,7 @@ Version:
 **Combination of predicates**:
 
 | There is a SKUItem with valid ID | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid | T1() -> SKUItem | Test get SKUItem - testGetSKUItem |
 | No | Valid | T2() -> SKUItem  | Test get SKUItem - testGetSKUItem |
 
@@ -2239,7 +2189,7 @@ Version:
 **Combination of predicates**:
 
 | skuitem exists | newDate is valid | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|-------|
 | Yes | Yes | Valid   | T1(validDate) -> changes | Test modify SKUItem - Test modify - Modify SKU with valid Date |
 | Yes | No  | Valid   | T2(validDate) -> changes | Test modify SKUItem - Test modify - Modify SKU with invalid Date |
 
@@ -2266,7 +2216,7 @@ Version:
 **Combination of predicates**:
 
 | SKU exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid   | T1(validSKUItemid) -> changes | Test delete SKU |
 | No | Invalid | T2(InvalidSKUItemid) -> error   | Test delete SKU - throw error on SKUItem not found |
 
@@ -2322,7 +2272,7 @@ Version:
 **Combination of predicates**:
 
 | Supplier exists |  Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid   | T1() -> RestockOrders | Test get all RestockOrders - testGetAllRestockOrders |
 | No | Invalid | T2() -> error   |  |
 
@@ -2348,7 +2298,7 @@ Version:
 **Combination of predicates**:
 
 | Supplier exists |  Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid   | T1() -> RestockOrders | Test get all RestockOrders Issued - testGetRestockOrdersIssued |
 | No | Invalid | T2() -> error   |  |
 
@@ -2374,7 +2324,7 @@ Version:
 **Combination of predicates**:
 
 | RestockOrder with same id exists | Date is valid | Valid / Invalid | Description of the test case | Jest test case |
-|-------|-------|-------|-------|-------|
+|-------|-------|-------|-------|
 | Yes | Valid   | T1(validRestockOrderID) -> RestockOrder | Test get RestockOrder - testGetRestockOrder |
 | No | Invalid | T2() -> error   |  |
 
@@ -2501,7 +2451,7 @@ Version:
 **Combination of predicates**:
 
 | RestockOrder with same id exists | RestockOrder State is COMPLETEDRETURN | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|-------|
 | Yes | Yes | Valid   | T1(validRestockOrderID) -> ok | Test return Items From RestockOrder - testReturnItemsFromRestockOrder |
 | No | Yes | Invalid | T2() -> error   |  |
 | Yes | No | Invalid | T2(validRestockOrderID) -> error   | Test return Items From RestockOrder - testReturnItemsFromRestockOrderError |
@@ -2531,7 +2481,7 @@ Version:
 **Combination of predicates**:
 
 | RestockOrder with same id exists | RestockOrder is not present in a SKUitem | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|-------|-------|-------|-------|
 | Yes | Yes | Valid   | T1(validRestockOrderID) -> ok | Test Delete RestockOrder - Delete RestockOrder |
 | No | Yes | Invalid | T2(invalidRestockOrderID) -> error   | Delete RestockOrder - testDeleteRestockOrderError |
 | Yes | No | Invalid | T2(validRestockOrderID) -> error   | Delete RestockOrder - testDeleteRestockOrderError |
@@ -2560,7 +2510,7 @@ Version:
 **Combination of predicates**:
 
 | RestockOrder with id=restockOrderId exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 | Yes | Valid  | T1() -> ok | Add return order test |
 | No | Valid | T2() -> error   | Add return order test |
 
@@ -2585,7 +2535,7 @@ Version:
 **Combination of predicates**:
 
 | returnOrders exist | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 | Yes | Valid  | T1() -> ok | Get all return orders test |
 | No | Valid | T2() -> error   | Get all return orders test |
 
@@ -2610,7 +2560,7 @@ Version:
 **Combination of predicates**:
 
 | returnOrders with id=ID exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 | Yes | Valid  | T1() -> ok | Get return order test |
 | No | Valid | T2() -> error   | Get return order test |
 
@@ -2635,7 +2585,7 @@ Version:
 **Combination of predicates**:
 
 | returnOrders with id=ID exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 | Yes | Valid  | T1() -> ok | Delete return order test |
 | No | Valid | T2() -> error   | Delete return order test |
 
@@ -2658,7 +2608,7 @@ Version:
 **Combination of predicates**:
 
 | - | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 |  | Valid  | T1() -> ok | Add internal order test |
 
 ### **Class *Warehouse* - method *getInternalOrders***
@@ -2680,7 +2630,7 @@ Version:
 **Combination of predicates**:
 
 | - | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 |  | Valid  | T1() -> ok | Get all internal orders test |
 
 ### **Class *Warehouse* - method *getInternalOrderIssued***
@@ -2702,7 +2652,7 @@ Version:
 **Combination of predicates**:
 
 | - | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 |  | Valid  | T1() -> ok | Get all issued internal orders test |
 
 ### **Class *Warehouse* - method *getAcceptedInternalOrders***
@@ -2724,7 +2674,7 @@ Version:
 **Combination of predicates**:
 
 | - | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 |  | Valid  | T1() -> ok | Get all accepted internal orders test |
 
 ### **Class *Warehouse* - method *getInternalOrder***
@@ -2746,7 +2696,7 @@ Version:
 **Combination of predicates**:
 
 | - | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 |  | Valid  | T1() -> ok | Get internal order test |
 
 ### **Class *Warehouse* - method *setIOStatus***
@@ -2770,7 +2720,7 @@ Version:
 **Combination of predicates**:
 
 | newStatus = "COMPLETED" | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 | yes | Valid  | T1() -> ok | Update Internal Order status test |
 | no | Valid  | T2() -> ok | Update Internal Order status test |
 
@@ -2795,7 +2745,7 @@ Version:
 **Combination of predicates**:
 
 | internalOrder with id=ID exists | Valid / Invalid | Description of the test case | Jest test case |
-|-------|---|-------|-------|-------|-------|
+|-------|---|-------|-------|
 | yes | Valid  | T1() -> ok | Delete internal order test |
 | no | Valid  | T2() -> err | Delete internal order test |
 
@@ -3238,7 +3188,6 @@ Version:
 
 
 -----------------------------------------------------------------------------------------------------
-
 # White Box Unit Tests
 
 ### Test cases definition
@@ -3275,44 +3224,44 @@ Version:
     the coverage tool. >
 
 
-File                        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                                                                                                                                
-----------------------------|---------|----------|---------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-All files                   |   86.89 |    81.32 |   79.87 |   88.18 |                                                                                                                                                                                                  
- Database                   |   89.87 |    83.52 |   98.09 |   89.93 |                                                                                                                                                                                                  
-  ConnectionDB.js           |      80 |       70 |     100 |   82.14 | 25,31,44,51,71                                                                                                                                                                                   
-  InternalOrderDAO.js       |   91.34 |    83.33 |     100 |   91.08 | 51,68,86,105,136,144,156,171,184                                                                                                                                                                 
-  ItemDAO.js                |   92.59 |      100 |     100 |   92.45 | 20,64,75,84                                                                                                                                                                                      
-  PositionDAO.js            |   94.64 |    91.66 |     100 |   94.54 | 37,80,90                                                                                                                                                                                         
-  RestockOrderDAO.js        |   89.85 |     87.5 |      90 |    90.9 | 29,64,74,86,90,101                                                                                                                                                                               
-  ReturnOrderDAO.js         |   96.61 |      100 |     100 |   96.61 | 74,103                                                                                                                                                                                           
-  SKUItemDAO.js             |   82.14 |    63.15 |     100 |   81.81 | 17,46,53-56,62,71,75,84                                                                                                                                                                          
-  SkuDAO.js                 |   89.58 |      100 |     100 |   89.36 | 22,34,60,71,80                                                                                                                                                                                   
-  TestDescriptorDAO.js      |   89.13 |      100 |     100 |   88.88 | 21,46,57,68,77                                                                                                                                                                                   
-  TestResultDAO.js          |    82.6 |      100 |    87.5 |   82.22 | 21,46,57,62-68                                                                                                                                                                                   
-  UserDAO.js                |   91.66 |       90 |     100 |   91.46 | 36,47,56,60,70,97,106                                                                                                                                                                            
- Mock_databases             |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_internalOrderDAO.js  |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_itemDAO.js           |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_positionDAO.js       |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_restockOrderDAO.js   |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_returnOrderDAO.js    |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_skuDAO.js            |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_skuItemDAO.js        |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_testDescriptorDAO.js |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_testResultDAO.js     |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
-  Mock_userDAO.js           |     100 |      100 |     100 |     100 |                                                                                                                                                                                                  
- Model                      |   83.94 |    80.56 |    71.1 |   85.98 |                                                                                                                                                                                                  
-  InternalOrder.js          |      76 |    66.66 |   55.55 |   76.19 | 43-56                                                                                                                                                                                            
-  Item.js                   |   81.81 |      100 |   58.33 |   91.66 | 30,35                                                                                                                                                                                            
-  Position.js               |   93.75 |       60 |   83.33 |   95.45 | 30                                                                                                                                                                                               
-  RestockOrder.js           |   69.84 |    26.31 |   60.86 |   67.27 | 42-46,50-53,60-69,84,97                                                                                                                                                                          
-  ReturnOrder.js            |   93.33 |      100 |   83.33 |    90.9 | 17                                                                                                                                                                                               
-  SKUItem.js                |   81.57 |    66.66 |   56.25 |      92 | 31,38                                                                                                                                                                                            
-  Sku.js                    |   80.85 |       60 |      55 |   93.33 | 37-40                                                                                                                                                                                            
-  TestDescriptor.js         |   80.64 |      100 |   54.54 |    91.3 | 31,36                                                                                                                                                                                            
-  TestResult.js             |   82.85 |    28.57 |   58.33 |    92.3 | 34,39                                                                                                                                                                                            
-  User.js                   |   90.47 |      100 |      75 |   93.33 | 21                                                                                                                                                                                               
-  Warehouse.js              |   85.61 |    89.44 |   84.26 |    86.1 | 34,76,91,127,132,148,158,174-180,207,221,226-234,258,269-272,297,369-373,400,414,429,493,498-502,528-531,551,582-585,619,637,644-647,674,683,724-727,738,747,788-793,803,812,850-854,879,919-925 
+File                        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                                                                                                                                    
+----------------------------|---------|----------|---------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+All files                   |   87.46 |    81.76 |   80.12 |   88.79 |                                                                                                                                                                                                      
+ Database                   |   91.41 |    87.05 |   99.04 |    91.5 |                                                                                                                                                                                                      
+  ConnectionDB.js           |   76.66 |       60 |     100 |   78.57 | 25,31,44,51,65,71                                                                                                                                                                                    
+  InternalOrderDAO.js       |   91.34 |    83.33 |     100 |   91.08 | 51,68,86,105,136,144,156,171,184                                                                                                                                                                     
+  ItemDAO.js                |   92.59 |      100 |     100 |   92.45 | 20,64,75,84                                                                                                                                                                                          
+  PositionDAO.js            |   94.64 |    91.66 |     100 |   94.54 | 37,80,90                                                                                                                                                                                             
+  RestockOrderDAO.js        |   89.85 |     87.5 |      90 |    90.9 | 29,64,74,86,90,101                                                                                                                                                                                   
+  ReturnOrderDAO.js         |   96.61 |      100 |     100 |   96.61 | 74,103                                                                                                                                                                                               
+  SKUItemDAO.js             |   96.42 |    84.21 |     100 |   96.36 | 46,84                                                                                                                                                                                                
+  SkuDAO.js                 |   89.58 |      100 |     100 |   89.36 | 22,34,60,71,80                                                                                                                                                                                       
+  TestDescriptorDAO.js      |   89.13 |      100 |     100 |   88.88 | 21,46,57,68,77                                                                                                                                                                                       
+  TestResultDAO.js          |   89.13 |      100 |     100 |   88.88 | 21,46,57,68,77                                                                                                                                                                                       
+  UserDAO.js                |   91.66 |       90 |     100 |   91.46 | 36,47,56,60,70,97,106                                                                                                                                                                                
+ Mock_databases             |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_internalOrderDAO.js  |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_itemDAO.js           |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_positionDAO.js       |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_restockOrderDAO.js   |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_returnOrderDAO.js    |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_skuDAO.js            |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_skuItemDAO.js        |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_testDescriptorDAO.js |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_testResultDAO.js     |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+  Mock_userDAO.js           |     100 |      100 |     100 |     100 |                                                                                                                                                                                                      
+ Model                      |   83.84 |       80 |   70.96 |   85.87 |                                                                                                                                                                                                      
+  InternalOrder.js          |      76 |    66.66 |   55.55 |   76.19 | 43-56                                                                                                                                                                                                
+  Item.js                   |   81.81 |      100 |   58.33 |   91.66 | 30,35                                                                                                                                                                                                
+  Position.js               |   93.75 |       60 |   83.33 |   95.45 | 30                                                                                                                                                                                                   
+  RestockOrder.js           |   69.84 |    26.31 |   60.86 |   67.27 | 42-46,50-53,60-69,84,97                                                                                                                                                                              
+  ReturnOrder.js            |   93.33 |      100 |   83.33 |    90.9 | 17                                                                                                                                                                                                   
+  SKUItem.js                |   81.57 |    66.66 |   56.25 |      92 | 31,38                                                                                                                                                                                                
+  Sku.js                    |   80.85 |       60 |      55 |   93.33 | 37-40                                                                                                                                                                                                
+  TestDescriptor.js         |   80.64 |      100 |   54.54 |    91.3 | 31,36                                                                                                                                                                                                
+  TestResult.js             |   82.85 |    28.57 |   58.33 |    92.3 | 34,39                                                                                                                                                                                                
+  User.js                   |   90.47 |      100 |      75 |   93.33 | 21                                                                                                                                                                                                   
+  Warehouse.js              |   85.46 |     88.4 |   84.09 |   85.94 | 34,76,91,127,132,148,158,174-180,207,221,226-234,258,269-272,297,369-373,400,414,429,493-497,525-528,548,579-582,616,634,641-644,671,680,721-724,735,744,785-790,800,809,847-851,876,883,897,920-926 
 
 
 
@@ -3323,9 +3272,10 @@ All files                   |   86.89 |    81.32 |   79.87 |   88.18 |
 
 |Unit name | Loop rows | Number of iterations | Jest test case |
 |---|---|---|---|
-|||||
-|||||
-||||||
+|getAllRestockOrders|3|0|Test Loop Coverage Restock Order|
+|getAllRestockOrders|3|1|Test Loop Coverage Restock Order|
+|getAllRestockOrders|3|2|Test Loop Coverage Restock Order|
+|getAllRestockOrders|3|3|Test Loop Coverage Restock Order|
 
 
 

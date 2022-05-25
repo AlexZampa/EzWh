@@ -57,7 +57,7 @@ class SKUItemDAO {
             }
             let sql = "UPDATE SKUItem SET rfid = ?, available = ?, dateOfStock = ?, restockOrderID = ? WHERE rfid = ?";
             let res = await this.connectionDB.DBexecuteQuery(sql, [newRFID, newAvailable, newDate, restockOrderID, oldRFID]);
-            return res.lastID;      
+            return res.changes;      
         } catch (err) {
             throw err;
         }
