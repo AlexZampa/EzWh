@@ -869,14 +869,11 @@ Version: 1.0
 
 
 | Criteria 1 | Criteria 2 | Valid / Invalid | Description of the test case | Jest test case |
-
 |-------|-------|-------|-------|
-
 | ID is a positive number | any | valid | validity checked by ControllerInternalOrder | - |
+| / | yes | valid | T1(ID) -> internalOrder | Test Create and Get Internal Order |
+| / | no | valid | T2(ID) -> 404 | Test throw err on get Internal Order |
 
-| - | yes | valid | T1(ID) -> internalOrder | Test Create and Get Internal Order |
-
-| - | no | valid | T2(ID) -> 404 | Test throw err on get Internal Order |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *InternalOrderDAO* - method *addDeliveredProducts***
@@ -907,7 +904,6 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-
 |-------|-------|-------|
 | yes | valid | T1(ID, SKUItemList) -> OK | Test add delivered products to a completed Internal Order |
 | no | invalid | T2(ID, SKUItemList) -> err | Test add delivered products to a completed Internal Order |
@@ -938,9 +934,8 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-
-|-------|-------|-------|| yes | valid | T1(ID, newState) -> OK | Test update Internal Order state |
-
+|-------|-------|-------|
+| yes | valid | T1(ID, newState) -> OK | Test update Internal Order state |
 | no | invalid | T2(ID, newState) -> 422 | Test update Internal Order state |
 
 -----------------------------------------------------------------------------------------------------
@@ -968,8 +963,7 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-
-|-------|-------|-------|
+|-------|-------|-------| 
 | yes | valid | T1(ID) -> OK | Test Delete Internal Order |
 | no | invalid | T2(ID) -> 404 | Test Delete Internal Order |
 
@@ -1001,11 +995,10 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-
-|-------|-------|-------|
+|-------|-------|-------|----|
 | yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
+| no | invalid |  T2(ID) -> 404 | Test Create and Get Return Order |
 
-| no | invalid | T2(ID) -> 404 | Test Create and Get Return Order |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *ReturnOrderDAO* - method *getReturnOrderById***
@@ -1033,10 +1026,8 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-
-|-------|-------|-------|
+|-------|-------|-------|----|
 | yes | valid | T1(ID) -> OK | Test Create and Get Return Order |
-
 | no | valid | T2(ID) -> 404 | Test throw err on get Return Order |
 
 -----------------------------------------------------------------------------------------------------
@@ -1064,11 +1055,9 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-
-|-------|-------|-------|
+|-------|-------|-------|----|
 | yes | valid | T1() -> list | Test Get All Return Orders |
-
-| no | valid | T2() -> emptyList | Test Get All Return Orders |
+| no | valid |  T2() -> emptyList | Test Get All Return Orders |
 
 -----------------------------------------------------------------------------------------------------
 ### **Class *ReturnOrderDAO* - method *deleteReturnOrder***
@@ -1095,10 +1084,8 @@ Version: 1.0
 
 
 | Criteria | Valid / Invalid | Description of the test case | Jest test case |
-
-|-------|-------|-------|
+|-------|-------|-------|---|
 | yes | valid | T1(ID) -> OK | Test Delete Return Order |
-
 | no | valid | T2(ID) -> 404 | Test Delete Return Order |
 
 
@@ -1158,7 +1145,6 @@ Version: 1.0
 | Yes | Valid | T1() -> list | Test Get All Item - testGetAllItems |
 | No  | Valid | T2() -> list | - |
 
-
 ### **Class *ItemDAO* - method *getItem***
 
 **Criteria for method *getItem*:**
@@ -1185,7 +1171,6 @@ Version: 1.0
 | Yes | Valid | T1(validItemId) -> Item | Test Create and Get Item - testGetItem |
 | No | Invalid| T2(invalidItemId) -> error | Test throw err on get Item - testGetItemerror |
 
-
 ### **Class *ItemDAO* - method *updateItem***
 
 **Criteria for method *updateItem*:**
@@ -1211,7 +1196,6 @@ Version: 1.0
 |-------|-------|-------|-------|
 | Yes | Valid  | T1(item) -> 1 | Test Update Item - testUpdateItem |
 | No  | Invalid | T2() -> 0 | Test Update Item - testUpdateItem |
-
 
 ### **Class *ItemDAO* - method *deleteItem***
 
@@ -1294,7 +1278,6 @@ Version: 1.0
 |-------|-------|-------|-------|
 | Yes | Valid | T1() -> list | Test Get All TestDescriptor - testGetAllTestDescriptor |
 | No | Valid| T2() -> list | - |
-
 
 ### **Class *TestDescriptorDAO* - method *getTestDescriptor***
 
