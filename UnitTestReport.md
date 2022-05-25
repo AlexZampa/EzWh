@@ -2321,7 +2321,7 @@ Version: 1.0
 
 **Combination of predicates**:
 
-| RestockOrder with same id exists | Date is valid | Valid / Invalid | Description of the test case | Jest test case |
+| RestockOrder with same id exists | Date is valid | Valid / Invalid  | Description of the test case | Jest test case |
 |-------|-------|-------|-------|
 | Yes | Valid   | T1(validRestockOrderID) -> RestockOrder | Test get RestockOrder - testGetRestockOrder  |
 | No | Invalid | T2() -> error   | /  |
