@@ -1,3 +1,4 @@
+exports.init = jest.fn();
 exports.newUser = jest.fn();
 exports.getAllUsers = jest.fn();
 exports.getAllUsersByType = jest.fn();
