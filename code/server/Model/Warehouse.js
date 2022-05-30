@@ -121,6 +121,8 @@ class Warehouse {
 
     modifySKUposition = async (skuID, positionID) => {
         try {
+            if (!Number(positionID) || positionID.length != 12)
+                throw { err: 422, msg: "Invalid Position data" };
             const sku = await this.skuDAO.getSKU(skuID);                         // get SKU
             const position = await this.positionDAO.getPosition(positionID);     // get Position
 
@@ -153,17 +155,7 @@ class Warehouse {
 
     deleteSKU = async (skuID) => {
         try {
-            const sku = await this.skuDAO.getSKU(skuID);        // check if SKU exists
-            const skuItemList = await this.skuItemDAO.getAllSKUItems();         // check if SKUItem has SKU
-            if (skuItemList.find(s => s.getSKU() === skuID))
-                throw { err: 422, msg: "Cannot delete SKU" };
-
             const res = await this.skuDAO.deleteSKU(skuID);     // delete SKU
-            if (sku.getPosition() !== undefined) {                // if SKU has a Position assigned
-                const pos = await this.positionDAO.getPosition(sku.getPosition());
-                // remove assignedSKU to the Position and set occupiedWeight and occupiedVolume to 0
-                const result = await this.positionDAO.updatePosition(pos.getPositionID(), pos.getPositionID(), pos.getAisle(), pos.getRow(), pos.getCol(), pos.getMaxWeight(), pos.getMaxVolume(), 0, 0, null);
-            }
             return res;
         }
         catch (err) {
@@ -355,9 +347,6 @@ class Warehouse {
 
     deletePosition = async (positionID) => {
         try {
-            const pos = await this.positionDAO.getPosition(positionID);
-            if (pos.getAssignedSKU() !== undefined)
-                throw { err: 422, msg: "Cannot delete: Position assigned to SKU" };
             const res = await this.positionDAO.deletePosition(positionID);
             return res;
         }
@@ -706,9 +695,10 @@ class Warehouse {
 
     deleteUser = async (username, type) => {
         try {
-            const user = await this.userDAO.getUser(username, type);
             if (type === "manager" || type === "administrator")
                 throw { err: 422, msg: "Attempt to delete manager/administrator" };
+            if (!userTypes.find(t => t === type))
+                throw { err: 422, msg: "Invalid user type" };
             const result = await this.userDAO.deleteUser(username, type);
             return result;
         } catch (err) {

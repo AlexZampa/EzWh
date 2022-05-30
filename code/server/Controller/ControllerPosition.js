@@ -9,12 +9,12 @@ const warehouse = new Warehouse();
 
 // CREATE NEW POSITION
 router.post('/position', 
-    [check("positionID").exists().isNumeric({no_symbols: true}),
-     check("aisleID").exists().isNumeric({no_symbols: true}),
-     check("row").exists().isNumeric({no_symbols: true}),
-     check("col").exists().isNumeric({no_symbols: true}),
-     check("maxWeight").exists().isNumeric(),
-     check("maxVolume").exists().isNumeric()],
+    [check("positionID").exists().isNumeric({no_symbols: true}).notEmpty(),
+     check("aisleID").exists().isNumeric({no_symbols: true}).notEmpty(),
+     check("row").exists().isNumeric({no_symbols: true}).notEmpty(),
+     check("col").exists().isNumeric({no_symbols: true}).notEmpty(),
+     check("maxWeight").exists().isInt({min: 1}).notEmpty(),
+     check("maxVolume").exists().isInt({min: 1}).notEmpty()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -36,6 +36,7 @@ router.post('/position',
     }  
 );
 
+
 // GET ALL POSITION
 router.get('/positions', async (req, res) => {
         try{
@@ -52,14 +53,14 @@ router.get('/positions', async (req, res) => {
 
 // MODIFY POSITION
 router.put('/position/:positionID', 
-    [check("positionID").isNumeric({no_symbols: true}),
-     check("newAisleID").exists().isNumeric({no_symbols: true}),
-     check("newRow").exists().isNumeric({no_symbols: true}), 
-     check("newCol").exists().isNumeric({no_symbols: true}), 
-     check("newMaxWeight").exists().isNumeric(), 
-     check("newMaxVolume").exists().isNumeric(),
-     check("newOccupiedWeight").exists().isNumeric(), 
-     check("newOccupiedVolume").exists().isNumeric()],
+    [check("positionID").isNumeric({no_symbols: true}).notEmpty(),
+     check("newAisleID").exists().isNumeric({no_symbols: true}).notEmpty(),
+     check("newRow").exists().isNumeric({no_symbols: true}).notEmpty(), 
+     check("newCol").exists().isNumeric({no_symbols: true}).notEmpty(), 
+     check("newMaxWeight").exists().isNumeric().notEmpty(), 
+     check("newMaxVolume").exists().isNumeric().notEmpty(),
+     check("newOccupiedWeight").exists().isNumeric().notEmpty(), 
+     check("newOccupiedVolume").exists().isNumeric().notEmpty()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -84,8 +85,8 @@ router.put('/position/:positionID',
 
 // MODIFY POSITION ID
 router.put('/position/:positionID/changeID', 
-    [check("positionID").isNumeric({no_symbols: true}),
-    check("newPositionID").exists().isNumeric({no_symbols: true})],
+    [check("positionID").isNumeric({no_symbols: true}).notEmpty(),
+    check("newPositionID").exists().isNumeric({no_symbols: true}).notEmpty()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -109,7 +110,7 @@ router.put('/position/:positionID/changeID',
 
 // DELETE POSITION
 router.delete('/position/:positionID',
-    [check("positionID").isNumeric({no_symbols: true})],
+    [check("positionID").isNumeric({no_symbols: true}).notEmpty()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -123,7 +124,6 @@ router.delete('/position/:positionID',
         } catch(err){
             console.log(err);
             switch(err.err){
-                case 404: return res.status(422).end();    // response should be 404 but API.md require 422 in any case
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }

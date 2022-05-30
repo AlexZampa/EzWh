@@ -10,11 +10,11 @@ const warehouse = new Warehouse();
 
 // CREATE NEW USER
 router.post('/newUser', 
-    [check("username").exists().isEmail(),
-     check("name").exists().isAlpha(),
-     check("surname").exists().isAlpha(),
+    [check("username").exists().isEmail().notEmpty(),
+     check("name").exists().isString(),
+     check("surname").exists().isString(),
      check("password").exists().isString(),
-     check("type").exists().isAlpha()],
+     check("type").exists().isString().notEmpty()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -265,7 +265,6 @@ router.delete('/users/:username/:type',
         } catch(err){
             console.log(err);
             switch(err.err){
-                case 404: return res.status(422).end();   // not specified in the API
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
