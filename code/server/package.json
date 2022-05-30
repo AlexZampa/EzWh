@@ -1,4 +1,19 @@
 {
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "apiTest": "./node_modules/.bin/mocha test --timeout 10000 --exit > ./studentApiTestResult.txt",
+    "test": "node_modules/.bin/jest --coverage > ./unitTestResult.txt",
+    "acceptanceTest": "npx mocha --spec acceptanceTest/testEzWhAPI.js --reporter mochawesome",
+    "totalcoverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha test --timeout 10000 --exit",
+    "winApiTest": "mocha test --exit",
+    "winTest": "jest --runInBand",
+    "testCoverage": "jest --runInBand --coverage"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "api-test": "^4.1.0",
     "dayjs": "^1.11.2",
@@ -8,17 +23,14 @@
     "sqlite3": "^5.0.6"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
+    "check-code-coverage": "^1.10.0",
     "jest": "^27.5.1",
-    "mocha": "^9.2.2"
-  },
-  "scripts": {
-    "apiTest": "./node_modules/.bin/mocha test --exit",
-    "test": "node_modules/.bin/jest --runInBand",
-    "winApiTest": "mocha test --exit",
-    "winTest": "jest --runInBand",
-    "testCoverage": "jest --runInBand --coverage"
+    "nodemon": "^2.0.16",
+    "mocha": "^9.2.2",
+    "mochawesome": "^7.1.3",
+    "mochawesome-report-generator": "^6.2.0",
+    "nyc": "^15.1.0"
   }
 }
