@@ -763,7 +763,6 @@ class Warehouse {
 
     deleteItem = async (id) => {
         try {
-            const item = await this.itemDAO.getItem(id);
             const res = await this.itemDAO.deleteItem(id);
             return res;
         }
@@ -825,7 +824,6 @@ class Warehouse {
 
     deleteTestDescriptor = async (id) => {
         try {
-            const td = await this.testDescriptorDAO.getTestDescriptor(id);
             const res = await this.testDescriptorDAO.deleteTestDescriptor(id);
             return res;
         }
@@ -902,7 +900,6 @@ class Warehouse {
 
     deleteTestResult = async (id, rfid) => {
         try {
-            const tr = await this.testResultDAO.getTestResult(rfid, id);
             const res = await this.testResultDAO.deleteTestResult(id, rfid);
             return res;
         }

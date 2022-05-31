@@ -22,7 +22,7 @@ router.get('/items', async (req, res) => {
 });
 
 //get item by id
-router.get('/items/:id', [check("id").isInt({ min: 1 })],
+router.get('/items/:id', [check("id").isInt({min: 0})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -43,8 +43,8 @@ router.get('/items/:id', [check("id").isInt({ min: 1 })],
     });
 
 //create item
-router.post('/item', [check("id").isInt({ min: 1 }), check("description").exists().isString().trim(), check("price").exists().isNumeric(), check("SKUId").exists().isInt({ min: 1 }),
-check("supplierId").exists().isInt({ min: 1 })],
+router.post('/item', [check("id").isInt({min: 0}), check("description").exists().isString().trim(), check("price").exists().isNumeric(), check("SKUId").exists().isInt({min: 0}),
+check("supplierId").exists().isInt({min: 0})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -66,7 +66,7 @@ check("supplierId").exists().isInt({ min: 1 })],
 );
 
 //modify item
-router.put('/item/:id', [check("id").exists().isInt({ min: 1 }), check("newDescription").exists().isString().trim(), check("newPrice").exists().isNumeric()],
+router.put('/item/:id', [check("id").exists().isInt({min: 0}), check("newDescription").exists().isString().trim(), check("newPrice").exists().isNumeric()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -88,7 +88,7 @@ router.put('/item/:id', [check("id").exists().isInt({ min: 1 }), check("newDescr
 );
 
 //delete item
-router.delete('/items/:id', [check("id").exists().isInt({ min: 1 })],
+router.delete('/items/:id', [check("id").exists().isInt({min: 0})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
