@@ -181,6 +181,7 @@ class Warehouse {
                 if (!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
                     throw { err: 422, msg: "Invalid Date" };
             }
+            const sku = await this.skuDAO.getSKU(skuID);
             const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock ? dateOfStock : null, null);
             return res;
         }
@@ -246,10 +247,6 @@ class Warehouse {
 
     deleteSKUItem = async (rfid) => {
         try {
-            const skuItem = await this.skuItemDAO.getSKUItem(rfid);            // get SKUItem
-            if (skuItem.getRestockOrder() !== undefined)
-                throw { err: 422, msg: "Cannot delete SKUItem" };              // check Restock Order
-
             const res = await this.skuItemDAO.deleteSKUItem(rfid);
             return res;
         }
@@ -369,12 +366,12 @@ class Warehouse {
     addRestockOrder = async (products, supplierID, issueDate) => {
         if (!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
             throw { err: 422, msg: "Invalid Date" };
-        for (const prod of products) {
-            await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
-        }
-        const users = await this.userDAO.getAllUsers();
-        if (!users.find(u => u.getUserID() === supplierID && u.getType() === "supplier"))
-            throw { err: 422, msg: "Supplier Not Found" };
+        // for (const prod of products) {
+        //     await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
+        // }
+        // const users = await this.userDAO.getAllUsers();
+        // if (!users.find(u => u.getUserID() === supplierID && u.getType() === "supplier"))
+        //     throw { err: 422, msg: "Supplier Not Found" };
         const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
         return res;
     }

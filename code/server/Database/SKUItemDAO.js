@@ -67,8 +67,6 @@ class SKUItemDAO {
         try {
             const sql = "DELETE FROM SKUItem WHERE rfid = ?";
             const res = await this.connectionDB.DBexecuteQuery(sql, [rfid]);     // delete SKUItem
-            if (res.changes === 0)
-                throw { err: 404, msg: "SKUItem not found" };
             return res.changes;
         }
         catch (err) {

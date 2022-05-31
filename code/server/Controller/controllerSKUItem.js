@@ -11,8 +11,8 @@ const warehouse = new Warehouse();
 // CREATE NEW SKUITEM
 router.post('/skuitem',
     [check("RFID").exists().isString(),
-    check("SKUId").exists().isNumeric(),
-    check("DateOfStock").optional({ nullable: true }).exists().isString()],
+    check("SKUId").exists().isInt({ min: 1}),
+    check("DateOfStock").optional({ nullable: true }).isString()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -141,7 +141,6 @@ router.delete('/skuitems/:rfid',
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(422).end();         // API requires 422 in any case   
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }
