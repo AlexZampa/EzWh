@@ -10,9 +10,9 @@ const warehouse = new Warehouse();
 
 // CREATE NEW SKUITEM
 router.post('/skuitem',
-    [check("RFID").exists().isString().isLength({min: 32, max: 32}),
     check("SKUId").exists().isInt({ min: 1}),
     check("DateOfStock").optional({ nullable: true }).isString()],
+    [check("RFID").optional({ nullable: true }).exists().isString().isLength({min: 32, max: 32}),
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -78,7 +78,7 @@ router.get('/skuitems/sku/:id',
 
 // GET SKUITEM
 router.get('/skuitems/:rfid',
-    [check("rfid").isString().isLength({min: 32, max: 32})],
+    [check("rfid").optional({ nullable: true }).isString().isLength({min: 32, max: 32})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -111,7 +111,7 @@ router.put('/skuitems/:rfid',
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 console.log({ errors: errors.array() });
-                return res.status(422).end();
+                return res.status(404).end();
             }
             const result = await warehouse.modifySKUItem(req.params.rfid, req.body.newRFID, req.body.newAvailable, req.body.newDateOfStock);
             return res.status(200).end();

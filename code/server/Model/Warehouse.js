@@ -181,7 +181,10 @@ class Warehouse {
                 if (!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
                     throw { err: 422, msg: "Invalid Date" };
             }
-            const sku = await this.skuDAO.getSKU(skuID);
+            if (skuID === null || rfid === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
+            const sku = await this.getSKU(skuID);
             const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock ? dateOfStock : null, null);
             return res;
         }
@@ -192,6 +195,9 @@ class Warehouse {
 
     getSKUItem = async (rfid) => {
         try {
+            if (rfid === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const sku = await this.skuDAO.getSKU(skuItem.getSKU());
             skuItem.setSKU(sku);
@@ -203,21 +209,19 @@ class Warehouse {
     };
 
     getSKUItems = async () => {
-        try {
-            const skuItemList = await this.skuItemDAO.getAllSKUItems();
-            for (const skuItem of skuItemList) {
-                const sku = await this.skuDAO.getSKU(skuItem.getSKU());
-                skuItem.setSKU(sku);
-            }
-            return skuItemList;
+        const skuItemList = await this.skuItemDAO.getAllSKUItems();
+        for (const skuItem of skuItemList) {
+            const sku = await this.skuDAO.getSKU(skuItem.getSKU());
+            skuItem.setSKU(sku);
         }
-        catch (err) {
-            throw err;
-        }
+        return skuItemList;
     };
 
     getSKUItemsBySKUid = async (skuID) => {
         try {
+            if (skuID === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
             const sku = await this.skuDAO.getSKU(skuID);
             let skuItems = await this.skuItemDAO.getAllSKUItems();
             skuItems = skuItems.filter(s => s.getSKU() === skuID && s.getAvailable() === 1);
@@ -235,6 +239,9 @@ class Warehouse {
                 if (!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid()))
                     throw { err: 422, msg: "Invalid Date" };
             }
+            if (newAvailable === null || rfid === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const result = this.skuItemDAO.updateSKUItem(rfid, newRFID, newAvailable, newDate ? newDate : skuItem.getDateOfStock(), skuItem.getRestockOrder());
             return result;
@@ -247,6 +254,9 @@ class Warehouse {
 
     deleteSKUItem = async (rfid) => {
         try {
+            if (rfid === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
             const res = await this.skuItemDAO.deleteSKUItem(rfid);
             return res;
         }
@@ -256,11 +266,7 @@ class Warehouse {
     };
 
     testDeleteAllSKUItems = async () => {
-        try {
-            await this.skuItemDAO.resetTable();
-        } catch (err) {
-            throw err;
-        }
+        await this.skuItemDAO.resetTable();
     }
 
     /*************** functions for managing Position ****************/
@@ -477,7 +483,7 @@ class Warehouse {
                 throw { err: 422, msg: "Restock Order not in COMPLETEDRETURN state" };
             const allSkuItems = await this.skuItemDAO.getAllSKUItems();
             const returnItems = [];
-            for(const s of allSkuItems){
+            for (const s of allSkuItems) {
                 if (s.getRestockOrder() === restockOrderID) {
                     const testResults = await this.testResultDAO.getAllTestResult(s.getRFID());
                     for (const r of testResults) {
@@ -523,7 +529,7 @@ class Warehouse {
     addReturnOrder = async (SKUItemList, restockOrderId, returnDate) => {
         try {
             let restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
-            if(!restockOrder) return;
+            if (!restockOrder) return;
             //if(!restockOrder) restockOrder = new RestockOrder(1, returnDate, 1, "DELIVERED", undefined);
             //console.log(restockOrder);
 
@@ -869,8 +875,8 @@ class Warehouse {
         try {
             if (!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid Date" };
-            if(result !== 'true' && result !== 'false')
-                throw {err : 422, msg : "Invalid format"};
+            if (result !== 'true' && result !== 'false')
+                throw { err: 422, msg: "Invalid format" };
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(idTestDescriptor);
             const res = await this.testResultDAO.newTestResult(rfid, idTestDescriptor, date, result);
@@ -885,8 +891,8 @@ class Warehouse {
         try {
             if (!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid Date" };
-            if(newResult !== 'true' && newResult !== 'false')
-                throw {err : 422, msg : "Invalid format"};
+            if (newResult !== 'true' && newResult !== 'false')
+                throw { err: 422, msg: "Invalid format" };
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(newIdTestDescriptor);
             const tr = await this.testResultDAO.getTestResult(rfid, id);
