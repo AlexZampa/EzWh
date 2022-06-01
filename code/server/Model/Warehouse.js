@@ -433,10 +433,8 @@ class Warehouse {
             const skuItemList = [];
             for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
-                // if SKUItem not found or skuID passed as params is different from the real SKUid or SKUItem has already a restockOrder
-                if (!skuItem || s.skuID !== skuItem.getSKU() || skuItem.getRestockOrder() !== undefined)
-                    throw { err: 422, msg: "Invalid SKUItem" };
-                skuItemList.push(skuItem);
+                if(skuItem)
+                    skuItemList.push(skuItem);
             }
             for (const skuItem of skuItemList) {
                 // update skuItem with all fields equal but the restockOrderID
