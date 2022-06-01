@@ -447,6 +447,8 @@ class Warehouse {
             if (!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid date" };
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
+            if(restockOrder.getState() != "DELIVERY")
+                throw { err: 422, msg: "RestockOrder must be in delivery state" };
             if (dayjs(date).isBefore(dayjs(restockOrder.getIssueDate())))
                 throw { err: 422, msg: "Invalid date: deliveryDate is before issueDate" };
             const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY-MM-DD'));

@@ -10,7 +10,7 @@ const warehouse = new Warehouse();
 
 // CREATE NEW SKUITEM
 router.post('/skuitem',
-    [check("RFID").exists().isString(),
+    [check("RFID").exists().isString().isLength({min: 32, max: 32}),
     check("SKUId").exists().isInt({ min: 1}),
     check("DateOfStock").optional({ nullable: true }).isString()],
     async (req, res) => {
@@ -78,7 +78,7 @@ router.get('/skuitems/sku/:id',
 
 // GET SKUITEM
 router.get('/skuitems/:rfid',
-    [check("rfid").isString()],
+    [check("rfid").isString().isLength({min: 32, max: 32})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -102,7 +102,7 @@ router.get('/skuitems/:rfid',
 
 // MODIFY SKUITEM
 router.put('/skuitems/:rfid',
-    [check("rfid").isString(),
+    [check("rfid").isString().isLength({min: 32, max: 32}),
     check("newRFID").exists().isString(),
     check("newAvailable").exists().isInt({ min: 0, max: 1 }),
     check("newDateOfStock").optional({ nullable: true }).exists().isString()],
@@ -128,7 +128,7 @@ router.put('/skuitems/:rfid',
 
 // DELETE SKUITEM
 router.delete('/skuitems/:rfid',
-    [check("rfid").isString()],
+    [check("rfid").isString().isLength({min: 32, max: 32})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
