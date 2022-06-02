@@ -199,8 +199,6 @@ class Warehouse {
                 throw { err: 422, msg: "Invalid Input" };
             }
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
-            const sku = await this.skuDAO.getSKU(skuItem.getSKU());
-            skuItem.setSKU(sku);
             return skuItem;
         }
         catch (err) {
@@ -210,10 +208,6 @@ class Warehouse {
 
     getSKUItems = async () => {
         const skuItemList = await this.skuItemDAO.getAllSKUItems();
-        for (const skuItem of skuItemList) {
-            const sku = await this.skuDAO.getSKU(skuItem.getSKU());
-            skuItem.setSKU(sku);
-        }
         return skuItemList;
     };
 
@@ -225,7 +219,6 @@ class Warehouse {
             const sku = await this.skuDAO.getSKU(skuID);
             let skuItems = await this.skuItemDAO.getAllSKUItems();
             skuItems = skuItems.filter(s => s.getSKU() === skuID && s.getAvailable() === 1);
-            skuItems.forEach(s => s.setSKU(sku));
             return skuItems;
         }
         catch (err) {
