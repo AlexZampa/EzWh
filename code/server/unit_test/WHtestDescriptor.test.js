@@ -188,17 +188,6 @@ describe("Test delete Test descriptor", () => {
         let result = await wh.deleteTestDescriptor(id);
         expect(result).toBe(expectedResult);
     })
-
-    testDeleteTestDescriptorError("throw error on Test descriptor not found", 5, {err: 404, msg:  "Test descriptor not found"});
-
-    function testDeleteTestDescriptorError(testMessage, id, expectedError){
-        test(testMessage, async () => {
-            async function invalidDelete(){
-                await wh.deleteTestDescriptor(id);
-            };
-            await expect(invalidDelete).rejects.toEqual(expectedError);
-        })
-    }
 });
 
 

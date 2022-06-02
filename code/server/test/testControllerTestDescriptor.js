@@ -18,7 +18,7 @@ describe('test Test descriptor apis', () => {
     newTestDescriptor('adding a new td2', 422);
     newTestDescriptor('adding a new td3', 422, 1, "description", 1);
     newTestDescriptor('adding a new td4', 422, "name", 1, 1);
-    newTestDescriptor('adding a new td5', 422, "name", "description", 0);
+    newTestDescriptor('adding a new td5', 422, "name", "description", -1);
     newTestDescriptor('adding a new td6', 422, "name", "description", "idSKU");
     newTestDescriptor('adding a new td7', 404, "name", "description", 100);
 
@@ -32,17 +32,16 @@ describe('test Test descriptor apis', () => {
     modifyTestDescriptor('modifing td data1', 200, 1, "newName", "newDescription", 1);
     modifyTestDescriptor('modifing td data2', 404, 100, "newName", "description", 1);
     modifyTestDescriptor('modifing td data2', 404, 1, "newName", "description", 40);
-    modifyTestDescriptor('modifing td data4', 422, 0, "newName", "description", 1);
+    modifyTestDescriptor('modifing td data4', 422, -1, "newName", "description", 1);
     modifyTestDescriptor('modifing td data5', 422, "id", "newName", "description", 1);
     modifyTestDescriptor('modifing td data6', 422, 1, 1, "newDescription", 1);
     modifyTestDescriptor('modifing td data7', 422, 1, "newName", 2, 1);
-    modifyTestDescriptor('modifing td data8', 422, 1, "newName", "description", 0);
+    modifyTestDescriptor('modifing td data8', 422, 1, "newName", "description", -1);
     modifyTestDescriptor('modifing td data9', 422, 1, "newName", "description", "newIdSKU");
 
     deleteTestDescriptor('deleting td1', 204, 1);
     deleteTestDescriptor('deleting td2', 422, "id");
-    deleteTestDescriptor('deleting td3', 422, 0);
-    deleteTestDescriptor('deleting td4', 422, 100);
+    deleteTestDescriptor('deleting td3', 422, -1);
 
 });
 

@@ -16,14 +16,14 @@ describe('test Item apis', () => {
 
     newItem('adding a new item1', 201, 1, "description", 20, 1, 4);
     newItem('adding a new item2', 422);
-    newItem('adding a new item3', 422, 0, "description", 20, 2, 4);
+    newItem('adding a new item3', 422, -1, "description", 20, 2, 4);
     newItem('adding a new item4', 422, "id", "description", 20, 2, 4);
     newItem('adding a new item5', 422, 1, 2, 20, 2, 4);
     newItem('adding a new item6', 422, 1, "description", -20, 2, 4);
     newItem('adding a new item7', 422, 1, "description", "price", 2, 4);
-    newItem('adding a new item8', 422, 1, "description", 20, 0, 4);
+    newItem('adding a new item8', 422, 1, "description", 20, -1, 4);
     newItem('adding a new item9', 422, 1, "description", 20, "SKUid", 4);
-    newItem('adding a new item10', 422, 1, "description", 20, 2, 0);
+    newItem('adding a new item10', 422, 1, "description", 20, 2, -1);
     newItem('adding a new item11', 422, 1, "description", 20, 2, "supplier");
     newItem('adding a new item12', 404, 1, "description", 20, 100, 4);
 
@@ -37,15 +37,14 @@ describe('test Item apis', () => {
     modifyItem('modifing Item data1', 200, 1, "description", 20);
     modifyItem('modifing Item data2', 404, 100, "description", 20);
     modifyItem('modifing Item data3', 422, 1, "description", -20);
-    modifyItem('modifing Item data4', 422, 0, "description", 20);
+    modifyItem('modifing Item data4', 422, -1, "description", 20);
     modifyItem('modifing Item data5', 422, "id", "description", 20);
     modifyItem('modifing Item data6', 422, 1, 2, 20);
     modifyItem('modifing Item data7', 422, 1, "description", "newPrice");
 
     deleteItem('deleting Item1', 204, 1);
     deleteItem('deleting Item2', 422, "id");
-    deleteItem('deleting Item3', 422, 0);
-    deleteItem('deleting Item4', 422, 100);
+    deleteItem('deleting Item3', 422, -1);
 
 });
 

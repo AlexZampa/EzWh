@@ -231,17 +231,6 @@ describe("Test delete Test result", () => {
         let result = await wh.deleteTestResult(id);
         expect(result).toBe(expectedResult);
     })
-
-    testDeleteTestResultError("throw error on Test result not found", 5, {err: 404, msg:  "Test result not found"});
-
-    function testDeleteTestResultError(testMessage, id, expectedError){
-        test(testMessage, async () => {
-            async function invalidDelete(){
-                await wh.deleteTestResult(id);
-            };
-            await expect(invalidDelete).rejects.toEqual(expectedError);
-        })
-    }
 });
 
 
