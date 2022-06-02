@@ -54,7 +54,7 @@ describe('test Position apis', () => {
     modifyPositionID(422, "111122223333", "444444555555666666", "111122223333", "999988887777" );
 
     deletePosition(204, "111122223333", "111122223333");
-    deletePosition(422, "999988887777", "111122223333");
+    deletePosition(204, "999988887777", "111122223333");
     deletePosition(422, "aaaabbbbcccc", "111122223333");
 
 });

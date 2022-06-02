@@ -89,7 +89,6 @@ describe('Test Delete SKUItem', () => {
     let expectedChanges = 1
     testDeleteSKUItem("2", expectedChanges);
     testGetAllSKUItem(skuItemList);
-    testDeleteSKUItemError("4", { err: 404, msg: "SKUItem not found" });
 });
 
 function testCreateSKUItem(RFID, sku, available, dateOfStock, restockOrder, expectedID) {
@@ -159,14 +158,6 @@ function testDeleteSKUItem(skuItemRFID, expectedChanges) {
     });
 }
 
-function testDeleteSKUItemError(skuItemRFID, expectedError) {
-    test('throw on delete SKUItem', async () => {
-        async function deleteNonExistentSKUItem() {
-            await await skuItemDAO.deleteSKUItem(skuItemRFID);
-        };
-        await expect(deleteNonExistentSKUItem).rejects.toEqual(expectedError);
-    });
-}
 
 function compareSKUItem(skuItem, expectedSKUItem) {
     expect(skuItem.getRFID()).toStrictEqual(expectedSKUItem.getRFID());

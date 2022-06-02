@@ -266,49 +266,19 @@ describe("Test modify SKU position", () => {
 describe("Test delete SKU", () => {
     const sku1 = new SKU(1, "description 1", 30, 20, "notes 1", 10.99, 40, null);
     const sku2 = new SKU(2, "description 2", 20, 50, "notes 2", 20.99, 50, "123456789900");
-    const pos = new Position("123456789900", "1234", "5678", "9900", 1000, 1200, 100, 150, 2);
+    
 
-    beforeAll(() => {
-        skuDAO.getSKU.mockReset();
-        skuDAO.getSKU.mockReturnValueOnce(sku1).mockReturnValueOnce(sku2).mockRejectedValueOnce({err: 404, msg:  "SKU not found"});          
-
-        skuItemDAO.getAllSKUItems.mockReset();
-        skuItemDAO.getAllSKUItems.mockReturnValue([]);
-
+    beforeAll(() => {    
         skuDAO.deleteSKU.mockReset();
         skuDAO.deleteSKU.mockReturnValue(1);
-        
-        positionDAO.getPosition.mockReset();
-        positionDAO.getPosition.mockReturnValue(pos);
-        
-        positionDAO.updatePosition.mockReset();
-        positionDAO.updatePosition.mockReturnValue(1);
     });
 
     let skuID = 1;
     let expectedResult = 1;
-    test('Delete SKU without position', async () => {
+    test('Delete SKU', async () => {
         let result = await wh.deleteSKU(skuID);
         expect(result).toBe(expectedResult);
-        expect(positionDAO.updatePosition).not.toHaveBeenCalled();
     })
-
-    skuID = 2;
-    test('Update position after delete SKU', async () => {
-        let res = await wh.deleteSKU(skuID);
-        expect(positionDAO.updatePosition).toHaveBeenCalledWith("123456789900", "123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null);
-    });
-
-    testDeleteSKUError("throw error on SKU not found", 5, {err: 404, msg:  "SKU not found"});
-
-    function testDeleteSKUError(testMessage, skuID, expectedError){
-        test(testMessage, async () => {
-            async function invalidDelete(){
-                await wh.deleteSKU(skuID);
-            };
-            await expect(invalidDelete).rejects.toEqual(expectedError);
-        })
-    }
 });
 
 

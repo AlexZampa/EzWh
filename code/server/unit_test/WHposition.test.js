@@ -232,30 +232,16 @@ describe("Test delete Position", () => {
     const pos2 = new Position("111122223333", "1111", "2222", "3333", 2000, 1500, 1000, 900, 1);
 
     beforeAll(() => {
-        positionDAO.getPosition.mockReset();
-        positionDAO.getPosition.mockReturnValueOnce(pos1).mockRejectedValueOnce({err: 404, msg: "Position not found"}).mockReturnValue(pos2);
-
         positionDAO.deletePosition.mockReset();
         positionDAO.deletePosition.mockReturnValue(1);
     });
 
     let expectedResult = 1;
-    test('Delete Position without SKU', async () => {
+    test('Delete Position', async () => {
         let result = await wh.deletePosition("123456789900");
         expect(result).toBe(expectedResult);
     })
-    
-    testDeletePositionError("throw error on Position not found", "999988887777", {err: 404, msg: "Position not found"});
-    testDeletePositionError("throw error on Position has assigned SKU", "111122223333", {err: 422, msg: "Cannot delete: Position assigned to SKU"});
 
-    function testDeletePositionError(testMessage, positionID, expectedError){
-        test(testMessage, async () => {
-            async function invalidDelete(){
-                await wh.deletePosition(positionID);
-            };
-            await expect(invalidDelete).rejects.toEqual(expectedError);
-        })
-    }
 });
 
 

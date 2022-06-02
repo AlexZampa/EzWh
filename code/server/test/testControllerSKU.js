@@ -58,9 +58,8 @@ describe('test SKU apis', () => {
     modifySKUposition(422, 1, "111122223333", 100, 1000, 10, "111122223333", 1000, 1000);
 
     deleteSKU(204, 1);
+    deleteSKU(204, 100);
     deleteSKU(422, "id");
-    deleteSKU(422, 100);
-
 });
 
 

@@ -33,8 +33,8 @@ describe('test user apis', () => {
     modifyUserRights(404, "user1@ezwh.com", "customer", "nonExistentUser@ezwh.com", "supplier");
     
     deleteUser(204, "user1@ezwh.com", "customer", "user1@ezwh.com", "customer");
-    deleteUser(422, "user1@ezwh.com", "customer", "nonExistentUser@ezwh.com", "customer");
-    deleteUser(422, "user1@ezwh.com", "customer", "user1@ezwh.com", "supplier");
+    deleteUser(204, "user1@ezwh.com", "customer", "nonExistentUser@ezwh.com", "customer");
+    deleteUser(422, "user1@ezwh.com", "customer", "user1@ezwh.com", "invaliType");
 
     customerSessions(200, "user1@ezwh.com", "testpassword", "user1@ezwh.com", "testpassword");
     customerSessions(401, "user1@ezwh.com", "testpassword", "user1@ezwh.com", "invalidPassword");
