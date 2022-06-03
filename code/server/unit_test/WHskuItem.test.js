@@ -15,6 +15,7 @@ const internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
 const itemDAO = require('../Mock_databases/Mock_itemDAO');
 const testDescriptorDAO = require('../Mock_databases/Mock_testDescriptorDAO');
 const testResultDAO = require('../Mock_databases/Mock_testResultDAO');
+const TestDescriptor = require("../Model/TestDescriptor");
 
 const wh = new Warehouse(userDAO, skuDAO, skuItemDAO, positionDAO, restockOrderDAO, returnOrderDAO, internalOrderDAO, itemDAO, testDescriptorDAO, testResultDAO);
 
@@ -25,6 +26,8 @@ const sku3 = new SKU(3, "description 3", 40, 40, "notes 3", 15.99, 20, null);
 describe("Test add SKUItem", () => {
     let id = 1;
     beforeEach(() => {
+        testDescriptorDAO.getAllTestDescriptor.mockReset();
+        testDescriptorDAO.getAllTestDescriptor.mockReturnValueOnce([]);
         skuItemDAO.newSKUItem.mockReset();
         skuItemDAO.newSKUItem.mockReturnValue(id);
         id++;
@@ -149,6 +152,7 @@ describe("Test delete SKUItem", () => {
     beforeAll(() => {
         skuItemDAO.getSKUItem.mockReset();
         skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem1);
+
 
         skuItemDAO.deleteSKUItem.mockReset();
         skuItemDAO.deleteSKUItem.mockReturnValue(1);
