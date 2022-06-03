@@ -15,22 +15,21 @@ describe('test SKUItem apis', () => {
         await agent.delete('/api/test/skus');
     })
 
-    newSKUItem(201, "1f", 1, "2022/02/22");
+    newSKUItem(201, "12345678901234567890123456789019", 1, "2022/02/22");
     newSKUItem(422);
-    newSKUItem(422, "12f", 2, "2002-12-12");
+    newSKUItem(422, "12345678901234567890123456789015", 2, "2002-12-12");
 
     getSKUItems(200);
 
-    getSKUItemByRFID(200, "1");
-    getSKUItemByRFID(404, "1f");
+    getSKUItemByRFID(200, "12345678901234567890123456789019");
+    getSKUItemByRFID(404, "12345678901234567890123456789011");
     getSKUItemByID(200, 1);
 
-    modifySKUItem(200, "1", "1f", 1, "2022/09/18");
-    modifySKUItem(404, "2", "2f", 0, "2022/02/18");
-    modifySKUItem(422, "1", "1f", 1, "2022-02-22");
+    modifySKUItem(200, "12345678901234567890123456789019", "11234567890123456789012345678901f", 1, "2022/09/18");
+    modifySKUItem(404, "12345678901234567890123456789011", "12345678901234567890123456789011", 0, "2022/02/18");
+    modifySKUItem(422, "12345678901234567890123456789019", "1234567890123456789012345678901f", 1, "2022-02-22");
 
-    deleteSKUItem(204, "1");
-    deleteSKUItem(422, "id");
+    deleteSKUItem(204, "12345678901234567890123456789019");
 
 });
 
@@ -66,13 +65,13 @@ function newSKUItem(expectedHTTPStatus, rfid, skuId, dateOfStock) {
 function getSKUItems(expectedHTTPStatus) {
     it('getting all SKUItems', function (done) {
 
-        const skuItem1 = { RFID: "1", SKUId: 1, DateOfStock: "2022/02/02" };
-        const skuItem2 = { RFID: "2", SKUId: 1, DateOfStock: "2022/04/30" };
-        const skuItem3 = { RFID: "3", SKUId: 1, DateOfStock: "2022/05/12" };
+        const skuItem1 = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/02/02" };
+        const skuItem2 = { RFID: "1234567890123456789012345678901a", SKUId: 1, DateOfStock: "2022/04/30" };
+        const skuItem3 = { RFID: "1234567890123456789012345678901b", SKUId: 1, DateOfStock: "2022/05/12" };
 
-        let expectedResult = [{ "RFID": "1", "SKUId": 1, "Available": 0, "DateOfStock": "2022/02/02" },
-        { "RFID": "2", "SKUId": 1, "Available": 0, "DateOfStock": "2022/04/30" },
-        { "RFID": "3", "SKUId": 1, "Available": 0, "DateOfStock": "2022/05/12" }];
+        let expectedResult = [{ "RFID": "12345678901234567890123456789019", "SKUId": 1, "Available": 0, "DateOfStock": "2022/02/02 00:00" },
+            { "RFID": "1234567890123456789012345678901a", "SKUId": 1, "Available": 0, "DateOfStock": "2022/04/30 00:00" },
+            { "RFID": "1234567890123456789012345678901b", "SKUId": 1, "Available": 0, "DateOfStock": "2022/05/12 00:00" }];
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
         agent.post('/api/sku')
             .send(sku)
@@ -94,6 +93,7 @@ function getSKUItems(expectedHTTPStatus) {
                                             .then(function (r) {
                                                 r.should.have.status(expectedHTTPStatus);
                                                 r.body.should.be.an('array');
+                                                console.log(r.body);
                                                 r.body.should.be.deep.equal(expectedResult);
                                                 done();
                                             });
@@ -107,9 +107,9 @@ function getSKUItems(expectedHTTPStatus) {
 
 function getSKUItemByID(expectedHTTPStatus, id) {
     it('getting single SKUItem by ID', function (done) {
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/02/02" };
-        const data = { "newRFID": "1", "newAvailable": 1, "newDateOfStock": "2022/02/03" };
-        const expectedResult = [{ "RFID": "1", "SKUId": 1, "DateOfStock": "2022/02/03" }];
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/02/02" };
+        const data = { "newRFID": "12345678901234567890123456789019", "newAvailable": 1, "newDateOfStock": "2022/02/03 00:00" };
+        const expectedResult = [{ "RFID": "12345678901234567890123456789019", "SKUId": 1, "DateOfStock": "2022/02/03 00:00" }];
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
         agent.post('/api/sku')
             .send(sku)
@@ -119,7 +119,7 @@ function getSKUItemByID(expectedHTTPStatus, id) {
                     .send(skuItem)
                     .then(function (res) {
                         res.should.have.status(201);
-                        agent.put('/api/skuitems/' + "1")
+                        agent.put('/api/skuitems/' + "12345678901234567890123456789019")
                             .send(data)
                             .then(function (res) {
                                 res.should.have.status(200);
@@ -138,8 +138,8 @@ function getSKUItemByID(expectedHTTPStatus, id) {
 
 function getSKUItemByRFID(expectedHTTPStatus, rfid) {
     it('getting single SKUItem by RFID', function (done) {
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/02/02" };
-        const expectedResult = { "RFID": "1", "SKUId": 1, "Available": 0, "DateOfStock": "2022/02/02" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/02/02" };
+        const expectedResult = { "RFID": "12345678901234567890123456789019", "SKUId": 1, "Available": 0, "DateOfStock": "2022/02/02 00:00" };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
         agent.post('/api/sku')
             .send(sku)
@@ -163,7 +163,7 @@ function getSKUItemByRFID(expectedHTTPStatus, rfid) {
 
 function modifySKUItem(expectedHTTPStatus, RFID, newRFID, newAvailable, newDate) {
     it('modifing SKUItem', function (done) {
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/02/02" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/02/02" };
         const data = { "newRFID": newRFID, "newAvailable": newAvailable, "newDateOfStock": newDate };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
         agent.post('/api/sku')
@@ -187,7 +187,7 @@ function modifySKUItem(expectedHTTPStatus, RFID, newRFID, newAvailable, newDate)
 
 function deleteSKUItem(expectedHTTPStatus, rfid) {
     it('deleting SKUItem', function (done) {
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/02/02" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/02/02" };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
         agent.post('/api/sku')
             .send(sku)

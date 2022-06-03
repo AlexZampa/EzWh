@@ -1,5 +1,6 @@
 'use strict';
 
+const { expect } = require('chai');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
@@ -34,9 +35,8 @@ describe('test RestockOrder apis', () => {
     getSKUItemToReturnFromRestockOrder(200, 1);
     getSKUItemToReturnFromRestockOrder(422, 2);
 
-    addSKUItemToRestockOrder(200, 2, "1", 1);
-    addSKUItemToRestockOrder(404, 3, "1", 1);
-    addSKUItemToRestockOrder(422, 2, "3", 3);
+    addSKUItemToRestockOrder(200, 2, "12345678901234567890123456789019", 1);
+    addSKUItemToRestockOrder(404, 3, "1234567890123456789012345678901a", 1);
 
     addTransportNoteToRestockOrder(200, 1, "2022/03/05");
 
@@ -56,7 +56,7 @@ function newRestockOrder(expectedHTTPStatus, products, supplierID, issueDate) {
                     done();
                 });
         } else {
-            const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+            const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
             const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
             const restockOrder = { issueDate: issueDate, products: products, supplierId: supplierID };
             let user = { username: "user1@ezwh.com", name: "name", surname: "surname", password: "password12345", type: "supplier" }
@@ -92,7 +92,7 @@ function getRestockOrders(expectedHTTPStatus) {
 
         let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
 
         const restockOrder = { issueDate: "2022/03/03", products: products, supplierId: 1 };
@@ -153,7 +153,7 @@ function getRestockOrder(expectedHTTPStatus, restockOrderID) {
 
         let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
 
         const restockOrder = { issueDate: "2022/03/03", products: products, supplierId: 1 };
@@ -208,7 +208,7 @@ function getRestockOrdersIssued(expectedHTTPStatus) {
 
         let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
 
         const restockOrder = { issueDate: "2022/03/03", products: products, supplierId: 1 };
@@ -270,10 +270,9 @@ function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) 
 
         let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
-        const skuItem2 = { RFID: "2", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
 
-        const skuToRO = { "skuItems": [{ rfid: "1", SKUId: 1 }] };
+        const skuToRO = { "skuItems": [{ rfid: "12345678901234567890123456789019", SKUId: 1 }] };
 
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
 
@@ -285,11 +284,10 @@ function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) 
 
         const testDescriptor = { name: "test", procedureDescription: "Description", idSKU: 1 };
 
-        const testResult = { rfid: "1", idTestDescriptor: 1, Date: "2022/02/02", Result: false };
-        const testResult2 = { rfid: "2", idTestDescriptor: 1, Date: "2022/02/02", Result: true };
+        const testResult = { rfid: "12345678901234567890123456789019", idTestDescriptor: 1, Date: "2022/02/02", Result: false };
 
         let expectedResult = [
-            { "RFID": "1", "SKUId": 1 }
+            { "RFID": "12345678901234567890123456789019", "SKUId": 1 }
         ];
 
         let user = { username: "user1@ezwh.com", name: "name", surname: "surname", password: "password12345", type: "supplier" }
@@ -305,50 +303,40 @@ function getSKUItemToReturnFromRestockOrder(expectedHTTPStatus, restockOrderID) 
                             .send(skuItem)
                             .then(function (res) {
                                 res.should.have.status(201);
-                                agent.post('/api/skuitem')
-                                    .send(skuItem2)
+                                agent.post('/api/testDescriptor')
+                                    .send(testDescriptor)
                                     .then(function (res) {
                                         res.should.have.status(201);
-                                        agent.post('/api/testDescriptor')
-                                            .send(testDescriptor)
+                                        agent.post('/api/skuitems/testResult')
+                                            .send(testResult)
                                             .then(function (res) {
                                                 res.should.have.status(201);
-                                                agent.post('/api/skuitems/testResult')
-                                                    .send(testResult)
+                                                agent.post('/api/restockOrder')
+                                                    .send(restockOrder)
                                                     .then(function (res) {
                                                         res.should.have.status(201);
-                                                        agent.post('/api/skuitems/testResult')
-                                                            .send(testResult2)
+                                                        agent.post('/api/restockOrder')
+                                                            .send(restockOrder2)
                                                             .then(function (res) {
                                                                 res.should.have.status(201);
-                                                                agent.post('/api/restockOrder')
-                                                                    .send(restockOrder)
+                                                                agent.put('/api/restockOrder/' + 1)
+                                                                    .send(changeState)
                                                                     .then(function (res) {
-                                                                        res.should.have.status(201);
-                                                                        agent.post('/api/restockOrder')
-                                                                            .send(restockOrder2)
+                                                                        res.should.have.status(200);
+                                                                        agent.put('/api/restockOrder/' + 1 + '/skuItems')
+                                                                            .send(skuToRO)
                                                                             .then(function (res) {
-                                                                                res.should.have.status(201);
+                                                                                res.should.have.status(200);
                                                                                 agent.put('/api/restockOrder/' + 1)
-                                                                                    .send(changeState)
+                                                                                    .send(changeState2)
                                                                                     .then(function (res) {
                                                                                         res.should.have.status(200);
-                                                                                        agent.put('/api/restockOrder/' + 1 + '/skuItems')
-                                                                                            .send(skuToRO)
-                                                                                            .then(function (res) {
-                                                                                                res.should.have.status(200);
-                                                                                                agent.put('/api/restockOrder/' + 1)
-                                                                                                    .send(changeState2)
-                                                                                                    .then(function (res) {
-                                                                                                        res.should.have.status(200);
-                                                                                                        agent.get('/api/restockOrders/' + restockOrderID + '/returnItems')
-                                                                                                            .then(function (r) {
-                                                                                                                r.should.have.status(expectedHTTPStatus);
-                                                                                                                if (expectedHTTPStatus === 200)
-                                                                                                                    r.body.should.be.deep.equal(expectedResult);
-                                                                                                                done();
-                                                                                                            });
-                                                                                                    });
+                                                                                        agent.get('/api/restockOrders/' + restockOrderID + '/returnItems')
+                                                                                            .then(function (r) {
+                                                                                                r.should.have.status(expectedHTTPStatus);
+                                                                                                if (expectedHTTPStatus === 200)
+                                                                                                    r.body.should.be.deep.equal(expectedResult);
+                                                                                                done();
                                                                                             });
                                                                                     });
                                                                             });
@@ -369,7 +357,7 @@ function addSKUItemToRestockOrder(expectedHTTPStatus, restockOrderID, rfid, SKUI
 
         let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
         const skuToRO = { "skuItems": [{ rfid: rfid, SKUId: SKUId }] };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
 
@@ -424,7 +412,7 @@ function changeStateRestockOrder(expectedHTTPStatus, restockOrderID, newState) {
 
         let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
 
         const changeState = { newState: newState };
 
@@ -468,9 +456,11 @@ function addTransportNoteToRestockOrder(expectedHTTPStatus, restockOrderID, date
 
         let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
         const transportNote = { transportNote: { deliveryDate: dateDelivery } };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
+
+        const changeState = { newState: "DELIVERY" };
 
         const restockOrder = { issueDate: "2022/03/03", products: products, supplierId: 1 };
 
@@ -491,11 +481,16 @@ function addTransportNoteToRestockOrder(expectedHTTPStatus, restockOrderID, date
                                     .send(restockOrder)
                                     .then(function (res) {
                                         res.should.have.status(201);
-                                        agent.put('/api/restockOrder/' + restockOrderID + '/transportNote')
-                                            .send(transportNote)
+                                        agent.put('/api/restockOrder/' + restockOrderID)
+                                            .send(changeState)
                                             .then(function (res) {
                                                 res.should.have.status(expectedHTTPStatus);
-                                                done();
+                                                agent.put('/api/restockOrder/' + restockOrderID + '/transportNote')
+                                                    .send(transportNote)
+                                                    .then(function (res) {
+                                                        res.should.have.status(expectedHTTPStatus);
+                                                        done();
+                                                    });
                                             });
                                     });
                             });
@@ -511,18 +506,12 @@ function deleteRestockOrder(expectedHTTPStatus, restockOrderID) {
 
         let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
-        const skuItem = { RFID: "1", SKUId: 1, DateOfStock: "2022/01/01" };
+        const skuItem = { RFID: "12345678901234567890123456789019", SKUId: 1, DateOfStock: "2022/01/01" };
         const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
 
         const restockOrder = { issueDate: "2022/03/03", products: products, supplierId: 1 };
         const restockOrder2 = { issueDate: "2022/04/05", products: products, supplierId: 1 };
 
-        let expectedResult = {
-            "issueDate": "2022/03/03 00:00", "state": "ISSUED",
-            "products": [{ "SKUId": 1, "description": "A product", "price": 20, "qty": 30 }],
-            "supplierId": 1,
-            "skuItems": []
-        };
 
         let user = { username: "user1@ezwh.com", name: "name", surname: "surname", password: "password12345", type: "supplier" }
         agent.post('/api/newUser')
