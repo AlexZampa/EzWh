@@ -145,11 +145,10 @@ describe("Test modify SKUItem", () => {
 describe("Test delete SKUItem", () => {
 
     const skuItem1 = new SKUItem("1", sku.getID(), 1, null, undefined);
-    const skuItem2 = new SKUItem("2", sku2.getID(), 1, dayjs('2022-05-18'), undefined);
 
     beforeAll(() => {
         skuItemDAO.getSKUItem.mockReset();
-        skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem1).mockRejectedValueOnce({ err: 404, msg: "SKUItem not found" });
+        skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem1);
 
         skuItemDAO.deleteSKUItem.mockReset();
         skuItemDAO.deleteSKUItem.mockReturnValue(1);
@@ -161,17 +160,6 @@ describe("Test delete SKUItem", () => {
         let result = await wh.deleteSKUItem(RFID);
         expect(result).toBe(expectedResult);
     })
-
-    testDeleteSKUItemError("throw error on SKUItem not found", "5", { err: 404, msg: "SKUItem not found" });
-
-    function testDeleteSKUItemError(testMessage, RFID, expectedError) {
-        test(testMessage, async () => {
-            async function invalidDelete() {
-                await wh.deleteSKUItem(RFID);
-            };
-            await expect(invalidDelete).rejects.toEqual(expectedError);
-        })
-    }
 });
 
 
