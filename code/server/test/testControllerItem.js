@@ -14,6 +14,10 @@ describe('test Item apis', () => {
         await agent.delete('/api/test/items');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/items');
+    })
+
     newItem('adding a new item1', 201, 1, "description", 20, 1, 4);
     newItem('adding a new item2', 422);
     newItem('adding a new item3', 422, -1, "description", 20, 2, 4);

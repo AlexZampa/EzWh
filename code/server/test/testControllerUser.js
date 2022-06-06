@@ -14,6 +14,10 @@ describe('test user apis', () => {
         await agent.delete('/api/test/users');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/users');
+    })
+
     newUser(201, "user1@ezwh.com", "Mary", "Red", "testpassword", "customer");
     newUser(422);
     newUser(422, "user1@ezwh.com", "Mary", "Red", "testpassword", "invalidType");

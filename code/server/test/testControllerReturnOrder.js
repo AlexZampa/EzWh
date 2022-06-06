@@ -12,7 +12,10 @@ describe('test Return Order apis', () => {
 
     beforeEach(async () => {
         await agent.delete('/api/test/returnOrders');
-        //await prepareEnvironment();
+    })
+
+    after(async () => {
+        await agent.delete('/api/test/returnOrders');
     })
 
     const products = [

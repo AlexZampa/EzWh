@@ -11,6 +11,11 @@ describe('Test Create and Get User', () => {
         await userDAO.resetTable();
     });
 
+    afterAll(async () => {
+        await userDAO.resetTable();
+        await userDAO.init(true);
+    });
+
     test('delete table User', async () => {
         let res = await userDAO.getAllUsers();
         expect(res.length).toStrictEqual(0);
@@ -35,6 +40,11 @@ describe('Test throw err on new User', () => {
         await userDAO.newUser("manager1@ezwh.com", "John", "Smith", "testpassword", "manager");
     });
 
+    afterAll(async () => {
+        await userDAO.resetTable();
+        await userDAO.init(true);
+    });
+
     testCreateUserError("manager1@ezwh.com", "John", "Smith", "testpassword", "manager", {err: 409, msg: "User already exists"});   
 });
 
@@ -46,6 +56,11 @@ describe('Test Get All User', () => {
         await userDAO.newUser("user1@ezwh.com", "Mary", "Red", "testpassword", "customer");
         await userDAO.newUser("qualityEmployee1@ezwh.com", "Frank", "White", "testpassword", "qualityEmployee");
         await userDAO.newUser("user2@ezwh.com", "Luke", "Yellow", "testpassword", "customer");
+    });
+
+    afterAll(async () => {
+        await userDAO.resetTable();
+        await userDAO.init(true);
     });
 
     const userList = [];
@@ -65,6 +80,11 @@ describe('Test Update User', () => {
         await userDAO.resetTable();
         await userDAO.newUser("manager1@ezwh.com", "John", "Smith", "testpassword", "manager");
     });
+
+    afterAll(async () => {
+        await userDAO.resetTable();
+        await userDAO.init(true);
+    });
     
     const expectedUser = new User(1, "John", "Smith", "manager1@ezwh.com", "customer");
     testUpdateUser("manager1@ezwh.com","manager", "customer", 1);
@@ -81,6 +101,11 @@ describe('Test Delete User', () => {
         await userDAO.newUser("qualityEmployee1@ezwh.com", "Frank", "White", "testpassword", "qualityEmployee");
     });
 
+    afterAll(async () => {
+        await userDAO.resetTable();
+        await userDAO.init(true);
+    });
+
     const userList = [];
     userList.push(new User(1, "John", "Smith", "manager1@ezwh.com", "manager"));
     userList.push(new User(3, "Frank", "White", "qualityEmployee1@ezwh.com", "qualityEmployee"));
@@ -94,6 +119,11 @@ describe('Test login User', () => {
     beforeAll(async () => {
         await userDAO.resetTable();
         await userDAO.newUser("manager1@ezwh.com" , "John", "Smith", "testpassword", "manager");
+    });
+
+    afterAll(async () => {
+        await userDAO.resetTable();
+        await userDAO.init(true);
     });
     
     const expectedUser = new User(1, "John", "Smith", "manager1@ezwh.com", "manager");

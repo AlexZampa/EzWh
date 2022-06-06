@@ -1,6 +1,6 @@
 'use strict';
 
-const TestDescriptorDAO = require('../Database/testDescriptorDAO');
+const TestDescriptorDAO = require('../Database/TestDescriptorDAO');
 const TestDescriptor = require('../Model/TestDescriptor');
 const SKU = require('../Model/Sku');
 
@@ -12,6 +12,10 @@ const sku3 = new SKU(3, "description 3", 40, 40, "notes 3", 15.99, 20, null);
 
 describe('Test Create and Get TestDescriptor', () => {
     beforeAll(async () => {
+        await testDescriptorDAO.resetTable();
+    });
+
+    afterAll(async () => {
         await testDescriptorDAO.resetTable();
     });
     
@@ -30,6 +34,11 @@ describe('Test throw err on get TestDescriptor', () => {
         await testDescriptorDAO.resetTable();
         await testDescriptorDAO.newTestDescriptor(2, "name2", "description2", 3);
     });
+
+    afterAll(async () => {
+        await testDescriptorDAO.resetTable();
+    });
+
     testGetTestDescriptorError(3, {err: 404, msg:  "Test descriptor not found"});
 });
 
@@ -39,6 +48,10 @@ describe('Test Get All TestDescriptor', () => {
         await testDescriptorDAO.newTestDescriptor("name1", "description1", 2);
         await testDescriptorDAO.newTestDescriptor("name2", "description2", 3);
         await testDescriptorDAO.newTestDescriptor("name3", "description3", 1);
+    });
+
+    afterAll(async () => {
+        await testDescriptorDAO.resetTable();
     });
 
     const TestDescriptorList = [];
@@ -54,6 +67,11 @@ describe('Test Update TestDescriptor', () => {
         await testDescriptorDAO.resetTable();
         await testDescriptorDAO.newTestDescriptor(1, "name2", "description2", 3);
     });
+
+    afterAll(async () => {
+        await testDescriptorDAO.resetTable();
+    });
+
     const expectedTestDescriptor = new TestDescriptor(1, "name1", "description1", 2);
     const expectedChanges = 1;
     testUpdateTestDescriptor(1, "name1", "description1", 2, expectedChanges);
@@ -69,6 +87,10 @@ describe('Test Delete TestDescriptor', () => {
         await testDescriptorDAO.newTestDescriptor("name3", "description3", 1);
     });
 
+    afterAll(async () => {
+        await testDescriptorDAO.resetTable();
+    });
+    
     const TestDescriptorList = [];
     TestDescriptorList.push(new TestDescriptor(1, "name1", "description1", 2));
     TestDescriptorList.push(new TestDescriptor(3, "name3", "description3", 1));

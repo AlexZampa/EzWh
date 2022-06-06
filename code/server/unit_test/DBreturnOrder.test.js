@@ -23,13 +23,10 @@ describe('Test Create and Get Return Order', () => {
         await returnOrderDAO.resetTable();
     });
 
-    /*
-    test('delete table ReturnOrder', async () => {
-        let res = await returnOrderDAO.getAllReturnOrders();
-        expect(res.length).toStrictEqual(0);
+    afterAll(async () => {
+        await returnOrderDAO.resetTable();
     });
-    */
-    
+
     const expectedRetOrd = new ReturnOrder(1, restockOrderId, returnDate, products);
 
     testCreateReturnOrder(products, restockOrderId, returnDate, 1);
@@ -40,6 +37,11 @@ describe('Test throw err on get Return Order', () => {
     beforeAll(async () => {
         await returnOrderDAO.resetTable();
     });
+
+    afterAll(async () => {
+        await returnOrderDAO.resetTable();
+    });
+
     testGetReturnOrderError(3, {err: 404, msg:  "ReturnOrder not found"});
 });
 
@@ -63,6 +65,10 @@ describe('Test Get All Return Orders', () => {
         await returnOrderDAO.resetTable();
         await returnOrderDAO.newReturnOrder(products1, 2, returnDate1);
         await returnOrderDAO.newReturnOrder(products2, 5, returnDate2);
+    });
+
+    afterAll(async () => {
+        await returnOrderDAO.resetTable();
     });
 
     const expectedList = [];
@@ -95,6 +101,10 @@ describe('Test Delete Return Order', () => {
         await returnOrderDAO.newReturnOrder(products2, 5, returnDate2);
     });
 
+    afterAll(async () => {
+        await returnOrderDAO.resetTable();
+    });
+    
     testDeleteReturnOrder(2, 1);
     testDeleteReturnOrderError(2, { err: 404, msg: "ReturnOrder not found" });
 });

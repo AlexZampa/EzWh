@@ -1,7 +1,6 @@
 'use strict';
 const sqlite = require('sqlite3');
 const ReturnOrder = require('../Model/ReturnOrder');
-const RestockOrderDAO = require('../Database/RestockOrderDAO');
 const ConnectionDB = require('./ConnectionDB');
 const dayjs = require('dayjs');
 
@@ -11,11 +10,11 @@ const buildReturnOrder = async (res, connectionDB) => {
     const sql = "SELECT * FROM ReturnOrderProduct WHERE returnOrder =?";
     let products = await connectionDB.DBgetAll(sql, [res.id]);
     products = await products.map(p => {
-        return{
-            SKUId : p.SKUId,
-            description : p.description,
-            price : p.price,
-            RFID : p.SKUItem
+        return {
+            SKUId: p.SKUId,
+            description: p.description,
+            price: p.price,
+            RFID: p.SKUItem
         }
     });
 
@@ -37,7 +36,7 @@ class ReturnOrderDAO {
         products.forEach(async p => {
             const res = await this.connectionDB.DBexecuteQuery(sql, [result.lastID, p.RFID, p.SKUId, p.description, p.price]);
         });
-        
+
         return result;
     };
 
@@ -48,7 +47,7 @@ class ReturnOrderDAO {
             const res = await this.connectionDB.DBget(sql, [returnOrderID]);
             if (res === undefined)
                 throw { err: 404, msg: "ReturnOrder not found" };
-            
+
             let result = buildReturnOrder(res, this.connectionDB);
             return result;
         }
@@ -58,17 +57,17 @@ class ReturnOrderDAO {
     };
 
     getAllReturnOrders = async () => {
-        
+
         try {
             let sql = "SELECT * FROM ReturnOrder";
             const res = await this.connectionDB.DBgetAll(sql, []);
-            
+
             const returnOrderList = [];
-            for(const ro of res){
+            for (const ro of res) {
                 returnOrderList.push(await buildReturnOrder(ro, this.connectionDB));
             }
             return returnOrderList;
-            
+
         }
         catch (err) {
             throw err;
@@ -77,12 +76,12 @@ class ReturnOrderDAO {
 
     deleteReturnOrder = async (returnOrderID) => {
         try {
-            let sql = "DELETE FROM ReturnOrderProduct WHERE returnOrder = ?";     
+            let sql = "DELETE FROM ReturnOrderProduct WHERE returnOrder = ?";
             let res = await this.connectionDB.DBget(sql, [returnOrderID]);
-            
+
             sql = "DELETE FROM ReturnOrder WHERE id = ?";
-            res = await this.connectionDB.DBexecuteQuery(sql, [returnOrderID]);    
-            if (res.changes === 0)     
+            res = await this.connectionDB.DBexecuteQuery(sql, [returnOrderID]);
+            if (res.changes === 0)
                 throw { err: 404, msg: "ReturnOrder not found" };
             return res.changes;
         }
@@ -98,9 +97,9 @@ class ReturnOrderDAO {
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrder" ("id" INTEGER PRIMARY KEY, "returnDate" DATETIME NOT NULL, "restockOrderId" INTEGER NOT NULL) ', []);
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" TEXT NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"))', []);
             res = await this.connectionDB.DBexecuteQuery('INSERT INTO RestockOrder(supplierID, state, issueDate) VALUES(?, ?, ?)', [1, "ISSUED", "2022/04/25"]);
-        } 
-            catch (err) {
-            throw err;    
+        }
+        catch (err) {
+            throw err;
         }
     };
 

@@ -1,8 +1,8 @@
 'use strict';
 
 const dayjs = require("dayjs");
-const SkuItemDAO = require('../Database/SkuItemDAO');
-const SKUItem = require('../Model/SkuItem');
+const SkuItemDAO = require('../Database/SKUItemDAO');
+const SKUItem = require('../Model/SKUItem');
 const SKU = require('../Model/Sku');
 
 const skuItemDAO = new SkuItemDAO();
@@ -13,6 +13,10 @@ const sku3 = new SKU(3, "description 3", 40, 40, "notes 3", 15.99, 20, null);
 
 describe('Test Create and Get SKUItem', () => {
     beforeAll(async () => {
+        await skuItemDAO.resetTable();
+    });
+
+    afterAll(async () => {
         await skuItemDAO.resetTable();
     });
 
@@ -41,6 +45,11 @@ describe('Test throw err on get SKUItem', () => {
         await skuItemDAO.resetTable();
         await skuItemDAO.newSKUItem("1", sku.getID(), 1, null, undefined);
     });
+
+    afterAll(async () => {
+        await skuItemDAO.resetTable();
+    });
+
     testGetSKUItemerror("3", { err: 404, msg: "SKUItem not found" });
 });
 
@@ -51,6 +60,10 @@ describe('Test Get All SKUItems', () => {
         await skuItemDAO.newSKUItem("1", sku.getID(), 1, null, undefined);
         await skuItemDAO.newSKUItem("2", sku2.getID(), 1, dayjs('2022-05-18'), undefined);
         await skuItemDAO.newSKUItem("3", sku3.getID(), 0, dayjs('2022-05-29'), undefined);
+    });
+
+    afterAll(async () => {
+        await skuItemDAO.resetTable();
     });
 
     const skuItemList = [];
@@ -67,6 +80,11 @@ describe('Test Update SKUItem', () => {
         await skuItemDAO.newSKUItem("1", sku.getID(), 1, null, undefined);
         await skuItemDAO.newSKUItem("2", sku2.getID(), 1, dayjs('2022-05-18'), undefined);
     });
+
+    afterAll(async () => {
+        await skuItemDAO.resetTable();
+    });
+
     const expectedSKUItem = new SKUItem("1", sku.getID(), 0, dayjs('2022-05-29'), undefined);
     const expectedChanges = 1;
     testUpdateSKUItem("1", "1", 0, dayjs('2022-05-29'), undefined, expectedChanges);
@@ -81,6 +99,10 @@ describe('Test Delete SKUItem', () => {
         await skuItemDAO.newSKUItem("1", sku.getID(), 1, null, undefined);
         await skuItemDAO.newSKUItem("2", sku2.getID(), 1, dayjs('2022-05-08'), undefined);
         await skuItemDAO.newSKUItem("3", sku3.getID(), 0, dayjs('2022-05-29'), undefined);
+    });
+
+    afterAll(async () => {
+        await skuItemDAO.resetTable();
     });
 
     const skuItemList = [];

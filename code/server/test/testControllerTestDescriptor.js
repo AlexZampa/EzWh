@@ -14,6 +14,10 @@ describe('test Test descriptor apis', () => {
         await agent.delete('/api/test/testDescriptors');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/testDescriptors');
+    })
+
     newTestDescriptor('adding a new td1', 201, "name", "description", 1);
     newTestDescriptor('adding a new td2', 422);
     newTestDescriptor('adding a new td3', 422, 1, "description", 1);

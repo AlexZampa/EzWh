@@ -14,6 +14,10 @@ describe('test Internal Order apis', () => {
         await agent.delete('/api/test/internalOrders');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/internalOrders');
+    })
+
     const products = [
         {SKUId:2, description: "abc", price:2.99, qty:10},
         {SKUId:1, description: "def", price:3.99, qty:11},

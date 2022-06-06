@@ -10,6 +10,10 @@ describe('Test Create and Get Position', () => {
         await positionDAO.resetTable();
     });
 
+    afterAll(async () => {
+        await positionDAO.resetTable();
+    });
+
     test('delete table Position', async () => {
         let res = await positionDAO.getAllPosition();
         expect(res.length).toStrictEqual(0);
@@ -34,6 +38,10 @@ describe('Test throw err on get and new Position', () => {
         await positionDAO.newPosition("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null);
     });
 
+    afterAll(async () => {
+        await positionDAO.resetTable();
+    });
+
     testCreatePositionError("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null, {err: 422, msg:  "positionID not unique"});
     testGetPositionError("1234", {err: 404, msg:  "Position not found"});
 });
@@ -45,6 +53,10 @@ describe('Test Get All Position', () => {
         await positionDAO.newPosition("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null);
         await positionDAO.newPosition("112233445566", "1122", "3344", "5566", 1500, 1500, 0, 0, 2);
         await positionDAO.newPosition("102938475656", "1029", "3847", "5656", 800, 800, 10, 10, null);
+    });
+
+    afterAll(async () => {
+        await positionDAO.resetTable();
     });
 
     const positionList = [];
@@ -63,6 +75,10 @@ describe('Test Update Position', () => {
         await positionDAO.newPosition("112233445566", "1122", "3344", "5566", 1500, 1500, 0, 0, 2);
         await positionDAO.newPosition("102938475656", "1029", "3847", "5656", 800, 800, 10, 10, null);
     });
+
+    afterAll(async () => {
+        await positionDAO.resetTable();
+    });
     
     const expectedPosition = new Position("098765432211", "0987", "6543", "2211", 1200, 1200, 0, 0, null);
     const expectedChanges = 1;
@@ -80,6 +96,10 @@ describe('Test Delete Position', () => {
         await positionDAO.newPosition("102938475656", "1029", "3847", "5656", 800, 800, 10, 10, null);
     });
 
+    afterAll(async () => {
+        await positionDAO.resetTable();
+    });
+    
     const positionList = [];
     positionList.push(new Position("123456789900", "1234", "5678", "9900", 1000, 1200, 0, 0, null));
     positionList.push(new Position("102938475656", "1029", "3847", "5656", 800, 800, 10, 10, null));

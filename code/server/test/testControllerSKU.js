@@ -14,6 +14,10 @@ describe('test SKU apis', () => {
         await agent.delete('/api/test/skus');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/skus');
+    })
+
     newSKU(201, "description", 20, 30, "notes", 10.99, 50);
     newSKU(422);
     newSKU(422, 100, 20, 30, "notes", 10.99, 50);

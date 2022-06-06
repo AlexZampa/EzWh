@@ -71,7 +71,7 @@ class SKUItemDAO {
     resetTable = async () => {
         try {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS SKUItem');
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "SKUItem" ("rfid" TEXT NOT NULL UNIQUE, "SKUid" INTEGER NOT NULL, "available" INTEGER NOT NULL, "dateOfStock" TEXT, "restockOrderID" INTEGER, PRIMARY KEY("rfid"));')
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "SKUItem" ("rfid" TEXT NOT NULL UNIQUE, "SKUid" INTEGER NOT NULL, "available" INTEGER NOT NULL, "dateOfStock" TEXT, "restockOrderID" INTEGER, PRIMARY KEY("rfid"));')
         } catch (err) {
             throw err;
         }

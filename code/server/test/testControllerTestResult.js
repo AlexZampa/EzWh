@@ -14,6 +14,10 @@ describe('test Test result apis', () => {
         await agent.delete('/api/test/skuitems/testResults');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/skuitems/testResults');
+    })
+
     newTestResult('adding a new tr1', 201, "12345678901234567890123456789012", 1, "2022/04/12", true);
     newTestResult('adding a new tr2', 422);
     newTestResult('adding a new tr3', 422, 12345678901234567890123456789012, 1, "2022/04/12", true);

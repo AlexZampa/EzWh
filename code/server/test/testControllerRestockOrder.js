@@ -20,6 +20,15 @@ describe('test RestockOrder apis', () => {
         await agent.delete('/api/test/testDescriptors');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/users');
+        await agent.delete('/api/test/restockOrders');
+        await agent.delete('/api/test/skuitems');
+        await agent.delete('/api/test/skus');
+        await agent.delete('/api/test/skuitems/testResults');
+        await agent.delete('/api/test/testDescriptors');
+    })
+
     let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
 
     newRestockOrder(201, products, 1, "2022/02/02");

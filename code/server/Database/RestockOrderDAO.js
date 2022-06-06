@@ -1,10 +1,6 @@
 'use strict';
 const sqlite = require('sqlite3');
 const {RestockOrder} = require('../Model/RestockOrder');
-const SKUItem = require('../Model/SKUItem');
-const SKU = require('../Model/SKU');
-const TestDescriptor = require('../Model/TestDescriptor');
-const TestResult = require('../Model/TestResult');
 const ConnectionDB = require('./ConnectionDB');
 
 
@@ -95,8 +91,8 @@ class RestockOrderDAO {
         try {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrder');
             res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrderProduct');
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","SKUId"));');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","SKUId"));');
         } catch (err) {
             throw err;
         }

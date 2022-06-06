@@ -10,6 +10,10 @@ describe('Test Create and Get Item', () => {
         await itemDAO.resetTable();
     });
 
+    afterAll(async () => {
+        await itemDAO.resetTable();
+    });
+
     test('delete table Item', async () => {
         let res = await itemDAO.getAllItem();
         expect(res.length).toStrictEqual(0);
@@ -31,6 +35,10 @@ describe('Test throw err on create item(id already exists)', () => {
         await itemDAO.newItem(1, "description 1", 30.5, 1, 4);
     });
 
+    afterAll(async () => {
+        await itemDAO.resetTable();
+    });
+
     testCreateItemError(1, "description 3", 30, 1, 4, { err: 422, msg: "id not unique" });
 });
 
@@ -38,6 +46,10 @@ describe('Test throw err on create item(same skuid for same supplier)', () => {
     beforeAll(async () => {
         await itemDAO.resetTable();
         await itemDAO.newItem(1, "description 1", 30.5, 1, 4);
+    });
+
+    afterAll(async () => {
+        await itemDAO.resetTable();
     });
 
     testCreateItemError(3, "description 3", 30, 1, 4, { err: 422, msg: "this supplier already sells an item with the same SKUId" });
@@ -48,6 +60,11 @@ describe('Test throw err on get Item', () => {
         await itemDAO.resetTable();
         await itemDAO.newItem(1, "description 1", 30.5, 1, 4);
     });
+
+    afterAll(async () => {
+        await itemDAO.resetTable();
+    });
+
     testGetItemError(3, {err: 404, msg:  "Item not found"});
 });
 
@@ -57,6 +74,10 @@ describe('Test Get All Item', () => {
         await itemDAO.newItem(1, "description 1", 30.5, 1, 4);
         await itemDAO.newItem(2, "description 2", 20, 3, 5);
         await itemDAO.newItem(3, "description 3", 30.5, 2, 1);
+    });
+
+    afterAll(async () => {
+        await itemDAO.resetTable();
     });
 
     const itemList = [];
@@ -72,6 +93,11 @@ describe('Test Update Item', () => {
         await itemDAO.resetTable();
         await itemDAO.newItem(1, "description 1", 30.5, 1, 4);
     });
+
+    afterAll(async () => {
+        await itemDAO.resetTable();
+    });
+    
     const expectedItem = new Item(1, "description 2", 40, 1, 4);
     const expectedChanges = 1;
     testUpdateItem(1, "description 2", 40, 1, 4, expectedChanges);
@@ -85,6 +111,10 @@ describe('Test Delete Item', () => {
         await itemDAO.newItem(1, "description 1", 30.5, 1, 4);
         await itemDAO.newItem(2, "description 2", 20, 3, 5);
         await itemDAO.newItem(3, "description 3", 30.5, 2, 1);
+    });
+
+    afterAll(async () => {
+        await itemDAO.resetTable();
     });
 
     const itemList = [];

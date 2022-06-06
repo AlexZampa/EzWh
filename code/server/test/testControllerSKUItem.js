@@ -15,6 +15,12 @@ describe('test SKUItem apis', () => {
         await agent.delete('/api/test/skus');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/skuitems');
+        await agent.delete('/api/test/skus');
+    })
+
+
     newSKUItem(201, "12345678901234567890123456789019", 1, "2022/02/22");
     newSKUItem(422);
     newSKUItem(422, "12345678901234567890123456789015", 2, "2002-12-12");
