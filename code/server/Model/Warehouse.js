@@ -207,8 +207,12 @@ class Warehouse {
     };
 
     getSKUItems = async () => {
-        const skuItemList = await this.skuItemDAO.getAllSKUItems();
-        return skuItemList;
+        try {
+            const skuItemList = await this.skuItemDAO.getAllSKUItems();
+            return skuItemList;
+        } catch (err) {
+            throw err;
+        }
     };
 
     getSKUItemsBySKUid = async (skuID) => {
@@ -259,7 +263,11 @@ class Warehouse {
     };
 
     testDeleteAllSKUItems = async () => {
-        await this.skuItemDAO.resetTable();
+        try {
+            await this.skuItemDAO.resetTable();
+        } catch (err) {
+            throw err;
+        }
     }
 
     /*************** functions for managing Position ****************/
@@ -363,16 +371,14 @@ class Warehouse {
 
     /********* functions for managing Restock Order ***********/
     addRestockOrder = async (products, supplierID, issueDate) => {
-        if (!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
-            throw { err: 422, msg: "Invalid Date" };
-        // for (const prod of products) {
-        //     await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
-        // }
-        // const users = await this.userDAO.getAllUsers();
-        // if (!users.find(u => u.getUserID() === supplierID && u.getType() === "supplier"))
-        //     throw { err: 422, msg: "Supplier Not Found" };
-        const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
-        return res;
+        try {
+            if (!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
+                throw { err: 422, msg: "Invalid Date" };
+            const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
+            return res;
+        } catch (err) {
+            throw err;
+        }
     }
 
     getRestockOrder = async (restockOrderID) => {
@@ -426,7 +432,7 @@ class Warehouse {
             const skuItemList = [];
             for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
-                if(skuItem)
+                if (skuItem)
                     skuItemList.push(skuItem);
             }
             for (const skuItem of skuItemList) {
@@ -444,7 +450,7 @@ class Warehouse {
             if (!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid date" };
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
-            if(restockOrder.getState() != "DELIVERY")
+            if (restockOrder.getState() != "DELIVERY")
                 throw { err: 422, msg: "RestockOrder must be in delivery state" };
             if (dayjs(date).isBefore(dayjs(restockOrder.getIssueDate())))
                 throw { err: 422, msg: "Invalid date: deliveryDate is before issueDate" };
@@ -521,9 +527,6 @@ class Warehouse {
         try {
             let restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
             if (!restockOrder) return;
-            //if(!restockOrder) restockOrder = new RestockOrder(1, returnDate, 1, "DELIVERED", undefined);
-            //console.log(restockOrder);
-
             const res = await this.returnOrderDAO.newReturnOrder(SKUItemList, restockOrderId, returnDate);
 
             if (res !== undefined && restockOrder !== undefined) {
@@ -536,28 +539,43 @@ class Warehouse {
     }
 
     getReturnOrders = async () => {
-        const res = await this.returnOrderDAO.getAllReturnOrders();
-        return res;
+        try {
+            const res = await this.returnOrderDAO.getAllReturnOrders();
+        } catch (err) {
+            return err;
+        }
     }
 
     getReturnOrderById = async (id) => {
-        const res = await this.returnOrderDAO.getReturnOrderById(id);
-        return res;
+        try {
+            const res = await this.returnOrderDAO.getReturnOrderById(id);
+            return res;
+        } catch (err) {
+            throw err;
+        }
     }
 
     deleteReturnOrder = async (id) => {
-        const res = await this.returnOrderDAO.deleteReturnOrder(id);
-        return res;
+        try {
+            const res = await this.returnOrderDAO.deleteReturnOrder(id);
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     sendNotificationRO = async (userID, returnOrderID) => {
-        const ro = await this.returnOrderDAO.getReturnOrderById(returnOrderID);
-        if (ro !== undefined) {
+        try {
+            const ro = await this.returnOrderDAO.getReturnOrderById(returnOrderID);
+            if (ro !== undefined) {
 
-            console.log("*** RETURN ORDER NOTIFICATION ***");
-            console.log(`To SUPPLIER: ${userID}`);
-            console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId()}`);
-            console.log(`For products: ${ro.getProducts()}`);
+                console.log("*** RETURN ORDER NOTIFICATION ***");
+                console.log(`To SUPPLIER: ${userID}`);
+                console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId()}`);
+                console.log(`For products: ${ro.getProducts()}`);
+            }
+        } catch (err) {
+            throw err;
         }
     }
 
@@ -572,55 +590,81 @@ class Warehouse {
 
     /********* functions for managing Internal Order **********/
     addInternalOrder = async (products, customerId, issueDate) => {
-        const res = await this.internalOrderDAO.newInternalOrder(issueDate, products, customerId, "ISSUED");
-        return res;
+        try {
+            const res = await this.internalOrderDAO.newInternalOrder(issueDate, products, customerId, "ISSUED");
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     getInternalOrders = async () => {
-        const res = await this.internalOrderDAO.getAllInternalOrders();
-        return res;
+        try {
+            const res = await this.internalOrderDAO.getAllInternalOrders();
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     getInternalOrderIssued = async () => {
-        const res = await this.internalOrderDAO.getAllIssued();
-        return res;
+        try {
+            const res = await this.internalOrderDAO.getAllIssued();
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     getAcceptedInternalOrders = async () => {
-        const res = await this.internalOrderDAO.getAllAccepted();
-        return res;
+        try {
+            const res = await this.internalOrderDAO.getAllAccepted();
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     getInternalOrder = async (ID) => {
-        const res = await this.internalOrderDAO.getInternalOrder(ID);
-        return res;
+        try {
+            const res = await this.internalOrderDAO.getInternalOrder(ID);
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     setIOStatus = async (ID, status, products) => {
-        const io = await this.getInternalOrder(ID);
-        if (io == undefined)
-            return 0;
+        try {
+            const io = await this.getInternalOrder(ID);
+            if (io == undefined)
+                return 0;
 
-        let res = 0;
+            let res = 0;
+            res = await this.internalOrderDAO.setStatus(ID, status);
 
-        res = await this.internalOrderDAO.setStatus(ID, status);
-
-        if (status === "COMPLETED") {
-            res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
+            if (status === "COMPLETED") {
+                res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
+            }
+            if (res)
+                return res; //if res has a value, it is an error
+            return res;
+        } catch (err) {
+            throw err
         }
-        if (res) return res; //if res has a value, it is an error
-
-
-        return res;
     }
 
     deleteInternalOrder = async (ID) => {
-        const io = await this.getInternalOrder(ID);
-        if (io == undefined)
-            return 0;
+        try {
+            const io = await this.getInternalOrder(ID);
+            if (io == undefined)
+                return 0;
 
-        const res = await this.internalOrderDAO.deleteInternalOrder(ID);
-        return res;
+            const res = await this.internalOrderDAO.deleteInternalOrder(ID);
+            return res;
+        } catch (err) {
+            throw err
+        }
     };
 
     testDeleteAllInternalOrders = async () => {

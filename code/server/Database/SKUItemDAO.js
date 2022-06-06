@@ -1,7 +1,6 @@
 'use strict';
 const sqlite = require('sqlite3');
-const SKUItem = require('../Model/SkuItem');
-const SKU = require('../Model/Sku');
+const SKUItem = require('../Model/SKUItem');
 const ConnectionDB = require('./ConnectionDB');
 
 class SKUItemDAO {
