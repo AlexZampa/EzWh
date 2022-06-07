@@ -541,6 +541,7 @@ class Warehouse {
     getReturnOrders = async () => {
         try {
             const res = await this.returnOrderDAO.getAllReturnOrders();
+            return res;
         } catch (err) {
             return err;
         }

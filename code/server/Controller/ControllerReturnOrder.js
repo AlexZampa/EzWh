@@ -30,7 +30,7 @@ router.get('/returnOrders',
 
 //GET RETURN ORDER BY ID
 router.get('/returnOrders/:id',
-    [[check("id").isInt({min: 1})]],
+    [[check("id").isInt({min: 0})]],
     async (req, res) => {
 
          // check if user authorized otherwise: return res.status(401).end();
@@ -92,7 +92,7 @@ router.post('/returnOrder',
 
 // DELETE RETURN ORDER
 router.delete('/returnOrder/:id',
-    [check("id").isInt({min: 1})],
+    [check("id").isInt({min: 0})],
     async (req, res) => {
         
         // check if user authorized otherwise: return res.status(401).end();
