@@ -2,7 +2,6 @@
 const sqlite = require('sqlite3');
 const ConnectionDB = require('./ConnectionDB');
 const SKU = require('../Model/Sku');
-const TestDescriptor = require('../Model/TestDescriptor');
 const { Position } = require('../Model/Position');
 
 class SkuDAO{
@@ -75,7 +74,7 @@ class SkuDAO{
     resetTable = async () => {
         try {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS SKU');
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "SKU" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT, "weight" NUMERIC NOT NULL, "volume" NUMERIC NOT NULL, "notes" TEXT NOT NULL, "availableQuantity" INTEGER NOT NULL, "price" NUMERIC NOT NULL, "position" TEXT, PRIMARY KEY("id"));')
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "SKU" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT, "weight" NUMERIC NOT NULL, "volume" NUMERIC NOT NULL, "notes" TEXT NOT NULL, "availableQuantity" INTEGER NOT NULL, "price" NUMERIC NOT NULL, "position" TEXT, PRIMARY KEY("id"));')
         } catch (err) {
             throw err;    
         }

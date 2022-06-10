@@ -14,6 +14,10 @@ describe('test Internal Order apis', () => {
         await agent.delete('/api/test/internalOrders');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/internalOrders');
+    })
+
     const products = [
         {SKUId:2, description: "abc", price:2.99, qty:10},
         {SKUId:1, description: "def", price:3.99, qty:11},
@@ -47,7 +51,7 @@ describe('test Internal Order apis', () => {
     getInternalOrder("Get single InternalOrder 5", 422, "id");
 
     modifyInternalOrderStatus("Modify InternalOrderStatus to 'ACCEPTED'", 200, 1, "ACCEPTED");
-    modifyInternalOrderStatus("Modify InternalOrderStatus to 'COMPLETED'", 200, 1, "COMPLETED", deliveredProducts);
+    //modifyInternalOrderStatus("Modify InternalOrderStatus to 'COMPLETED'", 200, 1, "COMPLETED", deliveredProducts);
     modifyInternalOrderStatus("Modify non existing InternalOrder Status", 404, 2, "ACCEPTED");
     modifyInternalOrderStatus("Modify InternalOrder with wrongStatus", 422, 1, "RANDOM_STRING");
 

@@ -1,7 +1,6 @@
 'use strict';
 const sqlite = require('sqlite3');
 const ConnectionDB = require('./ConnectionDB');
-const SKU = require('../Model/Sku');
 const Position = require('../Model/Position');
 
 class PositionDAO{
@@ -85,7 +84,7 @@ class PositionDAO{
     resetTable = async () => {
         try {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS Position');
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "Position" ("positionID" TEXT NOT NULL UNIQUE, "aisle" TEXT NOT NULL, "row" TEXT NOT NULL, "col" TEXT NOT NULL, "maxWeight" NUMERIC NOT NULL, "maxVolume" NUMERIC NOT NULL, "occupiedWeight" NUMERIC NOT NULL, "occupiedVolume" NUMERIC NOT NULL, "assignedSKUid" INTEGER, PRIMARY KEY("positionID"));');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "Position" ("positionID" TEXT NOT NULL UNIQUE, "aisle" TEXT NOT NULL, "row" TEXT NOT NULL, "col" TEXT NOT NULL, "maxWeight" NUMERIC NOT NULL, "maxVolume" NUMERIC NOT NULL, "occupiedWeight" NUMERIC NOT NULL, "occupiedVolume" NUMERIC NOT NULL, "assignedSKUid" INTEGER, PRIMARY KEY("positionID"));');
         } catch (err) {
             throw err;    
         }

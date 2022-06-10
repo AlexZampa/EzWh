@@ -14,6 +14,10 @@ describe('test Position apis', () => {
         await agent.delete('/api/test/positions');
     })
 
+    after(async () => {
+        await agent.delete('/api/test/positions');
+    })
+
     newPosition(201, "111122223333", "1111", "2222", "3333", 1000, 1500);
     newPosition(422, "111111222222333333", "111111", "222222", "333333", 1000, 1500);
     newPosition(422, "111122223333", "2222", "1111", "3333", 1000, 1500);
@@ -54,7 +58,7 @@ describe('test Position apis', () => {
     modifyPositionID(422, "111122223333", "444444555555666666", "111122223333", "999988887777" );
 
     deletePosition(204, "111122223333", "111122223333");
-    deletePosition(422, "999988887777", "111122223333");
+    deletePosition(204, "999988887777", "111122223333");
     deletePosition(422, "aaaabbbbcccc", "111122223333");
 
 });

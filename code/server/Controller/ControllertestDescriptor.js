@@ -22,7 +22,7 @@ router.get('/testDescriptors',
     });
 
 //get testDescriptor
-router.get('/testDescriptors/:id', [check("id").isInt({ min: 1 })],
+router.get('/testDescriptors/:id', [check("id").isInt({min: 0})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -43,7 +43,7 @@ router.get('/testDescriptors/:id', [check("id").isInt({ min: 1 })],
     });
 
 //create testDescriptor
-router.post('/testDescriptor', [check("name").exists().isString().trim(), check("procedureDescription").exists().isString().trim(), check("idSKU").exists().isInt({ min: 1 })],
+router.post('/testDescriptor', [check("name").exists().isString().trim(), check("procedureDescription").exists().isString().trim(), check("idSKU").exists().isInt({min: 0})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -64,8 +64,8 @@ router.post('/testDescriptor', [check("name").exists().isString().trim(), check(
 );
 
 //modify testDescriptor
-router.put('/testDescriptor/:id', [check("id").exists().isInt({ min: 1 }), check("newName").exists().isString().trim(),
-check("newProcedureDescription").exists().isString().trim(), check("newIdSKU").exists().isInt({ min: 1 })],
+router.put('/testDescriptor/:id', [check("id").exists().isInt({min: 0}), check("newName").exists().isString().trim(),
+check("newProcedureDescription").exists().isString().trim(), check("newIdSKU").exists().isInt({min: 0})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -87,7 +87,7 @@ check("newProcedureDescription").exists().isString().trim(), check("newIdSKU").e
 );
 
 //delete testDescriptor
-router.delete('/testDescriptor/:id', [check("id").exists().isInt({ min: 1 })], async (req, res) => {
+router.delete('/testDescriptor/:id', [check("id").exists().isInt({min: 0})], async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

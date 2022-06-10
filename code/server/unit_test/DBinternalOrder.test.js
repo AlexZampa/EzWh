@@ -11,6 +11,10 @@ describe('Test Create and Get Internal Order', () => {
         await internalOrderDAO.resetTable();
     });
 
+    afterAll(async () => {
+        await internalOrderDAO.resetTable();
+    });
+
     test('delete table InternalOrder', async () => {
         let res = await internalOrderDAO.getAllInternalOrders();
         expect(res.length).toStrictEqual(0);
@@ -30,6 +34,10 @@ describe('Test throw err on get Internal Order', () => {
         await internalOrderDAO.resetTable();
     });
 
+    afterAll(async () => {
+        await internalOrderDAO.resetTable();
+    });
+
     testGetIOerror(3, {err: 404, msg:  "not found"});
 });
 
@@ -43,6 +51,10 @@ describe('Test Get All Internal Orders', () => {
         await internalOrderDAO.newInternalOrder(date, [product], 1, "ISSUED");
         await internalOrderDAO.newInternalOrder(date, [product], 2, "ACCEPTED")
         await internalOrderDAO.newInternalOrder(date, [product], 3, "ISSUED");
+    });
+
+    afterAll(async () => {
+        await internalOrderDAO.resetTable();
     });
 
     const expectedList = [];
@@ -64,6 +76,10 @@ describe('Test Get All Internal Orders Issued', () => {
         await internalOrderDAO.newInternalOrder(date, [product], 3, "ISSUED");
     });
 
+    afterAll(async () => {
+        await internalOrderDAO.resetTable();
+    });
+
     const expectedList = [];
     expectedList.push(new InternalOrder(1, 1, date, "ISSUED"));
     expectedList.push(new InternalOrder(3, 3, date, "ISSUED"));
@@ -81,6 +97,10 @@ describe('Test Get All Internal Orders Accepted', () => {
         await internalOrderDAO.newInternalOrder(date, [product], 2, "ACCEPTED")
         await internalOrderDAO.newInternalOrder(date, [product], 3, "ACCEPTED");
     });
+    
+    afterAll(async () => {
+        await internalOrderDAO.resetTable();
+    });
 
     const expectedList = [];
     expectedList.push(new InternalOrder(2, 2, date, "ACCEPTED"));
@@ -97,6 +117,10 @@ describe('Test add delivered products to a completed Internal Order', () => {
         await internalOrderDAO.resetTable();
         await internalOrderDAO.newInternalOrder(date, [product], 1, "ISSUED");
         await internalOrderDAO.setStatus(1, "COMPLETED");
+    });
+
+    afterAll(async () => {
+        await internalOrderDAO.resetTable();
     });
 
     const deliveredProducts = [
@@ -120,6 +144,10 @@ describe('Test update Internal Order state', () => {
         await internalOrderDAO.resetTable();
         await internalOrderDAO.newInternalOrder(date, [product], 1, "ISSUED");
     });
+    
+    afterAll(async () => {
+        await internalOrderDAO.resetTable();
+    });
 
     testUpdateInternalOrderState(1, "ACCEPTED", 1);
 });
@@ -134,6 +162,10 @@ describe('Test Delete Internal Order', () => {
         await internalOrderDAO.newInternalOrder(date, [product], 1, "ISSUED");
         await internalOrderDAO.newInternalOrder(date, [product], 2, "ACCEPTED")
         await internalOrderDAO.newInternalOrder(date, [product], 3, "ACCEPTED");
+    });
+
+    afterAll(async () => {
+        await internalOrderDAO.resetTable();
     });
 
     const expectedList = [];

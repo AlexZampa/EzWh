@@ -121,6 +121,8 @@ class Warehouse {
 
     modifySKUposition = async (skuID, positionID) => {
         try {
+            if (!Number(positionID) || positionID.length != 12)
+                throw { err: 422, msg: "Invalid Position data" };
             const sku = await this.skuDAO.getSKU(skuID);                         // get SKU
             const position = await this.positionDAO.getPosition(positionID);     // get Position
 
@@ -153,17 +155,7 @@ class Warehouse {
 
     deleteSKU = async (skuID) => {
         try {
-            const sku = await this.skuDAO.getSKU(skuID);        // check if SKU exists
-            const skuItemList = await this.skuItemDAO.getAllSKUItems();         // check if SKUItem has SKU
-            if (skuItemList.find(s => s.getSKU() === skuID))
-                throw { err: 422, msg: "Cannot delete SKU" };
-
             const res = await this.skuDAO.deleteSKU(skuID);     // delete SKU
-            if (sku.getPosition() !== undefined) {                // if SKU has a Position assigned
-                const pos = await this.positionDAO.getPosition(sku.getPosition());
-                // remove assignedSKU to the Position and set occupiedWeight and occupiedVolume to 0
-                const result = await this.positionDAO.updatePosition(pos.getPositionID(), pos.getPositionID(), pos.getAisle(), pos.getRow(), pos.getCol(), pos.getMaxWeight(), pos.getMaxVolume(), 0, 0, null);
-            }
             return res;
         }
         catch (err) {
@@ -189,6 +181,10 @@ class Warehouse {
                 if (!(dayjs(dateOfStock, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(dateOfStock, 'YYYY/MM/DD', true).isValid()))
                     throw { err: 422, msg: "Invalid Date" };
             }
+            if (skuID === null || rfid === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
+            const sku = await this.getSKU(skuID);
             const res = await this.skuItemDAO.newSKUItem(rfid, skuID, 0, dateOfStock ? dateOfStock : null, null);
             return res;
         }
@@ -199,9 +195,10 @@ class Warehouse {
 
     getSKUItem = async (rfid) => {
         try {
+            if (rfid === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
-            const sku = await this.skuDAO.getSKU(skuItem.getSKU());
-            skuItem.setSKU(sku);
             return skuItem;
         }
         catch (err) {
@@ -212,23 +209,20 @@ class Warehouse {
     getSKUItems = async () => {
         try {
             const skuItemList = await this.skuItemDAO.getAllSKUItems();
-            for (const skuItem of skuItemList) {
-                const sku = await this.skuDAO.getSKU(skuItem.getSKU());
-                skuItem.setSKU(sku);
-            }
             return skuItemList;
-        }
-        catch (err) {
+        } catch (err) {
             throw err;
         }
     };
 
     getSKUItemsBySKUid = async (skuID) => {
         try {
+            if (skuID === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
             const sku = await this.skuDAO.getSKU(skuID);
             let skuItems = await this.skuItemDAO.getAllSKUItems();
             skuItems = skuItems.filter(s => s.getSKU() === skuID && s.getAvailable() === 1);
-            skuItems.forEach(s => s.setSKU(sku));
             return skuItems;
         }
         catch (err) {
@@ -242,6 +236,9 @@ class Warehouse {
                 if (!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid()))
                     throw { err: 422, msg: "Invalid Date" };
             }
+            if (newAvailable === null || rfid === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const result = this.skuItemDAO.updateSKUItem(rfid, newRFID, newAvailable, newDate ? newDate : skuItem.getDateOfStock(), skuItem.getRestockOrder());
             return result;
@@ -254,10 +251,9 @@ class Warehouse {
 
     deleteSKUItem = async (rfid) => {
         try {
-            const skuItem = await this.skuItemDAO.getSKUItem(rfid);            // get SKUItem
-            if (skuItem.getRestockOrder() !== undefined)
-                throw { err: 422, msg: "Cannot delete SKUItem" };              // check Restock Order
-
+            if (rfid === null) {
+                throw { err: 422, msg: "Invalid Input" };
+            }
             const res = await this.skuItemDAO.deleteSKUItem(rfid);
             return res;
         }
@@ -355,9 +351,6 @@ class Warehouse {
 
     deletePosition = async (positionID) => {
         try {
-            const pos = await this.positionDAO.getPosition(positionID);
-            if (pos.getAssignedSKU() !== undefined)
-                throw { err: 422, msg: "Cannot delete: Position assigned to SKU" };
             const res = await this.positionDAO.deletePosition(positionID);
             return res;
         }
@@ -378,16 +371,14 @@ class Warehouse {
 
     /********* functions for managing Restock Order ***********/
     addRestockOrder = async (products, supplierID, issueDate) => {
-        if (!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
-            throw { err: 422, msg: "Invalid Date" };
-        for (const prod of products) {
-            await this.skuDAO.getSKU(prod.SKUId);           // for each product get SKU associated: throw err 404 if does not exists
+        try {
+            if (!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
+                throw { err: 422, msg: "Invalid Date" };
+            const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
+            return res;
+        } catch (err) {
+            throw err;
         }
-        const users = await this.userDAO.getAllUsers();
-        if (!users.find(u => u.getUserID() === supplierID && u.getType() === "supplier"))
-            throw { err: 422, msg: "Supplier Not Found" };
-        const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
-        return res;
     }
 
     getRestockOrder = async (restockOrderID) => {
@@ -441,10 +432,8 @@ class Warehouse {
             const skuItemList = [];
             for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
-                // if SKUItem not found or skuID passed as params is different from the real SKUid or SKUItem has already a restockOrder
-                if (!skuItem || s.skuID !== skuItem.getSKU() || skuItem.getRestockOrder() !== undefined)
-                    throw { err: 422, msg: "Invalid SKUItem" };
-                skuItemList.push(skuItem);
+                if (skuItem)
+                    skuItemList.push(skuItem);
             }
             for (const skuItem of skuItemList) {
                 // update skuItem with all fields equal but the restockOrderID
@@ -461,6 +450,8 @@ class Warehouse {
             if (!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid date" };
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);        // get RestockOrder
+            if (restockOrder.getState() != "DELIVERY")
+                throw { err: 422, msg: "RestockOrder must be in delivery state" };
             if (dayjs(date).isBefore(dayjs(restockOrder.getIssueDate())))
                 throw { err: 422, msg: "Invalid date: deliveryDate is before issueDate" };
             const res = await this.restockOrderDAO.updateRestockOrder(restockOrderID, restockOrder.getState(), dayjs(date).format('YYYY-MM-DD'));
@@ -489,7 +480,7 @@ class Warehouse {
                 throw { err: 422, msg: "Restock Order not in COMPLETEDRETURN state" };
             const allSkuItems = await this.skuItemDAO.getAllSKUItems();
             const returnItems = [];
-            for(const s of allSkuItems){
+            for (const s of allSkuItems) {
                 if (s.getRestockOrder() === restockOrderID) {
                     const testResults = await this.testResultDAO.getAllTestResult(s.getRFID());
                     for (const r of testResults) {
@@ -535,10 +526,7 @@ class Warehouse {
     addReturnOrder = async (SKUItemList, restockOrderId, returnDate) => {
         try {
             let restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderId);
-            if(!restockOrder) return;
-            //if(!restockOrder) restockOrder = new RestockOrder(1, returnDate, 1, "DELIVERED", undefined);
-            //console.log(restockOrder);
-
+            if (!restockOrder) return;
             const res = await this.returnOrderDAO.newReturnOrder(SKUItemList, restockOrderId, returnDate);
 
             if (res !== undefined && restockOrder !== undefined) {
@@ -551,28 +539,44 @@ class Warehouse {
     }
 
     getReturnOrders = async () => {
-        const res = await this.returnOrderDAO.getAllReturnOrders();
-        return res;
+        try {
+            const res = await this.returnOrderDAO.getAllReturnOrders();
+            return res;
+        } catch (err) {
+            return err;
+        }
     }
 
     getReturnOrderById = async (id) => {
-        const res = await this.returnOrderDAO.getReturnOrderById(id);
-        return res;
+        try {
+            const res = await this.returnOrderDAO.getReturnOrderById(id);
+            return res;
+        } catch (err) {
+            throw err;
+        }
     }
 
     deleteReturnOrder = async (id) => {
-        const res = await this.returnOrderDAO.deleteReturnOrder(id);
-        return res;
+        try {
+            const res = await this.returnOrderDAO.deleteReturnOrder(id);
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     sendNotificationRO = async (userID, returnOrderID) => {
-        const ro = await this.returnOrderDAO.getReturnOrderById(returnOrderID);
-        if (ro !== undefined) {
+        try {
+            const ro = await this.returnOrderDAO.getReturnOrderById(returnOrderID);
+            if (ro !== undefined) {
 
-            console.log("*** RETURN ORDER NOTIFICATION ***");
-            console.log(`To SUPPLIER: ${userID}`);
-            console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId()}`);
-            console.log(`For products: ${ro.getProducts()}`);
+                console.log("*** RETURN ORDER NOTIFICATION ***");
+                console.log(`To SUPPLIER: ${userID}`);
+                console.log(`Related to RESTOCK ORDER ${ro.getRestockOrderId()}`);
+                console.log(`For products: ${ro.getProducts()}`);
+            }
+        } catch (err) {
+            throw err;
         }
     }
 
@@ -587,55 +591,81 @@ class Warehouse {
 
     /********* functions for managing Internal Order **********/
     addInternalOrder = async (products, customerId, issueDate) => {
-        const res = await this.internalOrderDAO.newInternalOrder(issueDate, products, customerId, "ISSUED");
-        return res;
+        try {
+            const res = await this.internalOrderDAO.newInternalOrder(issueDate, products, customerId, "ISSUED");
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     getInternalOrders = async () => {
-        const res = await this.internalOrderDAO.getAllInternalOrders();
-        return res;
+        try {
+            const res = await this.internalOrderDAO.getAllInternalOrders();
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     getInternalOrderIssued = async () => {
-        const res = await this.internalOrderDAO.getAllIssued();
-        return res;
+        try {
+            const res = await this.internalOrderDAO.getAllIssued();
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     getAcceptedInternalOrders = async () => {
-        const res = await this.internalOrderDAO.getAllAccepted();
-        return res;
+        try {
+            const res = await this.internalOrderDAO.getAllAccepted();
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     getInternalOrder = async (ID) => {
-        const res = await this.internalOrderDAO.getInternalOrder(ID);
-        return res;
+        try {
+            const res = await this.internalOrderDAO.getInternalOrder(ID);
+            return res;
+        } catch (err) {
+            throw err
+        }
     }
 
     setIOStatus = async (ID, status, products) => {
-        const io = await this.getInternalOrder(ID);
-        if (io == undefined)
-            return 0;
+        try {
+            const io = await this.getInternalOrder(ID);
+            if (io == undefined)
+                return 0;
 
-        let res = 0;
+            let res = 0;
+            res = await this.internalOrderDAO.setStatus(ID, status);
 
-        res = await this.internalOrderDAO.setStatus(ID, status);
-
-        if (status === "COMPLETED") {
-            res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
+            if (status === "COMPLETED") {
+                res = await this.internalOrderDAO.addDeliveredProducts(ID, products);
+            }
+            if (res)
+                return res; //if res has a value, it is an error
+            return res;
+        } catch (err) {
+            throw err
         }
-        if (res) return res; //if res has a value, it is an error
-
-
-        return res;
     }
 
     deleteInternalOrder = async (ID) => {
-        const io = await this.getInternalOrder(ID);
-        if (io == undefined)
-            return 0;
+        try {
+            const io = await this.getInternalOrder(ID);
+            if (io == undefined)
+                return 0;
 
-        const res = await this.internalOrderDAO.deleteInternalOrder(ID);
-        return res;
+            const res = await this.internalOrderDAO.deleteInternalOrder(ID);
+            return res;
+        } catch (err) {
+            throw err
+        }
     };
 
     testDeleteAllInternalOrders = async () => {
@@ -706,9 +736,10 @@ class Warehouse {
 
     deleteUser = async (username, type) => {
         try {
-            const user = await this.userDAO.getUser(username, type);
             if (type === "manager" || type === "administrator")
                 throw { err: 422, msg: "Attempt to delete manager/administrator" };
+            if (!userTypes.find(t => t === type))
+                throw { err: 422, msg: "Invalid user type" };
             const result = await this.userDAO.deleteUser(username, type);
             return result;
         } catch (err) {
@@ -773,7 +804,6 @@ class Warehouse {
 
     deleteItem = async (id) => {
         try {
-            const item = await this.itemDAO.getItem(id);
             const res = await this.itemDAO.deleteItem(id);
             return res;
         }
@@ -835,7 +865,6 @@ class Warehouse {
 
     deleteTestDescriptor = async (id) => {
         try {
-            const td = await this.testDescriptorDAO.getTestDescriptor(id);
             const res = await this.testDescriptorDAO.deleteTestDescriptor(id);
             return res;
         }
@@ -882,8 +911,8 @@ class Warehouse {
         try {
             if (!(dayjs(date, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(date, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid Date" };
-            if(result !== 'true' && result !== 'false')
-                throw {err : 422, msg : "Invalid format"};
+            if (result !== 'true' && result !== 'false')
+                throw { err: 422, msg: "Invalid format" };
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(idTestDescriptor);
             const res = await this.testResultDAO.newTestResult(rfid, idTestDescriptor, date, result);
@@ -898,8 +927,8 @@ class Warehouse {
         try {
             if (!(dayjs(newDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(newDate, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid Date" };
-            if(newResult !== 'true' && newResult !== 'false')
-                throw {err : 422, msg : "Invalid format"};
+            if (newResult !== 'true' && newResult !== 'false')
+                throw { err: 422, msg: "Invalid format" };
             const skuItem = await this.skuItemDAO.getSKUItem(rfid);
             const testDescriptor = await this.testDescriptorDAO.getTestDescriptor(newIdTestDescriptor);
             const tr = await this.testResultDAO.getTestResult(rfid, id);
@@ -912,7 +941,6 @@ class Warehouse {
 
     deleteTestResult = async (id, rfid) => {
         try {
-            const tr = await this.testResultDAO.getTestResult(rfid, id);
             const res = await this.testResultDAO.deleteTestResult(id, rfid);
             return res;
         }

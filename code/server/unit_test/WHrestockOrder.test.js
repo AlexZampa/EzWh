@@ -40,7 +40,6 @@ describe("Test add RestockOrder", () => {
 
     testAddRestockOrder(productList, 1, "2022/01/12", 1);
     testAddRestockOrder([], 1, "2022/01/22", 2);
-    testAddRestockOrderError('throw error on supplier not found', [], 2, "2022/01/22", { err: 422, msg: "Supplier Not Found" });
     testAddRestockOrderError('throw error on wrong date', productList, 1, "Hello", { err: 422, msg: "Invalid Date" });
 
     function testAddRestockOrder(products, supplierID, issueDate, expectedResult) {
@@ -186,7 +185,7 @@ describe("Test get RestockOrder", () => {
 
 
 describe("Test modify RestockOrder", () => {
-    const restockOrder1 = new RestockOrder(1, '2022/05/18', 2, "ISSUED", undefined);
+    const restockOrder1 = new RestockOrder(1, '2022/05/18', 2, "DELIVERY", undefined);
     const restockOrder2 = new RestockOrder(2, '2022/02/18', 2, "DELIVERED", new TransportNote('2022/02/20'));
 
     const skuItem1 = new SKUItem("1", 12, 1, null, undefined);
@@ -245,7 +244,6 @@ describe("Test modify RestockOrder", () => {
         testAddTransportNoteError("throw error on wrong date format", 1, '2022-02-20', { err: 422, msg: "Invalid date" });
         testAddTransportNoteError("throw error on date before actual", 1, '2022/02/20', { err: 422, msg: "Invalid date: deliveryDate is before issueDate" });
         testrestockOrderAddSKUItemsError("throw error on not delivered state", 2, [{ "skuID": 12, "rfid": "1" }, { "skuID": 15, "rfid": "2" }], { err: 422, msg: "Restock Order not in DELIVERED state" });
-        testrestockOrderAddSKUItemsError("throw error on Invalid SKUItem", 2, [{ "skuID": 13, "rfid": "1" }, { "skuID": 15, "rfid": "2" }], { err: 422, msg: "Invalid SKUItem" });
 
         function testModifyRestockOrderError(testMessage, restockOrderID, newState, expectedError) {
             test(testMessage, async () => {

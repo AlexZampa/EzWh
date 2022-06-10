@@ -11,6 +11,10 @@ describe('Test Create and Get RestockOrder', () => {
         await restockOrderDAO.resetTable();
     });
 
+    afterAll(async () => {
+        await restockOrderDAO.resetTable();
+    });
+
     test('delete table RestockOrder', async () => {
         let res = await restockOrderDAO.getAllRestockOrders();
         expect(res.length).toStrictEqual(0);
@@ -38,6 +42,11 @@ describe('Test throw err on get RestockOrder', () => {
         await restockOrderDAO.resetTable();
         await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', null);
     });
+
+    afterAll(async () => {
+        await restockOrderDAO.resetTable();
+    });
+
     testGetRestockOrdererror(3, { err: 404, msg: "RestockOrder not found" });
 });
 
@@ -48,6 +57,10 @@ describe('Test Get All RestockOrder', () => {
         await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', null);
         await restockOrderDAO.newRestockOrder([], "DELIVERED", 2, '2022/02/18','2022/02/20');
         await restockOrderDAO.newRestockOrder([], "COMPLETED", 2, '2022/03/19', '2022/04/20');
+    });
+
+    afterAll(async () => {
+        await restockOrderDAO.resetTable();
     });
 
     const restockOrderList = [];
@@ -62,6 +75,9 @@ describe('Test Loop Coverage Restock Order', () => {
         await restockOrderDAO.resetTable();
     });
 
+    afterAll(async () => {
+        await restockOrderDAO.resetTable();
+    });
 
     const restockOrderList0 = [];
     const restockOrderList1 = [];
@@ -91,6 +107,11 @@ describe('Test Update RestockOrder', () => {
         await restockOrderDAO.resetTable();
         await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', null);
     });
+
+    afterAll(async () => {
+        await restockOrderDAO.resetTable();
+    });
+
     const expectedRestockOrder = new RestockOrder(1, '2022/05/18', 2, "DELIVERED", '2022/02/20');
     const expectedChanges = true;
     testUpdateRestockOrder(1, "DELIVERED", '2022/02/20', expectedChanges);
@@ -104,6 +125,10 @@ describe('Test Delete RestockOrder', () => {
         await restockOrderDAO.newRestockOrder([], "ISSUED", 2, '2022/05/18', null);
         await restockOrderDAO.newRestockOrder([], "DELIVERED", 2, '2022/02/18', '2022/02/20');
         await restockOrderDAO.newRestockOrder([], "COMPLETED", 2, '2022/03/19', '2022/04/20');
+    });
+
+    afterAll(async () => {
+        await restockOrderDAO.resetTable();
     });
 
     const restockOrderList = [];

@@ -11,10 +11,10 @@ const warehouse = new Warehouse();
 
 // CREATE NEW SKU
 router.post('/sku', 
-    [check("description").exists().isString().trim(),
-     check("weight").exists().isNumeric(),
-     check("volume").exists().isNumeric(),
-     check("notes").exists().isString().trim(), 
+    [check("description").exists().isString().trim().notEmpty(),
+     check("weight").exists().isInt({min: 1}),
+     check("volume").exists().isInt({min: 1}),
+     check("notes").exists().isString().trim().notEmpty(), 
      check("price").exists().isNumeric(),
      check("availableQuantity").exists().isInt({ min: 0})],
     async (req, res) => {
@@ -54,7 +54,7 @@ router.get('/skus', async (req, res) => {
 
 
 // GET SKU BY ID
-router.get('/skus/:id', [check("id").isInt({ min: 1})],
+router.get('/skus/:id', [check("id").isInt({ min: 1}).notEmpty()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -79,11 +79,11 @@ router.get('/skus/:id', [check("id").isInt({ min: 1})],
 
 // MODIFY SKU 
 router.put('/sku/:id', 
-    [check("id").isInt({ min: 1}),
-     check("newDescription").exists().isString().trim(),
+    [check("id").isInt({ min: 1}).notEmpty(),
+     check("newDescription").exists().isString().trim().notEmpty(),
      check("newWeight").exists().isNumeric(),
      check("newVolume").exists().isNumeric(),
-     check("newNotes").exists().isString().trim(), 
+     check("newNotes").exists().isString().trim().notEmpty(), 
      check("newPrice").exists().isNumeric(),
      check("newAvailableQuantity").exists().isInt({ min: 0})],
     async (req, res) => {
@@ -110,8 +110,8 @@ router.put('/sku/:id',
 
 // MODIFY SKU POSITION
 router.put('/sku/:id/position',
-    [check("id").isNumeric()], 
-    check("position").exists().isNumeric({no_symbols: true}),
+    [check("id").isNumeric().notEmpty()], 
+    check("position").exists().isNumeric({no_symbols: true}).notEmpty(),
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -134,7 +134,7 @@ router.put('/sku/:id/position',
 
 
 // DELETE SKU
-router.delete('/skus/:id', [check("id").isNumeric()],
+router.delete('/skus/:id', [check("id").isNumeric().notEmpty()],
     async (req, res) => {
         try{
             const errors = validationResult(req);
@@ -148,7 +148,6 @@ router.delete('/skus/:id', [check("id").isNumeric()],
         } catch(err){
             console.log(err);
             switch(err.err){
-                case 404: return res.status(422).end();      // should be 404 but API require only 422
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }

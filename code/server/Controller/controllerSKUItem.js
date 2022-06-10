@@ -10,9 +10,9 @@ const warehouse = new Warehouse();
 
 // CREATE NEW SKUITEM
 router.post('/skuitem',
-    [check("RFID").exists().isString(),
-    check("SKUId").exists().isNumeric(),
-    check("DateOfStock").optional({ nullable: true }).exists().isString()],
+    [check("RFID").exists().isString().isLength({ min: 32, max: 32 }),
+    check("SKUId").exists().isInt({ min: 1}),
+    check("DateOfStock").optional({ nullable: true }).isString()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -78,7 +78,7 @@ router.get('/skuitems/sku/:id',
 
 // GET SKUITEM
 router.get('/skuitems/:rfid',
-    [check("rfid").isString()],
+    [check("rfid").optional({ nullable: true }).isString().isLength({min: 32, max: 32})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -102,7 +102,7 @@ router.get('/skuitems/:rfid',
 
 // MODIFY SKUITEM
 router.put('/skuitems/:rfid',
-    [check("rfid").isString(),
+    [check("rfid").isString().isLength({min: 32, max: 32}),
     check("newRFID").exists().isString(),
     check("newAvailable").exists().isInt({ min: 0, max: 1 }),
     check("newDateOfStock").optional({ nullable: true }).exists().isString()],
@@ -128,7 +128,7 @@ router.put('/skuitems/:rfid',
 
 // DELETE SKUITEM
 router.delete('/skuitems/:rfid',
-    [check("rfid").isString()],
+    [check("rfid").isString().isLength({min: 32, max: 32})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -141,7 +141,6 @@ router.delete('/skuitems/:rfid',
         } catch (err) {
             console.log(err);
             switch (err.err) {
-                case 404: return res.status(422).end();         // API requires 422 in any case   
                 case 422: return res.status(422).end();
                 default: return res.status(503).end();
             }

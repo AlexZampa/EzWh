@@ -22,6 +22,10 @@ describe('Test Create and Get TestResult', () => {
     beforeAll(async () => {
         await testResultDAO.resetTable();
     });
+
+    afterAll(async () => {
+        await testResultDAO.resetTable();
+    });
     
     const expectedTestResult1 = new TestResult(1, "1234", 1, "2022/03/12", "true");
     const expectedTestResult2 = new TestResult(2, "1234", 2, "2022/03/14", "false");
@@ -38,6 +42,11 @@ describe('Test throw err on get TestResult', () => {
         await testResultDAO.resetTable();
         await testResultDAO.newTestResult(1, "1234", 1, "2022/03/12", "true");
     });
+
+    afterAll(async () => {
+        await testResultDAO.resetTable();
+    });
+
     testGetTestResultError(3, {err: 404, msg:  "Test result not found"});
 });
 
@@ -47,6 +56,10 @@ describe('Test Get All TestResult', () => {
         await testResultDAO.newTestResult("1234", 1, "2022/03/12", "true");
         await testResultDAO.newTestResult("1234", 2, "2022/03/14", "false");
         await testResultDAO.newTestResult("5678", 3, "2022/03/14", "false");
+    });
+
+    afterAll(async () => {
+        await testResultDAO.resetTable();
     });
 
     const testResultList = [];
@@ -61,6 +74,11 @@ describe('Test Update TestResult', () => {
         await testResultDAO.resetTable();
         await testResultDAO.newTestResult("1234", 1, "2022/03/12", "true");
     });
+
+    afterAll(async () => {
+        await testResultDAO.resetTable();
+    });
+
     const expectedTestResult = new TestResult(1, "1234", 2, "2022/03/14", "false");
     const expectedChanges = 1;
     testUpdateTestResult(1, "1234", 2, "2022/03/14", "false", expectedChanges);
@@ -76,14 +94,16 @@ describe('Test Delete TestResult', () => {
         await testResultDAO.newTestResult("5678", 3, "2022/03/14", "false");
     });
 
+    afterAll(async () => {
+        await testResultDAO.resetTable();
+    });
+
     const testResultList = [];
     testResultList.push(new TestResult(1, "1234", 1, "2022/03/12", "true"));
     let expectedChanges = 1
     testDeleteTestResult(2, expectedChanges);
     testGetAllTestResult(testResultList);
 });
-
-
 
 
 function testCreateTestResult(rfid, idTestDescriptor, date, result, expectedID) {

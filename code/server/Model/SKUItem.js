@@ -30,7 +30,7 @@ class SKUItem {
     convertToObj = () => {
         return (
             {
-                "RFID": this.RFID, "SKUId": this.sku.getID(), "Available": this.available, "DateOfStock": this.dateOfStock ? this.dateOfStock.format('YYYY/MM/DD') : ""
+                "RFID": this.RFID, "SKUId": this.sku, "Available": this.available, "DateOfStock": this.dateOfStock ? this.dateOfStock.format('YYYY/MM/DD HH:mm') : ""
             });
     };
 

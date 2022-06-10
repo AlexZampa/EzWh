@@ -15,6 +15,7 @@ const internalOrderDAO = require('../Mock_databases/Mock_internalOrderDAO');
 const itemDAO = require('../Mock_databases/Mock_itemDAO');
 const testDescriptorDAO = require('../Mock_databases/Mock_testDescriptorDAO');
 const testResultDAO = require('../Mock_databases/Mock_testResultDAO');
+const TestDescriptor = require("../Model/TestDescriptor");
 
 const wh = new Warehouse(userDAO, skuDAO, skuItemDAO, positionDAO, restockOrderDAO, returnOrderDAO, internalOrderDAO, itemDAO, testDescriptorDAO, testResultDAO);
 
@@ -25,6 +26,8 @@ const sku3 = new SKU(3, "description 3", 40, 40, "notes 3", 15.99, 20, null);
 describe("Test add SKUItem", () => {
     let id = 1;
     beforeEach(() => {
+        testDescriptorDAO.getAllTestDescriptor.mockReset();
+        testDescriptorDAO.getAllTestDescriptor.mockReturnValueOnce([]);
         skuItemDAO.newSKUItem.mockReset();
         skuItemDAO.newSKUItem.mockReturnValue(id);
         id++;
@@ -145,11 +148,11 @@ describe("Test modify SKUItem", () => {
 describe("Test delete SKUItem", () => {
 
     const skuItem1 = new SKUItem("1", sku.getID(), 1, null, undefined);
-    const skuItem2 = new SKUItem("2", sku2.getID(), 1, dayjs('2022-05-18'), undefined);
 
     beforeAll(() => {
         skuItemDAO.getSKUItem.mockReset();
-        skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem1).mockRejectedValueOnce({ err: 404, msg: "SKUItem not found" });
+        skuItemDAO.getSKUItem.mockReturnValueOnce(skuItem1);
+
 
         skuItemDAO.deleteSKUItem.mockReset();
         skuItemDAO.deleteSKUItem.mockReturnValue(1);
@@ -161,17 +164,6 @@ describe("Test delete SKUItem", () => {
         let result = await wh.deleteSKUItem(RFID);
         expect(result).toBe(expectedResult);
     })
-
-    testDeleteSKUItemError("throw error on SKUItem not found", "5", { err: 404, msg: "SKUItem not found" });
-
-    function testDeleteSKUItemError(testMessage, RFID, expectedError) {
-        test(testMessage, async () => {
-            async function invalidDelete() {
-                await wh.deleteSKUItem(RFID);
-            };
-            await expect(invalidDelete).rejects.toEqual(expectedError);
-        })
-    }
 });
 
 

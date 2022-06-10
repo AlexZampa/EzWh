@@ -168,17 +168,6 @@ describe("Test delete Item", () => {
         let result = await wh.deleteItem(itemID);
         expect(result).toBe(expectedResult);
     })
-
-    testDeleteItemError("throw error on Item not found", 5, {err: 404, msg:  "Item not found"});
-
-    function testDeleteItemError(testMessage, id, expectedError){
-        test(testMessage, async () => {
-            async function invalidDelete(){
-                await wh.deleteItem(id);
-            };
-            await expect(invalidDelete).rejects.toEqual(expectedError);
-        })
-    }
 });
 
 

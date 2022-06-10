@@ -10,6 +10,10 @@ describe('Test Create and Get SKU', () => {
         await skuDAO.resetTable();
     });
 
+    afterAll(async () => {
+        await skuDAO.resetTable();
+    });
+
     test('delete table SKU', async () => {
         let res = await skuDAO.getAllSKU();
         expect(res.length).toStrictEqual(0);
@@ -31,6 +35,11 @@ describe('Test throw err on get SKU', () => {
         await skuDAO.resetTable();
         await skuDAO.newSKU("description 1", 30, 20, "notes 1", 10.99, 40, null);
     });
+
+    afterAll(async () => {
+        await skuDAO.resetTable();
+    });
+
     testGetSKUerror(3, {err: 404, msg:  "SKU not found"});
 });
 
@@ -41,6 +50,10 @@ describe('Test Get All SKU', () => {
         await skuDAO.newSKU("description 1", 30, 20, "notes 1", 10.99, 40, null);
         await skuDAO.newSKU("description 2", 20, 50, "notes 2", 20.99, 50, "123456789900");
         await skuDAO.newSKU("description 3", 40, 40, "notes 3", 15.99, 20, null);
+    });
+
+    afterAll(async () => {
+        await skuDAO.resetTable();
     });
 
     const skuList = [];
@@ -56,6 +69,11 @@ describe('Test Update SKU', () => {
         await skuDAO.resetTable();
         await skuDAO.newSKU("description 1", 30, 20, "notes 1", 10.99, 40, null);
     });
+
+    afterAll(async () => {
+        await skuDAO.resetTable();
+    });
+
     const expectedSKU = new SKU(1, "description 2", 40, 20, "notes 2", 10.99, 50, null);
     testUpdateSKU(1, "description 2", 40, 20, "notes 2", 10.99, 50, null, 1);
     testGetSKU(1, expectedSKU);
@@ -69,6 +87,10 @@ describe('Test Delete SKU', () => {
         await skuDAO.newSKU("description 1", 30, 20, "notes 1", 10.99, 40, null);
         await skuDAO.newSKU("description 2", 20, 50, "notes 2", 20.99, 50, "123456789900");
         await skuDAO.newSKU("description 3", 40, 40, "notes 3", 15.99, 20, null);
+    });
+
+    afterAll(async () => {
+        await skuDAO.resetTable();
     });
 
     const skuList = [];

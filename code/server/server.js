@@ -5,13 +5,13 @@ const express = require('express');
 const controllerSKU = require('./Controller/ControllerSKU');
 const controllerPosition = require('./Controller/ControllerPosition');
 const controllerUser =  require('./Controller/ControllerUser');
-const controllerSKUItem = require('./Controller/ControllerSKUItem');
+const controllerSKUItem = require('./Controller/controllerSKUItem');
 const controllerRestockOrder = require('./Controller/ControllerRestockOrder');
 const controllerInternalOrder = require('./Controller/ControllerInternalOrder');
 const controllerReturnOrder = require('./Controller/ControllerReturnOrder');
 const ControllerItem = require('./Controller/ControllerItem');
-const ControllerTestDescriptor = require('./Controller/ControllerTestDescriptor');
-const ControllerTestResult = require('./Controller/ControllertestResult');
+const ControllerTestDescriptor = require('./Controller/ControllertestDescriptor');
+const ControllerTestResult = require('./Controller/controllerTestResult');
 
 
 // init express

@@ -79,7 +79,7 @@ class ItemDAO {
     resetTable = async () => {
         try {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS Item');
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE "Item" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT, "price" NUMERIC NOT NULL, "associatedSKU" INTEGER NOT NULL, "supplier" INTEGER NOT NULL, PRIMARY KEY("id"));');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "Item" ("id" INTEGER NOT NULL UNIQUE, "description" TEXT, "price" NUMERIC NOT NULL, "associatedSKU" INTEGER NOT NULL, "supplier" INTEGER NOT NULL, PRIMARY KEY("id"));');
         } catch (err) {
             throw err;    
         }
