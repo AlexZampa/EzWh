@@ -374,7 +374,16 @@ class Warehouse {
         try {
             if (!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid Date" };
-            const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
+            const items = itemDAO.getItemBySupplier(supplierID);
+            let itemIds = [];
+            for (p in products) {
+                if (items.find(it => { return it.ID === p.itemId && it.getAssociatedSKU() === p.SKUId })) {
+                    itemIds.push(i.getID());
+                } else {
+                    throw { err: 422, msg: "Invalid Supplier" };
+                }
+            }
+            const res = await this.restockOrderDAO.newRestockOrder(products, itemIds, "ISSUED", supplierID, issueDate, null);
             return res;
         } catch (err) {
             throw err;
@@ -422,7 +431,7 @@ class Warehouse {
         }
     }
 
-    // receive an object SKUItemIdList: [{"skuID" : skuid, "rfid" : rfid},...]
+    // receive an object SKUItemIdList: [{"skuID" : skuid, "itemId" :itemId, "rfid" : rfid},...]
     restockOrderAddSKUItems = async (restockOrderID, SKUItemIdList) => {
         try {
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
@@ -432,8 +441,13 @@ class Warehouse {
             const skuItemList = [];
             for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
-                if (skuItem)
-                    skuItemList.push(skuItem);
+                const item = this.itemDAO.getItem(s.itemId);
+                if (item.getAssociatedSKU === skuItem.getSKU()) {
+                    if (skuItem)
+                        skuItemList.push(skuItem);
+                } else {
+                    throw { err: 422, msg: "Item not valid" };
+                }
             }
             for (const skuItem of skuItemList) {
                 // update skuItem with all fields equal but the restockOrderID
@@ -491,7 +505,19 @@ class Warehouse {
                     }
                 }
             }
+            return returnItems;
+        } catch (err) {
+            throw err;
+        }
+    }
 
+    returnItemsIdFromRestockOrder = async (restockOrderID, skuItems) => {
+        try {
+            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
+            const itemsID = [];
+            for (const s of skuItems) {
+                itemsID.push(restockOrder.getItemIDFromProduct(s.getSKU()));
+            }
             return returnItems;
         } catch (err) {
             throw err;

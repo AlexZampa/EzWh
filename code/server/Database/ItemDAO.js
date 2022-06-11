@@ -35,6 +35,34 @@ class ItemDAO {
         }
     }
 
+    getItemBySkuId = async (id) => {
+        try {
+            let sql = "SELECT * FROM Item WHERE associatedSKU = ?";
+            const res = await this.connectionDB.DBget(sql, [id]);
+            if (res === undefined)
+                throw { err: 404, msg: "Item not found" };
+            const item = new Item(res.id, res.description, res.price, res.associatedSKU, res.supplier);
+            return item;
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+
+    getItemBySupplier = async (id) => {
+        try {
+            let sql = "SELECT * FROM Item WHERE supplier = ?";
+            const res = await this.connectionDB.DBget(sql, [id]);
+            if (res === undefined)
+                throw { err: 404, msg: "Item not found" };
+            const itemList = result.map(r => new Item(r.id, r.description, r.price, r.associatedSKU, r.supplier));
+            return itemList;
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+
     newItem = async (id, description, price, SKUId, supplierId) => {
         try {
             let sql = "SELECT COUNT(*) AS num FROM Item WHERE id = ?";        // check if exists
