@@ -495,7 +495,7 @@ class Warehouse {
                     const testResults = await this.testResultDAO.getAllTestResult(s.getRFID());
                     for (const r of testResults) {
                         if (r.result === 'false') {
-                            returnItems.push(s);
+                            returnItems.push({"rfid" : s.getRFID(), "itemId": restockOrder.getItemIDFromProduct(s.getSKU()), "skuID" : s.getSKU() });
                             break;
                         }
                     }
@@ -507,18 +507,6 @@ class Warehouse {
         }
     }
 
-    returnItemsIdFromRestockOrder = async (restockOrderID, skuItems) => {
-        try {
-            const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
-            const itemsID = [];
-            for (const s of skuItems) {
-                itemsID.push(restockOrder.getItemIDFromProduct(s.getSKU()));
-            }
-            return returnItems;
-        } catch (err) {
-            throw err;
-        }
-    }
 
     deleteRestockOrder = async (restockOrderID) => {
         try {

@@ -101,14 +101,12 @@ router.get('/restockOrders/:id/returnItems',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const skuItems = await warehouse.returnItemsFromRestockOrder(Number(req.params.id));
-            const items = await warehouse.returnItemsIdFromRestockOrder(Number(req.params.id), skuItems);
+            const returnItems = await warehouse.returnItemsFromRestockOrder(Number(req.params.id));
             let result = [];
-            for (let i = 0; i < skuItems.length; i++) {
-                result.push({ "RFID" : skuItems[i].getRFID, "itemId" : items[i], "SKUId" : skuItems[i].getSKU() });
+            for (const r of returnItems) {
+                result.push({ "RFID" : r.rfid, "itemId" : r.itemId, "SKUId" : r.skuID });
             }
             return res.status(200).json(result);
-            // check if user authorized otherwise: return res.status(401).end();
         } catch(err){
             console.log(err);
             switch (err.err) {
