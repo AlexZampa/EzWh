@@ -11,22 +11,19 @@ class RestockOrderDAO {
         this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "itemID" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","SKUId"));');
     }
 
-    newRestockOrder = async (products, itemIds, state, supplierID, issueDate, transportNote) => {
+    newRestockOrder = async (products, state, supplierID, issueDate, transportNote) => {
         try {
             let sql = 'INSERT INTO RestockOrder(supplierID, state, issueDate, transportNote) VALUES(?, ?, ?, ?)';
             let result = await this.connectionDB.DBexecuteQuery(sql, [supplierID, state, issueDate, transportNote]);
             sql = "INSERT INTO RestockOrderProduct(restockOrderID, itemID, SKUId, description, price, quantity) VALUES(?, ?, ?, ?, ?, ?)";
-            let i = 0;
             for(const prod of products) {
                 // result.lastID = RestockOrderID
-                let res = this.connectionDB.DBexecuteQuery(sql, [result.lastID, itemIds[i], prod.SKUId, prod.description, prod.price, prod.qty]);
-                i++;
+                let res = this.connectionDB.DBexecuteQuery(sql, [result.lastID, prod.itemId, prod.SKUId, prod.description, prod.price, prod.qty]);
             }
             return result.lastID;
         } catch(err){
             throw err;
-        }
-        
+        }   
     };
 
     getRestockOrder = async (restockOrderID) => {

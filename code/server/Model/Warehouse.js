@@ -374,16 +374,13 @@ class Warehouse {
         try {
             if (!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid Date" };
-            const items = itemDAO.getItemBySupplier(supplierID);
-            let itemIds = [];
-            for (p in products) {
-                if (items.find(it => { return it.ID === p.itemId && it.getAssociatedSKU() === p.SKUId })) {
-                    itemIds.push(i.getID());
-                } else {
-                    throw { err: 422, msg: "Invalid Supplier" };
+            const items = await this.itemDAO.getItemsBySupplier(supplierID);
+            for (const p of products) {
+                if (!items.find(it => { return it.getID() === p.itemId && it.getAssociatedSKU() === p.SKUId })) {
+                    throw { err: 422, msg: "Invalid Item" };
                 }
             }
-            const res = await this.restockOrderDAO.newRestockOrder(products, itemIds, "ISSUED", supplierID, issueDate, null);
+            const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
             return res;
         } catch (err) {
             throw err;
@@ -441,10 +438,9 @@ class Warehouse {
             const skuItemList = [];
             for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
-                const item = this.itemDAO.getItem(s.itemId);
-                if (item.getAssociatedSKU === skuItem.getSKU()) {
-                    if (skuItem)
-                        skuItemList.push(skuItem);
+                const item = await this.itemDAO.getItem(s.itemId);
+                if (skuItem && item && item.getAssociatedSKU() === skuItem.getSKU()) {
+                    skuItemList.push(skuItem);
                 } else {
                     throw { err: 422, msg: "Item not valid" };
                 }

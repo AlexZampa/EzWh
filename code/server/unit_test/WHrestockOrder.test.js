@@ -1,9 +1,9 @@
 "use strict";
 
-const dayjs = require('dayjs');
 const Warehouse = require("../Model/Warehouse");
 const { RestockOrder, Product, TransportNote } = require('../Model/RestockOrder');
 const SKUItem = require('../Model/SkuItem');
+const Item = require('../Model/Item');
 const { User } = require('../Model/User');
 
 const userDAO = require('../Mock_databases/Mock_userDAO');
@@ -23,9 +23,15 @@ const wh = new Warehouse(userDAO, skuDAO, skuItemDAO, positionDAO, restockOrderD
 describe("Test add RestockOrder", () => {
 
     const user1 = new User(1, "Mary", "Red", "user1@ezwh.com", "supplier");
+    const itemList = [];
+    itemList.push(new Item(10, "description 1", 10.99, 1, 1));
+    itemList.push(new Item(15, "description 2", 25.99, 2, 1));
+    itemList.push(new Item(20, "description 3", 15.99, 3, 1));
 
     let id = 1;
     beforeEach(() => {
+        itemDAO.getItemsBySupplier.mockReset();
+        itemDAO.getItemsBySupplier.mockReturnValue(itemList);
         restockOrderDAO.newRestockOrder.mockReset();
         restockOrderDAO.newRestockOrder.mockReturnValue(id);
         userDAO.getAllUsers.mockReset();
@@ -35,8 +41,8 @@ describe("Test add RestockOrder", () => {
 
 
     const productList = [];
-    productList.push(new Product(1, "Object", 30, 20));
-    productList.push(new Product(3, "Object 3", 2, 240));
+    productList.push({"SKUId":1,"itemId":10,"description":"Object","price": 10.99, "qty":30});
+    productList.push({"SKUId":3,"itemId":20,"description":"Object 3","price": 15.99, "qty":240});
 
     testAddRestockOrder(productList, 1, "2022/01/12", 1);
     testAddRestockOrder([], 1, "2022/01/22", 2);
@@ -44,6 +50,7 @@ describe("Test add RestockOrder", () => {
 
     function testAddRestockOrder(products, supplierID, issueDate, expectedResult) {
         test('Add RestockOrder', async () => {
+            console.log(products);
             let result = await wh.addRestockOrder(products, supplierID, issueDate);
             expect(result).toBe(expectedResult);
         })
@@ -71,11 +78,11 @@ describe("Test get all RestockOrders", () => {
 
 
     let arrayProducts = [];
-    arrayProducts.push(new Product(12, "object", 20, 30));
-    arrayProducts.push(new Product(15, "object 2", 2, 550));
+    arrayProducts.push(new Product(1, 12, "object", 20, 30));
+    arrayProducts.push(new Product(3, 15, "object 2", 2, 550));
 
-    restockOrderList[0].addProduct(12, "object", 20, 30);
-    restockOrderList[0].addProduct(15, "object 2", 2, 550);
+    restockOrderList[0].addProduct(1, 12, "object", 20, 30);
+    restockOrderList[0].addProduct(3, 15, "object 2", 2, 550);
 
     const skuItem1 = new SKUItem("1", 12, 1, null, undefined);
     const skuItem2 = new SKUItem("2", 15, 1, '2022/05/18', undefined);
@@ -112,11 +119,11 @@ describe("Test get RestockOrders Issued", () => {
 
 
     let arrayProducts = [];
-    arrayProducts.push(new Product(12, "object", 20, 30));
-    arrayProducts.push(new Product(15, "object 2", 2, 550));
+    arrayProducts.push(new Product(1, 12, "object", 20, 30));
+    arrayProducts.push(new Product(3, 15, "object 2", 2, 550));
 
-    restockOrderList[0].addProduct(12, "object", 20, 30);
-    restockOrderList[0].addProduct(15, "object 2", 2, 550);
+    restockOrderList[0].addProduct(1, 12, "object", 20, 30);
+    restockOrderList[0].addProduct(3, 15, "object 2", 2, 550);
 
     const skuItem1 = new SKUItem("1", 12, 1, null, undefined);
     const skuItem2 = new SKUItem("2", 15, 1, '2022/05/18', undefined);
@@ -154,11 +161,11 @@ describe("Test get RestockOrder", () => {
 
 
     let arrayProducts = [];
-    arrayProducts.push(new Product(12, "object", 20, 30));
-    arrayProducts.push(new Product(15, "object 2", 2, 550));
+    arrayProducts.push(new Product(1, 12, "object", 20, 30));
+    arrayProducts.push(new Product(3, 15, "object 2", 2, 550));
 
-    restockOrderList[0].addProduct(12, "object", 20, 30);
-    restockOrderList[0].addProduct(15, "object 2", 2, 550);
+    restockOrderList[0].addProduct(1, 12, "object", 20, 30);
+    restockOrderList[0].addProduct(3, 15, "object 2", 2, 550);
 
     const skuItem1 = new SKUItem("1", 12, 1, null, undefined);
     const skuItem2 = new SKUItem("2", 15, 1, '2022/05/18', undefined);
@@ -191,7 +198,10 @@ describe("Test modify RestockOrder", () => {
     const skuItem1 = new SKUItem("1", 12, 1, null, undefined);
     const skuItem2 = new SKUItem("2", 15, 1, '2022/05/18', undefined);
 
-    restockOrder1.addProduct(12, "object", 20, 30);
+    const item1 = new Item(10, "description", 10.99, 12, 2);
+    const item2 = new Item(15, "description", 15.99, 15, 2);
+
+    restockOrder1.addProduct(10, 12, "object", 20, 30);
 
     describe('Test modify', () => {
         beforeAll(() => {
@@ -200,6 +210,9 @@ describe("Test modify RestockOrder", () => {
 
             skuItemDAO.getAllSKUItems.mockReset();
             skuItemDAO.getAllSKUItems.mockReturnValue([skuItem1, skuItem2]);
+
+            itemDAO.getItem.mockReset();
+            itemDAO.getItem.mockReturnValueOnce(item1).mockReturnValueOnce(item2);
 
             restockOrderDAO.updateRestockOrder.mockReset();
             restockOrderDAO.updateRestockOrder.mockReturnValue(1);
@@ -218,10 +231,10 @@ describe("Test modify RestockOrder", () => {
         })
 
         let expectedResult2 = restockOrder2;
-        expectedResult2.addProduct(12, "object", 20, 30);
-        expectedResult2.addProduct(15, "object", 20, 30);
+        expectedResult2.addProduct(10, 12, "object", 20, 30);
+        expectedResult2.addProduct(15, 15, "object", 20, 30);
         test('Add SKUItems to RestockOrder', async () => {
-            let result = await wh.restockOrderAddSKUItems(1, [{ "skuID": 12, "rfid": "1" }, { "skuID": 15, "rfid": "2" }]);
+            let result = await wh.restockOrderAddSKUItems(1, [{ "skuID": 12, "itemId": 10, "rfid": "1" }, { "skuID": 15, "itemId": 10, "rfid": "2" }]);
             expect(result).toBe(expectedResult2);
         })
 
@@ -243,7 +256,7 @@ describe("Test modify RestockOrder", () => {
         testModifyRestockOrderError("throw error on invalid state", 1, "OBTAINED", { err: 422, msg: "newState invalid" });
         testAddTransportNoteError("throw error on wrong date format", 1, '2022-02-20', { err: 422, msg: "Invalid date" });
         testAddTransportNoteError("throw error on date before actual", 1, '2022/02/20', { err: 422, msg: "Invalid date: deliveryDate is before issueDate" });
-        testrestockOrderAddSKUItemsError("throw error on not delivered state", 2, [{ "skuID": 12, "rfid": "1" }, { "skuID": 15, "rfid": "2" }], { err: 422, msg: "Restock Order not in DELIVERED state" });
+        testrestockOrderAddSKUItemsError("throw error on not delivered state", 2, [{ "skuID": 12, "itemId": 10, "rfid": "1" }, { "skuID": 15, "rfid": "2" }], { err: 422, msg: "Restock Order not in DELIVERED state" });
 
         function testModifyRestockOrderError(testMessage, restockOrderID, newState, expectedError) {
             test(testMessage, async () => {
@@ -397,6 +410,7 @@ function compareProducts(productList, expectedProductList) {
     expect(productList.length).toStrictEqual(expectedProductList.length);
     for (var i = 0; i < productList.length; i++) {
         expect(productList[i].SKUId).toStrictEqual(expectedProductList[i].SKUId);
+        expect(productList[i].itemId).toStrictEqual(expectedProductList[i].itemId);
         expect(productList[i].description).toStrictEqual(expectedProductList[i].description);
         expect(productList[i].price).toStrictEqual(expectedProductList[i].price);
         expect(productList[i].qty).toStrictEqual(expectedProductList[i].qty);

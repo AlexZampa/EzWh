@@ -35,12 +35,11 @@ class ItemDAO {
         }
     }
 
-    getItemBySkuId = async (id) => {
+    // CHECK
+    getItemsBySkuId = async (skuId) => {
         try {
             let sql = "SELECT * FROM Item WHERE associatedSKU = ?";
-            const res = await this.connectionDB.DBget(sql, [id]);
-            if (res === undefined)
-                throw { err: 404, msg: "Item not found" };
+            const res = await this.connectionDB.DBgetAll(sql, [skuId]);
             const item = new Item(res.id, res.description, res.price, res.associatedSKU, res.supplier);
             return item;
         }
@@ -49,12 +48,10 @@ class ItemDAO {
         }
     }
 
-    getItemBySupplier = async (id) => {
+    getItemsBySupplier = async (supplierId) => {
         try {
             let sql = "SELECT * FROM Item WHERE supplier = ?";
-            const res = await this.connectionDB.DBget(sql, [id]);
-            if (res === undefined)
-                throw { err: 404, msg: "Item not found" };
+            const result = await this.connectionDB.DBgetAll(sql, [supplierId]);
             const itemList = result.map(r => new Item(r.id, r.description, r.price, r.associatedSKU, r.supplier));
             return itemList;
         }

@@ -29,7 +29,7 @@ describe('test RestockOrder apis', () => {
         await agent.delete('/api/test/testDescriptors');
     })
 
-    let products = [{ SKUId: 1, description: "A product", price: 20, qty: 30 }];
+    let products = [{ SKUId: 1, itemId: 10, description: "A product", price: 20, qty: 30 }];
 
     newRestockOrder(201, products, 1, "2022/02/02");
     newRestockOrder(422);
@@ -69,6 +69,7 @@ function newRestockOrder(expectedHTTPStatus, products, supplierID, issueDate) {
             const sku = { description: "description 1", weight: 20, volume: 20, notes: "notes 1", price: 10.99, availableQuantity: 50 };
             const restockOrder = { issueDate: issueDate, products: products, supplierId: supplierID };
             let user = { username: "user1@ezwh.com", name: "name", surname: "surname", password: "password12345", type: "supplier" }
+            const item = { "id": 10, "description": "a new item", "price": 10.99, "SKUId": 1, "supplierId": 1 }
 
             agent.post('/api/newUser')
                 .send(user)
@@ -78,17 +79,22 @@ function newRestockOrder(expectedHTTPStatus, products, supplierID, issueDate) {
                         .send(sku)
                         .then(function (res) {
                             res.should.have.status(201);
-                            agent.post('/api/skuitem')
-                                .send(skuItem)
+                            agent.post('/api/item')
+                                .send(item)
                                 .then(function (res) {
                                     res.should.have.status(201);
-                                    agent.post('/api/restockOrder')
-                                        .send(restockOrder)
+                                    agent.post('/api/skuitem')
+                                        .send(skuItem)
                                         .then(function (res) {
-                                            res.should.have.status(expectedHTTPStatus);
-                                            done();
+                                            res.should.have.status(201);
+                                            agent.post('/api/restockOrder')
+                                                .send(restockOrder)
+                                                .then(function (res) {
+                                                    res.should.have.status(expectedHTTPStatus);
+                                                    done();
+                                                });
                                         });
-                                });
+                                })
                         });
                 });
         }
