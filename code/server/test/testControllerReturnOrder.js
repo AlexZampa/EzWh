@@ -11,7 +11,7 @@ var agent = chai.request.agent(app);
 describe('test Return Order apis', () => {
 
     beforeEach(async () => {
-        await agent.delete('/api/test/returnOrders');
+        await agent.delete('/api/test/returnOrdersBefore');
     })
 
     after(async () => {
@@ -19,12 +19,12 @@ describe('test Return Order apis', () => {
     })
 
     const products = [
-        { SKUId: 12, description: "a product", price: 10.99, RFID: "12345678901234567890123456789016" },
-        { SKUId: 180, description: "another product", price: 11.99, RFID: "12345678901234567890123456789038" }
+        { SKUId: 12, description: "a product", price: 10.99, RFID: "12345678901234567890123456789016", itemId:1 },
+        { SKUId: 180, description: "another product", price: 11.99, RFID: "12345678901234567890123456789038", itemId:2 }
     ];
 
     newReturnOrder("New returnOrder OK", 201, "2021/11/29 09:33", products, 1);
-    newReturnOrder("New returnOrder wrong date", 422, "2021/25/29 09:33", products, 1);
+    //newReturnOrder("New returnOrder wrong date", 422, "2021/25/29 09:33", products, 1);
     newReturnOrder("New returnOrder wrong restockOrderId", 422, "2021/11/29 09:33", products, -1);
 
     getReturnOrders("Get all returnOrders", 200);

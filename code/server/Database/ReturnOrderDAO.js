@@ -91,13 +91,15 @@ class ReturnOrderDAO {
         }
     };
 
-    resetTable = async () => {
+    resetTable = async (before) => {
         try {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS ReturnOrder');
             res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS ReturnOrderProduct');
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrder" ("id" INTEGER PRIMARY KEY, "returnDate" DATETIME NOT NULL, "restockOrderId" INTEGER NOT NULL) ', []);
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" TEXT NOT NULL, "SKUId" INTEGER NOT NULL, "itemID" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"))', []);
-            res = await this.connectionDB.DBexecuteQuery('INSERT INTO RestockOrder(supplierID, state, issueDate) VALUES(?, ?, ?)', [1, "ISSUED", "2022/04/25"]);
+            if(before){
+                res = await this.connectionDB.DBexecuteQuery('INSERT INTO RestockOrder(supplierID, state, issueDate) VALUES(?, ?, ?)', [1, "ISSUED", "2022/04/25"]);
+            }
         }
         catch (err) {
             throw err;

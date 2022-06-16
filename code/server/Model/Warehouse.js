@@ -590,9 +590,9 @@ class Warehouse {
         }
     }
 
-    testDeleteAllReturnOrders = async () => {
+    testDeleteAllReturnOrders = async (before) => {
         try {
-            await this.returnOrderDAO.resetTable();
+            await this.returnOrderDAO.resetTable(before);
         } catch (err) {
             throw err;
         }
