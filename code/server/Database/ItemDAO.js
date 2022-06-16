@@ -21,10 +21,10 @@ class ItemDAO {
         }
     }
 
-    getItem = async (id) => {
+    getItem = async (id, supplierId) => {
         try {
-            let sql = "SELECT * FROM Item WHERE id = ?";
-            const res = await this.connectionDB.DBget(sql, [id]);
+            let sql = "SELECT * FROM Item WHERE id = ? AND supplier = ?";
+            const res = await this.connectionDB.DBget(sql, [id, supplierId]);
             if (res === undefined)
                 throw { err: 404, msg: "Item not found" };
             const item = new Item(res.id, res.description, res.price, res.associatedSKU, res.supplier);
@@ -90,10 +90,10 @@ class ItemDAO {
         }
     };
 
-    deleteItem = async (id) => {
+    deleteItem = async (id, supplierId) => {
         try {
-            let sql = "DELETE FROM ITEM WHERE id = ?";
-            const res = await this.connectionDB.DBexecuteQuery(sql, [id]);
+            let sql = "DELETE FROM ITEM WHERE id = ? AND supplier = ?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [id, supplierId]);
             return res.changes;
         }
         catch (err) {

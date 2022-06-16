@@ -98,12 +98,12 @@ describe("Test get Item", () => {
         itemDAO.getItem.mockReturnValueOnce(item1).mockReturnValueOnce(item2);
     });
 
-    testGetItem(1, item1);
-    testGetItem(2, item2);
+    testGetItem(1, 4, item1);
+    testGetItem(2, 3, item2);
 
-    function testGetItem(id, expectedResult) {
+    function testGetItem(id, supplierId, expectedResult) {
         test('Get Item by id', async () => {
-            let result = await wh.getItem(id);
+            let result = await wh.getItem(id, supplierId);
             compareItem(result, expectedResult);
         })
     }
@@ -124,7 +124,7 @@ describe("Test modify Item", () => {
 
         let expectedResult = 1;
         test('Modify Item', async () => {
-            let result = await wh.modifyItem(1, "newDescription", 300);
+            let result = await wh.modifyItem(1, 4, "newDescription", 300);
             expect(result).toBe(expectedResult);
         })
     });
@@ -135,13 +135,13 @@ describe("Test modify Item", () => {
             itemDAO.getItem.mockRejectedValueOnce({ err: 404, msg: "Item not found" });
         });    
 
-        testModifyItemError("throw error on negative price", 2, "newDescription", -30, {err: 422, msg:  "Invalid data"});
-        testModifyItemError("throw error on non existing Item", 1, "newDescription", 30, { err: 404, msg: "Item not found" });
+        testModifyItemError("throw error on negative price", 2, 3, "newDescription", -30, {err: 422, msg:  "Invalid data"});
+        testModifyItemError("throw error on non existing Item", 1, 4, "newDescription", 30, { err: 404, msg: "Item not found" });
 
-        function testModifyItemError(testMessage, id, newDescription, newPrice, expectedError){
+        function testModifyItemError(testMessage, id, supplierId, newDescription, newPrice, expectedError){
             test(testMessage, async () => {
                 async function invalidModify(){
-                    await wh.modifyItem(id, newDescription, newPrice);
+                    await wh.modifyItem(id, supplierId, newDescription, newPrice);
                 };
                 await expect(invalidModify).rejects.toEqual(expectedError);
             })
@@ -163,9 +163,10 @@ describe("Test delete Item", () => {
     });
 
     let itemID = 1;
+    let supplierId = 4;
     let expectedResult = 1;
     test('Delete Item', async () => {
-        let result = await wh.deleteItem(itemID);
+        let result = await wh.deleteItem(itemID, supplierId);
         expect(result).toBe(expectedResult);
     })
 });

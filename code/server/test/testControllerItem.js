@@ -33,22 +33,29 @@ describe('test Item apis', () => {
 
     getItems('getting all Item', 200);
 
-    getItem('getting single Item1', 200, 1);
-    getItem('getting single Item2', 404, 100);
-    getItem('getting single Item3', 422, "id");
-    getItem('getting single Item4', 422, -1);
+    getItem('getting single Item1', 200, 1, 3);
+    getItem('getting single Item2', 404, 100, 7);
+    getItem('getting single Item3', 422, "id", 3);
+    getItem('getting single Item4', 422, -1, 3);
+    getItem('getting single Item5', 422, 1, "supplierId");
+    getItem('getting single Item6', 422, 1, -3);
 
-    modifyItem('modifing Item data1', 200, 1, "description", 20);
-    modifyItem('modifing Item data2', 404, 100, "description", 20);
-    modifyItem('modifing Item data3', 422, 1, "description", -20);
-    modifyItem('modifing Item data4', 422, -1, "description", 20);
-    modifyItem('modifing Item data5', 422, "id", "description", 20);
-    modifyItem('modifing Item data6', 422, 1, 2, 20);
-    modifyItem('modifing Item data7', 422, 1, "description", "newPrice");
+    modifyItem('modifing Item data1', 200, 1, 4, "description", 20);
+    modifyItem('modifing Item data2', 404, 100, 4, "description", 20);
+    modifyItem('modifing Item data3', 404, 1, 400, "description", 20);
+    modifyItem('modifing Item data4', 422, 1, 4, "description", -20);
+    modifyItem('modifing Item data5', 422, -1, 4, "description", 20);
+    modifyItem('modifing Item data6', 422, 1, -4, "description", 20);
+    modifyItem('modifing Item data7', 422, "id", 4, "description", 20);
+    modifyItem('modifing Item data8', 422, 1, "id", "description", 20);
+    modifyItem('modifing Item data9', 422, 1, 4, 2, 20);
+    modifyItem('modifing Item data10', 422, 1, 4, "description", "newPrice");
 
-    deleteItem('deleting Item1', 204, 1);
-    deleteItem('deleting Item2', 422, "id");
-    deleteItem('deleting Item3', 422, -1);
+    deleteItem('deleting Item1', 204, 1, 4);
+    deleteItem('deleting Item2', 422, "id", 4);
+    deleteItem('deleting Item3', 422, 1, "id");
+    deleteItem('deleting Item4', 422, -1, 4);
+    deleteItem('deleting Item5', 422, 1, -4);
 
 });
 
@@ -123,7 +130,7 @@ function getItems(testName, expectedHTTPStatus) {
 }
 
 
-function getItem(testName, expectedHTTPStatus, id) {
+function getItem(testName, expectedHTTPStatus, id, supplierId) {
     it(testName, function (done) {
         const item = { id: 1, description: "description1", price: 9.99, SKUId: 1, supplierId: 3 };
         let sku = { description: "description", weight: 2, volume: 2, notes: "notes", price: 2, availableQuantity: 4 };
@@ -137,7 +144,7 @@ function getItem(testName, expectedHTTPStatus, id) {
                     .send(item)
                     .then(function (res) {
                         res.should.have.status(201);
-                        agent.get('/api/items/' + id)
+                        agent.get('/api/items/' + id + '/' +supplierId)
                             .then(function (res) {
                                 res.should.have.status(expectedHTTPStatus);
                                 if (expectedHTTPStatus == 200)
@@ -151,7 +158,7 @@ function getItem(testName, expectedHTTPStatus, id) {
 }
 
 
-function modifyItem(testName, expectedHTTPStatus, id, newDescription, newPrice) {
+function modifyItem(testName, expectedHTTPStatus, id, supplierId, newDescription, newPrice) {
     it(testName, function (done) {
         const item = { id: 1, description: "description", price: 45, SKUId: 1, supplierId: 4 };
         let data = { "newDescription": newDescription, "newPrice": newPrice };
@@ -165,7 +172,7 @@ function modifyItem(testName, expectedHTTPStatus, id, newDescription, newPrice) 
                     .send(item)
                     .then(function (res) {
                         res.should.have.status(201);
-                        agent.put('/api/item/' + id)
+                        agent.put('/api/item/' + id + '/' + supplierId)
                             .send(data)
                             .then(function (res) {
                                 res.should.have.status(expectedHTTPStatus);
@@ -178,7 +185,7 @@ function modifyItem(testName, expectedHTTPStatus, id, newDescription, newPrice) 
 }
 
 
-function deleteItem(testName, expectedHTTPStatus, id) {
+function deleteItem(testName, expectedHTTPStatus, id, supplierId) {
     it(testName, function (done) {
         const item = { id: 1, description: "description", price: 45, SKUId: 1, supplierId: 4 };
         let sku = { description: "description", weight: 2, volume: 2, notes: "notes", price: 2, availableQuantity: 4 };
@@ -191,7 +198,7 @@ function deleteItem(testName, expectedHTTPStatus, id) {
                     .send(item)
                     .then(function (res) {
                         res.should.have.status(201);
-                        agent.delete('/api/items/' + id)
+                        agent.delete('/api/items/' + id + '/' + supplierId)
                             .then(function (res) {
                                 res.should.have.status(expectedHTTPStatus);
                                 done();

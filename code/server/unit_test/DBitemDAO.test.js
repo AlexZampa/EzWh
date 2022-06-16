@@ -23,10 +23,10 @@ describe('Test Create and Get Item', () => {
     const expectedItem2 = new Item(2, "description 2", 20, 2, 3);
 
     testCreateItem(1, "description 1", 30.5, 1, 4, 1);
-    testGetItem(1, expectedItem1);
+    testGetItem(1, 4, expectedItem1);
 
     testCreateItem(2, "description 2", 20, 2, 3, 2);
-    testGetItem(2, expectedItem2);
+    testGetItem(2, 3, expectedItem2);
 });
 
 describe('Test throw err on create item(id already exists)', () => {
@@ -101,7 +101,7 @@ describe('Test Update Item', () => {
     const expectedItem = new Item(1, "description 2", 40, 1, 4);
     const expectedChanges = 1;
     testUpdateItem(1, "description 2", 40, 1, 4, expectedChanges);
-    testGetItem(1, expectedItem);
+    testGetItem(1, 4, expectedItem);
 });
 
 
@@ -121,7 +121,7 @@ describe('Test Delete Item', () => {
     itemList.push(new Item(1, "description 1", 30.5, 1, 4));
     itemList.push(new Item(3, "description 3", 30.5, 2, 1));
     let expectedChanges = 1
-    testDeleteItem(2, expectedChanges);
+    testDeleteItem(2, 5, expectedChanges);
     testGetAllItem(itemList);
 });
 
@@ -144,9 +144,9 @@ function testCreateItemError(itemId, description, price, associatedSKU, supplier
     });
 }
 
-function testGetItem(id, expectedItem) {
+function testGetItem(id, supplierId, expectedItem) {
     test('get Item', async () => {
-        let res = await itemDAO.getItem(id);
+        let res = await itemDAO.getItem(id, supplierId);
         compareItem(res, expectedItem);
     });
 }
@@ -178,9 +178,9 @@ function testUpdateItem(id, newDescription, newPrice, newAssociatedSKU, newSuppl
 }
 
 
-function testDeleteItem(id, expectedChanges) {
+function testDeleteItem(id, supplierId, expectedChanges) {
     test('delete Item', async () => {
-        let res = await itemDAO.deleteItem(id);
+        let res = await itemDAO.deleteItem(id, supplierId);
         expect(res).toStrictEqual(expectedChanges);
     });
 }

@@ -778,9 +778,9 @@ class Warehouse {
         }
     }
 
-    getItem = async (id) => {
+    getItem = async (id, supplierId) => {
         try {
-            const item = await this.itemDAO.getItem(id);
+            const item = await this.itemDAO.getItem(id, supplierId);
             return item;
         } catch (err) {
             throw err;
@@ -800,11 +800,11 @@ class Warehouse {
         }
     }
 
-    modifyItem = async (id, newDescription, newPrice) => {
+    modifyItem = async (id, supplierId, newDescription, newPrice) => {
         try {
             if (newPrice <= 0)
                 throw { err: 422, msg: "Invalid data" };
-            const item = await this.itemDAO.getItem(id);
+            const item = await this.itemDAO.getItem(id, supplierId);
             const result = await item.modifyItemData(newDescription, newPrice, this.itemDAO);
             return result;
         } catch (err) {
@@ -812,9 +812,9 @@ class Warehouse {
         }
     }
 
-    deleteItem = async (id) => {
+    deleteItem = async (id, supplierId) => {
         try {
-            const res = await this.itemDAO.deleteItem(id);
+            const res = await this.itemDAO.deleteItem(id, supplierId);
             return res;
         }
         catch (err) {
