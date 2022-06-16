@@ -93,13 +93,19 @@ class ReturnOrderDAO {
 
     resetTable = async (before) => {
         try {
+            if(before){
+                let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrder');
+                res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
+                res = await this.connectionDB.DBexecuteQuery('INSERT INTO RestockOrder(supplierID, state, issueDate, transportNote) VALUES(?, ?, ?, ?)', [1, "ISSUED", "2022/04/25", "2022/05/25"]);
+            } else {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS ReturnOrder');
             res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS ReturnOrderProduct');
+            //res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrder');
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrder" ("id" INTEGER PRIMARY KEY, "returnDate" DATETIME NOT NULL, "restockOrderId" INTEGER NOT NULL) ', []);
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" TEXT NOT NULL, "SKUId" INTEGER NOT NULL, "itemID" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"))', []);
-            if(before){
-                res = await this.connectionDB.DBexecuteQuery('INSERT INTO RestockOrder(supplierID, state, issueDate) VALUES(?, ?, ?)', [1, "ISSUED", "2022/04/25"]);
+            //res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
             }
+            console.log(res);
         }
         catch (err) {
             throw err;
