@@ -438,7 +438,7 @@ class Warehouse {
             const skuItemList = [];
             for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
-                const item = await this.itemDAO.getItem(s.itemId);
+                const item = await this.itemDAO.getItem(s.itemId, restockOrder.getSupplier());
                 if (skuItem && item && item.getAssociatedSKU() === skuItem.getSKU()) {
                     skuItemList.push(skuItem);
                 } else {
