@@ -17,9 +17,9 @@ Report effort figures from the timesheet, compute size from the source code.
 ## New development (release 1  -- march 22 to may 25)
 | Measure| Value |
 |---|---|
-|effort E (report here effort in person hours, for all activities in the period, from your timesheet)  ||
-|size S (report here size in LOC of all code written, excluding test cases)  ||
-|productivity P = S/E ||
+|effort E (report here effort in person hours, for all activities in the period, from your timesheet)  |282|
+|size S (report here size in LOC of all code written, excluding test cases)  |4475|
+|productivity P = S/E |15.87|
 |defects before release D_before (number of defects found and fixed before may 25) ||
 
 
@@ -42,10 +42,10 @@ Now it is possible to repeat the estimate using values from the past. We can als
 
 |             | Estimate                        |             
 | ----------- | ------------------------------- |  
-| NC =  Estimated number of classes to be developed                 |                         |             
-|  A = Estimated average size per class, in LOC                     |                            | 
-| S_e = Estimated size of project, in LOC (= NC * A)                  |                                |
-| E = Estimated effort, in person hours (here use overall productivity OP)  |                                  |   
-| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro)                   |         | 
+| NC =  Estimated number of classes to be developed                 |       32                  |             
+|  A = Estimated average size per class, in LOC                     |         140                   | 
+| S_e = Estimated size of project, in LOC (= NC * A)                  |      4480                          |
+| E = Estimated effort, in person hours (here use overall productivity OP)  |    317                              |   
+| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro)                   |    9510     | 
 | D_e = Estimated number of defects = DD * S_e||
 | Estimated effort for non quality = D_e * D_fix ||
