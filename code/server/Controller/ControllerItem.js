@@ -22,7 +22,7 @@ router.get('/items', async (req, res) => {
 });
 
 //get item by id
-router.get('/items/:id', [check("id").isInt({min: 0})],
+router.get('/items/:id/:supplierId', [check("id").isInt({min: 0}), check("supplierId").isInt({min: 0})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -30,7 +30,7 @@ router.get('/items/:id', [check("id").isInt({min: 0})],
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const item = await warehouse.getItem(req.params.id);
+            const item = await warehouse.getItem(req.params.id, req.params.supplierId);
             const result = item.convertToObj();
             return res.status(200).json(result);
         } catch (err) {
@@ -66,7 +66,7 @@ check("supplierId").exists().isInt({min: 0})],
 );
 
 //modify item
-router.put('/item/:id', [check("id").exists().isInt({min: 0}), check("newDescription").exists().isString().trim(), check("newPrice").exists().isNumeric()],
+router.put('/item/:id/:supplierId', [check("id").exists().isInt({min: 0}), check("supplierId").exists().isInt({min: 0}), check("newDescription").exists().isString().trim(), check("newPrice").exists().isNumeric()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -74,7 +74,7 @@ router.put('/item/:id', [check("id").exists().isInt({min: 0}), check("newDescrip
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            await warehouse.modifyItem(req.params.id, req.body.newDescription, req.body.newPrice);
+            await warehouse.modifyItem(req.params.id, req.params.supplierId, req.body.newDescription, req.body.newPrice);
             return res.status(200).end();
         } catch (err) {
             console.log(err);
@@ -88,7 +88,7 @@ router.put('/item/:id', [check("id").exists().isInt({min: 0}), check("newDescrip
 );
 
 //delete item
-router.delete('/items/:id', [check("id").exists().isInt({min: 0})],
+router.delete('/items/:id/:supplierId', [check("id").exists().isInt({min: 0}), check("supplierId").exists().isInt({min: 0})],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -96,7 +96,7 @@ router.delete('/items/:id', [check("id").exists().isInt({min: 0})],
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const result = await warehouse.deleteItem(req.params.id);
+            const result = await warehouse.deleteItem(req.params.id, req.params.supplierId);
             return res.status(204).end();
         } catch (err) {
             console.log(err);

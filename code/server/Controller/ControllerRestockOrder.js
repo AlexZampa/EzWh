@@ -101,10 +101,12 @@ router.get('/restockOrders/:id/returnItems',
                 console.log({ errors: errors.array() });
                 return res.status(422).end();
             }
-            const skuItems = await warehouse.returnItemsFromRestockOrder(Number(req.params.id));
-            const result = skuItems.map(s => s.convertToObjSimple());
+            const returnItems = await warehouse.returnItemsFromRestockOrder(Number(req.params.id));
+            let result = [];
+            for (const r of returnItems) {
+                result.push({ "RFID" : r.rfid, "itemId" : r.itemId, "SKUId" : r.skuID });
+            }
             return res.status(200).json(result);
-            // check if user authorized otherwise: return res.status(401).end();
         } catch(err){
             console.log(err);
             switch (err.err) {
@@ -153,9 +155,9 @@ router.put('/restockOrder/:id/skuItems',
             }
             const skuItems = [];       // skuItems formatted
             for(const s of req.body.skuItems){
-                if(s.SKUId === undefined || s.rfid === undefined)
+                if(s.SKUId === undefined || s.rfid === undefined || s.itemId === undefined)
                     return res.status(422).end();
-                skuItems.push({"skuID" : s.SKUId, "rfid" : s.rfid});
+                skuItems.push({"skuID" : s.SKUId, "itemId" : s.itemId, "rfid" : s.rfid});
             }
             const result = await warehouse.restockOrderAddSKUItems(Number(req.params.id), skuItems);
             return res.status(200).end();

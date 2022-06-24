@@ -21,14 +21,39 @@ class ItemDAO {
         }
     }
 
-    getItem = async (id) => {
+    getItem = async (id, supplierId) => {
         try {
-            let sql = "SELECT * FROM Item WHERE id = ?";
-            const res = await this.connectionDB.DBget(sql, [id]);
+            let sql = "SELECT * FROM Item WHERE id = ? AND supplier = ?";
+            const res = await this.connectionDB.DBget(sql, [id, supplierId]);
             if (res === undefined)
                 throw { err: 404, msg: "Item not found" };
             const item = new Item(res.id, res.description, res.price, res.associatedSKU, res.supplier);
             return item;
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+
+    // CHECK
+    getItemsBySkuId = async (skuId) => {
+        try {
+            let sql = "SELECT * FROM Item WHERE associatedSKU = ?";
+            const res = await this.connectionDB.DBgetAll(sql, [skuId]);
+            const item = new Item(res.id, res.description, res.price, res.associatedSKU, res.supplier);
+            return item;
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+
+    getItemsBySupplier = async (supplierId) => {
+        try {
+            let sql = "SELECT * FROM Item WHERE supplier = ?";
+            const result = await this.connectionDB.DBgetAll(sql, [supplierId]);
+            const itemList = result.map(r => new Item(r.id, r.description, r.price, r.associatedSKU, r.supplier));
+            return itemList;
         }
         catch (err) {
             throw err;
@@ -65,10 +90,10 @@ class ItemDAO {
         }
     };
 
-    deleteItem = async (id) => {
+    deleteItem = async (id, supplierId) => {
         try {
-            let sql = "DELETE FROM ITEM WHERE id = ?";
-            const res = await this.connectionDB.DBexecuteQuery(sql, [id]);
+            let sql = "DELETE FROM ITEM WHERE id = ? AND supplier = ?";
+            const res = await this.connectionDB.DBexecuteQuery(sql, [id, supplierId]);
             return res.changes;
         }
         catch (err) {

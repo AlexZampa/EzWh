@@ -17,6 +17,11 @@ class RestockOrder {
     getID = () => { return this.id; };
     getIssueDate = () => { return this.issueDate; };
     getProducts = () => { return this.products; };
+
+    getItemIDFromProduct = (skuID) => {
+       return this.products.find(prod => prod.SKUId === skuID).itemID;
+    }
+
     getState = () => { return this.state; };
     getTransportNote = () => { 
         const transportNote = this.transportNote ? this.transportNote.getShipmentDate() : undefined
@@ -27,8 +32,8 @@ class RestockOrder {
 
     setSKUItems = (skuItems) => { this.skuItems = skuItems };
 
-    addProduct(SKUId, description, price, qty) {
-        const prod = new Product(SKUId, description, price, qty);
+    addProduct(itemID, SKUId, description, price, qty) {
+        const prod = new Product(itemID, SKUId, description, price, qty);
         this.products.push(prod);
     }
 
@@ -58,9 +63,9 @@ class RestockOrder {
     convertToObj = () => {
         
         const obj = { "id": this.id, "issueDate": this.issueDate.format('YYYY/MM/DD HH:mm'), "state": this.state, 
-            "products": this.products.map(p => { return { "SKUId": p.SKUId, "description": p.description, "price": p.price, "qty": p.qty }}),
+            "products": this.products.map(p => { return { "SKUId": p.SKUId, "itemId" : p.itemID, "description": p.description, "price": p.price, "qty": p.qty }}),
             "supplierId": this.supplier, "transportNote": this.transportNote ? this.transportNote.convertToObj() : "", 
-            "skuItems": this.skuItems.map(s => { return {"SKUId" : s.getSKU(), "rfid" : s.getRFID()}; })
+            "skuItems": this.skuItems.map(s => { return {"SKUId" : s.getSKU(), "itemId" : this.getItemIDFromProduct(s.getSKU()), "rfid" : s.getRFID()}; })
         }
         if(this.state === "ISSUED")
             delete obj.transportNote;
@@ -86,7 +91,8 @@ class TransportNote {
 }
 
 class Product {
-    constructor(SKUId, description, price, qty) {
+    constructor(itemID, SKUId, description, price, qty) {
+        this.itemID = itemID
         this.SKUId = SKUId;
         this.description = description;
         this.price = price;
@@ -94,7 +100,7 @@ class Product {
     };
 
     convertToObj = () => {
-         return ( { "SKUId": this.SKUId, "description": this.description, "price": this.price, "qty": this.qty }); 
+         return ( { "SKUId": this.SKUId, "itemId" : this.itemID, "description": this.description, "price": this.price, "qty": this.qty }); 
     };
 } 
 

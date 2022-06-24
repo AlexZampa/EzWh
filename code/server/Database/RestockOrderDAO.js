@@ -8,23 +8,22 @@ class RestockOrderDAO {
     constructor(db) {
         this.connectionDB = new ConnectionDB();
         this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","SKUId"));');
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "itemID" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","SKUId"));');
     }
 
     newRestockOrder = async (products, state, supplierID, issueDate, transportNote) => {
         try {
             let sql = 'INSERT INTO RestockOrder(supplierID, state, issueDate, transportNote) VALUES(?, ?, ?, ?)';
             let result = await this.connectionDB.DBexecuteQuery(sql, [supplierID, state, issueDate, transportNote]);
-            sql = "INSERT INTO RestockOrderProduct(restockOrderID, SKUId, description, price, quantity) VALUES(?, ?, ?, ?, ?)";
+            sql = "INSERT INTO RestockOrderProduct(restockOrderID, itemID, SKUId, description, price, quantity) VALUES(?, ?, ?, ?, ?, ?)";
             for(const prod of products) {
                 // result.lastID = RestockOrderID
-                let res = this.connectionDB.DBexecuteQuery(sql, [result.lastID, prod.SKUId, prod.description, prod.price, prod.qty]);
+                let res = this.connectionDB.DBexecuteQuery(sql, [result.lastID, prod.itemId, prod.SKUId, prod.description, prod.price, prod.qty]);
             }
             return result.lastID;
         } catch(err){
             throw err;
-        }
-        
+        }   
     };
 
     getRestockOrder = async (restockOrderID) => {
@@ -36,7 +35,7 @@ class RestockOrderDAO {
             const restockOrder = new RestockOrder(res.id, res.issueDate, res.supplierID, res.state, res.transportNote ? res.transportNote : undefined);
             sql = "SELECT * FROM RestockOrderProduct WHERE restockOrderID = ?";
             const products = await this.connectionDB.DBgetAll(sql, [restockOrderID]);
-            products.forEach(p => restockOrder.addProduct(p.SKUId, p.description, p.price, p.quantity));
+            products.forEach(p => restockOrder.addProduct(p.itemID, p.SKUId, p.description, p.price, p.quantity));
             return restockOrder;
         }
         catch (err) {
@@ -52,7 +51,7 @@ class RestockOrderDAO {
             sql = "SELECT * FROM RestockOrderProduct WHERE restockOrderID = ?";
             for(const ro of restockOrderList){
                 const products = await this.connectionDB.DBgetAll(sql, [ro.getID()]);
-                products.forEach(p => ro.addProduct(p.SKUId, p.description, p.price, p.quantity));
+                products.forEach(p => ro.addProduct(p.itemID, p.SKUId, p.description, p.price, p.quantity));
             }
             return restockOrderList;
         }
@@ -92,7 +91,7 @@ class RestockOrderDAO {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrder');
             res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrderProduct');
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","SKUId"));');
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrderProduct" ("restockOrderID" INTEGER NOT NULL, "itemID" INTEGER NOT NULL, "SKUId" INTEGER NOT NULL, "description" TEXT NOT NULL, "price"	NUMERIC NOT NULL, "quantity" INTEGER NOT NULL, PRIMARY KEY("restockOrderID","SKUId"));');
         } catch (err) {
             throw err;
         }

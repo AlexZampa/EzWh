@@ -12,6 +12,7 @@ const buildReturnOrder = async (res, connectionDB) => {
     products = await products.map(p => {
         return {
             SKUId: p.SKUId,
+            itemId : p.itemID,
             description: p.description,
             price: p.price,
             RFID: p.SKUItem
@@ -26,15 +27,15 @@ class ReturnOrderDAO {
     constructor() {
         this.connectionDB = new ConnectionDB();
         this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrder" ("id" INTEGER NOT NULL UNIQUE, "returnDate" DATETIME NOT NULL, "restockOrderId" INTEGER NOT NULL, PRIMARY KEY("id")) ', []);
-        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" TEXT NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"))', []);
+        this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" TEXT NOT NULL, "SKUId" INTEGER NOT NULL, "itemID" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"))', []);
     }
 
     newReturnOrder = async (products, restockOrderId, returnDate) => {
         let sql = 'INSERT INTO ReturnOrder(restockOrderId, returnDate, restockOrderId) VALUES(?, ?, ?)';
         const result = await this.connectionDB.DBexecuteQuery(sql, [restockOrderId, returnDate, restockOrderId]);
-        sql = "INSERT INTO ReturnOrderProduct(returnOrder, SKUItem, SKUId, description, price) VALUES(?, ?, ?, ?, ?)"
+        sql = "INSERT INTO ReturnOrderProduct(returnOrder, SKUItem, SKUId, itemID, description, price) VALUES(?, ?, ?, ?, ?, ?)"
         products.forEach(async p => {
-            const res = await this.connectionDB.DBexecuteQuery(sql, [result.lastID, p.RFID, p.SKUId, p.description, p.price]);
+            const res = await this.connectionDB.DBexecuteQuery(sql, [result.lastID, p.RFID, p.SKUId, p.itemId, p.description, p.price]);
         });
 
         return result;
@@ -90,13 +91,18 @@ class ReturnOrderDAO {
         }
     };
 
-    resetTable = async () => {
+    resetTable = async (before) => {
         try {
+            if(before){
+                let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS RestockOrder');
+                res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "RestockOrder" ("id" INTEGER NOT NULL UNIQUE, "supplierID" INTEGER NOT NULL, "state" TEXT NOT NULL, "issueDate" TEXT NOT NULL,"transportNote" TEXT, PRIMARY KEY("id"));');
+                res = await this.connectionDB.DBexecuteQuery('INSERT INTO RestockOrder(supplierID, state, issueDate, transportNote) VALUES(?, ?, ?, ?)', [1, "ISSUED", "2022/04/25", "2022/05/25"]);
+            } else {
             let res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS ReturnOrder');
             res = await this.connectionDB.DBexecuteQuery('DROP TABLE IF EXISTS ReturnOrderProduct');
             res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrder" ("id" INTEGER PRIMARY KEY, "returnDate" DATETIME NOT NULL, "restockOrderId" INTEGER NOT NULL) ', []);
-            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" TEXT NOT NULL, "SKUId" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"))', []);
-            res = await this.connectionDB.DBexecuteQuery('INSERT INTO RestockOrder(supplierID, state, issueDate) VALUES(?, ?, ?)', [1, "ISSUED", "2022/04/25"]);
+            res = await this.connectionDB.DBexecuteQuery('CREATE TABLE IF NOT EXISTS "ReturnOrderProduct" ( "returnOrder" INTEGER NOT NULL, "SKUItem" TEXT NOT NULL, "SKUId" INTEGER NOT NULL, "itemID" INTEGER NOT NULL, "description" VARCHAR(100), "price" DOUBLE, PRIMARY KEY ("returnOrder", "SKUItem"))', []);
+            }
         }
         catch (err) {
             throw err;

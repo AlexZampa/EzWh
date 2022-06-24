@@ -117,9 +117,19 @@ router.delete('/returnOrder/:id',
     }
 );
 
+router.delete('/test/returnOrdersBefore', async (req, res) => {
+    try{
+        const result = await warehouse.testDeleteAllReturnOrders(true);
+        return res.status(204).end();
+    } catch(err){
+        console.log(err);
+        return res.status(503).end();
+    }
+});
+
 router.delete('/test/returnOrders', async (req, res) => {
     try{
-        const result = await warehouse.testDeleteAllReturnOrders();
+        const result = await warehouse.testDeleteAllReturnOrders(false);
         return res.status(204).end();
     } catch(err){
         console.log(err);

@@ -1,6 +1,5 @@
 'use strict';
 
-const dayjs = require("dayjs");
 const RestockOrderDAO = require('../Database/RestockOrderDAO');
 const { RestockOrder } = require('../Model/RestockOrder');
 
@@ -21,13 +20,13 @@ describe('Test Create and Get RestockOrder', () => {
     });
 
     const expectedRestockOrder1 = new RestockOrder(1, '2022/05/18', 2, "ISSUED", undefined);
-    expectedRestockOrder1.addProduct(12, "object", 20, 30);
-    expectedRestockOrder1.addProduct(15, "object 2", 2, 550)
+    expectedRestockOrder1.addProduct(1, 12, "object", 20, 30);
+    expectedRestockOrder1.addProduct(2, 15, "object 2", 2, 550)
     const expectedRestockOrder2 = new RestockOrder(2, '2022/02/19', 2, "DELIVERED", '2022/02/20');
 
     let arrayProducts = [];
-    arrayProducts.push({SKUId: 12, description: "object", price: 20, qty: 30});
-    arrayProducts.push({SKUId: 15, description: "object 2", price: 2, qty: 550});
+    arrayProducts.push({SKUId: 12, itemId: 1, description: "object", price: 20, qty: 30});
+    arrayProducts.push({SKUId: 15, itemId: 2, description: "object 2", price: 2, qty: 550});
 
     testCreateRestockOrder(arrayProducts, '2022/05/18', 2, "ISSUED", null,  1);
     testGetRestockOrder(1, expectedRestockOrder1);

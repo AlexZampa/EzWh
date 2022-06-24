@@ -14,8 +14,8 @@ describe('Test Create and Get Return Order', () => {
     const returnDate = dayjs();
 
     const products = [
-        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016"},
-        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038"}
+        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016", itemId:1},
+        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038", itemId:2}
     ];
 
 
@@ -50,15 +50,15 @@ describe('Test Get All Return Orders', () => {
     const returnDate1 = dayjs();
 
     const products1 = [
-        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016"},
-        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038"}
+        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016", itemId:1},
+        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038", itemId:2}
     ];
 
     const returnDate2 = dayjs();
 
     const products2 = [
-        {SKUId:14, description:"a product", price:0.99, RFID:"12345670901234567890123456789016"},
-        {SKUId:150, description:"another product", price:11.97, RFID:"13345678901234567890123456789038"}
+        {SKUId:14, description:"a product", price:0.99, RFID:"12345670901234567890123456789016", itemId:1},
+        {SKUId:150, description:"another product", price:11.97, RFID:"13345678901234567890123456789038", itemId:2}
     ];
 
     beforeAll(async () => {
@@ -84,15 +84,15 @@ describe('Test Delete Return Order', () => {
     const returnDate1 = dayjs();
 
     const products1 = [
-        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016"},
-        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038"}
+        {SKUId:12, description:"a product", price:10.99, RFID:"12345678901234567890123456789016", itemId:1},
+        {SKUId:180, description:"another product", price:11.99, RFID:"12345678901234567890123456789038", itemId:2}
     ];
 
     const returnDate2 = dayjs();
 
     const products2 = [
-        {SKUId:14, description:"a product", price:0.99, RFID:"12345670901234567890123456789016"},
-        {SKUId:150, description:"another product", price:11.97, RFID:"13345678901234567890123456789038"}
+        {SKUId:14, description:"a product", price:0.99, RFID:"12345670901234567890123456789016", itemId:1},
+        {SKUId:150, description:"another product", price:11.97, RFID:"13345678901234567890123456789038", itemId:2}
     ];
 
     beforeAll(async () => {

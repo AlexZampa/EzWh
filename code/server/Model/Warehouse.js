@@ -374,6 +374,12 @@ class Warehouse {
         try {
             if (!(dayjs(issueDate, 'YYYY/MM/DD HH:mm', true).isValid() || dayjs(issueDate, 'YYYY/MM/DD', true).isValid()))
                 throw { err: 422, msg: "Invalid Date" };
+            const items = await this.itemDAO.getItemsBySupplier(supplierID);
+            for (const p of products) {
+                if (!items.find(it => { return it.getID() === p.itemId && it.getAssociatedSKU() === p.SKUId })) {
+                    throw { err: 422, msg: "Invalid Item" };
+                }
+            }
             const res = await this.restockOrderDAO.newRestockOrder(products, "ISSUED", supplierID, issueDate, null);
             return res;
         } catch (err) {
@@ -422,7 +428,7 @@ class Warehouse {
         }
     }
 
-    // receive an object SKUItemIdList: [{"skuID" : skuid, "rfid" : rfid},...]
+    // receive an object SKUItemIdList: [{"skuID" : skuid, "itemId" :itemId, "rfid" : rfid},...]
     restockOrderAddSKUItems = async (restockOrderID, SKUItemIdList) => {
         try {
             const restockOrder = await this.restockOrderDAO.getRestockOrder(restockOrderID);
@@ -432,8 +438,12 @@ class Warehouse {
             const skuItemList = [];
             for (const s of SKUItemIdList) {
                 const skuItem = allSKUItems.find(skuI => skuI.getRFID() === s.rfid);        // get SKUItem 
-                if (skuItem)
+                const item = await this.itemDAO.getItem(s.itemId, restockOrder.getSupplier());
+                if (skuItem && item && item.getAssociatedSKU() === skuItem.getSKU()) {
                     skuItemList.push(skuItem);
+                } else {
+                    throw { err: 422, msg: "Item not valid" };
+                }
             }
             for (const skuItem of skuItemList) {
                 // update skuItem with all fields equal but the restockOrderID
@@ -485,18 +495,18 @@ class Warehouse {
                     const testResults = await this.testResultDAO.getAllTestResult(s.getRFID());
                     for (const r of testResults) {
                         if (r.result === 'false') {
-                            returnItems.push(s);
+                            returnItems.push({"rfid" : s.getRFID(), "itemId": restockOrder.getItemIDFromProduct(s.getSKU()), "skuID" : s.getSKU() });
                             break;
                         }
                     }
                 }
             }
-
             return returnItems;
         } catch (err) {
             throw err;
         }
     }
+
 
     deleteRestockOrder = async (restockOrderID) => {
         try {
@@ -580,9 +590,9 @@ class Warehouse {
         }
     }
 
-    testDeleteAllReturnOrders = async () => {
+    testDeleteAllReturnOrders = async (before) => {
         try {
-            await this.returnOrderDAO.resetTable();
+            await this.returnOrderDAO.resetTable(before);
         } catch (err) {
             throw err;
         }
@@ -768,9 +778,9 @@ class Warehouse {
         }
     }
 
-    getItem = async (id) => {
+    getItem = async (id, supplierId) => {
         try {
-            const item = await this.itemDAO.getItem(id);
+            const item = await this.itemDAO.getItem(id, supplierId);
             return item;
         } catch (err) {
             throw err;
@@ -790,11 +800,11 @@ class Warehouse {
         }
     }
 
-    modifyItem = async (id, newDescription, newPrice) => {
+    modifyItem = async (id, supplierId, newDescription, newPrice) => {
         try {
             if (newPrice <= 0)
                 throw { err: 422, msg: "Invalid data" };
-            const item = await this.itemDAO.getItem(id);
+            const item = await this.itemDAO.getItem(id, supplierId);
             const result = await item.modifyItemData(newDescription, newPrice, this.itemDAO);
             return result;
         } catch (err) {
@@ -802,9 +812,9 @@ class Warehouse {
         }
     }
 
-    deleteItem = async (id) => {
+    deleteItem = async (id, supplierId) => {
         try {
-            const res = await this.itemDAO.deleteItem(id);
+            const res = await this.itemDAO.deleteItem(id, supplierId);
             return res;
         }
         catch (err) {
